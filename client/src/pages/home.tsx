@@ -120,46 +120,46 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-12">
-              <h2 className="font-serif text-2xl font-bold text-primary-dark mb-4">Features</h2>
+            <div className="bg-card rounded-xl shadow-sm border border-border p-6 mb-12">
+              <h2 className="font-serif text-2xl font-bold text-primary mb-4">Features</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="flex items-start space-x-4">
-                  <div className="flex-shrink-0 bg-secondary-light p-3 rounded-lg">
+                  <div className="flex-shrink-0 bg-accent/15 p-3 rounded-lg">
                     <FaLightbulb className="text-primary text-xl" />
                   </div>
                   <div>
-                    <h3 className="font-medium text-lg text-primary-dark mb-1">Multi-lens Commentary</h3>
-                    <p className="text-gray-600">View passages through Catholic, Evangelical, Jewish, Gen-Z, or Kids perspectives</p>
+                    <h3 className="font-medium text-lg text-primary mb-1">Multi-lens Commentary</h3>
+                    <p className="text-muted-foreground">View passages through Catholic, Evangelical, Jewish, Gen-Z, or Kids perspectives</p>
                   </div>
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="flex-shrink-0 bg-secondary-light p-3 rounded-lg">
+                  <div className="flex-shrink-0 bg-accent/15 p-3 rounded-lg">
                     <FaUserFriends className="text-primary text-xl" />
                   </div>
                   <div>
-                    <h3 className="font-medium text-lg text-primary-dark mb-1">Context & Insights</h3>
-                    <p className="text-gray-600">Discover author information, historical context, and "Did you know?" facts</p>
+                    <h3 className="font-medium text-lg text-primary mb-1">Context & Insights</h3>
+                    <p className="text-muted-foreground">Discover author information, historical context, and "Did you know?" facts</p>
                   </div>
                 </div>
                 
                 <div className="flex items-start space-x-4">
-                  <div className="flex-shrink-0 bg-secondary-light p-3 rounded-lg">
+                  <div className="flex-shrink-0 bg-accent/15 p-3 rounded-lg">
                     <i className="fas fa-highlighter text-primary text-xl"></i>
                   </div>
                   <div>
-                    <h3 className="font-medium text-lg text-primary-dark mb-1">Notes & Highlights</h3>
-                    <p className="text-gray-600">Create personal notes and highlight important verses for future reference</p>
+                    <h3 className="font-medium text-lg text-primary mb-1">Notes & Highlights</h3>
+                    <p className="text-muted-foreground">Create personal notes and highlight important verses for future reference</p>
                   </div>
                 </div>
                 
                 <div className="flex items-start space-x-4">
-                  <div className="flex-shrink-0 bg-secondary-light p-3 rounded-lg">
+                  <div className="flex-shrink-0 bg-accent/15 p-3 rounded-lg">
                     <i className="fas fa-search text-primary text-xl"></i>
                   </div>
                   <div>
-                    <h3 className="font-medium text-lg text-primary-dark mb-1">Smart Search</h3>
-                    <p className="text-gray-600">Find verses by theme, people, places, or semantic meaning</p>
+                    <h3 className="font-medium text-lg text-primary mb-1">Smart Search</h3>
+                    <p className="text-muted-foreground">Find verses by theme, people, places, or semantic meaning</p>
                   </div>
                 </div>
               </div>
