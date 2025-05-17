@@ -44,7 +44,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       let verses = await storage.getVerses(book, chapterNum);
       
       // Get highlights for the user
-      const notes = await storage.getNotes(MOCK_USER_ID, book, chapterNum);
+      const userId = getUserId(req);
+      const notes = await storage.getNotes(userId, book, chapterNum);
       
       // Enhance verses with highlight info and commentary
       verses = verses.map(verse => {
@@ -90,8 +91,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Get notes for a chapter
-  app.get("/api/notes/:book/:chapter", async (req: Request, res: Response) => {
+  // Get notes for a chapter - protected by authentication
+  app.get("/api/notes/:book/:chapter", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const { book, chapter } = req.params;
       const chapterNum = parseInt(chapter);
@@ -100,7 +101,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid chapter number" });
       }
       
-      const notes = await storage.getNotes(MOCK_USER_ID, book, chapterNum);
+      const userId = getUserId(req);
+      const notes = await storage.getNotes(userId, book, chapterNum);
       return res.json(notes);
     } catch (error) {
       console.error("Error fetching notes:", error);
@@ -108,12 +110,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Create a note
-  app.post("/api/notes", async (req: Request, res: Response) => {
+  // Create a note - protected by authentication
+  app.post("/api/notes", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const noteData = insertNoteSchema.parse({
         ...req.body,
-        userId: MOCK_USER_ID
+        userId: getUserId(req)
       });
       
       const note = await storage.createNote(noteData);
@@ -128,8 +130,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Update a note
-  app.patch("/api/notes/:id", async (req: Request, res: Response) => {
+  // Update a note - protected by authentication
+  app.patch("/api/notes/:id", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
       const { content } = req.body;
@@ -144,7 +146,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Note not found" });
       }
       
-      if (note.userId !== MOCK_USER_ID) {
+      if (note.userId !== getUserId(req)) {
         return res.status(403).json({ message: "Not authorized to update this note" });
       }
       
@@ -156,8 +158,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Delete a note
-  app.delete("/api/notes/:id", async (req: Request, res: Response) => {
+  // Delete a note - protected by authentication
+  app.delete("/api/notes/:id", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
       
@@ -167,7 +169,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Note not found" });
       }
       
-      if (note.userId !== MOCK_USER_ID) {
+      if (note.userId !== getUserId(req)) {
         return res.status(403).json({ message: "Not authorized to delete this note" });
       }
       
