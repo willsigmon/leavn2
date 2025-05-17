@@ -5,7 +5,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useState } from "react";
 import { FaBookOpen, FaBible, FaLightbulb, FaUserFriends, FaQuestionCircle, FaCommentAlt, FaChartBar, FaLock } from "react-icons/fa";
-import { CheckCircle } from "lucide-react";
+import { 
+  CheckCircle, 
+  BookOpen, 
+  User, 
+  Heart, 
+  MessageSquare, 
+  Share,
+  Lightbulb,
+  Sparkles,
+  Check
+} from "lucide-react";
 
 export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -352,43 +362,86 @@ export default function Home() {
                 </div>
                 
                 <div className="bg-primary-foreground/10 backdrop-blur-sm p-6 rounded-xl border border-primary-foreground/20">
-                  <div className="bg-card p-4 rounded-lg shadow-lg">
-                    <h3 className="font-medium text-foreground mb-3">Who uses Leavn Bible Study?</h3>
-                    
-                    <div className="space-y-3 mb-4">
-                      <div className="flex items-center">
-                        <input type="checkbox" defaultChecked className="w-4 h-4 rounded mr-3 accent-primary" />
-                        <span className="text-muted-foreground">Sunday School Teachers</span>
+                  <div className="relative">
+                    {/* App Interface Preview */}
+                    <div className="bg-card rounded-lg shadow-lg overflow-hidden">
+                      {/* App Header */}
+                      <div className="bg-primary p-3 flex items-center justify-between">
+                        <div className="flex items-center">
+                          <FaBookOpen className="h-5 w-5 text-primary-foreground mr-2" />
+                          <span className="text-primary-foreground font-medium">Leavn Bible Study</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-6 h-6 rounded-full bg-primary-foreground/20 flex items-center justify-center">
+                            <FaUserFriends className="h-3 w-3 text-primary-foreground" />
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex items-center">
-                        <input type="checkbox" defaultChecked className="w-4 h-4 rounded mr-3 accent-primary" />
-                        <span className="text-muted-foreground">Bible Study Groups</span>
-                      </div>
-                      <div className="flex items-center">
-                        <input type="checkbox" defaultChecked className="w-4 h-4 rounded mr-3 accent-primary" />
-                        <span className="text-muted-foreground">Personal Study</span>
-                      </div>
-                      <div className="flex items-center">
-                        <input type="checkbox" defaultChecked className="w-4 h-4 rounded mr-3 accent-primary" />
-                        <span className="text-muted-foreground">Pastors & Ministers</span>
+                      
+                      {/* App Body */}
+                      <div className="p-4 space-y-4">
+                        <div className="flex items-center justify-between">
+                          <h3 className="text-foreground font-medium">John 3:16</h3>
+                          <div className="flex items-center space-x-2">
+                            <button className="text-primary p-1 rounded-full hover:bg-primary/10">
+                              <FaLock className="h-4 w-4" />
+                            </button>
+                            <button className="text-primary p-1 rounded-full hover:bg-primary/10">
+                              <FaCommentAlt className="h-4 w-4" />
+                            </button>
+                            <button className="text-primary p-1 rounded-full hover:bg-primary/10">
+                              <FaChartBar className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </div>
+                        
+                        <div className="bg-accent/10 p-3 rounded-lg border border-accent/20">
+                          <p className="text-foreground">
+                            For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.
+                          </p>
+                        </div>
+                        
+                        <div className="border-t border-border pt-3">
+                          <h4 className="text-sm font-medium text-foreground mb-2">Multi-lens Commentary</h4>
+                          <div className="flex gap-2 overflow-x-auto pb-2 mb-2">
+                            <button className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs whitespace-nowrap">Catholic</button>
+                            <button className="bg-accent/20 text-primary px-3 py-1 rounded-full text-xs whitespace-nowrap">Evangelical</button>
+                            <button className="bg-accent/20 text-primary px-3 py-1 rounded-full text-xs whitespace-nowrap">Jewish</button>
+                            <button className="bg-accent/20 text-primary px-3 py-1 rounded-full text-xs whitespace-nowrap">Gen-Z</button>
+                            <button className="bg-accent/20 text-primary px-3 py-1 rounded-full text-xs whitespace-nowrap">Kids</button>
+                          </div>
+                          <div className="bg-primary/5 p-3 rounded-lg">
+                            <p className="text-sm text-muted-foreground italic">
+                              This verse expresses the core of Christian faith: God's immense love for humanity manifested through Christ's sacrifice, offering eternal salvation to all believers...
+                            </p>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center justify-between text-xs text-primary mt-2">
+                          <div className="flex items-center">
+                            <FaBookOpen className="h-3 w-3 mr-1" />
+                            <span>Narrative Mode</span>
+                          </div>
+                          <div className="flex items-center">
+                            <FaLightbulb className="h-3 w-3 mr-1" />
+                            <span>Did You Know?</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                     
-                    <div className="mt-6 pt-4 border-t border-border">
-                      <h4 className="text-sm font-medium text-foreground mb-2">I want to study:</h4>
-                      <div className="space-y-2">
-                        <div className="flex items-center">
-                          <input type="radio" name="studyType" defaultChecked className="w-4 h-4 mr-3 accent-primary" />
-                          <span className="text-muted-foreground">New Testament</span>
-                        </div>
-                        <div className="flex items-center">
-                          <input type="radio" name="studyType" className="w-4 h-4 mr-3 accent-primary" />
-                          <span className="text-muted-foreground">Old Testament</span>
-                        </div>
-                        <div className="flex items-center">
-                          <input type="radio" name="studyType" className="w-4 h-4 mr-3 accent-primary" />
-                          <span className="text-muted-foreground">Both</span>
-                        </div>
+                    {/* Floating elements to show interactivity */}
+                    <div className="absolute -top-3 -right-3 bg-accent text-primary p-2 rounded-lg shadow-lg text-xs font-medium">
+                      <div className="flex items-center">
+                        <FaLightbulb className="h-3 w-3 mr-1" />
+                        <span>AI-powered insights</span>
+                      </div>
+                    </div>
+                    
+                    <div className="absolute -bottom-3 -left-3 bg-card text-foreground p-2 rounded-lg shadow-lg text-xs">
+                      <div className="flex items-center">
+                        <FaLock className="h-3 w-3 mr-1 text-primary" />
+                        <span>Personalized for you</span>
                       </div>
                     </div>
                   </div>
