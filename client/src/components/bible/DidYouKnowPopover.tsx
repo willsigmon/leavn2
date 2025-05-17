@@ -35,19 +35,19 @@ export default function DidYouKnowPopover({ book, chapter, verse, verseText }: D
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <button 
-          className="bg-blue-50 text-blue-700 hover:bg-blue-100 text-xs px-2 py-1 rounded-full flex items-center"
+          className="bg-accent/10 text-primary hover:bg-accent/20 text-xs px-2 py-1 rounded-full flex items-center"
         >
-          <FaLightbulb className="mr-1 h-3 w-3 text-yellow-500" />
+          <FaLightbulb className="mr-1 h-3 w-3 text-accent" />
           <span>Did you know?</span>
         </button>
       </PopoverTrigger>
       <PopoverContent className="w-80 p-0">
-        <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-3 rounded-t-md">
+        <div className="bg-gradient-to-r from-primary to-primary-dark text-primary-foreground p-3 rounded-t-md">
           <h3 className="text-lg font-bold flex items-center">
-            <FaLightbulb className="mr-2 text-yellow-300" />
+            <FaLightbulb className="mr-2 text-accent-foreground" />
             Did you know?
           </h3>
-          <p className="text-xs text-blue-100">
+          <p className="text-xs text-primary-foreground/80">
             {book} {chapter}:{verse}
           </p>
         </div>

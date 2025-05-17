@@ -133,7 +133,7 @@ export default function ContextualQuestionPopover({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <button className="bg-purple-50 text-purple-700 hover:bg-purple-100 text-xs px-2 py-1 rounded-full flex items-center">
+        <button className="bg-accent/10 text-primary hover:bg-accent/20 text-xs px-2 py-1 rounded-full flex items-center">
           <FaQuestionCircle className="mr-1 h-3 w-3" />
           <span>Ask about this</span>
         </button>
@@ -177,7 +177,7 @@ export default function ContextualQuestionPopover({
               <button
                 key={preset}
                 onClick={() => handleQuestionPresetClick(preset)}
-                className="text-xs bg-purple-50 text-purple-700 hover:bg-purple-100 rounded-full px-2 py-1"
+                className="text-xs bg-accent/10 text-primary hover:bg-accent/20 rounded-full px-2 py-1"
               >
                 {preset}
               </button>
