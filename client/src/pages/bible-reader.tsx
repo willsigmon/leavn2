@@ -519,7 +519,7 @@ export default function BibleReader() {
                         >
                           <span className="text-xs text-stone-400 align-top mr-1.5">{4}</span>
                           <span className="relative inline">
-                            And God saw the light, that it was <span className="border-b border-amber-400 hover:text-amber-700 cursor-help font-medium" title="Hebrew: 'tov' - indicating completeness">good</span>: and God divided the light from the darkness.
+                            And God saw the light, that it was <span className="border-b-2 border-teal-500 hover:text-teal-700 cursor-help font-medium" title="Hebrew: 'tov' - indicating completeness">good</span>: and God divided the light from the darkness.
                           </span>
                         </div>
                         

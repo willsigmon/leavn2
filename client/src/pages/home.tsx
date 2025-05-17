@@ -34,8 +34,8 @@ export default function Home() {
               <div className="inline-block px-4 py-1 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold mb-2 md:mb-4">
                 Spiritually Intelligent Bible Study
               </div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
-                Bible Study made <span className="bg-gradient-to-r from-emerald-600 to-green-700 bg-clip-text text-transparent">simple.</span>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-stone-800">
+                Bible Study made <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">simple.</span>
               </h1>
               <p className="text-lg md:text-xl text-stone-600">
                 Engage with Scripture through multiple theological lenses, immersive narratives, 
@@ -82,7 +82,7 @@ export default function Home() {
               </div>
             </div>
             <div className="w-full mt-8 lg:mt-0 lg:w-1/2 relative">
-              <div className="hidden md:block absolute inset-0 -left-6 -top-6 bg-amber-100 rounded-xl"></div>
+              <div className="hidden md:block absolute inset-0 -left-6 -top-6 bg-emerald-50 rounded-xl"></div>
               <div className="hidden md:block absolute inset-0 -right-6 -bottom-6 bg-emerald-100 rounded-xl"></div>
               <div className="relative rounded-xl overflow-hidden shadow-xl border-2 md:border-4 border-white">
                 <img 
@@ -100,7 +100,7 @@ export default function Home() {
       <section className="py-20 px-4 md:px-0 bg-white">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-16">
-            <div className="inline-block px-4 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-semibold mb-4">
+            <div className="inline-block px-4 py-1 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold mb-4">
               Powerful Features
             </div>
             <h2 className="text-3xl font-bold mb-4">Bible Study designed for <span className="text-emerald-600">deeper understanding</span></h2>
@@ -147,8 +147,8 @@ export default function Home() {
 
             <div className="bg-white rounded-lg shadow-md border border-slate-100 overflow-hidden hover:shadow-lg transition-shadow">
               <div className="p-5">
-                <div className="h-12 w-12 rounded-lg bg-amber-100 flex items-center justify-center mb-4">
-                  <LightbulbIcon className="h-6 w-6 text-amber-600" />
+                <div className="h-12 w-12 rounded-lg bg-teal-100 flex items-center justify-center mb-4">
+                  <LightbulbIcon className="h-6 w-6 text-teal-600" />
                 </div>
                 <h3 className="text-lg font-semibold mb-2">"Did You Know" Facts</h3>
                 <p className="text-slate-600 mb-4">
@@ -217,10 +217,10 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 px-4 md:px-0 bg-amber-50">
+      <section className="py-20 px-4 md:px-0 bg-emerald-50">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-12">
-            <div className="inline-block px-4 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-semibold mb-4">
+            <div className="inline-block px-4 py-1 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold mb-4">
               Testimonials
             </div>
             <h2 className="text-3xl font-bold mb-4">What Users Are Saying</h2>
@@ -231,18 +231,18 @@ export default function Home() {
 
           <Tabs defaultValue="pastors" className="w-full">
             <div className="flex justify-center mb-8">
-              <TabsList className="bg-amber-100/50">
-                <TabsTrigger value="pastors" className="data-[state=active]:bg-emerald-100 data-[state=active]:text-emerald-700">Pastors</TabsTrigger>
-                <TabsTrigger value="students" className="data-[state=active]:bg-emerald-100 data-[state=active]:text-emerald-700">Students</TabsTrigger>
-                <TabsTrigger value="families" className="data-[state=active]:bg-emerald-100 data-[state=active]:text-emerald-700">Families</TabsTrigger>
+              <TabsList className="bg-emerald-100/50">
+                <TabsTrigger value="pastors" className="data-[state=active]:bg-emerald-200 data-[state=active]:text-emerald-700">Pastors</TabsTrigger>
+                <TabsTrigger value="students" className="data-[state=active]:bg-emerald-200 data-[state=active]:text-emerald-700">Students</TabsTrigger>
+                <TabsTrigger value="families" className="data-[state=active]:bg-emerald-200 data-[state=active]:text-emerald-700">Families</TabsTrigger>
               </TabsList>
             </div>
             
             <TabsContent value="pastors">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                <div className="bg-white rounded-lg p-6 shadow-md border border-amber-100">
-                  <div className="w-10 h-10 rounded-full bg-amber-100 mb-4 flex items-center justify-center">
-                    <span className="text-amber-600">❝</span>
+                <div className="bg-white rounded-lg p-6 shadow-md border border-emerald-100">
+                  <div className="w-10 h-10 rounded-full bg-emerald-100 mb-4 flex items-center justify-center">
+                    <span className="text-emerald-600">❝</span>
                   </div>
                   <p className="italic mb-4 text-stone-700">
                     "Leavn has transformed my sermon preparation process. The multiple theological lenses help me consider viewpoints I might have overlooked, and the contextual information is incredibly valuable."
@@ -258,9 +258,9 @@ export default function Home() {
                   </div>
                 </div>
                 
-                <div className="bg-white rounded-lg p-6 shadow-md border border-amber-100">
-                  <div className="w-10 h-10 rounded-full bg-amber-100 mb-4 flex items-center justify-center">
-                    <span className="text-amber-600">❝</span>
+                <div className="bg-white rounded-lg p-6 shadow-md border border-emerald-100">
+                  <div className="w-10 h-10 rounded-full bg-emerald-100 mb-4 flex items-center justify-center">
+                    <span className="text-emerald-600">❝</span>
                   </div>
                   <p className="italic mb-4 text-stone-700">
                     "The ability to instantly access different commentaries and perspectives saves me hours of research time, and the narrative mode helps bring passages to life for my congregation."
