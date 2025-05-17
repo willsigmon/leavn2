@@ -97,14 +97,14 @@ export default function Home() {
       </section>
 
       {/* Features section */}
-      <section className="py-20 px-4 md:px-0 bg-white">
+      <section className="py-20 px-4 md:px-0 bg-white dark:bg-background">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-16">
-            <div className="inline-block px-4 py-1 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold mb-4">
+            <div className="inline-block px-4 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 text-sm font-semibold mb-4">
               Powerful Features
             </div>
-            <h2 className="text-3xl font-bold mb-4 text-stone-800">Bible Study designed for <span className="text-emerald-600">deeper understanding</span></h2>
-            <p className="text-stone-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl font-bold mb-4 text-stone-800 dark:text-stone-100">Bible Study designed for <span className="text-emerald-600 dark:text-emerald-400">deeper understanding</span></h2>
+            <p className="text-stone-600 dark:text-stone-300 max-w-2xl mx-auto">
               Everything you need to explore Scripture more deeply and meaningfully with features that enhance your understanding
               and bring the text to life.
             </p>
@@ -223,8 +223,8 @@ export default function Home() {
             <div className="inline-block px-4 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 text-sm font-semibold mb-4">
               Testimonials
             </div>
-            <h2 className="text-3xl font-bold mb-4 text-stone-800">What Users Are Saying</h2>
-            <p className="text-stone-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl font-bold mb-4 text-stone-800 dark:text-stone-100">What Users Are Saying</h2>
+            <p className="text-stone-600 dark:text-stone-300 max-w-2xl mx-auto">
               Hear from people who have experienced deeper understanding through Leavn's approach to Bible study.
             </p>
           </div>
