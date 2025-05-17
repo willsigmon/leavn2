@@ -293,6 +293,110 @@ export default function Home() {
             </div>
           </section>
           
+          {/* Blue Animated CTA Section */}
+          <section className="py-16 md:py-24 bg-blue-600 relative overflow-hidden">
+            {/* Animated dots background */}
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute inset-0" style={{ 
+                backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)',
+                backgroundSize: '30px 30px' 
+              }}></div>
+            </div>
+            
+            {/* Floating elements */}
+            <div className="absolute -right-8 top-10 w-24 h-24 rounded-lg bg-blue-500 opacity-40 animate-float"></div>
+            <div className="absolute left-16 bottom-10 w-16 h-16 rounded-lg bg-blue-700 opacity-30 animate-float-delayed"></div>
+            <div className="absolute right-1/4 top-1/3 w-10 h-10 rounded-full bg-white opacity-20 animate-float"></div>
+            
+            <div className="container mx-auto px-4 relative z-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div className="text-white">
+                  <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                    Ready to gather spiritual insights?
+                  </h2>
+                  <p className="text-lg text-blue-100 mb-8">
+                    Start using Leavn Bible Study today and transform your Scripture experience.
+                  </p>
+                  
+                  <div className="space-y-4">
+                    <div className="flex items-center">
+                      <div className="rounded-full bg-blue-500 p-1 mr-3">
+                        <CheckCircle className="h-5 w-5 text-white" />
+                      </div>
+                      <span className="text-blue-50">Free for personal Bible study</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="rounded-full bg-blue-500 p-1 mr-3">
+                        <CheckCircle className="h-5 w-5 text-white" />
+                      </div>
+                      <span className="text-blue-50">No account required to preview</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="rounded-full bg-blue-500 p-1 mr-3">
+                        <CheckCircle className="h-5 w-5 text-white" />
+                      </div>
+                      <span className="text-blue-50">Premium features for deeper study</span>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-8 flex flex-col sm:flex-row gap-4">
+                    <Link href="/api/login">
+                      <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50">
+                        Create Account
+                      </Button>
+                    </Link>
+                    <Button variant="outline" size="lg" className="border-white text-white hover:bg-blue-500">
+                      View Example
+                    </Button>
+                  </div>
+                </div>
+                
+                <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20">
+                  <div className="bg-white p-4 rounded-lg shadow-lg">
+                    <h3 className="font-medium text-gray-900 mb-3">Who uses Leavn Bible Study?</h3>
+                    
+                    <div className="space-y-3 mb-4">
+                      <div className="flex items-center">
+                        <input type="checkbox" checked className="w-4 h-4 rounded mr-3 accent-blue-600" />
+                        <span className="text-gray-700">Sunday School Teachers</span>
+                      </div>
+                      <div className="flex items-center">
+                        <input type="checkbox" checked className="w-4 h-4 rounded mr-3 accent-blue-600" />
+                        <span className="text-gray-700">Bible Study Groups</span>
+                      </div>
+                      <div className="flex items-center">
+                        <input type="checkbox" checked className="w-4 h-4 rounded mr-3 accent-blue-600" />
+                        <span className="text-gray-700">Personal Study</span>
+                      </div>
+                      <div className="flex items-center">
+                        <input type="checkbox" checked className="w-4 h-4 rounded mr-3 accent-blue-600" />
+                        <span className="text-gray-700">Pastors & Ministers</span>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-6 pt-4 border-t border-gray-200">
+                      <h4 className="text-sm font-medium text-gray-900 mb-2">I want to study:</h4>
+                      <div className="space-y-2">
+                        <div className="flex items-center">
+                          <input type="radio" name="studyType" checked className="w-4 h-4 mr-3 accent-blue-600" />
+                          <span className="text-gray-700">New Testament</span>
+                        </div>
+                        <div className="flex items-center">
+                          <input type="radio" name="studyType" className="w-4 h-4 mr-3 accent-blue-600" />
+                          <span className="text-gray-700">Old Testament</span>
+                        </div>
+                        <div className="flex items-center">
+                          <input type="radio" name="studyType" className="w-4 h-4 mr-3 accent-blue-600" />
+                          <span className="text-gray-700">Both</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          
           {/* Footer */}
           <footer className="bg-card border-t border-border py-12">
             <div className="container mx-auto px-4 max-w-6xl">
