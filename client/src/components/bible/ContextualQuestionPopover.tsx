@@ -71,7 +71,7 @@ export default function ContextualQuestionPopover({
       // Add answer to question
       const answeredQuestion = {
         ...newQuestion,
-        answer: response.content
+        answer: response?.content || "I'm sorry, I couldn't generate an answer at this time."
       };
       
       // Add to recent questions list
@@ -116,13 +116,16 @@ export default function ContextualQuestionPopover({
           <span>Ask about this</span>
         </button>
       </DialogTrigger>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md" aria-describedby="contextual-question-description">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-center mb-1">
             Ask about {book} {chapter}:{verse}
           </DialogTitle>
-          <div className="text-sm text-gray-500 text-center py-2 px-4 bg-gray-50 rounded border mb-4">
+          <div className="text-sm text-center py-2 px-4 bg-accent/5 rounded border border-border mb-4">
             {verseText}
+          </div>
+          <div id="contextual-question-description" className="sr-only">
+            Ask and receive answers about this Bible verse in context
           </div>
         </DialogHeader>
         
