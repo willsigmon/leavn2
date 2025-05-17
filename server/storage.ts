@@ -4,7 +4,7 @@ import {
   Author, InsertAuthor, DidYouKnow, InsertDidYouKnow 
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, and } from "drizzle-orm";
+import { eq, and, sql } from "drizzle-orm";
 import * as schema from "@shared/schema";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -213,7 +213,8 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(schema.tags)
       .where(
-        schema.tags.id.in(tagIds)
+        // Use SQL where clause with IN for compatible operation
+        sql`${schema.tags.id} IN (${tagIds.join(',')})`
       );
     
     return tags;
@@ -263,16 +264,44 @@ export class MemStorage implements IStorage {
     this.users.set(sampleUser.id, sampleUser);
     
     // Sample verses for Proverbs 3
-    const verses = [
-      { id: "v1", book: "proverbs", chapter: 3, verseNumber: 1, text: "My son, do not forget my teaching, but keep my commands in your heart," },
-      { id: "v2", book: "proverbs", chapter: 3, verseNumber: 2, text: "for they will prolong your life many years and bring you peace and prosperity." },
-      { id: "v3", book: "proverbs", chapter: 3, verseNumber: 3, text: "Let love and faithfulness never leave you; bind them around your neck, write them on the tablet of your heart." },
-      { id: "v4", book: "proverbs", chapter: 3, verseNumber: 4, text: "Then you will win favor and a good name in the sight of God and man." },
-      { id: "v5", book: "proverbs", chapter: 3, verseNumber: 5, text: "Trust in the LORD with all your heart and lean not on your own understanding;" },
-      { id: "v6", book: "proverbs", chapter: 3, verseNumber: 6, text: "in all your ways submit to him, and he will make your paths straight." },
-      { id: "v7", book: "proverbs", chapter: 3, verseNumber: 7, text: "Do not be wise in your own eyes; fear the LORD and shun evil." },
-      { id: "v8", book: "proverbs", chapter: 3, verseNumber: 8, text: "This will bring health to your body and nourishment to your bones." }
+    const proverbsVerses = [
+      { id: "prov3v1", book: "proverbs", chapter: 3, verseNumber: 1, text: "My son, do not forget my teaching, but keep my commands in your heart,", embedding: null },
+      { id: "prov3v2", book: "proverbs", chapter: 3, verseNumber: 2, text: "for they will prolong your life many years and bring you peace and prosperity.", embedding: null },
+      { id: "prov3v3", book: "proverbs", chapter: 3, verseNumber: 3, text: "Let love and faithfulness never leave you; bind them around your neck, write them on the tablet of your heart.", embedding: null },
+      { id: "prov3v4", book: "proverbs", chapter: 3, verseNumber: 4, text: "Then you will win favor and a good name in the sight of God and man.", embedding: null },
+      { id: "prov3v5", book: "proverbs", chapter: 3, verseNumber: 5, text: "Trust in the LORD with all your heart and lean not on your own understanding;", embedding: null },
+      { id: "prov3v6", book: "proverbs", chapter: 3, verseNumber: 6, text: "in all your ways submit to him, and he will make your paths straight.", embedding: null },
+      { id: "prov3v7", book: "proverbs", chapter: 3, verseNumber: 7, text: "Do not be wise in your own eyes; fear the LORD and shun evil.", embedding: null },
+      { id: "prov3v8", book: "proverbs", chapter: 3, verseNumber: 8, text: "This will bring health to your body and nourishment to your bones.", embedding: null }
     ];
+    
+    // Sample verses for Genesis 1
+    const genesisVerses = [
+      { id: "gen1v1", book: "genesis", chapter: 1, verseNumber: 1, text: "In the beginning God created the heavens and the earth.", embedding: null },
+      { id: "gen1v2", book: "genesis", chapter: 1, verseNumber: 2, text: "Now the earth was formless and empty, darkness was over the surface of the deep, and the Spirit of God was hovering over the waters.", embedding: null },
+      { id: "gen1v3", book: "genesis", chapter: 1, verseNumber: 3, text: "And God said, 'Let there be light,' and there was light.", embedding: null },
+      { id: "gen1v4", book: "genesis", chapter: 1, verseNumber: 4, text: "God saw that the light was good, and he separated the light from the darkness.", embedding: null },
+      { id: "gen1v5", book: "genesis", chapter: 1, verseNumber: 5, text: "God called the light 'day,' and the darkness he called 'night.' And there was evening, and there was morning—the first day.", embedding: null },
+      { id: "gen1v6", book: "genesis", chapter: 1, verseNumber: 6, text: "And God said, 'Let there be a vault between the waters to separate water from water.'", embedding: null },
+      { id: "gen1v7", book: "genesis", chapter: 1, verseNumber: 7, text: "So God made the vault and separated the water under the vault from the water above it. And it was so.", embedding: null },
+      { id: "gen1v8", book: "genesis", chapter: 1, verseNumber: 8, text: "God called the vault 'sky.' And there was evening, and there was morning—the second day.", embedding: null }
+    ];
+    
+    // Sample verses for John 3
+    const johnVerses = [
+      { id: "john3v1", book: "john", chapter: 3, verseNumber: 1, text: "Now there was a Pharisee, a man named Nicodemus who was a member of the Jewish ruling council.", embedding: null },
+      { id: "john3v2", book: "john", chapter: 3, verseNumber: 2, text: "He came to Jesus at night and said, 'Rabbi, we know that you are a teacher who has come from God. For no one could perform the signs you are doing if God were not with him.'", embedding: null },
+      { id: "john3v3", book: "john", chapter: 3, verseNumber: 3, text: "Jesus replied, 'Very truly I tell you, no one can see the kingdom of God unless they are born again.'", embedding: null },
+      { id: "john3v4", book: "john", chapter: 3, verseNumber: 4, text: "'How can someone be born when they are old?' Nicodemus asked. 'Surely they cannot enter a second time into their mother's womb to be born!'", embedding: null },
+      { id: "john3v5", book: "john", chapter: 3, verseNumber: 5, text: "Jesus answered, 'Very truly I tell you, no one can enter the kingdom of God unless they are born of water and the Spirit.'", embedding: null },
+      { id: "john3v6", book: "john", chapter: 3, verseNumber: 6, text: "Flesh gives birth to flesh, but the Spirit gives birth to spirit.", embedding: null },
+      { id: "john3v7", book: "john", chapter: 3, verseNumber: 7, text: "You should not be surprised at my saying, 'You must be born again.'", embedding: null },
+      { id: "john3v8", book: "john", chapter: 3, verseNumber: 8, text: "The wind blows wherever it pleases. You hear its sound, but you cannot tell where it comes from or where it is going. So it is with everyone born of the Spirit.", embedding: null },
+      { id: "john3v16", book: "john", chapter: 3, verseNumber: 16, text: "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.", embedding: null }
+    ];
+    
+    // Combine all verses
+    const verses = [...proverbsVerses, ...genesisVerses, ...johnVerses];
     
     verses.forEach(verse => {
       this.verses.set(verse.id, verse);
@@ -356,17 +385,50 @@ export class MemStorage implements IStorage {
       imageUrl: "https://pixabay.com/get/g055bc4e5f89ae0b254f6b72f19ac6cd4dff2ffbfdf0ad33c851f6a31c49e64e79b80caa43c01d1c1c6c4264e20c4d7add9aecb01b3ab54a18fc55e80ffa3a95c_1280.jpg"
     };
     
-    this.authors.set(proverbsAuthor.book, proverbsAuthor);
-    this.authors.set(genesisAuthor.book, genesisAuthor);
-    
-    // Sample "Did you know" fact
-    const didYouKnowFact: DidYouKnow = {
-      id: "dyk1",
-      verseId: "v5",
-      content: "This verse and the next (Proverbs 3:5-6) are among the most memorized and quoted verses from the entire Book of Proverbs."
+    const johnAuthor: Author = {
+      id: "a3",
+      book: "john",
+      name: "John the Apostle",
+      description: "John was one of Jesus' closest disciples, often referred to as 'the disciple whom Jesus loved.' His gospel, written around 90-95 AD, emphasizes the deity of Christ and contains many unique stories and teachings not found in the other gospels.",
+      imageUrl: "https://pixabay.com/get/g8e52e16dae5c7fb8be1acc9d03f0c0e61ed1cc5c10b09ebdf1dcc9f2b5b0c6bd8293ef39c1d9d87ead73da4fa8e3ec5acb7809e23f33d77c3a1752cf1f4c172f_1280.jpg"
     };
     
-    this.didYouKnow.set(didYouKnowFact.verseId, didYouKnowFact);
+    this.authors.set(proverbsAuthor.book, proverbsAuthor);
+    this.authors.set(genesisAuthor.book, genesisAuthor);
+    this.authors.set(johnAuthor.book, johnAuthor);
+    
+    // Sample "Did you know" facts
+    const didYouKnowFacts: DidYouKnow[] = [
+      {
+        id: "dyk1",
+        verseId: "prov3v5",
+        content: "This verse and the next (Proverbs 3:5-6) are among the most memorized and quoted verses from the entire Book of Proverbs."
+      },
+      {
+        id: "dyk2",
+        verseId: "gen1v1",
+        content: "Genesis 1:1 is one of the most translated verses in the Bible. The Hebrew word 'bara' (created) is used exclusively for God's creative activity and never for human creativity."
+      },
+      {
+        id: "dyk3",
+        verseId: "john3v16",
+        content: "John 3:16 is often called 'the gospel in a nutshell' because it summarizes the core Christian message in a single verse. It has been translated into more than 1,100 languages."
+      },
+      {
+        id: "dyk4",
+        verseId: "gen1v3",
+        content: "The phrase 'let there be light' (Genesis 1:3) has become iconic in popular culture, appearing in numerous books, films, and songs as a metaphor for sudden illumination or understanding."
+      },
+      {
+        id: "dyk5",
+        verseId: "john3v5",
+        content: "The phrase 'born of water and the Spirit' has been interpreted in various ways throughout church history, including references to physical birth, baptism, spiritual renewal, or the Word of God."
+      }
+    ];
+    
+    didYouKnowFacts.forEach(fact => {
+      this.didYouKnow.set(fact.verseId, fact);
+    });
   }
   
   async getUser(id: string): Promise<User | undefined> {
