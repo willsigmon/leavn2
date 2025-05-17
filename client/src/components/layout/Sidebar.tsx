@@ -89,7 +89,7 @@ export default function Sidebar({ isOpen, onClose, currentBook }: SidebarProps) 
         </div>
 
         <div>
-          <h2 className="text-xs uppercase font-bold text-gray-500 tracking-wider mb-3">New Testament</h2>
+          <h2 className="text-xs uppercase font-bold text-muted-foreground tracking-wider mb-3">New Testament</h2>
           <ul className="space-y-1">
             {newTestamentBooks.map((book) => {
               const bookTitle = book.charAt(0).toUpperCase() + book.slice(1);
@@ -102,8 +102,8 @@ export default function Sidebar({ isOpen, onClose, currentBook }: SidebarProps) 
                     className={cn(
                       "flex items-center px-2 py-2 text-sm rounded-lg",
                       isActive 
-                        ? "font-semibold text-primary bg-secondary-light" 
-                        : "hover:bg-gray-100"
+                        ? "font-semibold text-primary bg-accent/10" 
+                        : "hover:bg-muted"
                     )}
                   >
                     <span>{bookTitle}</span>
