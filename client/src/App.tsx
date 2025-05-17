@@ -6,6 +6,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import BibleReader from "@/pages/bible-reader";
+import ReadingPlans from "@/pages/reading-plans";
+import ReadingPlanDetail from "@/pages/reading-plan-detail";
 import { ThemeProvider } from "next-themes";
 
 function Router() {
@@ -13,6 +15,8 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/bible/:book/:chapter" component={BibleReader} />
+      <Route path="/reading-plans" component={ReadingPlans} />
+      <Route path="/reading-plan/:id" component={ReadingPlanDetail} />
       {/* Fallback to 404 */}
       <Route component={NotFound} />
     </Switch>

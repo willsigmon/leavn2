@@ -378,6 +378,83 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(500).json({ message: "Failed to search verses" });
     }
   });
+  
+  // Get all reading plans
+  app.get("/api/reading-plans", async (req: Request, res: Response) => {
+    try {
+      const plans = [
+        {
+          id: "plan1",
+          title: "Daily Devotional",
+          description: "Start each day with a short passage to reflect on throughout the day",
+          days: 30,
+          image: "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=400&auto=format",
+          entries: [
+            { day: 1, book: "proverbs", chapter: 3, startVerse: 1, endVerse: 8 },
+            { day: 2, book: "john", chapter: 3, startVerse: 1, endVerse: 8 },
+            { day: 3, book: "genesis", chapter: 1, startVerse: 1, endVerse: 8 }
+          ]
+        },
+        {
+          id: "plan2",
+          title: "New Testament in 90 Days",
+          description: "Read through the entire New Testament in just three months",
+          days: 90,
+          image: "https://images.unsplash.com/photo-1507692812060-98338d07aca3?w=400&auto=format",
+          entries: [
+            { day: 1, book: "matthew", chapter: 1, startVerse: 1, endVerse: null },
+            { day: 2, book: "matthew", chapter: 2, startVerse: 1, endVerse: null },
+            { day: 3, book: "john", chapter: 3, startVerse: 1, endVerse: null }
+          ]
+        },
+        {
+          id: "plan3",
+          title: "Faith Foundations",
+          description: "Explore key passages that explain core Christian beliefs and principles",
+          days: 21,
+          image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400&auto=format",
+          entries: [
+            { day: 1, book: "john", chapter: 3, startVerse: 16, endVerse: 16 },
+            { day: 2, book: "proverbs", chapter: 3, startVerse: 5, endVerse: 6 },
+            { day: 3, book: "genesis", chapter: 1, startVerse: 1, endVerse: 5 }
+          ]
+        }
+      ];
+      
+      return res.json(plans);
+    } catch (error) {
+      console.error("Error fetching reading plans:", error);
+      return res.status(500).json({ message: "Failed to fetch reading plans" });
+    }
+  });
+  
+  // Get reading plan by ID
+  app.get("/api/reading-plans/:id", async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      
+      // Mock response for now
+      if (id === "plan1") {
+        return res.json({
+          id: "plan1",
+          title: "Daily Devotional",
+          description: "Start each day with a short passage to reflect on throughout the day",
+          days: 30,
+          image: "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=400&auto=format",
+          entries: [
+            { day: 1, book: "proverbs", chapter: 3, startVerse: 1, endVerse: 8 },
+            { day: 2, book: "john", chapter: 3, startVerse: 1, endVerse: 8 },
+            { day: 3, book: "genesis", chapter: 1, startVerse: 1, endVerse: 8 }
+          ]
+        });
+      }
+      
+      return res.status(404).json({ message: "Reading plan not found" });
+    } catch (error) {
+      console.error("Error fetching reading plan:", error);
+      return res.status(500).json({ message: "Failed to fetch reading plan" });
+    }
+  });
 
   const httpServer = createServer(app);
   return httpServer;

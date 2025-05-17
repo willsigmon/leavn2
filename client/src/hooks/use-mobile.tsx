@@ -21,7 +21,7 @@ export function useMobile() {
     }
   }, []);
 
-  return isMobile;
+  return { isMobile };
 }
 
 export default useMobile;

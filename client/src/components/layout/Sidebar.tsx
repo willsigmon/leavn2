@@ -42,21 +42,21 @@ export default function Sidebar({ isOpen, onClose, currentBook }: SidebarProps) 
           <h2 className="text-xs uppercase font-bold text-gray-500 tracking-wider mb-3">Reading Plans</h2>
           <ul className="space-y-1">
             <li>
-              <Link href="#" className="flex items-center px-2 py-2 text-sm rounded-lg hover:bg-gray-100">
+              <Link href="/reading-plans" className="flex items-center px-2 py-2 text-sm rounded-lg hover:bg-gray-100">
                 <FaCalendarDay className="w-5 text-primary mr-2" />
+                <span>All Reading Plans</span>
+              </Link>
+            </li>
+            <li>
+              <Link href="/reading-plan/plan1" className="flex items-center px-2 py-2 text-sm rounded-lg hover:bg-gray-100">
+                <FaBookOpen className="w-5 text-primary mr-2" />
                 <span>Daily Devotional</span>
               </Link>
             </li>
             <li>
-              <Link href="#" className="flex items-center px-2 py-2 text-sm rounded-lg hover:bg-gray-100">
-                <FaBookOpen className="w-5 text-primary mr-2" />
-                <span>New Testament in 90 Days</span>
-              </Link>
-            </li>
-            <li>
-              <Link href="#" className="flex items-center px-2 py-2 text-sm rounded-lg hover:bg-gray-100">
+              <Link href="/reading-plan/plan2" className="flex items-center px-2 py-2 text-sm rounded-lg hover:bg-gray-100">
                 <FaSeedling className="w-5 text-primary mr-2" />
-                <span>Faith Foundations</span>
+                <span>New Testament in 90 Days</span>
               </Link>
             </li>
           </ul>
