@@ -217,10 +217,10 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 px-4 md:px-0 bg-emerald-50">
+      <section className="py-20 px-4 md:px-0 bg-emerald-50 dark:bg-emerald-950/30">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-12">
-            <div className="inline-block px-4 py-1 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold mb-4">
+            <div className="inline-block px-4 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 text-sm font-semibold mb-4">
               Testimonials
             </div>
             <h2 className="text-3xl font-bold mb-4 text-stone-800">What Users Are Saying</h2>
@@ -231,47 +231,47 @@ export default function Home() {
 
           <Tabs defaultValue="pastors" className="w-full">
             <div className="flex justify-center mb-8">
-              <TabsList className="bg-emerald-100/50">
-                <TabsTrigger value="pastors" className="data-[state=active]:bg-emerald-200 data-[state=active]:text-emerald-700">Pastors</TabsTrigger>
-                <TabsTrigger value="students" className="data-[state=active]:bg-emerald-200 data-[state=active]:text-emerald-700">Students</TabsTrigger>
-                <TabsTrigger value="families" className="data-[state=active]:bg-emerald-200 data-[state=active]:text-emerald-700">Families</TabsTrigger>
+              <TabsList className="bg-emerald-100/50 dark:bg-emerald-900/30">
+                <TabsTrigger value="pastors" className="data-[state=active]:bg-emerald-200 data-[state=active]:text-emerald-700 dark:data-[state=active]:bg-emerald-800 dark:data-[state=active]:text-emerald-300">Pastors</TabsTrigger>
+                <TabsTrigger value="students" className="data-[state=active]:bg-emerald-200 data-[state=active]:text-emerald-700 dark:data-[state=active]:bg-emerald-800 dark:data-[state=active]:text-emerald-300">Students</TabsTrigger>
+                <TabsTrigger value="families" className="data-[state=active]:bg-emerald-200 data-[state=active]:text-emerald-700 dark:data-[state=active]:bg-emerald-800 dark:data-[state=active]:text-emerald-300">Families</TabsTrigger>
               </TabsList>
             </div>
             
             <TabsContent value="pastors">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                <div className="bg-white rounded-lg p-6 shadow-md border border-emerald-100">
-                  <div className="w-10 h-10 rounded-full bg-emerald-100 mb-4 flex items-center justify-center">
-                    <span className="text-emerald-600">❝</span>
+                <div className="bg-card rounded-lg p-6 shadow-md border border-border">
+                  <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900 mb-4 flex items-center justify-center">
+                    <span className="text-emerald-600 dark:text-emerald-400">❝</span>
                   </div>
-                  <p className="italic mb-4 text-stone-700">
+                  <p className="italic mb-4 text-foreground">
                     "Leavn has transformed my sermon preparation process. The multiple theological lenses help me consider viewpoints I might have overlooked, and the contextual information is incredibly valuable."
                   </p>
                   <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold">
+                    <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center text-emerald-700 dark:text-emerald-400 font-bold">
                       JM
                     </div>
                     <div className="ml-3">
-                      <p className="font-medium text-slate-800">Pastor James Miller</p>
-                      <p className="text-sm text-stone-500">Community Church</p>
+                      <p className="font-medium text-foreground">Pastor James Miller</p>
+                      <p className="text-sm text-muted-foreground">Community Church</p>
                     </div>
                   </div>
                 </div>
                 
-                <div className="bg-white rounded-lg p-6 shadow-md border border-emerald-100">
-                  <div className="w-10 h-10 rounded-full bg-emerald-100 mb-4 flex items-center justify-center">
-                    <span className="text-emerald-600">❝</span>
+                <div className="bg-card rounded-lg p-6 shadow-md border border-border">
+                  <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900 mb-4 flex items-center justify-center">
+                    <span className="text-emerald-600 dark:text-emerald-400">❝</span>
                   </div>
-                  <p className="italic mb-4 text-stone-700">
+                  <p className="italic mb-4 text-foreground">
                     "The ability to instantly access different commentaries and perspectives saves me hours of research time, and the narrative mode helps bring passages to life for my congregation."
                   </p>
                   <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold">
+                    <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center text-emerald-700 dark:text-emerald-400 font-bold">
                       SR
                     </div>
                     <div className="ml-3">
-                      <p className="font-medium text-slate-800">Rev. Sarah Rodriguez</p>
-                      <p className="text-sm text-stone-500">Hillside Fellowship</p>
+                      <p className="font-medium text-foreground">Rev. Sarah Rodriguez</p>
+                      <p className="text-sm text-muted-foreground">Hillside Fellowship</p>
                     </div>
                   </div>
                 </div>
@@ -280,38 +280,38 @@ export default function Home() {
             
             <TabsContent value="students">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                <div className="bg-white rounded-lg p-6 shadow-md border border-amber-100">
-                  <div className="w-10 h-10 rounded-full bg-amber-100 mb-4 flex items-center justify-center">
-                    <span className="text-amber-600">❝</span>
+                <div className="bg-card rounded-lg p-6 shadow-md border border-border">
+                  <div className="w-10 h-10 rounded-full bg-teal-100 dark:bg-teal-900 mb-4 flex items-center justify-center">
+                    <span className="text-teal-600 dark:text-teal-400">❝</span>
                   </div>
-                  <p className="italic mb-4 text-stone-700">
+                  <p className="italic mb-4 text-foreground">
                     "As a theology student, the multiple perspectives feature is invaluable. I can quickly compare different theological traditions' interpretations of the same passage."
                   </p>
                   <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold">
+                    <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center text-emerald-700 dark:text-emerald-400 font-bold">
                       DJ
                     </div>
                     <div className="ml-3">
-                      <p className="font-medium text-slate-800">David Johnson</p>
-                      <p className="text-sm text-stone-500">Seminary Student</p>
+                      <p className="font-medium text-foreground">David Johnson</p>
+                      <p className="text-sm text-muted-foreground">Seminary Student</p>
                     </div>
                   </div>
                 </div>
                 
-                <div className="bg-white rounded-lg p-6 shadow-md border border-amber-100">
-                  <div className="w-10 h-10 rounded-full bg-amber-100 mb-4 flex items-center justify-center">
-                    <span className="text-amber-600">❝</span>
+                <div className="bg-card rounded-lg p-6 shadow-md border border-border">
+                  <div className="w-10 h-10 rounded-full bg-teal-100 dark:bg-teal-900 mb-4 flex items-center justify-center">
+                    <span className="text-teal-600 dark:text-teal-400">❝</span>
                   </div>
-                  <p className="italic mb-4 text-stone-700">
+                  <p className="italic mb-4 text-foreground">
                     "The 'Did You Know' facts and contextual questions help me understand cultural nuances I would have missed. It's like having a professor available 24/7."
                   </p>
                   <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold">
+                    <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center text-emerald-700 dark:text-emerald-400 font-bold">
                       AT
                     </div>
                     <div className="ml-3">
-                      <p className="font-medium text-slate-800">Amanda Torres</p>
-                      <p className="text-sm text-stone-500">Religious Studies Major</p>
+                      <p className="font-medium text-foreground">Amanda Torres</p>
+                      <p className="text-sm text-muted-foreground">Religious Studies Major</p>
                     </div>
                   </div>
                 </div>
@@ -320,20 +320,20 @@ export default function Home() {
             
             <TabsContent value="families">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                <div className="bg-white rounded-lg p-6 shadow-md border border-amber-100">
-                  <div className="w-10 h-10 rounded-full bg-amber-100 mb-4 flex items-center justify-center">
-                    <span className="text-amber-600">❝</span>
+                <div className="bg-card rounded-lg p-6 shadow-md border border-border">
+                  <div className="w-10 h-10 rounded-full bg-teal-100 dark:bg-teal-900 mb-4 flex items-center justify-center">
+                    <span className="text-teal-600 dark:text-teal-400">❝</span>
                   </div>
-                  <p className="italic mb-4 text-stone-700">
+                  <p className="italic mb-4 text-foreground">
                     "The kids' translation makes family devotions so much more engaging. Our children actually look forward to Bible time now!"
                   </p>
                   <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold">
+                    <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center text-emerald-700 dark:text-emerald-400 font-bold">
                       WF
                     </div>
                     <div className="ml-3">
-                      <p className="font-medium text-slate-800">Wilson Family</p>
-                      <p className="text-sm text-stone-500">Parents of three</p>
+                      <p className="font-medium text-foreground">Wilson Family</p>
+                      <p className="text-sm text-muted-foreground">Parents of three</p>
                     </div>
                   </div>
                 </div>
