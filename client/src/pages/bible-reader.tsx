@@ -234,12 +234,31 @@ export default function BibleReader() {
                         </div>
                         
                         <div className="md:w-80">
-                          <NotePanel 
-                            notes={notes || []} 
-                            book={book}
-                            chapter={parseInt(chapter)}
-                            onOpenNoteModal={openNoteModal}
-                          />
+                          <div className="space-y-4">
+                            <NotePanel 
+                              notes={notes || []} 
+                              book={book}
+                              chapter={parseInt(chapter)}
+                              onOpenNoteModal={openNoteModal}
+                            />
+                            
+                            {/* RAG Tagging Explorer */}
+                            <div className="mt-6 border-t border-border pt-4">
+                              <h3 className="text-lg font-serif font-semibold mb-4 text-primary">Explore Connections</h3>
+                              <p className="text-sm text-muted-foreground mb-4">
+                                Discover related verses and themes using our intelligent tagging system.
+                              </p>
+                              <TagExplorer 
+                                onVerseSelect={(selectedBook, selectedChapter, verse) => {
+                                  // Navigate to the selected verse
+                                  const element = document.getElementById(`verse-${verse}`);
+                                  if (element) {
+                                    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                  }
+                                }}
+                              />
+                            </div>
+                          </div>
                         </div>
                       </div>
                     ) : (
