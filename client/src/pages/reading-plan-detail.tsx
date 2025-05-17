@@ -82,7 +82,7 @@ export default function ReadingPlanDetail() {
           ) : plan ? (
             <>
               <div>
-                <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+                <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                   {plan.title}
                 </h1>
                 <p className="text-lg text-muted-foreground mb-6">
@@ -107,7 +107,7 @@ export default function ReadingPlanDetail() {
                 <h2 className="text-2xl font-semibold mb-4">Reading Schedule</h2>
                 
                 <div className="space-y-4">
-                  {plan.entries.map((entry) => (
+                  {Array.isArray(plan.entries) ? plan.entries.map((entry) => (
                     <Card key={entry.day} className="transition-all hover:shadow-md">
                       <CardHeader className="pb-2">
                         <CardTitle className="text-lg">Day {entry.day}</CardTitle>
@@ -118,14 +118,21 @@ export default function ReadingPlanDetail() {
                       </CardHeader>
                       <CardContent>
                         <Link href={`/bible/${entry.book}/${entry.chapter}`}>
-                          <Button variant="outline" className="flex items-center gap-2">
+                          <Button variant="outline" className="flex items-center gap-2 border-input hover:bg-accent hover:text-accent-foreground">
                             <BookOpen size={16} />
                             Read Passage
                           </Button>
                         </Link>
                       </CardContent>
                     </Card>
-                  ))}
+                  )) : (
+                    <Alert>
+                      <AlertTitle>No Entries</AlertTitle>
+                      <AlertDescription>
+                        This reading plan doesn't have any entries yet.
+                      </AlertDescription>
+                    </Alert>
+                  )}
                 </div>
               </div>
             </>
