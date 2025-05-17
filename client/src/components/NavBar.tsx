@@ -49,10 +49,15 @@ export function NavBar() {
             {/* Logo */}
             <div 
               onClick={() => navigate('/')}
-              className="flex items-center space-x-2 cursor-pointer"
+              className="flex items-center space-x-2 cursor-pointer relative"
             >
               <BookOpenText className="h-6 w-6 text-primary" />
               <span className="text-xl font-semibold text-primary">Leavn</span>
+              <div className="absolute -right-8 -top-1">
+                <span className="bg-primary text-primary-foreground text-[10px] px-1.5 py-0.5 rounded-full font-semibold">
+                  BETA
+                </span>
+              </div>
             </div>
             
             {/* Desktop navigation */}
