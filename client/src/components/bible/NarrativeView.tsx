@@ -9,9 +9,10 @@ interface NarrativeViewProps {
   book: string;
   chapter: number;
   lens: string;
+  onToggleView?: () => void;
 }
 
-export default function NarrativeView({ book, chapter, lens }: NarrativeViewProps) {
+export default function NarrativeView({ book, chapter, lens, onToggleView }: NarrativeViewProps) {
   const [fontFamily, setFontFamily] = useState<"serif" | "sans-serif">("serif");
   const [fontSize, setFontSize] = useState<"normal" | "large">("normal");
   const [showArtwork, setShowArtwork] = useState(true);

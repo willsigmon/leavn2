@@ -219,8 +219,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.json({ content: cachedCommentary.content });
       }
       
-      // Generate commentary
-      const commentary = await generateCommentary(verseData.text, lens);
+      // Generate commentary using the best available AI model
+      let commentary = "";
+      if (process.env.ANTHROPIC_API_KEY) {
+        // Use Anthropic Claude for deeper theological insights
+        const { generateTheologicalCommentaryWithClaude } = await import('./anthropic');
+        commentary = await generateTheologicalCommentaryWithClaude(verseData.text, lens);
+      } else {
+        // Fall back to OpenAI
+        const { generateCommentary } = await import('./ai');
+        commentary = await generateCommentary(verseData.text, lens);
+      }
       
       // Cache the commentary
       await storage.createCommentary({
@@ -383,6 +392,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/ai/narrative/:book/:chapter", async (req: Request, res: Response) => {
     try {
       const { book, chapter } = req.params;
+      const lens = req.query.lens as string || "standard";
       const chapterNum = parseInt(chapter);
       
       if (isNaN(chapterNum)) {
@@ -399,8 +409,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Extract text from verses
       const verseTexts = verses.map(verse => verse.text);
       
-      // Generate narrative mode
-      const narrative = await generateNarrativeMode(verseTexts, { book, chapter: chapterNum });
+      // Choose AI provider based on available API keys
+      let narrative = "";
+      if (process.env.ANTHROPIC_API_KEY) {
+        // Use Anthropic Claude for better narrative generation
+        const { generateNarrativeWithClaude } = await import('./anthropic');
+        narrative = await generateNarrativeWithClaude(verseTexts, { book, chapter: chapterNum }, lens);
+      } else {
+        // Fall back to OpenAI
+        const { generateNarrativeMode } = await import('./ai');
+        narrative = await generateNarrativeMode(verseTexts, { book, chapter: chapterNum });
+      }
       
       return res.json({ content: narrative });
     } catch (error) {
@@ -430,6 +449,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const firstFewVerses = verses.slice(0, Math.min(5, verses.length)).map(v => v.text).join(" ");
       
       // Generate artwork
+      const { generateArtwork } = await import('./ai');
       const artwork = await generateArtwork(firstFewVerses);
       
       return res.json(artwork);
@@ -448,8 +468,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Verse text and question are required" });
       }
       
-      // Generate contextual answer
-      const answer = await generateContextualAnswer(verseText, question);
+      // Generate contextual answer using the best available AI model
+      let answer = "";
+      if (process.env.ANTHROPIC_API_KEY) {
+        // Use Anthropic Claude for deeper theological insights
+        const { generateContextualAnswerWithClaude } = await import('./anthropic');
+        answer = await generateContextualAnswerWithClaude(verseText, question);
+      } else {
+        // Fall back to OpenAI
+        const { generateContextualAnswer } = await import('./ai');
+        answer = await generateContextualAnswer(verseText, question);
+      }
       
       return res.json({ content: answer });
     } catch (error) {

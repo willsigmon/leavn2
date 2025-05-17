@@ -51,7 +51,16 @@ export async function generateNarrativeWithClaude(
       ],
     });
 
-    return response.content[0].text;
+    // Check if content exists and extract the text
+    if (response.content && response.content.length > 0) {
+      // Handle the different content block types
+      const contentBlock = response.content[0];
+      if (contentBlock.type === 'text') {
+        return contentBlock.text;
+      }
+    }
+    
+    return "Unable to generate narrative mode at this time.";
   } catch (error) {
     console.error("Error generating narrative with Claude:", error);
     return "Unable to generate narrative mode at this time.";
@@ -94,7 +103,16 @@ export async function generateContextualAnswerWithClaude(
       ],
     });
 
-    return response.content[0].text;
+    // Check if content exists and extract the text
+    if (response.content && response.content.length > 0) {
+      // Handle the different content block types
+      const contentBlock = response.content[0];
+      if (contentBlock.type === 'text') {
+        return contentBlock.text;
+      }
+    }
+    
+    return "Unable to generate an answer at this time.";
   } catch (error) {
     console.error("Error generating contextual answer with Claude:", error);
     return "Unable to generate an answer at this time.";
@@ -141,7 +159,16 @@ export async function generateTheologicalCommentaryWithClaude(
       ],
     });
 
-    return response.content[0].text;
+    // Check if content exists and extract the text
+    if (response.content && response.content.length > 0) {
+      // Handle the different content block types
+      const contentBlock = response.content[0];
+      if (contentBlock.type === 'text') {
+        return contentBlock.text;
+      }
+    }
+    
+    return "Unable to generate commentary at this time.";
   } catch (error) {
     console.error("Error generating theological commentary with Claude:", error);
     return "Unable to generate commentary at this time.";
