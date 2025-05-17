@@ -1,5 +1,33 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
 
+// Define response types for our API endpoints
+export interface NarrativeResponse {
+  content: string;
+}
+
+export interface ArtworkResponse {
+  url: string;
+}
+
+export interface TranslationResponse {
+  genz: string;
+  kids: string;
+  devotional?: string;
+  scholarly?: string;
+}
+
+export interface DidYouKnowResponse {
+  content: string;
+}
+
+export interface CommentaryResponse {
+  content: string;
+}
+
+export interface ContextualAnswerResponse {
+  content: string;
+}
+
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
     const text = (await res.text()) || res.statusText;

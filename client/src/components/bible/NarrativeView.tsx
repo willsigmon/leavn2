@@ -4,6 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Image, Volume2, Bookmark, Share } from "lucide-react";
+import { NarrativeResponse, ArtworkResponse } from "@/lib/api-types";
 
 interface NarrativeViewProps {
   book: string;
@@ -18,16 +19,12 @@ export default function NarrativeView({ book, chapter, lens, onToggleView }: Nar
   const [showArtwork, setShowArtwork] = useState(true);
   
   // Query for the narrative version of this chapter
-  const { data: narrativeData, isLoading: isNarrativeLoading, error: narrativeError } = useQuery({
+  const { data: narrativeData, isLoading: isNarrativeLoading, error: narrativeError } = useQuery<unknown, Error, NarrativeResponse>({
     queryKey: [`/api/ai/narrative/${book}/${chapter}`, lens],
     // Don't refetch on window focus for performance
     refetchOnWindowFocus: false,
-    // Handle errors gracefully
-    onError: (error) => {
-      console.error('Error fetching narrative content:', error);
-    },
     // Ensure we always have a valid content structure
-    select: (data) => {
+    select: (data: any) => {
       return {
         content: data?.content || 'Narrative content currently unavailable. Please try again later.'
       };
@@ -35,18 +32,14 @@ export default function NarrativeView({ book, chapter, lens, onToggleView }: Nar
   });
   
   // Query for the AI-generated artwork for this chapter
-  const { data: artworkData, isLoading: isArtworkLoading, error: artworkError } = useQuery({
+  const { data: artworkData, isLoading: isArtworkLoading, error: artworkError } = useQuery<unknown, Error, ArtworkResponse>({
     queryKey: [`/api/ai/artwork/${book}/${chapter}`],
     // Only fetch artwork if showArtwork is true
     enabled: showArtwork,
     // Don't refetch on window focus for performance
     refetchOnWindowFocus: false,
-    // Handle errors gracefully
-    onError: (error) => {
-      console.error('Error fetching artwork:', error);
-    },
     // Ensure we always have a valid URL
-    select: (data) => {
+    select: (data: any) => {
       return {
         url: data?.url || 'https://placehold.co/1200x800/e2e8f0/64748b?text=Chapter+Artwork'
       };

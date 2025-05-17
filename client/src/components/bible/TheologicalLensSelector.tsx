@@ -61,7 +61,7 @@ export default function TheologicalLensSelector({
         >
           <TabsList className="grid grid-cols-5 w-full md:w-auto">
             <TabsTrigger value="standard" className="text-xs md:text-sm relative group">
-              Standard
+              <span>Standard</span>
               <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 hidden group-hover:block z-10">
                 <div className="bg-black text-white text-xs rounded py-1 px-2 w-48">
                   <p>{lensInfo.standard}</p>
@@ -69,7 +69,7 @@ export default function TheologicalLensSelector({
               </div>
             </TabsTrigger>
             <TabsTrigger value="catholic" className="text-xs md:text-sm relative group">
-              Catholic
+              <span>Catholic</span>
               <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 hidden group-hover:block z-10">
                 <div className="bg-black text-white text-xs rounded py-1 px-2 w-48">
                   <p>{lensInfo.catholic}</p>
@@ -77,7 +77,7 @@ export default function TheologicalLensSelector({
               </div>
             </TabsTrigger>
             <TabsTrigger value="evangelical" className="text-xs md:text-sm relative group">
-              Evangelical
+              <span>Evangelical</span>
               <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 hidden group-hover:block z-10">
                 <div className="bg-black text-white text-xs rounded py-1 px-2 w-48">
                   <p>{lensInfo.evangelical}</p>
@@ -85,7 +85,7 @@ export default function TheologicalLensSelector({
               </div>
             </TabsTrigger>
             <TabsTrigger value="jewish" className="text-xs md:text-sm relative group">
-              Jewish
+              <span>Jewish</span>
               <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 hidden group-hover:block z-10">
                 <div className="bg-black text-white text-xs rounded py-1 px-2 w-48">
                   <p>{lensInfo.jewish}</p>
@@ -93,7 +93,7 @@ export default function TheologicalLensSelector({
               </div>
             </TabsTrigger>
             <TabsTrigger value="atheist" className="text-xs md:text-sm relative group">
-              Secular
+              <span>Secular</span>
               <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 hidden group-hover:block z-10">
                 <div className="bg-black text-white text-xs rounded py-1 px-2 w-48">
                   <p>{lensInfo.atheist}</p>
