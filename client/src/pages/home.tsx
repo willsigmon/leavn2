@@ -385,7 +385,7 @@ export default function Home() {
                           <span className="text-primary-foreground font-medium">Leavn Bible Study</span>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <div className="w-6 h-6 rounded-full bg-primary-foreground/20 flex items-center justify-center">
+                          <div className="w-6 h-6 rounded-full bg-primary-foreground/20 flex items-center justify-center cursor-pointer hover:bg-primary-foreground/30 transition-colors">
                             <FaUserFriends className="h-3 w-3 text-primary-foreground" />
                           </div>
                         </div>
@@ -394,36 +394,44 @@ export default function Home() {
                       {/* App Body */}
                       <div className="p-4 space-y-4">
                         <div className="flex items-center justify-between">
-                          <h3 className="text-foreground font-medium">John 3:16</h3>
+                          <div className="relative group">
+                            <h3 className="text-foreground font-medium cursor-pointer group-hover:text-primary transition-colors">John 3:16</h3>
+                            <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></div>
+                          </div>
                           <div className="flex items-center space-x-2">
-                            <button className="text-primary p-1 rounded-full hover:bg-primary/10">
+                            <button className="text-primary p-1 rounded-full hover:bg-primary/10 transition-colors active:scale-95 transform duration-100">
                               <FaLock className="h-4 w-4" />
                             </button>
-                            <button className="text-primary p-1 rounded-full hover:bg-primary/10">
+                            <button className="text-primary p-1 rounded-full hover:bg-primary/10 transition-colors active:scale-95 transform duration-100">
                               <FaCommentAlt className="h-4 w-4" />
                             </button>
-                            <button className="text-primary p-1 rounded-full hover:bg-primary/10">
+                            <button className="text-primary p-1 rounded-full hover:bg-primary/10 transition-colors active:scale-95 transform duration-100">
                               <FaChartBar className="h-4 w-4" />
                             </button>
                           </div>
                         </div>
                         
-                        <div className="bg-accent/10 p-3 rounded-lg border border-accent/20">
-                          <p className="text-foreground">
-                            For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.
-                          </p>
+                        <div className="group">
+                          <div className="bg-accent/10 p-3 rounded-lg border border-accent/20 hover:bg-accent/15 transition-colors cursor-pointer">
+                            <p className="text-foreground">
+                              <span className="group-hover:bg-accent/30 px-1 py-0.5 rounded transition-colors">For God</span> so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have <span className="group-hover:bg-accent/30 px-1 py-0.5 rounded transition-colors">everlasting life</span>.
+                            </p>
+                          </div>
+                          <div className="hidden group-hover:block mt-2 text-xs text-primary animate-fade-in-up">
+                            <span>Click to highlight key phrases</span>
+                          </div>
                         </div>
                         
                         <div className="border-t border-border pt-3">
                           <h4 className="text-sm font-medium text-foreground mb-2">Multi-lens Commentary</h4>
                           <div className="flex gap-2 overflow-x-auto pb-2 mb-2">
-                            <button className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs whitespace-nowrap">Catholic</button>
-                            <button className="bg-accent/20 text-primary px-3 py-1 rounded-full text-xs whitespace-nowrap">Evangelical</button>
-                            <button className="bg-accent/20 text-primary px-3 py-1 rounded-full text-xs whitespace-nowrap">Jewish</button>
-                            <button className="bg-accent/20 text-primary px-3 py-1 rounded-full text-xs whitespace-nowrap">Gen-Z</button>
-                            <button className="bg-accent/20 text-primary px-3 py-1 rounded-full text-xs whitespace-nowrap">Kids</button>
+                            <button className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs whitespace-nowrap hover:brightness-110 transition-all active:scale-95 transform duration-100">Catholic</button>
+                            <button className="bg-accent/20 text-primary px-3 py-1 rounded-full text-xs whitespace-nowrap hover:bg-accent/30 transition-colors active:scale-95 transform duration-100">Evangelical</button>
+                            <button className="bg-accent/20 text-primary px-3 py-1 rounded-full text-xs whitespace-nowrap hover:bg-accent/30 transition-colors active:scale-95 transform duration-100">Jewish</button>
+                            <button className="bg-accent/20 text-primary px-3 py-1 rounded-full text-xs whitespace-nowrap hover:bg-accent/30 transition-colors active:scale-95 transform duration-100">Gen-Z</button>
+                            <button className="bg-accent/20 text-primary px-3 py-1 rounded-full text-xs whitespace-nowrap hover:bg-accent/30 transition-colors active:scale-95 transform duration-100">Kids</button>
                           </div>
-                          <div className="bg-primary/5 p-3 rounded-lg">
+                          <div className="bg-primary/5 p-3 rounded-lg hover:bg-primary/10 transition-colors cursor-pointer">
                             <p className="text-sm text-muted-foreground italic">
                               This verse expresses the core of Christian faith: God's immense love for humanity manifested through Christ's sacrifice, offering eternal salvation to all believers...
                             </p>
@@ -431,13 +439,18 @@ export default function Home() {
                         </div>
                         
                         <div className="flex items-center justify-between text-xs text-primary mt-2">
-                          <div className="flex items-center">
+                          <div className="flex items-center cursor-pointer hover:text-primary/70 transition-colors">
                             <FaBookOpen className="h-3 w-3 mr-1" />
                             <span>Narrative Mode</span>
                           </div>
-                          <div className="flex items-center">
-                            <FaLightbulb className="h-3 w-3 mr-1" />
-                            <span>Did You Know?</span>
+                          <div className="relative group">
+                            <div className="flex items-center cursor-pointer hover:text-primary/70 transition-colors">
+                              <FaLightbulb className="h-3 w-3 mr-1" />
+                              <span>Did You Know?</span>
+                            </div>
+                            <div className="absolute bottom-full right-0 mb-2 w-48 p-2 bg-card shadow-lg rounded-lg scale-0 group-hover:scale-100 origin-bottom-right transition-transform duration-200 z-10">
+                              <p className="text-xs text-muted-foreground">This verse is one of the most widely quoted verses in Christianity and is often considered a summary of the central theme of the Gospel.</p>
+                            </div>
                           </div>
                         </div>
                       </div>
