@@ -15,6 +15,12 @@ import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "./hooks/useAuth";
 import { NavBar } from "./components/NavBar";
 import Footer from "./components/layout/Footer";
+import { lazy, Suspense } from "react";
+
+// Lazily load legal and resource pages
+const BibleTranslationsPage = lazy(() => import("./pages/resources/bible-translations"));
+const PrivacyPolicyPage = lazy(() => import("./pages/legal/privacy-policy"));
+const TermsOfServicePage = lazy(() => import("./pages/legal/terms-of-service"));
 
 function Router() {
   return (
@@ -23,13 +29,33 @@ function Router() {
       <main className="flex-1">
         <Switch>
           <Route path="/" component={Home} />
-          <Route path="/bible/:book/:chapter" component={BibleReader} />
+          <Route path="/reader/:book/:chapter" component={BibleReader} />
+          <Route path="/reader" component={BibleReader} />
           <Route path="/reading-plans" component={ReadingPlans} />
           <Route path="/reading-plan/:id" component={ReadingPlanDetail} />
           <Route path="/login" component={Login} />
           <Route path="/profile" component={Profile} />
           <Route path="/settings" component={Settings} />
-          <Route path="/resources/bible-translations" component={() => import('./pages/resources/bible-translations').then(module => module.default)} />
+          
+          {/* Lazily loaded pages */}
+          <Route path="/resources/bible-translations">
+            <Suspense fallback={<div className="p-12 text-center">Loading...</div>}>
+              <BibleTranslationsPage />
+            </Suspense>
+          </Route>
+          
+          <Route path="/legal/privacy-policy">
+            <Suspense fallback={<div className="p-12 text-center">Loading...</div>}>
+              <PrivacyPolicyPage />
+            </Suspense>
+          </Route>
+          
+          <Route path="/legal/terms-of-service">
+            <Suspense fallback={<div className="p-12 text-center">Loading...</div>}>
+              <TermsOfServicePage />
+            </Suspense>
+          </Route>
+          
           {/* Fallback to 404 */}
           <Route component={NotFound} />
         </Switch>
@@ -42,14 +68,12 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <ThemeProvider attribute="class">
-          <TooltipProvider>
-            <Toaster />
-            <Router />
-          </TooltipProvider>
-        </ThemeProvider>
-      </AuthProvider>
+      <ThemeProvider attribute="class">
+        <TooltipProvider>
+          <Toaster />
+          <Router />
+        </TooltipProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

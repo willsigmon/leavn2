@@ -1,241 +1,177 @@
-import { PageHeader } from '@/components/layout/PageHeader';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { ArrowLeft } from 'lucide-react';
+import { useLocation } from 'wouter';
 
 export default function PrivacyPolicy() {
-  const lastUpdated = 'May 15, 2025';
-  
+  const [, navigate] = useLocation();
+  const currentYear = new Date().getFullYear();
+
   return (
-    <div className="container mx-auto py-6 max-w-4xl">
-      <PageHeader
-        title="Privacy Policy"
-        description="How we collect, use, and protect your information"
-        breadcrumbs={[
-          { label: 'Legal', href: '/legal' },
-          { label: 'Privacy Policy' }
-        ]}
-      />
-
-      <div className="space-y-8">
-        <div className="prose prose-emerald max-w-none">
-          <p className="text-sm text-muted-foreground">Last Updated: {lastUpdated}</p>
-          
-          <p className="lead">
-            At Leavn Bible Study ("we", "our", or "us"), we respect your privacy and are committed to protecting your personal data. This privacy policy explains how we collect, use, and safeguard your information when you use our application.
-          </p>
-          
-          <h2 className="mt-8">Information We Collect</h2>
-          <p>
-            We collect several types of information from and about users of our application, including:
-          </p>
-          <ul>
-            <li>
-              <strong>Personal Data</strong>: We may collect personal identification information (such as your name, email address, and profile picture) when you register for an account, sign in via social authentication providers, or contact us.
-            </li>
-            <li>
-              <strong>Usage Data</strong>: We automatically collect information about how you interact with our application, including pages visited, features used, time spent on the application, and other analytics data.
-            </li>
-            <li>
-              <strong>Study Data</strong>: We collect and store information related to your Bible study activities, such as notes, highlights, reading progress, and preferences.
-            </li>
-            <li>
-              <strong>Device Information</strong>: We may collect information about the device you use to access our application, including device type, operating system, unique device identifiers, IP address, and mobile network information.
-            </li>
-          </ul>
+    <div className="container mx-auto py-8 px-4 md:px-0">
+      <div className="flex flex-col gap-6 max-w-4xl mx-auto">
+        {/* Header with back button */}
+        <div className="flex items-center gap-4">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => navigate(-1)}
+            className="p-0"
+          >
+            <ArrowLeft className="h-4 w-4 mr-1" />
+            Back
+          </Button>
         </div>
-
-        <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="how-we-use">
-            <AccordionTrigger className="text-lg font-semibold">How We Use Your Information</AccordionTrigger>
-            <AccordionContent className="prose prose-emerald max-w-none">
-              <p>We use the information we collect for various purposes, including:</p>
-              <ul>
-                <li>
-                  <strong>Providing and Improving the Application</strong>: To operate, maintain, and enhance our application and its features, including personalized recommendations, multi-lens Bible commentary, and AI-generated insights.
-                </li>
-                <li>
-                  <strong>Personalization</strong>: To remember your preferences and customize your experience, including saved study materials, theological lens preferences, and user interface settings.
-                </li>
-                <li>
-                  <strong>Communication</strong>: To respond to your inquiries, provide customer support, and send you transactional and informational emails related to the application.
-                </li>
-                <li>
-                  <strong>Analytics</strong>: To understand how users interact with our application, identify usage trends, and improve our services.
-                </li>
-                <li>
-                  <strong>Legal Compliance</strong>: To comply with applicable laws, regulations, and legal processes.
-                </li>
-              </ul>
-            </AccordionContent>
-          </AccordionItem>
-          
-          <AccordionItem value="data-sharing">
-            <AccordionTrigger className="text-lg font-semibold">Data Sharing and Disclosure</AccordionTrigger>
-            <AccordionContent className="prose prose-emerald max-w-none">
-              <p>We may share your personal information in the following situations:</p>
-              <ul>
-                <li>
-                  <strong>With Service Providers</strong>: We may share your information with third-party vendors, service providers, and contractors who perform services on our behalf and need access to your information to provide these services.
-                </li>
-                <li>
-                  <strong>With Your Consent</strong>: We may share your information when you have given us consent to do so, such as when you choose to share your notes or insights with other users.
-                </li>
-                <li>
-                  <strong>For Legal Reasons</strong>: We may disclose your information if required to do so by law or in response to valid legal requests, including from public and government authorities.
-                </li>
-                <li>
-                  <strong>Business Transfers</strong>: If we are involved in a merger, acquisition, or sale of all or a portion of our assets, your information may be transferred as part of that transaction.
-                </li>
-              </ul>
-              
-              <p>
-                We do not sell or rent your personal information to third parties for marketing purposes.
-              </p>
-            </AccordionContent>
-          </AccordionItem>
-          
-          <AccordionItem value="ai-usage">
-            <AccordionTrigger className="text-lg font-semibold">AI and Data Processing</AccordionTrigger>
-            <AccordionContent className="prose prose-emerald max-w-none">
-              <p>
-                Our application uses artificial intelligence (AI) to provide features such as multi-lens commentary, narrative mode, and contextual answers. Here's how we use AI with your data:
-              </p>
-              <ul>
-                <li>
-                  <strong>AI-Generated Content</strong>: We use AI models to generate biblical commentary, insights, and interpretations tailored to your preferences and queries.
-                </li>
-                <li>
-                  <strong>Query Processing</strong>: When you ask questions or request specific theological perspectives, we process these queries through AI services to provide relevant responses.
-                </li>
-                <li>
-                  <strong>Content Personalization</strong>: We may use AI to analyze your usage patterns and preferences to provide more relevant study materials and recommendations.
-                </li>
-              </ul>
-              
-              <p>
-                While we use AI services from reputable providers (including OpenAI and Anthropic), we take measures to limit the personal information shared with these services. We primarily send biblical text and contextual queries rather than your personal data.
-              </p>
-            </AccordionContent>
-          </AccordionItem>
-          
-          <AccordionItem value="data-security">
-            <AccordionTrigger className="text-lg font-semibold">Data Security</AccordionTrigger>
-            <AccordionContent className="prose prose-emerald max-w-none">
-              <p>
-                We implement appropriate technical and organizational measures to protect your personal information from unauthorized access, use, disclosure, alteration, or destruction. These measures include:
-              </p>
-              <ul>
-                <li>
-                  <strong>Encryption</strong>: We use industry-standard encryption to protect data in transit and at rest.
-                </li>
-                <li>
-                  <strong>Access Controls</strong>: We limit access to personal information to authorized personnel who need it to perform their job functions.
-                </li>
-                <li>
-                  <strong>Regular Security Assessments</strong>: We conduct regular security reviews and assessments of our systems and practices.
-                </li>
-                <li>
-                  <strong>Third-Party Security</strong>: We ensure that our third-party service providers maintain adequate security measures.
-                </li>
-              </ul>
-              
-              <p>
-                While we strive to protect your personal information, no method of transmission over the Internet or electronic storage is 100% secure. We cannot guarantee absolute security.
-              </p>
-            </AccordionContent>
-          </AccordionItem>
-          
-          <AccordionItem value="user-rights">
-            <AccordionTrigger className="text-lg font-semibold">Your Rights and Choices</AccordionTrigger>
-            <AccordionContent className="prose prose-emerald max-w-none">
-              <p>
-                Depending on your location, you may have certain rights regarding your personal information, including:
-              </p>
-              <ul>
-                <li>
-                  <strong>Access</strong>: You can request access to the personal information we hold about you.
-                </li>
-                <li>
-                  <strong>Correction</strong>: You can request that we correct inaccurate or incomplete information.
-                </li>
-                <li>
-                  <strong>Deletion</strong>: You can request that we delete your personal information.
-                </li>
-                <li>
-                  <strong>Restriction</strong>: You can request that we restrict the processing of your information.
-                </li>
-                <li>
-                  <strong>Data Portability</strong>: You can request a copy of your information in a structured, commonly used, and machine-readable format.
-                </li>
-                <li>
-                  <strong>Objection</strong>: You can object to the processing of your personal information.
-                </li>
-              </ul>
-              
-              <p>
-                To exercise these rights, please contact us at privacy@leavn.com. We will respond to your request within the timeframe required by applicable law.
-              </p>
-              
-              <p>
-                <strong>Account Settings</strong>: You can update certain personal information and preferences directly within your account settings in the application.
-              </p>
-            </AccordionContent>
-          </AccordionItem>
-          
-          <AccordionItem value="children">
-            <AccordionTrigger className="text-lg font-semibold">Children's Privacy</AccordionTrigger>
-            <AccordionContent className="prose prose-emerald max-w-none">
-              <p>
-                Our application is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13. If you believe we have collected information from a child under 13, please contact us immediately at privacy@leavn.com, and we will take appropriate measures to investigate and remove such information from our records.
-              </p>
-            </AccordionContent>
-          </AccordionItem>
-          
-          <AccordionItem value="international">
-            <AccordionTrigger className="text-lg font-semibold">International Data Transfers</AccordionTrigger>
-            <AccordionContent className="prose prose-emerald max-w-none">
-              <p>
-                We are based in the United States, and your information may be processed, stored, and transferred to countries where we operate, which may have different data protection laws than your country of residence.
-              </p>
-              
-              <p>
-                If you are located in the European Economic Area (EEA), the United Kingdom, or Switzerland, we ensure that any transfer of your personal information to countries outside these regions is made in accordance with applicable data protection laws, using appropriate safeguards such as Standard Contractual Clauses.
-              </p>
-            </AccordionContent>
-          </AccordionItem>
-          
-          <AccordionItem value="changes">
-            <AccordionTrigger className="text-lg font-semibold">Changes to This Privacy Policy</AccordionTrigger>
-            <AccordionContent className="prose prose-emerald max-w-none">
-              <p>
-                We may update this privacy policy from time to time to reflect changes in our practices or for other operational, legal, or regulatory reasons. We will notify you of any material changes by posting the new privacy policy on this page and updating the "Last Updated" date.
-              </p>
-              
-              <p>
-                We encourage you to review this privacy policy periodically to stay informed about how we are protecting your information.
-              </p>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+        
+        <h1 className="text-3xl font-bold text-primary">Privacy Policy</h1>
+        <p className="text-muted-foreground">Last updated: May 15, {currentYear}</p>
+        
+        <Separator className="my-2" />
         
         <div className="prose prose-emerald max-w-none">
-          <h2>Contact Us</h2>
-          <p>
-            If you have any questions about this privacy policy or our privacy practices, please contact us at:
+          <p className="lead">
+            At Leavn, we are committed to protecting your privacy and ensuring the security of your personal information. 
+            This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our Bible study platform.
           </p>
           
-          <address className="not-italic mt-4 mb-8">
-            <p><strong>Leavn Bible Study</strong></p>
-            <p>Email: privacy@leavn.com</p>
-            <p>Address: 123 Faith Way, Scripture Valley, CA 90210</p>
-          </address>
+          <h2>1. Information We Collect</h2>
+          <h3>1.1 Personal Information</h3>
+          <p>
+            We may collect personally identifiable information, such as:
+          </p>
+          <ul>
+            <li>Your name and email address when you create an account</li>
+            <li>Your profile information and preferences</li>
+            <li>Authentication information when you log in using third-party services</li>
+          </ul>
           
-          <p className="text-center text-muted-foreground text-sm border-t pt-6 mt-8">
-            © {new Date().getFullYear()} Leavn Bible Study. All rights reserved.
+          <h3>1.2 Usage Information</h3>
+          <p>
+            We may collect non-personal information about how you use our service, including:
+          </p>
+          <ul>
+            <li>Reading patterns and history</li>
+            <li>Notes, highlights, and annotations you create</li>
+            <li>Preferences for theological perspectives and study features</li>
+            <li>Interaction with reading plans and other content</li>
+          </ul>
+          
+          <h3>1.3 Device Information</h3>
+          <p>
+            We may collect information about the device you use to access Leavn, such as:
+          </p>
+          <ul>
+            <li>Device type, operating system, and browser information</li>
+            <li>IP address and general location information</li>
+            <li>Unique device identifiers</li>
+          </ul>
+          
+          <h2>2. How We Use Your Information</h2>
+          <p>
+            We use the information we collect to:
+          </p>
+          <ul>
+            <li>Provide, maintain, and improve our services</li>
+            <li>Personalize your experience based on your preferences and usage patterns</li>
+            <li>Process your subscriptions and transactions</li>
+            <li>Send you updates, security alerts, and support messages</li>
+            <li>Analyze usage trends to enhance our platform</li>
+            <li>Develop new features based on user interactions</li>
+            <li>Protect against unauthorized access and potential abuse of our services</li>
+          </ul>
+          
+          <h2>3. Sharing Your Information</h2>
+          <p>
+            We may share your information in the following circumstances:
+          </p>
+          <ul>
+            <li><strong>Service Providers:</strong> We may share your information with third-party vendors who help us provide and improve our services, such as cloud hosting providers and payment processors.</li>
+            <li><strong>Legal Requirements:</strong> We may disclose your information if required by law or in response to valid requests by public authorities.</li>
+            <li><strong>Business Transfers:</strong> If Leavn is involved in a merger, acquisition, or sale of assets, your information may be transferred as part of that transaction.</li>
+          </ul>
+          <p>
+            We will never sell your personal information to third parties for marketing purposes.
+          </p>
+          
+          <h2>4. AI and Data Processing</h2>
+          <p>
+            Leavn uses artificial intelligence to enhance your Bible study experience. Here's how we handle data in relation to our AI features:
+          </p>
+          <ul>
+            <li>The content you create (notes, highlights, questions) may be processed by our AI systems to provide personalized insights and recommendations.</li>
+            <li>Biblical content analysis is performed to provide theological perspectives and contextual information.</li>
+            <li>We may use aggregated, anonymized data to improve our AI models and features.</li>
+          </ul>
+          <p>
+            You can control AI-assisted features through your account settings.
+          </p>
+          
+          <h2>5. Data Security</h2>
+          <p>
+            We implement appropriate security measures to protect your personal information from unauthorized access, alteration, disclosure, or destruction. These measures include:
+          </p>
+          <ul>
+            <li>Encryption of transmitted data</li>
+            <li>Regular security assessments</li>
+            <li>Restricted access to personal information</li>
+            <li>Secure data storage practices</li>
+          </ul>
+          <p>
+            However, no method of transmission over the Internet or electronic storage is 100% secure. While we strive to use commercially acceptable means to protect your personal information, we cannot guarantee its absolute security.
+          </p>
+          
+          <h2>6. Your Data Rights</h2>
+          <p>
+            Depending on your location, you may have certain rights regarding your personal information:
+          </p>
+          <ul>
+            <li><strong>Access:</strong> You may request access to the personal information we hold about you.</li>
+            <li><strong>Correction:</strong> You may request that we correct inaccurate or incomplete information.</li>
+            <li><strong>Deletion:</strong> You may request that we delete your personal information.</li>
+            <li><strong>Portability:</strong> You may request a copy of your data in a structured, commonly used format.</li>
+            <li><strong>Restriction:</strong> You may request that we restrict the processing of your information.</li>
+            <li><strong>Objection:</strong> You may object to our processing of your information.</li>
+          </ul>
+          <p>
+            To exercise these rights, please contact us using the information in the "Contact Us" section.
+          </p>
+          
+          <h2>7. Children's Privacy</h2>
+          <p>
+            Leavn is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13. If we learn that we have collected personal information from a child under 13, we will take steps to delete that information.
+          </p>
+          
+          <h2>8. International Data Transfers</h2>
+          <p>
+            Your information may be transferred to and processed in countries other than the one in which you reside. These countries may have different data protection laws than your country of residence.
+          </p>
+          <p>
+            When we transfer your information to other countries, we will protect it as described in this Privacy Policy and in accordance with applicable data protection laws.
+          </p>
+          
+          <h2>9. Cookies and Tracking Technologies</h2>
+          <p>
+            We use cookies and similar tracking technologies to track activity on our Service and hold certain information. Cookies are files with a small amount of data that may include an anonymous unique identifier.
+          </p>
+          <p>
+            You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. However, if you do not accept cookies, you may not be able to use some portions of our Service.
+          </p>
+          
+          <h2>10. Changes to This Privacy Policy</h2>
+          <p>
+            We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last updated" date.
+          </p>
+          <p>
+            You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.
+          </p>
+          
+          <h2>11. Contact Us</h2>
+          <p>
+            If you have any questions about this Privacy Policy, please contact us:
+          </p>
+          <p>
+            <strong>Email:</strong> privacy@leavn.com<br />
+            <strong>Mail:</strong> Leavn Privacy Team, 123 Faith Avenue, Anytown, USA 12345
           </p>
         </div>
       </div>

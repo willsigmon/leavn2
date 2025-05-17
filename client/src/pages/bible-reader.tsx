@@ -46,21 +46,30 @@ export default function BibleReader() {
     enabled: isAuthenticated,
   });
 
-  // Redirect to login if not authenticated
+  // Check if we're on the demo chapter (Genesis 1)
+  const isDemoChapter = book === 'Genesis' && chapter === 1;
+  
+  // Redirect to login if not authenticated and trying to access non-demo chapters 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated && !isDemoChapter) {
       navigate('/login');
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate, isDemoChapter]);
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !isDemoChapter) {
     return null;
   }
 
   const navigateToChapter = (offset: number) => {
     const nextChapter = chapter + offset;
     if (nextChapter > 0) {
-      navigate(`/bible/${book}/${nextChapter}`);
+      // Check if user is authenticated for non-demo chapters
+      if (!isAuthenticated && !(book === 'Genesis' && nextChapter === 1)) {
+        // Show login prompt
+        navigate('/login');
+        return;
+      }
+      navigate(`/reader/${book}/${nextChapter}`);
     }
   };
 
