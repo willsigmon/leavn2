@@ -3,49 +3,70 @@
 @tailwind utilities;
 
 :root {
-      --background: 0 0% 100%;
---foreground: 20 14.3% 4.1%;
---muted: 60 4.8% 95.9%;
---muted-foreground: 25 5.3% 44.7%;
---popover: 0 0% 100%;
---popover-foreground: 20 14.3% 4.1%;
---card: 0 0% 100%;
---card-foreground: 20 14.3% 4.1%;
---border: 20 5.9% 90%;
---input: 20 5.9% 90%;
---primary: 207 90% 54%;
---primary-foreground: 211 100% 99%;
---secondary: 60 4.8% 95.9%;
---secondary-foreground: 24 9.8% 10%;
---accent: 60 4.8% 95.9%;
---accent-foreground: 24 9.8% 10%;
---destructive: 0 84.2% 60.2%;
---destructive-foreground: 60 9.1% 97.8%;
---ring: 20 14.3% 4.1%;
---radius: 0.5rem;
-  }
-  .dark {
-      --background: 240 10% 3.9%;
---foreground: 0 0% 98%;
---muted: 240 3.7% 15.9%;
---muted-foreground: 240 5% 64.9%;
---popover: 240 10% 3.9%;
---popover-foreground: 0 0% 98%;
---card: 240 10% 3.9%;
---card-foreground: 0 0% 98%;
---border: 240 3.7% 15.9%;
---input: 240 3.7% 15.9%;
---primary: 207 90% 54%;
---primary-foreground: 211 100% 99%;
---secondary: 240 3.7% 15.9%;
---secondary-foreground: 0 0% 98%;
---accent: 240 3.7% 15.9%;
---accent-foreground: 0 0% 98%;
---destructive: 0 62.8% 30.6%;
---destructive-foreground: 0 0% 98%;
---ring: 240 4.9% 83.9%;
---radius: 0.5rem;
-  }
+  --background: 30 40% 96%;
+  --foreground: 25 15% 12%;
+  --muted: 45 20% 92%;
+  --muted-foreground: 32 8% 35%;
+  --popover: var(--background);
+  --popover-foreground: var(--foreground);
+  --card: var(--background);
+  --card-foreground: var(--foreground);
+  --border: 30 15% 85%;
+  --input: var(--border);
+
+  --primary: 32 70% 38%;
+  --primary-foreground: 32 30% 96%;
+  --secondary: 112 24% 38%;
+  --secondary-foreground: 30 25% 96%;
+
+  --accent: 42 35% 55%;
+  --accent-foreground: 30 25% 96%;
+
+  --destructive: 0 65% 35%;
+  --destructive-foreground: 0 0% 98%;
+
+  /* optional data-viz */
+  --chart-1: 32 70% 38%;
+  --chart-2: 112 24% 38%;
+  --chart-3: 42 35% 55%;
+  --chart-4: 20 20% 50%;
+  --chart-5: 190 20% 40%;
+
+  --ring: var(--border);
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 25 12% 8%;
+  --foreground: 35 30% 90%;
+  --muted: 35 12% 14%;
+  --muted-foreground: 38 8% 60%;
+  --popover: var(--background);
+  --popover-foreground: var(--foreground);
+  --card: var(--background);
+  --card-foreground: var(--foreground);
+  --border: 25 8% 25%;
+  --input: var(--border);
+
+  --primary: 32 65% 48%;
+  --primary-foreground: 35 35% 93%;
+  --secondary: 112 20% 55%;
+  --secondary-foreground: 35 30% 92%;
+
+  --accent: 42 30% 62%;
+  --accent-foreground: 35 30% 92%;
+
+  --destructive: 0 70% 50%;
+  --destructive-foreground: 0 0% 98%;
+
+  --chart-1: 32 65% 48%;
+  --chart-2: 112 20% 55%;
+  --chart-3: 42 30% 62%;
+  --chart-4: 20 15% 60%;
+  --chart-5: 190 15% 50%;
+
+  --ring: var(--border);
+}
 
 @layer base {
   * {

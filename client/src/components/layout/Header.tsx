@@ -2,7 +2,9 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FaBars, FaSearch, FaUser } from "react-icons/fa";
+import { Moon, Sun } from "lucide-react";
 import useMobile from "@/hooks/use-mobile";
+import { toggleTheme } from "@/lib/theme";
 
 interface HeaderProps {
   toggleSidebar: () => void;
@@ -12,7 +14,7 @@ export default function Header({ toggleSidebar }: HeaderProps) {
   const isMobile = useMobile();
 
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
+    <header className="bg-background border-b border-border sticky top-0 z-10">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between py-4">
           <div className="flex items-center space-x-4">
@@ -48,6 +50,19 @@ export default function Header({ toggleSidebar }: HeaderProps) {
             >
               <FaSearch className="text-xl" />
             </button>
+            
+            {/* Theme toggle button */}
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={toggleTheme}
+              className="rounded-full"
+              aria-label="Toggle theme"
+            >
+              <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+              <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            </Button>
+            
             <Button className="bg-primary-dark hover:bg-primary text-white">
               Sign In
             </Button>
