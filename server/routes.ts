@@ -5,6 +5,12 @@ import { generateCommentary, generateTranslation, searchVerses } from "./ai";
 import { z } from "zod";
 import { insertNoteSchema } from "@shared/schema";
 import { setupAuth, isAuthenticated } from "./replitAuth";
+import { 
+  initBibleRAG, 
+  findSimilarChunks, 
+  getRAGContext, 
+  loadBibleCache 
+} from "./rag-bible";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up authentication
