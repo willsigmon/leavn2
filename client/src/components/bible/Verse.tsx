@@ -113,7 +113,7 @@ export default function Verse({
           <p className={cn(
             "font-serif leading-relaxed", 
             compact ? "text-base" : "text-lg",
-            isHighlighted && "bg-amber-100 px-1 rounded"
+            isHighlighted && "bg-accent/20 px-1 rounded"
           )}>
             {getVerseText()}
           </p>
@@ -145,8 +145,8 @@ export default function Verse({
               variant="default"
               className="mt-4"
             >
-              <p className="text-gray-700">{note.content}</p>
-              <div className="flex justify-between items-center mt-2 text-xs text-gray-500">
+              <p className="text-foreground">{note.content}</p>
+              <div className="flex justify-between items-center mt-2 text-xs text-muted-foreground">
                 <span>Added on {new Date(note.createdAt).toLocaleDateString()}</span>
                 <div className="flex space-x-2">
                   <button className="hover:text-primary" onClick={() => onOpenNoteModal(verse.verseNumber)}>

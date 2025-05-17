@@ -23,7 +23,7 @@ export default function Sidebar({ isOpen, onClose, currentBook }: SidebarProps) 
   return (
     <aside 
       className={cn(
-        "bg-white border-r border-gray-200 overflow-y-auto",
+        "bg-background border-r border-border overflow-y-auto",
         isMobile ? "fixed inset-y-0 left-0 z-40 w-64 transition-transform transform duration-300 ease-in-out" : "hidden md:block w-64",
         isMobile && !isOpen && "-translate-x-full",
         isMobile && isOpen && "translate-x-0"
@@ -31,7 +31,7 @@ export default function Sidebar({ isOpen, onClose, currentBook }: SidebarProps) 
     >
       {isMobile && (
         <div className="p-4 flex justify-end">
-          <button onClick={onClose} className="text-gray-500 hover:text-primary">
+          <button onClick={onClose} className="text-muted-foreground hover:text-primary">
             <FaTimes className="text-xl" />
           </button>
         </div>
@@ -39,22 +39,22 @@ export default function Sidebar({ isOpen, onClose, currentBook }: SidebarProps) 
       
       <div className="px-4 py-6">
         <div className="mb-6">
-          <h2 className="text-xs uppercase font-bold text-gray-500 tracking-wider mb-3">Reading Plans</h2>
+          <h2 className="text-xs uppercase font-bold text-muted-foreground tracking-wider mb-3">Reading Plans</h2>
           <ul className="space-y-1">
             <li>
-              <Link href="/reading-plans" className="flex items-center px-2 py-2 text-sm rounded-lg hover:bg-gray-100">
+              <Link href="/reading-plans" className="flex items-center px-2 py-2 text-sm rounded-lg hover:bg-muted">
                 <FaCalendarDay className="w-5 text-primary mr-2" />
                 <span>All Reading Plans</span>
               </Link>
             </li>
             <li>
-              <Link href="/reading-plan/plan1" className="flex items-center px-2 py-2 text-sm rounded-lg hover:bg-gray-100">
+              <Link href="/reading-plan/plan1" className="flex items-center px-2 py-2 text-sm rounded-lg hover:bg-muted">
                 <FaBookOpen className="w-5 text-primary mr-2" />
                 <span>Daily Devotional</span>
               </Link>
             </li>
             <li>
-              <Link href="/reading-plan/plan2" className="flex items-center px-2 py-2 text-sm rounded-lg hover:bg-gray-100">
+              <Link href="/reading-plan/plan2" className="flex items-center px-2 py-2 text-sm rounded-lg hover:bg-muted">
                 <FaSeedling className="w-5 text-primary mr-2" />
                 <span>New Testament in 90 Days</span>
               </Link>
@@ -63,7 +63,7 @@ export default function Sidebar({ isOpen, onClose, currentBook }: SidebarProps) 
         </div>
         
         <div className="mb-6">
-          <h2 className="text-xs uppercase font-bold text-gray-500 tracking-wider mb-3">Old Testament</h2>
+          <h2 className="text-xs uppercase font-bold text-muted-foreground tracking-wider mb-3">Old Testament</h2>
           <ul className="space-y-1">
             {oldTestamentBooks.map((book) => {
               const bookTitle = book.charAt(0).toUpperCase() + book.slice(1);
@@ -76,8 +76,8 @@ export default function Sidebar({ isOpen, onClose, currentBook }: SidebarProps) 
                     className={cn(
                       "flex items-center px-2 py-2 text-sm rounded-lg",
                       isActive 
-                        ? "font-semibold text-primary bg-secondary-light" 
-                        : "hover:bg-gray-100"
+                        ? "font-semibold text-primary bg-accent/10" 
+                        : "hover:bg-muted"
                     )}
                   >
                     <span>{bookTitle}</span>
