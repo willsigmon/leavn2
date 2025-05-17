@@ -430,16 +430,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Invalid chapter or verse number" });
       }
       
-      const verseData = await storage.getVerse(book, chapter, verse);
+      // Query database directly using SQL for now, to ensure case-sensitive match
+      const [row] = await db.execute(`
+        SELECT text_kjv, text_web FROM verses 
+        WHERE book = '${book}' AND chapter = ${chapter} AND verse_number = ${verse}
+      `);
       
-      if (!verseData) {
+      if (!row) {
         return res.status(404).json({ error: "Verse not found" });
       }
       
       // Return both translations
       res.json({
-        kjv: verseData.textKjv || (verseData.text?.kjv || ""),
-        web: verseData.textWeb || (verseData.text?.web || "")
+        kjv: row.text_kjv || "",
+        web: row.text_web || ""
       });
     } catch (error) {
       console.error("Error fetching verse comparison:", error);
