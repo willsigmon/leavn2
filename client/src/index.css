@@ -19,18 +19,18 @@
   --secondary: 32 35% 48%;  /* Muted warm brown */
   --secondary-foreground: 30 25% 96%;
 
-  --accent: 45 45% 50%;  /* Softer golden accent */
-  --accent-foreground: 30 25% 96%;
+  --accent: 170 45% 50%;  /* Teal accent instead of golden */
+  --accent-foreground: 170 25% 96%;
 
   --destructive: 0 65% 35%;
   --destructive-foreground: 0 0% 98%;
 
   /* optional data-viz */
   --chart-1: 130 40% 38%;
-  --chart-2: 32 60% 50%;
-  --chart-3: 55 60% 55%;
+  --chart-2: 160 50% 45%;
+  --chart-3: 170 55% 50%;
   --chart-4: 180 20% 50%;
-  --chart-5: 250 20% 40%;
+  --chart-5: 190 30% 45%;
 
   --ring: var(--border);
   --radius: 0.5rem;
@@ -53,8 +53,8 @@
   --secondary: 32 45% 40%;  /* Warm brown */
   --secondary-foreground: 35 30% 92%;
 
-  --accent: 55 50% 55%;  /* Golden accent */
-  --accent-foreground: 35 30% 92%;
+  --accent: 170 50% 55%;  /* Teal accent instead of golden */
+  --accent-foreground: 170 30% 92%;
 
   --destructive: 0 70% 50%;
   --destructive-foreground: 0 0% 98%;

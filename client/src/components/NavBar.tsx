@@ -12,7 +12,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { BookOpenText, Settings, LogOut, User as UserIcon, Search, SunMoon } from 'lucide-react';
+import { BookOpenText, Settings, LogOut, User as UserIcon, Search, Moon, Sun } from 'lucide-react';
+import { ThemeToggle } from './ThemeToggle';
 
 export function NavBar() {
   const { user } = useAuth();
@@ -93,10 +94,7 @@ export function NavBar() {
           {/* Right side controls */}
           <div className="flex items-center gap-3">
             {/* Theme toggle */}
-            <Button variant="ghost" size="icon" className="rounded-full">
-              <SunMoon className="h-5 w-5" />
-              <span className="sr-only">Toggle theme</span>
-            </Button>
+            <ThemeToggle />
             
             {/* Mobile search button */}
             <Button variant="ghost" size="icon" className="md:hidden rounded-full">
