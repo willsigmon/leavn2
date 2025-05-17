@@ -16,7 +16,7 @@ export default function Login() {
   const handleSignIn = () => {
     setIsLoading(true);
     try {
-      login();
+      window.location.href = '/api/login';
     } catch (error) {
       setIsLoading(false);
       console.error('Login error:', error);

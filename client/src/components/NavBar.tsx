@@ -144,7 +144,7 @@ export function NavBar() {
               </DropdownMenu>
             ) : (
               <Button 
-                onClick={() => navigate('/login')}
+                onClick={() => window.location.href = '/api/login'}
                 className="bg-primary text-primary-foreground"
               >
                 Sign in
