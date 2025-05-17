@@ -37,7 +37,7 @@ export default function Home() {
                   <p className="text-gray-600 mb-4">
                     Continue your Bible study journey or discover new passages with our easy-to-use interface.
                   </p>
-                  <Link href="/bible/proverbs/3">
+                  <Link href="/bible/john/3">
                     <Button className="bg-primary-dark hover:bg-primary text-white">
                       <FaBookOpen className="mr-2" /> Open Bible
                     </Button>
@@ -52,13 +52,72 @@ export default function Home() {
                   <p className="text-gray-600 mb-4">
                     Follow structured reading plans to help you stay consistent in your Bible study habit.
                   </p>
-                  <Link href="/bible/proverbs/3">
+                  <Link href="/reading-plans">
                     <Button className="bg-primary-dark hover:bg-primary text-white">
                       <FaBible className="mr-2" /> View Plans
                     </Button>
                   </Link>
                 </CardContent>
               </Card>
+            </div>
+            
+            {/* Active Reading Plans Dashboard */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-12">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="font-serif text-2xl font-bold text-primary-dark">Active Reading Plans</h2>
+                <Link href="/reading-plans">
+                  <Button variant="outline" size="sm">View All Plans</Button>
+                </Link>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* This would normally fetch from an API */}
+                <div className="flex flex-col gap-4">
+                  <div className="bg-gray-50 rounded-lg p-5 border border-gray-100">
+                    <h3 className="font-medium text-lg text-primary-dark mb-2">Daily Devotional</h3>
+                    <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
+                      <span>Day 3 of 30</span>
+                      <span>10% complete</span>
+                    </div>
+                    <div className="w-full bg-gray-200 h-1.5 rounded-full mb-4">
+                      <div className="bg-primary h-1.5 rounded-full" style={{ width: '10%' }}></div>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <Link href="/bible/genesis/1">
+                        <Button variant="outline" size="sm">
+                          <FaBookOpen className="mr-2 h-3 w-3" /> Today: Genesis 1:1-8
+                        </Button>
+                      </Link>
+                      <Link href="/reading-plan/plan1">
+                        <Button variant="ghost" size="sm">View Plan</Button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex flex-col gap-4">
+                  <div className="bg-gray-50 rounded-lg p-5 border border-gray-100">
+                    <h3 className="font-medium text-lg text-primary-dark mb-2">Faith Foundations</h3>
+                    <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
+                      <span>Day 1 of 21</span>
+                      <span>5% complete</span>
+                    </div>
+                    <div className="w-full bg-gray-200 h-1.5 rounded-full mb-4">
+                      <div className="bg-primary h-1.5 rounded-full" style={{ width: '5%' }}></div>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <Link href="/bible/john/3">
+                        <Button variant="outline" size="sm">
+                          <FaBookOpen className="mr-2 h-3 w-3" /> Today: John 3:16
+                        </Button>
+                      </Link>
+                      <Link href="/reading-plan/plan3">
+                        <Button variant="ghost" size="sm">View Plan</Button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-12">
