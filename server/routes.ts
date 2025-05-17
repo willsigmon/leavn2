@@ -25,24 +25,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Helper to get the current user ID from the session
   const getUserId = (req: Request): string => {
-    if (req.session && req.session.userId) {
-      return req.session.userId;
+    if (req.session && (req.session as any).userId) {
+      return (req.session as any).userId;
     }
     // Fallback to mock user ID for development
     return "user1";
   };
-
-  // Get user info endpoint
-  app.get("/api/auth/user", isAuthenticated, async (req: Request, res: Response) => {
-    try {
-      const userId = (req.user as any).claims.sub;
-      const user = await storage.getUser(userId);
-      res.json(user);
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({ message: "Failed to fetch user" });
-    }
-  });
 
   // Get bible chapter - protected by authentication
   app.get("/api/bible/:book/:chapter", isAuthenticated, async (req: Request, res: Response) => {

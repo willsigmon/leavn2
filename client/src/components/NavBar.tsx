@@ -1,8 +1,7 @@
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../lib/auth';
 import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { logOut } from '../lib/firebase';
 import { useToast } from '@/hooks/use-toast';
 import { 
   DropdownMenu,
@@ -20,9 +19,11 @@ export function NavBar() {
   const { toast } = useToast();
   const [, navigate] = useLocation();
 
-  const handleLogout = async () => {
+  const { logout } = useAuth();
+  
+  const handleLogout = () => {
     try {
-      await logOut();
+      logout();
       toast({
         title: "Signed out successfully",
       });
@@ -36,8 +37,8 @@ export function NavBar() {
     }
   };
 
-  const userInitials = user?.displayName
-    ? user.displayName.split(' ').map(n => n[0]).join('').toUpperCase()
+  const userInitials = user?.name
+    ? user.name.split(' ').map(n => n[0]).join('').toUpperCase()
     : 'U';
 
   return (
@@ -109,7 +110,7 @@ export function NavBar() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={user.photoURL || undefined} />
+                      <AvatarImage src={user.profileImageUrl} />
                       <AvatarFallback className="bg-primary text-primary-foreground">
                         {userInitials}
                       </AvatarFallback>
@@ -119,7 +120,7 @@ export function NavBar() {
                 <DropdownMenuContent className="w-56" align="end" forceMount>
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{user.displayName}</p>
+                      <p className="text-sm font-medium leading-none">{user.name}</p>
                       <p className="text-xs leading-none text-muted-foreground">
                         {user.email}
                       </p>
