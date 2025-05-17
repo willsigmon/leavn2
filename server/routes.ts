@@ -4,7 +4,7 @@ import { storage } from "./storage";
 import { generateCommentary, generateTranslation, searchVerses } from "./ai";
 import { z } from "zod";
 import { insertNoteSchema } from "@shared/schema";
-import { setupAuth, isAuthenticated } from "./replitAuth";
+import { setupSession, isAuthenticated, handleLogin, handleLogout, getUserData } from "./simpleAuth";
 import { 
   initBibleRAG, 
   findSimilarChunks, 
@@ -15,13 +15,18 @@ import { getSuggestedTags } from "./tag-suggest";
 import { db } from "./db";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Set up authentication
-  await setupAuth(app);
+  // Set up session middleware
+  setupSession(app);
+
+  // Add authentication routes
+  app.get("/api/login", handleLogin);
+  app.get("/api/logout", handleLogout);
+  app.get("/api/auth/user", getUserData);
 
   // Helper to get the current user ID from the session
   const getUserId = (req: Request): string => {
-    if (req.user && (req.user as any).claims && (req.user as any).claims.sub) {
-      return (req.user as any).claims.sub;
+    if (req.session && req.session.userId) {
+      return req.session.userId;
     }
     // Fallback to mock user ID for development
     return "user1";

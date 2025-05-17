@@ -3,18 +3,20 @@ import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, LogIn, BookOpen, UserPlus, AlertCircle } from 'lucide-react';
+import { Loader2, LogIn, BookOpen, UserPlus, AlertCircle, ExternalLink } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/lib/auth';
 
 export default function Login() {
   const [, setLocation] = useLocation();
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { login } = useAuth();
 
   const handleSignIn = () => {
     setIsLoading(true);
     try {
-      window.location.href = '/api/login';
+      login();
     } catch (error) {
       setIsLoading(false);
       console.error('Login error:', error);
