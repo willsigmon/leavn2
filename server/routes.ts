@@ -255,13 +255,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Generate commentary using the best available AI model
       let commentary = "";
       if (process.env.ANTHROPIC_API_KEY) {
+        // Extract verse text from various possible formats
+        const extractedText = typeof verseData.text === 'string' 
+          ? verseData.text 
+          : verseData.textKjv || 
+            (typeof verseData.text === 'object' ? verseData.text.kjv : undefined) || 
+            "Verse text unavailable";
+            
         // Use Anthropic Claude for deeper theological insights
         const { generateTheologicalCommentaryWithClaude } = await import('./anthropic');
-        commentary = await generateTheologicalCommentaryWithClaude(verseData.text, lens);
+        commentary = await generateTheologicalCommentaryWithClaude(extractedText, lens);
       } else {
+        // Extract verse text from various possible formats
+        const extractedText = typeof verseData.text === 'string' 
+          ? verseData.text 
+          : verseData.textKjv || 
+            (typeof verseData.text === 'object' ? verseData.text.kjv : undefined) || 
+            "Verse text unavailable";
+            
         // Fall back to OpenAI
         const { generateCommentary } = await import('./ai');
-        commentary = await generateCommentary(verseData.text, lens);
+        commentary = await generateCommentary(extractedText, lens);
       }
       
       // Cache the commentary
@@ -297,16 +311,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Verse not found" });
       }
       
+      // Extract verse text from various possible formats
+      const extractedText = typeof verseData.text === 'string' 
+        ? verseData.text 
+        : verseData.textKjv || 
+          (typeof verseData.text === 'object' ? verseData.text.kjv : undefined) || 
+          "Verse text unavailable";
+      
       // Mock translations for now - in production this would call the AI service
-      if (verseNum === 5) {
+      if (verseNum === 5 || verseNum % 5 === 0) {
         return res.json({
-          genz: "No cap, trust God completely and don't just rely on your own vibes;",
-          kids: "Trust God with your whole heart and don't just use your own brain to figure things out;"
+          genz: `No cap, ${extractedText.substring(0, 100)}...`,
+          kids: `In simple words, ${extractedText.substring(0, 100)}...`
         });
       }
       
       // For other verses, generate translations
-      const translations = await generateTranslation(verseData.text);
+      const { generateTranslation } = await import('./ai');
+      const translations = await generateTranslation(extractedText);
       
       return res.json(translations);
     } catch (error) {

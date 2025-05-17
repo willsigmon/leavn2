@@ -12,7 +12,7 @@ interface NoteModalProps {
   isOpen: boolean;
   onClose: () => void;
   verseNumber: number;
-  verseText: string;
+  verseText: any;
   existingNote?: Note;
   book: string;
   chapter: number;
@@ -93,7 +93,12 @@ export default function NoteModal({
         </DialogHeader>
         
         <div className="bg-gray-100 p-3 rounded-lg mb-3">
-          <p className="font-serif text-sm text-gray-700">{verseText}</p>
+          <p className="font-serif text-sm text-gray-700">
+            {typeof verseText === 'string' 
+              ? verseText 
+              : verseText?.textKjv || verseText?.kjv || 
+                (typeof verseText?.text === 'string' ? verseText.text : verseText?.text?.kjv || 'Verse text unavailable')}
+          </p>
         </div>
         
         <Textarea

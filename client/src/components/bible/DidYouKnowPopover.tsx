@@ -12,7 +12,7 @@ interface DidYouKnowPopoverProps {
   book: string;
   chapter: number;
   verse: number;
-  verseText: string;
+  verseText: any;
 }
 
 export default function DidYouKnowPopover({ book, chapter, verse, verseText }: DidYouKnowPopoverProps) {
