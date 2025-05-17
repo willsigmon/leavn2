@@ -224,6 +224,71 @@ export default function BibleReader() {
             onClick={() => setSidebarOpen(false)}
           />
         )}
+
+        {/* Insights Sidebar (fixed on the right side) */}
+        <div className="hidden lg:block w-80 bg-white border-l border-stone-200 h-full overflow-y-auto">
+          <div className="p-6 space-y-6">
+            <div>
+              <h3 className="text-lg font-medium flex items-center text-emerald-700">
+                <Book className="h-5 w-5 mr-2" />
+                Theological Insights
+              </h3>
+              <div className="mt-4 space-y-2.5">
+                <div className="flex gap-2 items-start">
+                  <div className="w-2 h-2 rounded-full bg-emerald-500 mt-1.5"></div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-stone-700">Evangelical</p>
+                    <p className="text-xs text-stone-500 mt-0.5">
+                      Emphasizes God's sovereign creative power and the ordered nature of creation.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-2 items-start">
+                  <div className="w-2 h-2 rounded-full bg-amber-500 mt-1.5"></div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-stone-700">Catholic</p>
+                    <p className="text-xs text-stone-500 mt-0.5">
+                      Highlights creation as an outpouring of God's goodness and the special creation of humans.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-2 items-start">
+                  <div className="w-2 h-2 rounded-full bg-blue-500 mt-1.5"></div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-stone-700">Jewish</p>
+                    <p className="text-xs text-stone-500 mt-0.5">
+                      Notes the literary pattern and focuses on God's blessing of Shabbat at creation.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="border-t border-stone-100 pt-5">
+              <h3 className="text-lg font-medium flex items-center text-emerald-700">
+                <Info className="h-5 w-5 mr-2" />
+                Context
+              </h3>
+              <p className="mt-3 text-sm text-stone-600">
+                Genesis 1 presents the systematic account of creation over six days, followed by God's rest on the seventh day. Written approximately 1445-1405 BCE, it establishes God's role as creator and the ordered structure of the universe.
+              </p>
+            </div>
+
+            <div className="border-t border-stone-100 pt-5">
+              <h3 className="text-lg font-medium flex items-center text-emerald-700">
+                <MessageCircle className="h-5 w-5 mr-2" />
+                Study Notes
+              </h3>
+              <div className="mt-3 text-sm text-stone-600">
+                <ul className="space-y-3 list-disc pl-5">
+                  <li>The Hebrew word for "created" (bara) is used exclusively for divine creation</li>
+                  <li>The phrase "it was good" appears seven times, a number symbolizing completeness</li>
+                  <li>Creation proceeds from chaos to order, from simple to complex life forms</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
         
         {/* Main Reading Area with Content */}
         <div
