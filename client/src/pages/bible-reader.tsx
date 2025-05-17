@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useLocation } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -17,9 +17,22 @@ import {
   Volume2,
   Info,
   LogIn,
-  ArrowRight
+  ArrowRight,
+  Menu,
+  X,
+  Search,
+  Settings,
+  BookOpen,
+  ChevronUp
 } from 'lucide-react';
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useAuth } from '../lib/auth';
+import { cn } from '@/lib/utils';
 
 interface Verse {
   id: string;
@@ -37,6 +50,10 @@ export default function BibleReader() {
   const params = useParams();
   const [, navigate] = useLocation();
   const [activeTranslation, setActiveTranslation] = useState('web');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showToolbar, setShowToolbar] = useState(true);
+  const [fontSize, setFontSize] = useState('base'); // 'sm', 'base', 'lg', 'xl'
+  const readerRef = useRef<HTMLDivElement>(null);
 
   // Default to Genesis 1 if no parameters are provided
   const book = params.book || 'Genesis';
@@ -58,6 +75,13 @@ export default function BibleReader() {
     }
   }, [isAuthenticated, navigate, isDemoChapter]);
 
+  // Scroll to top when chapter changes
+  useEffect(() => {
+    if (readerRef.current) {
+      readerRef.current.scrollTo(0, 0);
+    }
+  }, [book, chapter]);
+
   if (!isAuthenticated && !isDemoChapter) {
     return null;
   }
@@ -75,197 +99,293 @@ export default function BibleReader() {
     }
   };
 
+  const getFontSizeClass = () => {
+    switch (fontSize) {
+      case 'sm': return 'text-base';
+      case 'base': return 'text-lg';
+      case 'lg': return 'text-xl';
+      case 'xl': return 'text-2xl';
+      default: return 'text-lg';
+    }
+  };
+
   return (
-    <div className="container mx-auto py-8 px-4 md:px-0">
-      <div className="flex flex-col gap-6">
-        {/* Sign-up CTA for non-authenticated users */}
-        {!isAuthenticated && isDemoChapter && (
-          <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 mb-2">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <div>
-                <h2 className="text-xl font-semibold text-primary">Unlock the Full Bible</h2>
-                <p className="text-muted-foreground mt-1">
-                  You're viewing Genesis 1 as a demo. Sign up for free to access all 66 books, personal notes, 
-                  AI-powered commentary, and more.
-                </p>
-              </div>
-              <Button 
-                className="whitespace-nowrap" 
-                onClick={() => navigate('/login')}
-              >
-                Sign Up for Free
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        )}
+    <div className="flex h-screen flex-col overflow-hidden bg-stone-50 text-stone-800">
+      {/* NeuBible-style Top Navigation */}
+      <div className={cn(
+        "flex items-center justify-between px-4 py-3 transition-opacity duration-300 bg-stone-50 border-b border-stone-200",
+        showToolbar ? "opacity-100" : "opacity-0"
+      )}>
+        <div className="flex items-center">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="mr-2 text-stone-700 hover:text-emerald-600" 
+            onClick={() => setSidebarOpen(true)}
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
+          <h1 className="text-xl font-medium">{book} {chapter}</h1>
+        </div>
         
-        {/* Header Section */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-primary">
-              {book} {chapter}
-            </h1>
-            <p className="text-muted-foreground">
-              Explore and study the Word with multiple perspectives
-            </p>
+        <div className="flex items-center space-x-2">
+          <Button variant="ghost" size="icon" className="text-stone-700 hover:text-emerald-600">
+            <Search className="h-5 w-5" />
+          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="text-stone-700 hover:text-emerald-600">
+                <Settings className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setFontSize('sm')}>
+                Small Text
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setFontSize('base')}>
+                Medium Text
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setFontSize('lg')}>
+                Large Text
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setFontSize('xl')}>
+                Extra Large Text
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+      
+      {/* Main Bible Reading Area with Sidebar */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Bible Navigation Sidebar (Hidden by default on mobile) */}
+        <div className={cn(
+          "fixed inset-0 z-40 w-72 bg-white transform transition-transform duration-300 ease-in-out shadow-lg",
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        )}>
+          <div className="flex justify-between items-center p-4 border-b">
+            <h2 className="text-lg font-medium">Bible Books</h2>
+            <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(false)}>
+              <X className="h-5 w-5" />
+            </Button>
           </div>
           
-          <div className="flex items-center gap-2">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => navigateToChapter(-1)}
-              disabled={chapter <= 1}
-            >
-              <ChevronLeft className="h-4 w-4 mr-1" />
-              Previous
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => navigateToChapter(1)}
-            >
-              Next
-              <ChevronRight className="h-4 w-4 ml-1" />
-            </Button>
+          <div className="p-2 overflow-y-auto h-full pb-20">
+            <div className="grid grid-cols-1 gap-1">
+              {/* Old Testament */}
+              <div className="px-3 py-2 text-sm font-semibold text-emerald-700 bg-emerald-50 rounded-md">
+                Old Testament
+              </div>
+              {["Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy"].map((bookName) => (
+                <Button 
+                  key={bookName}
+                  variant="ghost" 
+                  className={cn(
+                    "justify-start px-3 rounded-md", 
+                    book === bookName ? "bg-emerald-100 text-emerald-700" : "text-stone-700"
+                  )}
+                  onClick={() => {
+                    navigate(`/reader/${bookName}/1`);
+                    setSidebarOpen(false);
+                  }}
+                >
+                  {bookName}
+                </Button>
+              ))}
+              
+              {/* New Testament (abbreviated list) */}
+              <div className="px-3 py-2 mt-2 text-sm font-semibold text-emerald-700 bg-emerald-50 rounded-md">
+                New Testament
+              </div>
+              {["Matthew", "Mark", "Luke", "John", "Acts"].map((bookName) => (
+                <Button 
+                  key={bookName}
+                  variant="ghost" 
+                  className={cn(
+                    "justify-start px-3 rounded-md", 
+                    book === bookName ? "bg-emerald-100 text-emerald-700" : "text-stone-700"
+                  )}
+                  onClick={() => {
+                    navigate(`/reader/${bookName}/1`);
+                    setSidebarOpen(false);
+                  }}
+                >
+                  {bookName}
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
         
-        <Separator />
+        {/* Backdrop overlay when sidebar is open */}
+        {sidebarOpen && (
+          <div 
+            className="fixed inset-0 bg-black/20 z-30"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
         
-        {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Bible Text Column */}
-          <div className="lg:col-span-8">
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex justify-between items-center mb-4">
-                  <Tabs 
-                    defaultValue={activeTranslation} 
-                    onValueChange={setActiveTranslation}
-                    className="w-full"
+        {/* Main Reading Area with Content */}
+        <div
+          ref={readerRef}
+          className="flex-1 overflow-y-auto px-0 md:px-0 py-0 bg-stone-50" 
+          onClick={() => setShowToolbar(!showToolbar)}
+        >
+          {/* Sign-up CTA for non-authenticated users */}
+          {!isAuthenticated && isDemoChapter && (
+            <div className="bg-amber-50 border-y border-amber-200 py-4 px-6 mb-6">
+              <div className="max-w-3xl mx-auto">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                  <div>
+                    <h2 className="text-xl font-medium text-amber-800">Unlock the Full Bible</h2>
+                    <p className="text-amber-700 mt-1">
+                      You're viewing Genesis 1 as a demo. Sign up for free to access all 66 books, personal notes, 
+                      AI-powered commentary, and more.
+                    </p>
+                  </div>
+                  <Button 
+                    className="whitespace-nowrap bg-amber-600 hover:bg-amber-700 border-0" 
+                    onClick={() => navigate('/login')}
                   >
-                    <TabsList>
-                      <TabsTrigger value="web">WEB</TabsTrigger>
-                      <TabsTrigger value="kjv">KJV</TabsTrigger>
-                    </TabsList>
-                  </Tabs>
-                  
-                  <div className="flex gap-2">
-                    <Button variant="ghost" size="sm">
-                      <PenLine className="h-4 w-4 mr-1" />
-                      Notes
-                    </Button>
-                    <Button variant="ghost" size="sm">
-                      <Volume2 className="h-4 w-4 mr-1" />
-                      Listen
-                    </Button>
-                  </div>
+                    Sign Up for Free
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
                 </div>
+              </div>
+            </div>
+          )}
+          
+          {/* Translation tabs */}
+          <div className="sticky top-0 z-10 bg-stone-50 border-b border-stone-200 mb-6 px-4 md:px-6">
+            <div className="max-w-3xl mx-auto py-2">
+              <Tabs 
+                defaultValue={activeTranslation} 
+                onValueChange={setActiveTranslation}
+                className="w-full"
+              >
+                <TabsList className="bg-stone-200/70">
+                  <TabsTrigger 
+                    value="web" 
+                    className="data-[state=active]:bg-emerald-100 data-[state=active]:text-emerald-700"
+                  >
+                    WEB
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="kjv"
+                    className="data-[state=active]:bg-emerald-100 data-[state=active]:text-emerald-700"
+                  >
+                    KJV
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+          </div>
+          
+          {/* Bible content */}
+          <div className="max-w-3xl mx-auto px-6 md:px-8 pb-32">
+            {isLoading ? (
+              <div className="space-y-4 my-8">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <div key={i} className="flex gap-2">
+                    <Skeleton className="h-5 w-5 rounded-full" />
+                    <Skeleton className="h-5 w-full" />
+                  </div>
+                ))}
+              </div>
+            ) : error ? (
+              <div className="py-10 text-center text-red-600">
+                <p>Error loading chapter. Please try again.</p>
+              </div>
+            ) : (
+              <div className="my-8">
+                <h2 className="text-2xl md:text-3xl font-serif font-medium text-center mb-8 text-stone-800">{book} {chapter}</h2>
                 
-                {isLoading ? (
-                  <div className="space-y-4">
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <div key={i} className="flex gap-2">
-                        <Skeleton className="h-5 w-5 rounded-full" />
-                        <Skeleton className="h-5 w-full" />
-                      </div>
-                    ))}
-                  </div>
-                ) : error ? (
-                  <div className="py-10 text-center text-red-500">
-                    <p>Error loading chapter. Please try again.</p>
-                  </div>
-                ) : (
-                  <div className="prose prose-emerald max-w-none">
-                    {verses?.map((verse) => (
-                      <div key={verse.id} className="mb-4 verse-container group">
-                        <div className="flex gap-2 items-start">
-                          <span className="text-xs font-bold mt-1 text-muted-foreground">{verse.verse}</span>
-                          <div className="flex-1">
-                            <p className="text-lg leading-relaxed">
-                              {activeTranslation === 'web' ? verse.text.web : verse.text.kjv}
-                            </p>
-                            <div className="hidden group-hover:flex mt-2 gap-2">
-                              <Button variant="ghost" size="sm" className="h-7 px-2">
-                                <Bookmark className="h-3.5 w-3.5 mr-1" />
-                                Highlight
-                              </Button>
-                              <Button variant="ghost" size="sm" className="h-7 px-2">
-                                <MessageCircle className="h-3.5 w-3.5 mr-1" />
-                                Note
-                              </Button>
-                              <Button variant="ghost" size="sm" className="h-7 px-2">
-                                <Share className="h-3.5 w-3.5 mr-1" />
-                                Share
-                              </Button>
-                            </div>
+                <div className={cn("prose max-w-none", getFontSizeClass())}>
+                  {verses?.map((verse) => (
+                    <div key={verse.id} className="mb-6 verse-container group">
+                      <div className="flex gap-3 items-start">
+                        <span className="text-xs font-bold pt-1.5 text-stone-400 select-none w-6 text-right">
+                          {verse.verse}
+                        </span>
+                        <div className="flex-1 font-serif">
+                          <p className={cn("leading-relaxed text-stone-800", getFontSizeClass())}>
+                            {activeTranslation === 'web' ? verse.text.web : verse.text.kjv}
+                          </p>
+                          <div className="hidden group-hover:flex mt-2 gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Button variant="ghost" size="sm" className="h-7 px-2 text-xs text-stone-500 hover:text-emerald-600">
+                              <Bookmark className="h-3 w-3 mr-1" />
+                              Highlight
+                            </Button>
+                            <Button variant="ghost" size="sm" className="h-7 px-2 text-xs text-stone-500 hover:text-emerald-600">
+                              <MessageCircle className="h-3 w-3 mr-1" />
+                              Note
+                            </Button>
+                            <Button variant="ghost" size="sm" className="h-7 px-2 text-xs text-stone-500 hover:text-emerald-600">
+                              <Share className="h-3 w-3 mr-1" />
+                              Share
+                            </Button>
                           </div>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-          
-          {/* Sidebar Column */}
-          <div className="lg:col-span-4">
-            <div className="space-y-6">
-              {/* Theological Lenses */}
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold mb-4 flex items-center">
-                    <Book className="h-5 w-5 mr-2 text-primary" />
-                    Theological Lenses
-                  </h3>
-                  
-                  <div className="space-y-3">
-                    <Button variant="outline" className="w-full justify-start">
-                      Evangelical
-                    </Button>
-                    <Button variant="outline" className="w-full justify-start">
-                      Catholic
-                    </Button>
-                    <Button variant="outline" className="w-full justify-start">
-                      Jewish
-                    </Button>
-                    <Button variant="outline" className="w-full justify-start">
-                      Historical
-                    </Button>
-                    <Button variant="outline" className="w-full justify-start">
-                      Gen-Z
-                    </Button>
-                    <Button variant="outline" className="w-full justify-start">
-                      Kids
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              {/* Chapter Context */}
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold mb-4 flex items-center">
-                    <Info className="h-5 w-5 mr-2 text-primary" />
-                    Chapter Context
-                  </h3>
-                  
-                  <div className="text-sm text-muted-foreground">
-                    <p className="mb-2">
-                      This chapter was written approximately around 1445-1405 BC during Israel's wilderness wanderings.
-                    </p>
-                    <p>
-                      The author likely drew from both oral traditions and divine inspiration to compose this account of creation, establishing foundational theological principles about God, humanity, and the natural world.
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
+        
+        {/* Additional Floating Controls */}
+        <div className={cn(
+          "fixed bottom-4 left-1/2 transform -translate-x-1/2 z-20 flex space-x-2 bg-white shadow-xl rounded-full transition-opacity duration-300 border border-stone-200",
+          showToolbar ? "opacity-100" : "opacity-0"
+        )}>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="text-stone-700 hover:text-amber-600"
+            onClick={() => navigateToChapter(-1)}
+            disabled={chapter <= 1}
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </Button>
+          
+          <Separator orientation="vertical" className="h-8 self-center" />
+          
+          <Button 
+            variant="ghost" 
+            size="sm"
+            className="flex items-center space-x-1 px-3 text-stone-700 hover:text-emerald-600"
+            onClick={() => setSidebarOpen(true)}
+          >
+            <BookOpen className="h-4 w-4 mr-1" />
+            <span>{book} {chapter}</span>
+          </Button>
+          
+          <Separator orientation="vertical" className="h-8 self-center" />
+          
+          <Button 
+            variant="ghost" 
+            size="sm"
+            className="text-stone-700 hover:text-amber-600"
+            onClick={() => navigateToChapter(1)}
+          >
+            <ChevronRight className="h-5 w-5" />
+          </Button>
+        </div>
+        
+        {/* Scroll to top button */}
+        <Button
+          variant="secondary"
+          size="icon"
+          className={cn(
+            "fixed bottom-4 right-4 z-20 rounded-full bg-stone-200 hover:bg-stone-300 transition-opacity duration-300",
+            showToolbar ? "opacity-100" : "opacity-0"
+          )}
+          onClick={() => readerRef.current?.scrollTo(0, 0)}
+        >
+          <ChevronUp className="h-5 w-5" />
+        </Button>
       </div>
     </div>
   );
