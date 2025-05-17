@@ -293,8 +293,8 @@ export default function Home() {
             </div>
           </section>
           
-          {/* Blue Animated CTA Section */}
-          <section className="py-16 md:py-24 bg-blue-600 relative overflow-hidden">
+          {/* Animated CTA Section */}
+          <section className="py-16 md:py-24 bg-primary relative overflow-hidden">
             {/* Animated dots background */}
             <div className="absolute inset-0 opacity-10">
               <div className="absolute inset-0" style={{ 
@@ -304,90 +304,90 @@ export default function Home() {
             </div>
             
             {/* Floating elements */}
-            <div className="absolute -right-8 top-10 w-24 h-24 rounded-lg bg-blue-500 opacity-40 animate-float"></div>
-            <div className="absolute left-16 bottom-10 w-16 h-16 rounded-lg bg-blue-700 opacity-30 animate-float-delayed"></div>
-            <div className="absolute right-1/4 top-1/3 w-10 h-10 rounded-full bg-white opacity-20 animate-float"></div>
+            <div className="absolute -right-8 top-10 w-24 h-24 rounded-lg bg-accent opacity-40 animate-float"></div>
+            <div className="absolute left-16 bottom-10 w-16 h-16 rounded-lg bg-primary-foreground opacity-30 animate-float-delayed"></div>
+            <div className="absolute right-1/4 top-1/3 w-10 h-10 rounded-full bg-accent opacity-20 animate-float"></div>
             
             <div className="container mx-auto px-4 relative z-10">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                <div className="text-white">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                <div className="text-primary-foreground">
+                  <h2 className="text-3xl md:text-4xl font-bold mb-6 font-serif">
                     Ready to gather spiritual insights?
                   </h2>
-                  <p className="text-lg text-blue-100 mb-8">
+                  <p className="text-lg text-primary-foreground/90 mb-8">
                     Start using Leavn Bible Study today and transform your Scripture experience.
                   </p>
                   
                   <div className="space-y-4">
                     <div className="flex items-center">
-                      <div className="rounded-full bg-blue-500 p-1 mr-3">
-                        <CheckCircle className="h-5 w-5 text-white" />
+                      <div className="rounded-full bg-accent p-1 mr-3">
+                        <CheckCircle className="h-5 w-5 text-primary" />
                       </div>
-                      <span className="text-blue-50">Free for personal Bible study</span>
+                      <span className="text-primary-foreground/90">Free for personal Bible study</span>
                     </div>
                     <div className="flex items-center">
-                      <div className="rounded-full bg-blue-500 p-1 mr-3">
-                        <CheckCircle className="h-5 w-5 text-white" />
+                      <div className="rounded-full bg-accent p-1 mr-3">
+                        <CheckCircle className="h-5 w-5 text-primary" />
                       </div>
-                      <span className="text-blue-50">No account required to preview</span>
+                      <span className="text-primary-foreground/90">No account required to preview</span>
                     </div>
                     <div className="flex items-center">
-                      <div className="rounded-full bg-blue-500 p-1 mr-3">
-                        <CheckCircle className="h-5 w-5 text-white" />
+                      <div className="rounded-full bg-accent p-1 mr-3">
+                        <CheckCircle className="h-5 w-5 text-primary" />
                       </div>
-                      <span className="text-blue-50">Premium features for deeper study</span>
+                      <span className="text-primary-foreground/90">Premium features for deeper study</span>
                     </div>
                   </div>
                   
                   <div className="mt-8 flex flex-col sm:flex-row gap-4">
                     <Link href="/api/login">
-                      <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50">
+                      <Button size="lg" className="bg-card text-primary hover:bg-card/90">
                         Create Account
                       </Button>
                     </Link>
-                    <Button variant="outline" size="lg" className="border-white text-white hover:bg-blue-500">
+                    <Button variant="outline" size="lg" className="border-card text-card hover:bg-primary-foreground/10">
                       View Example
                     </Button>
                   </div>
                 </div>
                 
-                <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20">
-                  <div className="bg-white p-4 rounded-lg shadow-lg">
-                    <h3 className="font-medium text-gray-900 mb-3">Who uses Leavn Bible Study?</h3>
+                <div className="bg-primary-foreground/10 backdrop-blur-sm p-6 rounded-xl border border-primary-foreground/20">
+                  <div className="bg-card p-4 rounded-lg shadow-lg">
+                    <h3 className="font-medium text-foreground mb-3">Who uses Leavn Bible Study?</h3>
                     
                     <div className="space-y-3 mb-4">
                       <div className="flex items-center">
-                        <input type="checkbox" checked className="w-4 h-4 rounded mr-3 accent-blue-600" />
-                        <span className="text-gray-700">Sunday School Teachers</span>
+                        <input type="checkbox" defaultChecked className="w-4 h-4 rounded mr-3 accent-primary" />
+                        <span className="text-muted-foreground">Sunday School Teachers</span>
                       </div>
                       <div className="flex items-center">
-                        <input type="checkbox" checked className="w-4 h-4 rounded mr-3 accent-blue-600" />
-                        <span className="text-gray-700">Bible Study Groups</span>
+                        <input type="checkbox" defaultChecked className="w-4 h-4 rounded mr-3 accent-primary" />
+                        <span className="text-muted-foreground">Bible Study Groups</span>
                       </div>
                       <div className="flex items-center">
-                        <input type="checkbox" checked className="w-4 h-4 rounded mr-3 accent-blue-600" />
-                        <span className="text-gray-700">Personal Study</span>
+                        <input type="checkbox" defaultChecked className="w-4 h-4 rounded mr-3 accent-primary" />
+                        <span className="text-muted-foreground">Personal Study</span>
                       </div>
                       <div className="flex items-center">
-                        <input type="checkbox" checked className="w-4 h-4 rounded mr-3 accent-blue-600" />
-                        <span className="text-gray-700">Pastors & Ministers</span>
+                        <input type="checkbox" defaultChecked className="w-4 h-4 rounded mr-3 accent-primary" />
+                        <span className="text-muted-foreground">Pastors & Ministers</span>
                       </div>
                     </div>
                     
-                    <div className="mt-6 pt-4 border-t border-gray-200">
-                      <h4 className="text-sm font-medium text-gray-900 mb-2">I want to study:</h4>
+                    <div className="mt-6 pt-4 border-t border-border">
+                      <h4 className="text-sm font-medium text-foreground mb-2">I want to study:</h4>
                       <div className="space-y-2">
                         <div className="flex items-center">
-                          <input type="radio" name="studyType" checked className="w-4 h-4 mr-3 accent-blue-600" />
-                          <span className="text-gray-700">New Testament</span>
+                          <input type="radio" name="studyType" defaultChecked className="w-4 h-4 mr-3 accent-primary" />
+                          <span className="text-muted-foreground">New Testament</span>
                         </div>
                         <div className="flex items-center">
-                          <input type="radio" name="studyType" className="w-4 h-4 mr-3 accent-blue-600" />
-                          <span className="text-gray-700">Old Testament</span>
+                          <input type="radio" name="studyType" className="w-4 h-4 mr-3 accent-primary" />
+                          <span className="text-muted-foreground">Old Testament</span>
                         </div>
                         <div className="flex items-center">
-                          <input type="radio" name="studyType" className="w-4 h-4 mr-3 accent-blue-600" />
-                          <span className="text-gray-700">Both</span>
+                          <input type="radio" name="studyType" className="w-4 h-4 mr-3 accent-primary" />
+                          <span className="text-muted-foreground">Both</span>
                         </div>
                       </div>
                     </div>
