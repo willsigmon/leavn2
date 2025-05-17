@@ -15,7 +15,9 @@ import {
   Book, 
   PenLine,
   Volume2,
-  Info
+  Info,
+  LogIn,
+  ArrowRight
 } from 'lucide-react';
 import { useAuth } from '../lib/auth';
 
@@ -43,7 +45,7 @@ export default function BibleReader() {
   // Fetch verses for the current chapter
   const { data: verses, isLoading, error } = useQuery<Verse[]>({
     queryKey: [`/api/bible/${book}/${chapter}`],
-    enabled: isAuthenticated,
+    enabled: isAuthenticated || isDemoChapter, // Allow fetching for the demo chapter even when not logged in
   });
 
   // Check if we're on the demo chapter (Genesis 1)
@@ -76,6 +78,28 @@ export default function BibleReader() {
   return (
     <div className="container mx-auto py-8 px-4 md:px-0">
       <div className="flex flex-col gap-6">
+        {/* Sign-up CTA for non-authenticated users */}
+        {!isAuthenticated && isDemoChapter && (
+          <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 mb-2">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div>
+                <h2 className="text-xl font-semibold text-primary">Unlock the Full Bible</h2>
+                <p className="text-muted-foreground mt-1">
+                  You're viewing Genesis 1 as a demo. Sign up for free to access all 66 books, personal notes, 
+                  AI-powered commentary, and more.
+                </p>
+              </div>
+              <Button 
+                className="whitespace-nowrap" 
+                onClick={() => navigate('/login')}
+              >
+                Sign Up for Free
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        )}
+        
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
