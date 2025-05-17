@@ -338,20 +338,20 @@ export default function Home() {
                   </div>
                 </div>
                 
-                <div className="bg-white rounded-lg p-6 shadow-md border border-amber-100">
-                  <div className="w-10 h-10 rounded-full bg-amber-100 mb-4 flex items-center justify-center">
-                    <span className="text-amber-600">❝</span>
+                <div className="bg-card rounded-lg p-6 shadow-md border border-border">
+                  <div className="w-10 h-10 rounded-full bg-teal-100 dark:bg-teal-900 mb-4 flex items-center justify-center">
+                    <span className="text-teal-600 dark:text-teal-400">❝</span>
                   </div>
-                  <p className="italic mb-4 text-stone-700">
+                  <p className="italic mb-4 text-foreground">
                     "We use the reading plans to keep our family consistent with Bible study. The narrative mode helps our teenagers connect with stories in a fresh way."
                   </p>
                   <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold">
+                    <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center text-emerald-700 dark:text-emerald-400 font-bold">
                       LP
                     </div>
                     <div className="ml-3">
-                      <p className="font-medium text-slate-800">Liu-Parker Family</p>
-                      <p className="text-sm text-stone-500">Home church group</p>
+                      <p className="font-medium text-foreground">Liu-Parker Family</p>
+                      <p className="text-sm text-muted-foreground">Home church group</p>
                     </div>
                   </div>
                 </div>
@@ -362,11 +362,11 @@ export default function Home() {
       </section>
 
       {/* Call to action */}
-      <section className="py-20 px-4 md:px-0 bg-gradient-to-b from-emerald-600 to-green-700 text-white relative overflow-hidden">
+      <section className="py-20 px-4 md:px-0 bg-gradient-to-b from-emerald-600 to-emerald-800 dark:from-emerald-800 dark:to-emerald-950 text-white relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute top-20 left-10 w-32 h-32 bg-white/10 rounded-full"></div>
         <div className="absolute bottom-10 right-10 w-24 h-24 bg-white/5 rounded-lg rotate-12"></div>
-        <div className="absolute top-1/2 right-1/3 w-16 h-16 bg-amber-300/10 rounded-full"></div>
+        <div className="absolute top-1/2 right-1/3 w-16 h-16 bg-teal-300/10 rounded-full"></div>
         
         <div className="container mx-auto max-w-4xl relative z-10 text-center">
           <div className="inline-block px-4 py-1 rounded-full bg-white/20 text-white text-sm font-semibold mb-6">
