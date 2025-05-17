@@ -400,33 +400,34 @@ export default function BibleReader() {
                     <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/paper.png')] opacity-50 rounded-md"></div>
                     
                     {/* Theological lens selector toolbar */}
-                    <div className="relative mb-8 flex items-center justify-center">
+                    <div className="relative mb-8 flex flex-col items-center justify-center">
+                      <div className="mb-2 text-sm text-stone-600 font-medium">View Through Theological Lens</div>
                       <div className="inline-flex p-1 bg-stone-100 rounded-lg shadow-sm">
                         <Button 
                           variant="ghost" 
                           size="sm"
-                          className="rounded-md bg-emerald-100 text-emerald-800 hover:bg-emerald-200"
+                          className="rounded-md bg-emerald-100 text-emerald-800 hover:bg-emerald-200 font-medium"
                         >
                           Historical
                         </Button>
                         <Button 
                           variant="ghost" 
                           size="sm"
-                          className="rounded-md text-stone-700 hover:bg-stone-200"
+                          className="rounded-md text-stone-700 hover:bg-stone-200 font-medium"
                         >
                           Evangelical
                         </Button>
                         <Button 
                           variant="ghost" 
                           size="sm"
-                          className="rounded-md text-stone-700 hover:bg-stone-200"
+                          className="rounded-md text-stone-700 hover:bg-stone-200 font-medium"
                         >
                           Catholic
                         </Button>
                         <Button 
                           variant="ghost" 
                           size="sm"
-                          className="rounded-md text-stone-700 hover:bg-stone-200"
+                          className="rounded-md text-stone-700 hover:bg-stone-200 font-medium"
                         >
                           Jewish
                         </Button>
@@ -449,7 +450,7 @@ export default function BibleReader() {
                         >
                           <span className="text-xs text-stone-400 align-top mr-1.5">{1}</span>
                           <span className="relative inline">
-                            In the beginning God <span className="bg-amber-50 px-0.5 rounded hover:bg-amber-100 cursor-help" title="Key concept: Creation">created</span> the heaven and the earth.
+                            In the beginning God <span className="border-b border-emerald-400 hover:text-emerald-700 cursor-help font-medium" title="Key concept: Creation">created</span> the heaven and the earth.
                             {/* Hover interaction */}
                             <div className="hidden group-hover:flex absolute -top-1 right-0 transform translate-x-full bg-white shadow-lg rounded-md p-2 z-10 gap-2">
                               <Button variant="ghost" size="icon" className="h-8 w-8 text-amber-600">
@@ -472,7 +473,7 @@ export default function BibleReader() {
                         >
                           <span className="text-xs text-stone-400 align-top mr-1.5">{2}</span>
                           <span className="relative inline">
-                            And the earth was without <span className="bg-amber-50 px-0.5 rounded hover:bg-amber-100 cursor-help" title="Hebrew: 'tohu vabohu'">form, and void</span>; and darkness was upon the face of the deep. And the <span className="bg-emerald-50 px-0.5 rounded hover:bg-emerald-100 cursor-help" title="Hebrew: 'ruach Elohim'">Spirit of God</span> moved upon the face of the waters.
+                            And the earth was <span className="border-b border-amber-400 hover:text-amber-700 cursor-help font-medium" title="Hebrew: 'tohu vabohu'">without form, and void</span>; and darkness was upon the face of the deep. And the <span className="border-b border-emerald-400 hover:text-emerald-700 cursor-help font-medium" title="Hebrew: 'ruach Elohim'">Spirit of God</span> moved upon the face of the waters.
                             {/* Hover interaction */}
                             <div className="hidden group-hover:flex absolute -top-1 right-0 transform translate-x-full bg-white shadow-lg rounded-md p-2 z-10 gap-2">
                               <Button variant="ghost" size="icon" className="h-8 w-8 text-amber-600">
@@ -495,7 +496,7 @@ export default function BibleReader() {
                         >
                           <span className="text-xs text-stone-400 align-top mr-1.5">{3}</span>
                           <span className="relative inline">
-                            And God said, <span className="bg-amber-50 px-0.5 rounded hover:bg-amber-100 cursor-help" title="Divine speech as creative act">Let there be light</span>: and there was light.
+                            And God said, <span className="border-b border-amber-400 hover:text-amber-700 cursor-help font-medium" title="Divine speech as creative act">Let there be light</span>: and there was light.
                             {/* Hover interaction */}
                             <div className="hidden group-hover:flex absolute -top-1 right-0 transform translate-x-full bg-white shadow-lg rounded-md p-2 z-10 gap-2">
                               <Button variant="ghost" size="icon" className="h-8 w-8 text-amber-600">
@@ -508,6 +509,312 @@ export default function BibleReader() {
                                 <Share className="h-4 w-4" />
                               </Button>
                             </div>
+                          </span>
+                        </div>
+                        
+                        {/* Verse 4 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{4}</span>
+                          <span className="relative inline">
+                            And God saw the light, that it was <span className="border-b border-amber-400 hover:text-amber-700 cursor-help font-medium" title="Hebrew: 'tov' - indicating completeness">good</span>: and God divided the light from the darkness.
+                          </span>
+                        </div>
+                        
+                        {/* Verse 5 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{5}</span>
+                          <span className="relative inline">
+                            And God <span className="border-b border-emerald-400 hover:text-emerald-700 cursor-help font-medium" title="Divine naming establishes order">called</span> the light Day, and the darkness he called Night. And the evening and the morning were the first day.
+                          </span>
+                        </div>
+                        
+                        {/* Verse 6 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{6}</span>
+                          <span className="relative inline">
+                            And God said, Let there be a <span className="border-b border-amber-400 hover:text-amber-700 cursor-help font-medium" title="Hebrew: 'raqia' - an expanse">firmament</span> in the midst of the waters, and let it divide the waters from the waters.
+                          </span>
+                        </div>
+                        
+                        {/* Verse 7 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{7}</span>
+                          <span className="relative inline">
+                            And God made the firmament, and divided the waters which were under the firmament from the waters which were above the firmament: and it was so.
+                          </span>
+                        </div>
+                        
+                        {/* Verse 8 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{8}</span>
+                          <span className="relative inline">
+                            And God called the firmament Heaven. And the evening and the morning were the second day.
+                          </span>
+                        </div>
+                        
+                        {/* Verse 9 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{9}</span>
+                          <span className="relative inline">
+                            And God said, Let the waters under the heaven be gathered together unto one place, and let the dry land appear: and it was so.
+                          </span>
+                        </div>
+                        
+                        {/* Verse 10 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{10}</span>
+                          <span className="relative inline">
+                            And God called the dry land Earth; and the gathering together of the waters called he Seas: and God saw that it was good.
+                          </span>
+                        </div>
+                        
+                        {/* Verse 11 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{11}</span>
+                          <span className="relative inline">
+                            And God said, Let the earth bring forth <span className="border-b border-emerald-400 hover:text-emerald-700 cursor-help font-medium" title="Creation according to kinds">grass, the herb yielding seed, and the fruit tree yielding fruit after his kind</span>, whose seed is in itself, upon the earth: and it was so.
+                          </span>
+                        </div>
+                        
+                        {/* Verse 12 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{12}</span>
+                          <span className="relative inline">
+                            And the earth brought forth grass, and herb yielding seed after his kind, and the tree yielding fruit, whose seed was in itself, after his kind: and God saw that it was good.
+                          </span>
+                        </div>
+                        
+                        {/* Verse 13 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{13}</span>
+                          <span className="relative inline">
+                            And the evening and the morning were the third day.
+                          </span>
+                        </div>
+                        
+                        {/* Verse 14 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{14}</span>
+                          <span className="relative inline">
+                            And God said, Let there be <span className="border-b border-amber-400 hover:text-amber-700 cursor-help font-medium" title="Hebrew: 'meorot' - sources of light">lights</span> in the firmament of the heaven to divide the day from the night; and let them be for signs, and for seasons, and for days, and years:
+                          </span>
+                        </div>
+                        
+                        {/* Verse 15 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{15}</span>
+                          <span className="relative inline">
+                            And let them be for lights in the firmament of the heaven to give light upon the earth: and it was so.
+                          </span>
+                        </div>
+                        
+                        {/* Verse 16 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{16}</span>
+                          <span className="relative inline">
+                            And God made two great lights; the <span className="border-b border-emerald-400 hover:text-emerald-700 cursor-help font-medium" title="Unlike other ancient texts, these aren't named as deities">greater light to rule the day</span>, and the lesser light to rule the night: he made the stars also.
+                          </span>
+                        </div>
+                        
+                        {/* Verse 17-18 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{17}</span>
+                          <span className="relative inline">
+                            And God set them in the firmament of the heaven to give light upon the earth,
+                          </span>
+                        </div>
+                        
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{18}</span>
+                          <span className="relative inline">
+                            And to rule over the day and over the night, and to divide the light from the darkness: and God saw that it was good.
+                          </span>
+                        </div>
+                        
+                        {/* Verse 19 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{19}</span>
+                          <span className="relative inline">
+                            And the evening and the morning were the fourth day.
+                          </span>
+                        </div>
+                        
+                        {/* Verse 20 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{20}</span>
+                          <span className="relative inline">
+                            And God said, Let the waters bring forth abundantly the <span className="border-b border-amber-400 hover:text-amber-700 cursor-help font-medium" title="Hebrew: 'sherets' - teeming creatures">moving creature that hath life</span>, and fowl that may fly above the earth in the open firmament of heaven.
+                          </span>
+                        </div>
+                        
+                        {/* Verse 21 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{21}</span>
+                          <span className="relative inline">
+                            And God created great <span className="border-b border-emerald-400 hover:text-emerald-700 cursor-help font-medium" title="Hebrew: 'tanninim' - sea monsters or dragons">whales</span>, and every living creature that moveth, which the waters brought forth abundantly, after their kind, and every winged fowl after his kind: and God saw that it was good.
+                          </span>
+                        </div>
+                        
+                        {/* Verse 22 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{22}</span>
+                          <span className="relative inline">
+                            And God <span className="border-b border-amber-400 hover:text-amber-700 cursor-help font-medium" title="First blessing in the Bible">blessed</span> them, saying, Be fruitful, and multiply, and fill the waters in the seas, and let fowl multiply in the earth.
+                          </span>
+                        </div>
+                        
+                        {/* Verse 23 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{23}</span>
+                          <span className="relative inline">
+                            And the evening and the morning were the fifth day.
+                          </span>
+                        </div>
+                        
+                        {/* Verse 24 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{24}</span>
+                          <span className="relative inline">
+                            And God said, Let the earth bring forth the living creature after his kind, cattle, and creeping thing, and beast of the earth after his kind: and it was so.
+                          </span>
+                        </div>
+                        
+                        {/* Verse 25 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{25}</span>
+                          <span className="relative inline">
+                            And God made the beast of the earth after his kind, and cattle after their kind, and every thing that creepeth upon the earth after his kind: and God saw that it was good.
+                          </span>
+                        </div>
+                        
+                        {/* Verse 26 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{26}</span>
+                          <span className="relative inline">
+                            And God said, Let us <span className="border-b border-emerald-400 hover:text-emerald-700 cursor-help font-medium" title="Trinity implied in the plural form">make man in our image</span>, after our likeness: and let them have dominion over the fish of the sea, and over the fowl of the air, and over the cattle, and over all the earth, and over every creeping thing that creepeth upon the earth.
+                          </span>
+                        </div>
+                        
+                        {/* Verse 27 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{27}</span>
+                          <span className="relative inline">
+                            So God created man in his own image, in the <span className="border-b border-amber-400 hover:text-amber-700 cursor-help font-medium" title="Both genders reflect God's image">image of God created he him; male and female created he them</span>.
+                          </span>
+                        </div>
+                        
+                        {/* Verse 28 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{28}</span>
+                          <span className="relative inline">
+                            And God blessed them, and God said unto them, <span className="border-b border-emerald-400 hover:text-emerald-700 cursor-help font-medium" title="Cultural mandate - human vocation">Be fruitful, and multiply, and replenish the earth, and subdue it</span>: and have dominion over the fish of the sea, and over the fowl of the air, and over every living thing that moveth upon the earth.
+                          </span>
+                        </div>
+                        
+                        {/* Verse 29-30 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{29}</span>
+                          <span className="relative inline">
+                            And God said, Behold, I have given you every herb bearing seed, which is upon the face of all the earth, and every tree, in the which is the fruit of a tree yielding seed; to you it shall be for meat.
+                          </span>
+                        </div>
+                        
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{30}</span>
+                          <span className="relative inline">
+                            And to every beast of the earth, and to every fowl of the air, and to every thing that creepeth upon the earth, wherein there is life, I have given every green herb for meat: and it was so.
+                          </span>
+                        </div>
+                        
+                        {/* Verse 31 */}
+                        <div 
+                          className="verse-content group cursor-pointer relative"
+                          onClick={() => {/* Handle verse selection */}}
+                        >
+                          <span className="text-xs text-stone-400 align-top mr-1.5">{31}</span>
+                          <span className="relative inline">
+                            And God saw every thing that he had made, and, behold, it was <span className="border-b border-amber-400 hover:text-amber-700 cursor-help font-medium" title="Hebrew: 'tov meod' - very good, indicating complete perfection">very good</span>. And the evening and the morning were the sixth day.
                           </span>
                         </div>
                       </div>
