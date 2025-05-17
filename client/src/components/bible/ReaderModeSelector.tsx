@@ -17,11 +17,26 @@ interface ReaderModeSelectorProps {
 }
 
 const modeInfo = {
-  standard: "Original translation with traditional language",
-  genz: "Casual, relatable language for younger readers",
-  kids: "Simplified vocabulary and concepts for children",
-  devotional: "Reflective language that encourages spiritual application",
-  scholarly: "Formal language closely following original text structure"
+  standard: {
+    description: "Original translation with traditional language",
+    example: "For God so loved the world, that he gave his only Son, that whoever believes in him should not perish but have eternal life."
+  },
+  genz: {
+    description: "Casual, relatable language for younger readers",
+    example: "God literally loved everyone so much that he sent his one and only Son so that anyone who believes in him won't die but will have life that lasts forever. No cap."
+  },
+  kids: {
+    description: "Simplified vocabulary and concepts for children",
+    example: "God loves you very much! He gave his Son Jesus so that if you believe in him, you will live with God forever in heaven."
+  },
+  devotional: {
+    description: "Reflective language that encourages spiritual application",
+    example: "In God's infinite love, He offered His only Son as the ultimate gift—for you. This sacrificial love invites your belief, transforming death's certainty into eternal life's promise."
+  },
+  scholarly: {
+    description: "Formal language closely following original text structure",
+    example: "For in this manner did God demonstrate benevolence toward the cosmos: He gave His only begotten Son, in order that all believing in Him should not perish but possess eternal life."
+  }
 };
 
 export default function ReaderModeSelector({ 
@@ -58,7 +73,13 @@ export default function ReaderModeSelector({
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger className="w-full h-full">Standard</TooltipTrigger>
-                <TooltipContent><p>{modeInfo.standard}</p></TooltipContent>
+                <TooltipContent side="top" className="max-w-xs p-3">
+                  <p className="font-medium text-sm mb-1 text-primary">{modeInfo.standard.description}</p>
+                  <div className="text-xs text-muted-foreground mt-2 p-2 bg-accent/10 rounded-md border border-border">
+                    <p className="italic">"{modeInfo.standard.example}"</p>
+                    <p className="text-[10px] mt-1 text-right text-muted-foreground">John 3:16</p>
+                  </div>
+                </TooltipContent>
               </Tooltip>
             </TooltipProvider>
           </TabsTrigger>
@@ -66,7 +87,13 @@ export default function ReaderModeSelector({
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger className="w-full h-full">Gen Z</TooltipTrigger>
-                <TooltipContent><p>{modeInfo.genz}</p></TooltipContent>
+                <TooltipContent side="top" className="max-w-xs p-3">
+                  <p className="font-medium text-sm mb-1 text-primary">{modeInfo.genz.description}</p>
+                  <div className="text-xs text-muted-foreground mt-2 p-2 bg-accent/10 rounded-md border border-border">
+                    <p className="italic">"{modeInfo.genz.example}"</p>
+                    <p className="text-[10px] mt-1 text-right text-muted-foreground">John 3:16</p>
+                  </div>
+                </TooltipContent>
               </Tooltip>
             </TooltipProvider>
           </TabsTrigger>
@@ -74,7 +101,13 @@ export default function ReaderModeSelector({
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger className="w-full h-full">Kids</TooltipTrigger>
-                <TooltipContent><p>{modeInfo.kids}</p></TooltipContent>
+                <TooltipContent side="top" className="max-w-xs p-3">
+                  <p className="font-medium text-sm mb-1 text-primary">{modeInfo.kids.description}</p>
+                  <div className="text-xs text-muted-foreground mt-2 p-2 bg-accent/10 rounded-md border border-border">
+                    <p className="italic">"{modeInfo.kids.example}"</p>
+                    <p className="text-[10px] mt-1 text-right text-muted-foreground">John 3:16</p>
+                  </div>
+                </TooltipContent>
               </Tooltip>
             </TooltipProvider>
           </TabsTrigger>
@@ -82,7 +115,13 @@ export default function ReaderModeSelector({
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger className="w-full h-full">Devotional</TooltipTrigger>
-                <TooltipContent><p>{modeInfo.devotional}</p></TooltipContent>
+                <TooltipContent side="top" className="max-w-xs p-3">
+                  <p className="font-medium text-sm mb-1 text-primary">{modeInfo.devotional.description}</p>
+                  <div className="text-xs text-muted-foreground mt-2 p-2 bg-accent/10 rounded-md border border-border">
+                    <p className="italic">"{modeInfo.devotional.example}"</p>
+                    <p className="text-[10px] mt-1 text-right text-muted-foreground">John 3:16</p>
+                  </div>
+                </TooltipContent>
               </Tooltip>
             </TooltipProvider>
           </TabsTrigger>
@@ -90,7 +129,13 @@ export default function ReaderModeSelector({
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger className="w-full h-full">Scholarly</TooltipTrigger>
-                <TooltipContent><p>{modeInfo.scholarly}</p></TooltipContent>
+                <TooltipContent side="top" className="max-w-xs p-3">
+                  <p className="font-medium text-sm mb-1 text-primary">{modeInfo.scholarly.description}</p>
+                  <div className="text-xs text-muted-foreground mt-2 p-2 bg-accent/10 rounded-md border border-border">
+                    <p className="italic">"{modeInfo.scholarly.example}"</p>
+                    <p className="text-[10px] mt-1 text-right text-muted-foreground">John 3:16</p>
+                  </div>
+                </TooltipContent>
               </Tooltip>
             </TooltipProvider>
           </TabsTrigger>
