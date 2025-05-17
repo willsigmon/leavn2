@@ -12,7 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  createUser(user: UpsertUser): Promise<User>;
   upsertUser(user: UpsertUser): Promise<User>;
   
   // Bible
@@ -50,14 +50,15 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    const [user] = await db.select().from(schema.users).where(eq(schema.users.username, username));
-    return user;
+    // In our updated schema we don't have username anymore
+    // Just return undefined since we're using OpenID for auth
+    return undefined;
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
+  async createUser(userData: UpsertUser): Promise<User> {
     const [user] = await db
       .insert(schema.users)
-      .values({ ...insertUser, id: uuidv4() })
+      .values({ ...userData, id: userData.id || uuidv4() })
       .returning();
     return user;
   }
@@ -270,13 +271,15 @@ export class MemStorage implements IStorage {
   }
   
   private initializeSampleData() {
-    // Sample user
+    // Sample user with updated schema fields
     const sampleUser: User = {
       id: "user1",
       email: "user@example.com",
-      username: "testuser",
-      password: "password123",
-      createdAt: new Date()
+      firstName: "Test",
+      lastName: "User",
+      profileImageUrl: null,
+      createdAt: new Date(),
+      updatedAt: new Date()
     };
     this.users.set(sampleUser.id, sampleUser);
     
@@ -453,16 +456,46 @@ export class MemStorage implements IStorage {
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username
-    );
+    // In our updated schema we don't have username anymore
+    // Just return undefined since we're using OpenID for auth
+    return undefined;
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = uuidv4();
-    const user: User = { ...insertUser, id, createdAt: new Date() };
+  async createUser(userData: UpsertUser): Promise<User> {
+    const id = userData.id || uuidv4();
+    const now = new Date();
+    const user: User = { 
+      ...userData, 
+      id,
+      email: userData.email || null,
+      firstName: userData.firstName || null,
+      lastName: userData.lastName || null,
+      profileImageUrl: userData.profileImageUrl || null,
+      createdAt: now,
+      updatedAt: now
+    };
     this.users.set(id, user);
     return user;
+  }
+  
+  async upsertUser(userData: UpsertUser): Promise<User> {
+    // If user exists, update it
+    if (userData.id && this.users.has(userData.id)) {
+      const existingUser = this.users.get(userData.id)!;
+      const updatedUser: User = {
+        ...existingUser,
+        ...userData,
+        email: userData.email || existingUser.email,
+        firstName: userData.firstName || existingUser.firstName,
+        lastName: userData.lastName || existingUser.lastName,
+        profileImageUrl: userData.profileImageUrl || existingUser.profileImageUrl,
+        updatedAt: new Date()
+      };
+      this.users.set(userData.id, updatedUser);
+      return updatedUser;
+    }
+    // Otherwise create new user
+    return this.createUser(userData);
   }
   
   async getVerse(book: string, chapter: number, verse: number): Promise<schema.Verse | undefined> {

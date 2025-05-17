@@ -4,13 +4,35 @@ import { storage } from "./storage";
 import { generateCommentary, generateTranslation, searchVerses } from "./ai";
 import { z } from "zod";
 import { insertNoteSchema } from "@shared/schema";
+import { setupAuth, isAuthenticated } from "./replitAuth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Mock user for development
-  const MOCK_USER_ID = "user1";
+  // Set up authentication
+  await setupAuth(app);
 
-  // Get bible chapter
-  app.get("/api/bible/:book/:chapter", async (req: Request, res: Response) => {
+  // Helper to get the current user ID from the session
+  const getUserId = (req: Request): string => {
+    if (req.user && (req.user as any).claims && (req.user as any).claims.sub) {
+      return (req.user as any).claims.sub;
+    }
+    // Fallback to mock user ID for development
+    return "user1";
+  };
+
+  // Get user info endpoint
+  app.get("/api/auth/user", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const userId = (req.user as any).claims.sub;
+      const user = await storage.getUser(userId);
+      res.json(user);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
+
+  // Get bible chapter - protected by authentication
+  app.get("/api/bible/:book/:chapter", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const { book, chapter } = req.params;
       const chapterNum = parseInt(chapter);
