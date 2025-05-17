@@ -21,39 +21,39 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero section */}
-      <section className="py-20 px-4 md:px-0 bg-gradient-to-b from-amber-50 to-emerald-50 relative overflow-hidden">
+      <section className="py-20 px-4 md:px-0 bg-gradient-to-b from-emerald-50 to-teal-50 dark:from-emerald-950 dark:to-teal-950 relative overflow-hidden">
         {/* Decorative elements */}
-        <div className="absolute top-12 left-12 w-24 h-24 bg-amber-200 rounded-lg opacity-20 rotate-12"></div>
-        <div className="absolute bottom-20 right-20 w-32 h-32 bg-emerald-200 rounded-full opacity-30"></div>
-        <div className="absolute top-1/4 right-10 w-16 h-16 bg-stone-200 rounded-lg opacity-20 -rotate-12"></div>
-        <div className="absolute bottom-32 left-20 w-20 h-20 bg-lime-200 rounded-full opacity-30"></div>
+        <div className="absolute top-12 left-12 w-24 h-24 bg-teal-200 dark:bg-teal-900 rounded-lg opacity-20 rotate-12"></div>
+        <div className="absolute bottom-20 right-20 w-32 h-32 bg-emerald-200 dark:bg-emerald-900 rounded-full opacity-30"></div>
+        <div className="absolute top-1/4 right-10 w-16 h-16 bg-teal-100 dark:bg-teal-800 rounded-lg opacity-20 -rotate-12"></div>
+        <div className="absolute bottom-32 left-20 w-20 h-20 bg-emerald-100 dark:bg-emerald-800 rounded-full opacity-30"></div>
         
         <div className="container mx-auto max-w-5xl relative z-10">
           <div className="flex flex-col lg:flex-row gap-8 md:gap-12 items-center">
             <div className="w-full lg:w-1/2 space-y-4 md:space-y-6">
-              <div className="inline-block px-4 py-1 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold mb-2 md:mb-4">
+              <div className="inline-block px-4 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 text-sm font-semibold mb-2 md:mb-4">
                 Spiritually Intelligent Bible Study
               </div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-stone-800">
-                Bible Study made <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">simple.</span>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-stone-800 dark:text-stone-100">
+                Bible Study made <span className="bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-500 dark:to-teal-400 bg-clip-text text-transparent">simple.</span>
               </h1>
-              <p className="text-lg md:text-xl text-stone-600">
+              <p className="text-lg md:text-xl text-stone-600 dark:text-stone-300">
                 Engage with Scripture through multiple theological lenses, immersive narratives, 
                 and AI-powered spiritual insights – all in one place.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 pt-4 md:pt-6">
                 {isAuthenticated ? (
-                  <Button size="lg" onClick={() => navigate('/reader')} className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white border-0 rounded-lg">
+                  <Button size="lg" onClick={() => navigate('/reader')} className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-800 text-white border-0 rounded-lg">
                     <BookOpen className="mr-2 h-5 w-5" />
                     Open Bible Reader
                   </Button>
                 ) : (
-                  <Button size="lg" onClick={() => login()} className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white border-0 rounded-lg">
+                  <Button size="lg" onClick={() => login()} className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-800 text-white border-0 rounded-lg">
                     <BookOpen className="mr-2 h-5 w-5" />
                     Get Started
                   </Button>
                 )}
-                <Button size="lg" variant="outline" onClick={() => navigate('/reading-plans')} className="w-full sm:w-auto border-emerald-300 text-emerald-700 hover:bg-emerald-50 rounded-lg">
+                <Button size="lg" variant="outline" onClick={() => navigate('/reading-plans')} className="w-full sm:w-auto border-emerald-300 dark:border-emerald-700 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded-lg">
                   <Calendar className="mr-2 h-5 w-5" />
                   View Reading Plans
                 </Button>
