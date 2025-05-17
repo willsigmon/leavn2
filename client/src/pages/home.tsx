@@ -21,39 +21,39 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero section */}
-      <section className="py-20 px-4 md:px-0 bg-gradient-to-b from-blue-50 to-indigo-50 relative overflow-hidden">
+      <section className="py-20 px-4 md:px-0 bg-gradient-to-b from-amber-50 to-emerald-50 relative overflow-hidden">
         {/* Decorative elements */}
-        <div className="absolute top-12 left-12 w-24 h-24 bg-yellow-200 rounded-lg opacity-20 rotate-12"></div>
-        <div className="absolute bottom-20 right-20 w-32 h-32 bg-blue-200 rounded-full opacity-30"></div>
-        <div className="absolute top-1/4 right-10 w-16 h-16 bg-emerald-200 rounded-lg opacity-20 -rotate-12"></div>
-        <div className="absolute bottom-32 left-20 w-20 h-20 bg-indigo-200 rounded-full opacity-30"></div>
+        <div className="absolute top-12 left-12 w-24 h-24 bg-amber-200 rounded-lg opacity-20 rotate-12"></div>
+        <div className="absolute bottom-20 right-20 w-32 h-32 bg-emerald-200 rounded-full opacity-30"></div>
+        <div className="absolute top-1/4 right-10 w-16 h-16 bg-stone-200 rounded-lg opacity-20 -rotate-12"></div>
+        <div className="absolute bottom-32 left-20 w-20 h-20 bg-lime-200 rounded-full opacity-30"></div>
         
         <div className="container mx-auto max-w-5xl relative z-10">
           <div className="flex flex-col lg:flex-row gap-12 items-center">
             <div className="lg:w-1/2 space-y-6">
-              <div className="inline-block px-4 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-semibold mb-4">
+              <div className="inline-block px-4 py-1 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold mb-4">
                 Spiritually Intelligent Bible Study
               </div>
               <h1 className="text-4xl md:text-5xl font-bold leading-tight">
-                Bible Study made <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">simple.</span>
+                Bible Study made <span className="bg-gradient-to-r from-emerald-600 to-green-700 bg-clip-text text-transparent">simple.</span>
               </h1>
-              <p className="text-xl text-slate-600">
+              <p className="text-xl text-stone-600">
                 Engage with Scripture through multiple theological lenses, immersive narratives, 
                 and AI-powered spiritual insights – all in one place.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 pt-6">
                 {isAuthenticated ? (
-                  <Button size="lg" onClick={() => navigate('/reader')} className="bg-blue-600 hover:bg-blue-700 text-white border-0 rounded-lg">
+                  <Button size="lg" onClick={() => navigate('/reader')} className="bg-emerald-600 hover:bg-emerald-700 text-white border-0 rounded-lg">
                     <BookOpen className="mr-2 h-5 w-5" />
                     Open Bible Reader
                   </Button>
                 ) : (
-                  <Button size="lg" onClick={() => login()} className="bg-blue-600 hover:bg-blue-700 text-white border-0 rounded-lg">
+                  <Button size="lg" onClick={() => login()} className="bg-emerald-600 hover:bg-emerald-700 text-white border-0 rounded-lg">
                     <BookOpen className="mr-2 h-5 w-5" />
                     Get Started
                   </Button>
                 )}
-                <Button size="lg" variant="outline" onClick={() => navigate('/reading-plans')} className="border-blue-300 text-blue-700 hover:bg-blue-50 rounded-lg">
+                <Button size="lg" variant="outline" onClick={() => navigate('/reading-plans')} className="border-emerald-300 text-emerald-700 hover:bg-emerald-50 rounded-lg">
                   <Calendar className="mr-2 h-5 w-5" />
                   View Reading Plans
                 </Button>
@@ -61,29 +61,29 @@ export default function Home() {
               
               {/* Feature badges */}
               <div className="flex flex-wrap gap-4 pt-6">
-                <div className="flex items-center text-sm text-slate-600">
-                  <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-2">
-                    <span className="text-blue-700 text-xs">✓</span>
+                <div className="flex items-center text-sm text-stone-600">
+                  <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center mr-2">
+                    <span className="text-emerald-700 text-xs">✓</span>
                   </div>
                   Free to use
                 </div>
-                <div className="flex items-center text-sm text-slate-600">
-                  <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-2">
-                    <span className="text-blue-700 text-xs">✓</span>
+                <div className="flex items-center text-sm text-stone-600">
+                  <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center mr-2">
+                    <span className="text-emerald-700 text-xs">✓</span>
                   </div>
                   Multiple translations
                 </div>
-                <div className="flex items-center text-sm text-slate-600">
-                  <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-2">
-                    <span className="text-blue-700 text-xs">✓</span>
+                <div className="flex items-center text-sm text-stone-600">
+                  <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center mr-2">
+                    <span className="text-emerald-700 text-xs">✓</span>
                   </div>
                   AI-powered insights
                 </div>
               </div>
             </div>
             <div className="lg:w-1/2 relative">
-              <div className="absolute inset-0 -left-6 -top-6 bg-yellow-100 rounded-xl"></div>
-              <div className="absolute inset-0 -right-6 -bottom-6 bg-blue-100 rounded-xl"></div>
+              <div className="absolute inset-0 -left-6 -top-6 bg-amber-100 rounded-xl"></div>
+              <div className="absolute inset-0 -right-6 -bottom-6 bg-emerald-100 rounded-xl"></div>
               <div className="relative rounded-xl overflow-hidden shadow-xl border-4 border-white">
                 <img 
                   src="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80" 
@@ -100,11 +100,11 @@ export default function Home() {
       <section className="py-20 px-4 md:px-0 bg-white">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-16">
-            <div className="inline-block px-4 py-1 rounded-full bg-indigo-100 text-indigo-700 text-sm font-semibold mb-4">
+            <div className="inline-block px-4 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-semibold mb-4">
               Powerful Features
             </div>
-            <h2 className="text-3xl font-bold mb-4">Bible Study designed for <span className="text-blue-600">deeper understanding</span></h2>
-            <p className="text-slate-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl font-bold mb-4">Bible Study designed for <span className="text-emerald-600">deeper understanding</span></h2>
+            <p className="text-stone-600 max-w-2xl mx-auto">
               Everything you need to explore Scripture more deeply and meaningfully with features that enhance your understanding
               and bring the text to life.
             </p>
@@ -341,11 +341,11 @@ export default function Home() {
       </section>
 
       {/* Call to action */}
-      <section className="py-20 px-4 md:px-0 bg-gradient-to-b from-blue-500 to-blue-600 text-white relative overflow-hidden">
+      <section className="py-20 px-4 md:px-0 bg-gradient-to-b from-emerald-600 to-green-700 text-white relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute top-20 left-10 w-32 h-32 bg-white/10 rounded-full"></div>
         <div className="absolute bottom-10 right-10 w-24 h-24 bg-white/5 rounded-lg rotate-12"></div>
-        <div className="absolute top-1/2 right-1/3 w-16 h-16 bg-white/10 rounded-full"></div>
+        <div className="absolute top-1/2 right-1/3 w-16 h-16 bg-amber-300/10 rounded-full"></div>
         
         <div className="container mx-auto max-w-4xl relative z-10 text-center">
           <div className="inline-block px-4 py-1 rounded-full bg-white/20 text-white text-sm font-semibold mb-6">
@@ -354,19 +354,19 @@ export default function Home() {
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Begin Your Journey of Deeper Understanding
           </h2>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-emerald-100 mb-8 max-w-2xl mx-auto">
             Join thousands of others discovering new dimensions of Scripture through Leavn's
             innovative study tools.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {isAuthenticated ? (
-              <Button size="lg" onClick={() => navigate('/reader')} className="bg-white text-blue-600 hover:bg-blue-50 border-0 rounded-lg shadow-lg">
+              <Button size="lg" onClick={() => navigate('/reader')} className="bg-white text-emerald-700 hover:bg-emerald-50 border-0 rounded-lg shadow-lg">
                 <BookOpen className="mr-2 h-5 w-5" />
                 Open Bible Reader
               </Button>
             ) : (
-              <Button size="lg" onClick={() => login()} className="bg-white text-blue-600 hover:bg-blue-50 border-0 rounded-lg shadow-lg">
+              <Button size="lg" onClick={() => login()} className="bg-white text-emerald-700 hover:bg-emerald-50 border-0 rounded-lg shadow-lg">
                 <BookOpen className="mr-2 h-5 w-5" />
                 Get Started Free
               </Button>
@@ -380,19 +380,19 @@ export default function Home() {
           
           {/* Feature badges */}
           <div className="flex flex-wrap justify-center gap-8 mt-12">
-            <div className="flex items-center text-sm text-blue-100">
+            <div className="flex items-center text-sm text-emerald-100">
               <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center mr-2">
                 <span className="text-white text-xs">✓</span>
               </div>
               Free for unlimited users
             </div>
-            <div className="flex items-center text-sm text-blue-100">
+            <div className="flex items-center text-sm text-emerald-100">
               <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center mr-2">
                 <span className="text-white text-xs">✓</span>
               </div>
               No account required to explore
             </div>
-            <div className="flex items-center text-sm text-blue-100">
+            <div className="flex items-center text-sm text-emerald-100">
               <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center mr-2">
                 <span className="text-white text-xs">✓</span>
               </div>

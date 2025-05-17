@@ -41,15 +41,15 @@ export default function BibleReader() {
   // Default to Genesis 1 if no parameters are provided
   const book = params.book || 'Genesis';
   const chapter = params.chapter ? parseInt(params.chapter) : 1;
+  
+  // Check if we're on the demo chapter (Genesis 1)
+  const isDemoChapter = book === 'Genesis' && chapter === 1;
 
   // Fetch verses for the current chapter
   const { data: verses, isLoading, error } = useQuery<Verse[]>({
     queryKey: [`/api/bible/${book}/${chapter}`],
     enabled: isAuthenticated || isDemoChapter, // Allow fetching for the demo chapter even when not logged in
   });
-
-  // Check if we're on the demo chapter (Genesis 1)
-  const isDemoChapter = book === 'Genesis' && chapter === 1;
   
   // Redirect to login if not authenticated and trying to access non-demo chapters 
   useEffect(() => {
