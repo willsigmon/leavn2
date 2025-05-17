@@ -2,6 +2,9 @@ import { Link } from "wouter";
 import { FaCalendarDay, FaBookOpen, FaSeedling, FaTimes } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 import useMobile from "@/hooks/use-mobile";
+import { useState } from "react";
+import { ChevronDown, ChevronRight } from "lucide-react";
+import { bibleData } from "@/lib/bible";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -11,14 +14,41 @@ interface SidebarProps {
 
 export default function Sidebar({ isOpen, onClose, currentBook }: SidebarProps) {
   const isMobile = useMobile();
+  const [expandedSections, setExpandedSections] = useState({
+    old: true,
+    new: true,
+    apocrypha: false,
+    pseudepigrapha: false
+  });
   
-  const oldTestamentBooks = [
-    "genesis", "exodus", "psalms", "proverbs"
-  ];
+  // Filter books by testament
+  const oldTestamentBooks = bibleData.books
+    .filter(book => book.testament === "old")
+    .map(book => book.id);
   
-  const newTestamentBooks = [
-    "matthew", "mark", "luke", "john"
-  ];
+  const newTestamentBooks = bibleData.books
+    .filter(book => book.testament === "new")
+    .map(book => book.id);
+    
+  const apocryphaBooks = bibleData.books
+    .filter(book => book.testament === "apocrypha")
+    .map(book => book.id);
+    
+  const pseudepigraphaBooks = bibleData.books
+    .filter(book => book.testament === "pseudepigrapha")
+    .map(book => book.id);
+    
+  const toggleSection = (section: keyof typeof expandedSections) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
+
+  const formatBookTitle = (bookId: string) => {
+    const book = bibleData.books.find(b => b.id === bookId);
+    return book ? book.title : bookId.charAt(0).toUpperCase() + bookId.slice(1);
+  };
 
   return (
     <aside 
@@ -62,56 +92,144 @@ export default function Sidebar({ isOpen, onClose, currentBook }: SidebarProps) 
           </ul>
         </div>
         
-        <div className="mb-6">
-          <h2 className="text-xs uppercase font-bold text-muted-foreground tracking-wider mb-3">Old Testament</h2>
-          <ul className="space-y-1">
-            {oldTestamentBooks.map((book) => {
-              const bookTitle = book.charAt(0).toUpperCase() + book.slice(1);
-              const isActive = currentBook === book;
-              
-              return (
-                <li key={book}>
-                  <Link 
-                    href={`/bible/${book}/1`}
-                    className={cn(
-                      "flex items-center px-2 py-2 text-sm rounded-lg",
-                      isActive 
-                        ? "font-semibold text-primary bg-accent/10" 
-                        : "hover:bg-muted"
-                    )}
-                  >
-                    <span>{bookTitle}</span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+        {/* Old Testament Section */}
+        <div className="mb-4">
+          <button 
+            onClick={() => toggleSection('old')}
+            className="flex items-center justify-between w-full text-xs uppercase font-bold text-muted-foreground tracking-wider mb-2 hover:text-primary"
+          >
+            <span>Old Testament</span>
+            {expandedSections.old ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+          </button>
+          
+          {expandedSections.old && (
+            <ul className="space-y-1 ml-2">
+              {oldTestamentBooks.map((book) => {
+                const isActive = currentBook === book;
+                
+                return (
+                  <li key={book}>
+                    <Link 
+                      href={`/bible/${book}/1`}
+                      className={cn(
+                        "flex items-center px-2 py-2 text-sm rounded-lg",
+                        isActive 
+                          ? "font-semibold text-primary bg-accent/10" 
+                          : "hover:bg-muted"
+                      )}
+                    >
+                      <span>{formatBookTitle(book)}</span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </div>
-
-        <div>
-          <h2 className="text-xs uppercase font-bold text-muted-foreground tracking-wider mb-3">New Testament</h2>
-          <ul className="space-y-1">
-            {newTestamentBooks.map((book) => {
-              const bookTitle = book.charAt(0).toUpperCase() + book.slice(1);
-              const isActive = currentBook === book;
-              
-              return (
-                <li key={book}>
-                  <Link 
-                    href={`/bible/${book}/1`}
-                    className={cn(
-                      "flex items-center px-2 py-2 text-sm rounded-lg",
-                      isActive 
-                        ? "font-semibold text-primary bg-accent/10" 
-                        : "hover:bg-muted"
-                    )}
-                  >
-                    <span>{bookTitle}</span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+        
+        {/* New Testament Section */}
+        <div className="mb-4">
+          <button 
+            onClick={() => toggleSection('new')}
+            className="flex items-center justify-between w-full text-xs uppercase font-bold text-muted-foreground tracking-wider mb-2 hover:text-primary"
+          >
+            <span>New Testament</span>
+            {expandedSections.new ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+          </button>
+          
+          {expandedSections.new && (
+            <ul className="space-y-1 ml-2">
+              {newTestamentBooks.map((book) => {
+                const isActive = currentBook === book;
+                
+                return (
+                  <li key={book}>
+                    <Link 
+                      href={`/bible/${book}/1`}
+                      className={cn(
+                        "flex items-center px-2 py-2 text-sm rounded-lg",
+                        isActive 
+                          ? "font-semibold text-primary bg-accent/10" 
+                          : "hover:bg-muted"
+                      )}
+                    >
+                      <span>{formatBookTitle(book)}</span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+        
+        {/* Apocrypha/Deuterocanonical Section */}
+        <div className="mb-4">
+          <button 
+            onClick={() => toggleSection('apocrypha')}
+            className="flex items-center justify-between w-full text-xs uppercase font-bold text-muted-foreground tracking-wider mb-2 hover:text-primary"
+          >
+            <span>Deuterocanonical</span>
+            {expandedSections.apocrypha ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+          </button>
+          
+          {expandedSections.apocrypha && (
+            <ul className="space-y-1 ml-2">
+              {apocryphaBooks.map((book) => {
+                const isActive = currentBook === book;
+                
+                return (
+                  <li key={book}>
+                    <Link 
+                      href={`/bible/${book}/1`}
+                      className={cn(
+                        "flex items-center px-2 py-2 text-sm rounded-lg",
+                        isActive 
+                          ? "font-semibold text-primary bg-accent/10" 
+                          : "hover:bg-muted"
+                      )}
+                    >
+                      <span>{formatBookTitle(book)}</span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+        
+        {/* Pseudepigrapha Section */}
+        <div className="mb-4">
+          <button 
+            onClick={() => toggleSection('pseudepigrapha')}
+            className="flex items-center justify-between w-full text-xs uppercase font-bold text-muted-foreground tracking-wider mb-2 hover:text-primary"
+          >
+            <span>Pseudepigrapha</span>
+            {expandedSections.pseudepigrapha ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+          </button>
+          
+          {expandedSections.pseudepigrapha && (
+            <ul className="space-y-1 ml-2">
+              {pseudepigraphaBooks.map((book) => {
+                const isActive = currentBook === book;
+                
+                return (
+                  <li key={book}>
+                    <Link 
+                      href={`/bible/${book}/1`}
+                      className={cn(
+                        "flex items-center px-2 py-2 text-sm rounded-lg",
+                        isActive 
+                          ? "font-semibold text-primary bg-accent/10" 
+                          : "hover:bg-muted"
+                      )}
+                    >
+                      <span>{formatBookTitle(book)}</span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </div>
       </div>
     </aside>
