@@ -103,7 +103,7 @@ export default function Home() {
             <div className="inline-block px-4 py-1 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold mb-4">
               Powerful Features
             </div>
-            <h2 className="text-3xl font-bold mb-4">Bible Study designed for <span className="text-emerald-600">deeper understanding</span></h2>
+            <h2 className="text-3xl font-bold mb-4 text-stone-800">Bible Study designed for <span className="text-emerald-600">deeper understanding</span></h2>
             <p className="text-stone-600 max-w-2xl mx-auto">
               Everything you need to explore Scripture more deeply and meaningfully with features that enhance your understanding
               and bring the text to life.
@@ -116,7 +116,7 @@ export default function Home() {
                 <div className="h-12 w-12 rounded-lg bg-blue-100 flex items-center justify-center mb-4">
                   <Sparkles className="h-6 w-6 text-blue-600" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Multiple Theological Lenses</h3>
+                <h3 className="text-lg font-semibold mb-2 text-stone-800">Multiple Theological Lenses</h3>
                 <p className="text-slate-600 mb-4">
                   Study passages through Evangelical, Catholic, Jewish, and other perspectives.
                 </p>
@@ -133,7 +133,7 @@ export default function Home() {
                 <div className="h-12 w-12 rounded-lg bg-indigo-100 flex items-center justify-center mb-4">
                   <PenLine className="h-6 w-6 text-indigo-600" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Narrative Mode</h3>
+                <h3 className="text-lg font-semibold mb-2 text-stone-800">Narrative Mode</h3>
                 <p className="text-slate-600 mb-4">
                   Transform Bible chapters into immersive, flowing narratives.
                 </p>
@@ -150,7 +150,7 @@ export default function Home() {
                 <div className="h-12 w-12 rounded-lg bg-teal-100 flex items-center justify-center mb-4">
                   <LightbulbIcon className="h-6 w-6 text-teal-600" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">"Did You Know" Facts</h3>
+                <h3 className="text-lg font-semibold mb-2 text-stone-800">"Did You Know" Facts</h3>
                 <p className="text-slate-600 mb-4">
                   Discover fascinating historical and cultural contexts.
                 </p>
@@ -167,7 +167,7 @@ export default function Home() {
                 <div className="h-12 w-12 rounded-lg bg-purple-100 flex items-center justify-center mb-4">
                   <MessageCircle className="h-6 w-6 text-purple-600" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Contextual Questions</h3>
+                <h3 className="text-lg font-semibold mb-2 text-stone-800">Contextual Questions</h3>
                 <p className="text-slate-600 mb-4">
                   Ask questions about passages and receive detailed explanations.
                 </p>
@@ -184,7 +184,7 @@ export default function Home() {
                 <div className="h-12 w-12 rounded-lg bg-emerald-100 flex items-center justify-center mb-4">
                   <Compass className="h-6 w-6 text-emerald-600" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Reading Plans</h3>
+                <h3 className="text-lg font-semibold mb-2 text-stone-800">Reading Plans</h3>
                 <p className="text-slate-600 mb-4">
                   Follow curated daily reading schedules for structured study.
                 </p>
@@ -201,7 +201,7 @@ export default function Home() {
                 <div className="h-12 w-12 rounded-lg bg-sky-100 flex items-center justify-center mb-4">
                   <Search className="h-6 w-6 text-sky-600" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">Semantic Search</h3>
+                <h3 className="text-lg font-semibold mb-2 text-stone-800">Semantic Search</h3>
                 <p className="text-slate-600 mb-4">
                   Find verses based on concepts, not just keywords.
                 </p>
@@ -223,7 +223,7 @@ export default function Home() {
             <div className="inline-block px-4 py-1 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold mb-4">
               Testimonials
             </div>
-            <h2 className="text-3xl font-bold mb-4">What Users Are Saying</h2>
+            <h2 className="text-3xl font-bold mb-4 text-stone-800">What Users Are Saying</h2>
             <p className="text-stone-600 max-w-2xl mx-auto">
               Hear from people who have experienced deeper understanding through Leavn's approach to Bible study.
             </p>
@@ -372,7 +372,7 @@ export default function Home() {
           <div className="inline-block px-4 py-1 rounded-full bg-white/20 text-white text-sm font-semibold mb-6">
             Ready to get started?
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
             Begin Your Journey of Deeper Understanding
           </h2>
           <p className="text-xl text-emerald-100 mb-8 max-w-2xl mx-auto">
