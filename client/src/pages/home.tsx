@@ -86,6 +86,9 @@ export default function Home() {
                       <span>Instant insights</span>
                     </div>
                   </div>
+                  <div className="mt-4 text-xs italic text-muted-foreground/70 md:text-left text-center">
+                    <span className="font-medium">Leavn</span> — like leaven, a small influence that causes a widespread transformation for the better.
+                  </div>
                 </div>
                 <div className="md:col-span-5">
                   <div className="bg-card rounded-xl shadow-lg border border-border overflow-hidden">
