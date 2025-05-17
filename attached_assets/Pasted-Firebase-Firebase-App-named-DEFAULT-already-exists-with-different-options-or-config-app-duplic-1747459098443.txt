@@ -1,0 +1,55 @@
+Firebase: Firebase App named '[DEFAULT]' already exists with different options or config (app/duplicate-app).
+at initializeApp (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-4FMGHJMM.js?v=cc9434d0:1829:27)
+at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/src/lib/firebase.ts?t=1747458981463:26:13
+[hmr] Failed to reload /src/hooks/useAuth.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+at t.value (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+Firebase: Firebase App named '[DEFAULT]' already exists with different options or config (app/duplicate-app).
+at initializeApp (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-4FMGHJMM.js?v=cc9434d0:1829:27)
+at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/src/lib/firebase.ts?t=1747458981463:26:13
+[hmr] Failed to reload /src/components/NavBar.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+at t.value (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+Firebase: Firebase App named '[DEFAULT]' already exists with different options or config (app/duplicate-app).
+at initializeApp (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-4FMGHJMM.js?v=cc9434d0:1829:27)
+at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/src/lib/firebase.ts?t=1747458981463:26:13
+[hmr] Failed to reload /src/pages/login.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+at t.value (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+Firebase: Firebase App named '[DEFAULT]' already exists with different options or config (app/duplicate-app).
+at initializeApp (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-4FMGHJMM.js?v=cc9434d0:1829:27)
+at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/src/lib/firebase.ts?t=1747458995657:26:13
+[hmr] Failed to reload /src/hooks/useAuth.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+at t.value (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+Firebase: Firebase App named '[DEFAULT]' already exists with different options or config (app/duplicate-app).
+at initializeApp (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-4FMGHJMM.js?v=cc9434d0:1829:27)
+at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/src/lib/firebase.ts?t=1747458995657:26:13
+[hmr] Failed to reload /src/components/NavBar.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+at t.value (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+Firebase: Firebase App named '[DEFAULT]' already exists with different options or config (app/duplicate-app).
+at initializeApp (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-4FMGHJMM.js?v=cc9434d0:1829:27)
+at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/src/lib/firebase.ts?t=1747458995657:26:13
+[hmr] Failed to reload /src/pages/login.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+at t.value (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+getApp is not defined
+at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/src/lib/firebase.ts?t=1747459029862:32:5
+[hmr] Failed to reload /src/components/NavBar.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+at t.value (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400

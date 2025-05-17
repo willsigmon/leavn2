@@ -83,18 +83,29 @@ export default function Login() {
   const handleSSOSignIn = async (provider: string) => {
     try {
       setIsLoading(true);
-      await signInWithProvider(provider);
+      console.log(`Attempting to sign in with ${provider}...`);
+      const user = await signInWithProvider(provider);
+      console.log("Sign in successful:", user?.displayName);
+      
       toast({
         title: "Sign in successful",
-        description: "Welcome to Leavn Bible Study",
+        description: `Welcome${user?.displayName ? ` ${user.displayName}` : ""} to Leavn Bible Study`,
       });
       setLocation('/');
-    } catch (error) {
+    } catch (error: any) {
       console.error(`Login error with ${provider}:`, error);
+      
+      // Provide better error messages to the user
+      let errorMessage = `There was a problem signing in with ${provider.charAt(0).toUpperCase() + provider.slice(1)}.`;
+      
+      if (error.message) {
+        errorMessage = error.message;
+      }
+      
       toast({
         variant: "destructive",
         title: "Sign in failed",
-        description: `There was a problem signing in with ${provider.charAt(0).toUpperCase() + provider.slice(1)}.`,
+        description: errorMessage,
       });
     } finally {
       setIsLoading(false);
@@ -110,18 +121,37 @@ export default function Login() {
   const handleEmailLogin = async (values: LoginFormValues) => {
     try {
       setIsLoading(true);
-      await signInWithEmail(values.email, values.password);
+      console.log("Attempting to sign in with email...");
+      const user = await signInWithEmail(values.email, values.password);
+      console.log("Email sign in successful:", user?.displayName);
+      
       toast({
         title: "Sign in successful",
-        description: "Welcome to Leavn Bible Study",
+        description: `Welcome${user?.displayName ? ` ${user.displayName}` : ""} to Leavn Bible Study`,
       });
       setLocation('/');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Login error:', error);
+      
+      // Provide more specific error messages
+      let errorMessage = "Invalid email or password.";
+      
+      if (error.code === 'auth/user-not-found') {
+        errorMessage = "No account exists with this email. Please check your email or register.";
+      } else if (error.code === 'auth/wrong-password') {
+        errorMessage = "Incorrect password. Please try again.";
+      } else if (error.code === 'auth/too-many-requests') {
+        errorMessage = "Too many failed login attempts. Please try again later.";
+      } else if (error.code === 'auth/user-disabled') {
+        errorMessage = "This account has been disabled. Please contact support.";
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
       toast({
         variant: "destructive",
         title: "Sign in failed",
-        description: "Invalid email or password.",
+        description: errorMessage,
       });
     } finally {
       setIsLoading(false);
@@ -132,18 +162,35 @@ export default function Login() {
   const handleRegister = async (values: RegisterFormValues) => {
     try {
       setIsLoading(true);
-      await signUpWithEmail(values.email, values.password, values.name);
+      console.log("Attempting to register with email...");
+      const user = await signUpWithEmail(values.email, values.password, values.name);
+      console.log("Registration successful:", user?.displayName);
+      
       toast({
         title: "Registration successful",
-        description: "Your account has been created. Welcome to Leavn!",
+        description: `Your account has been created. Welcome${user?.displayName ? ` ${user.displayName}` : ""} to Leavn!`,
       });
       setLocation('/');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Registration error:', error);
+      
+      // Provide more specific error messages
+      let errorMessage = "Registration failed. Please try again.";
+      
+      if (error.code === 'auth/email-already-in-use') {
+        errorMessage = "This email is already in use. Try logging in instead.";
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = "Please enter a valid email address.";
+      } else if (error.code === 'auth/weak-password') {
+        errorMessage = "Password is too weak. Please use a stronger password.";
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
       toast({
         variant: "destructive",
         title: "Registration failed",
-        description: "This email may already be in use.",
+        description: errorMessage,
       });
     } finally {
       setIsLoading(false);
@@ -154,18 +201,35 @@ export default function Login() {
   const handlePasswordReset = async (values: ResetFormValues) => {
     try {
       setIsLoading(true);
+      console.log("Attempting to send password reset email...");
       await resetPassword(values.email);
+      console.log("Password reset email sent successfully");
+      
       toast({
         title: "Password reset email sent",
         description: "Check your inbox for instructions to reset your password.",
       });
       setShowResetForm(false);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Password reset error:', error);
+      
+      // Provide more specific error messages
+      let errorMessage = "There was a problem sending the reset email.";
+      
+      if (error.code === 'auth/user-not-found') {
+        errorMessage = "No account exists with this email address.";
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = "Please enter a valid email address.";
+      } else if (error.code === 'auth/too-many-requests') {
+        errorMessage = "Too many requests. Please try again later.";
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
       toast({
         variant: "destructive",
         title: "Password reset failed",
-        description: "There was a problem sending the reset email.",
+        description: errorMessage,
       });
     } finally {
       setIsLoading(false);
