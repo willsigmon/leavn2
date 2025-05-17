@@ -1,9 +1,14 @@
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import OpenAI from 'openai';
 import { db } from './db';
 import { verses } from '@shared/schema';
 import { eq } from 'drizzle-orm';
+
+// Get the directory name equivalent in ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Initialize OpenAI client
 // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
@@ -89,8 +94,8 @@ export async function downloadAndCacheBible() {
       chapter: verse.chapter,
       verse: verse.verseNumber,
       text: {
-        kjv: verse.text, // For now, using the same text for both
-        web: verse.text,
+        kjv: verse.textKjv || "", // Use the new schema properties
+        web: verse.textWeb || "",
       }
     }));
     

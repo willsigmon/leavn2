@@ -1,0 +1,76 @@
+[
+  {
+    "id": "chunk-1",
+    "content": "Trust in Yahweh with all your heart, and don't lean on your own understanding. In all your ways acknowledge him, and he will make your paths straight.",
+    "references": {
+      "verses": [
+        "Proverbs 3:5",
+        "Proverbs 3:6"
+      ],
+      "book": "Proverbs",
+      "startChapter": 3,
+      "startVerse": 5,
+      "endChapter": 3,
+      "endVerse": 6
+    },
+    "metadata": {
+      "tags": [],
+      "translation": "web"
+    }
+  },
+  {
+    "id": "chunk-2",
+    "content": "For God so loved the world, that he gave his one and only Son, that whoever believes in him should not perish, but have eternal life.",
+    "references": {
+      "verses": [
+        "John 3:16"
+      ],
+      "book": "John",
+      "startChapter": 3,
+      "startVerse": 16,
+      "endChapter": 3,
+      "endVerse": 16
+    },
+    "metadata": {
+      "tags": [],
+      "translation": "web"
+    }
+  },
+  {
+    "id": "chunk-3",
+    "content": "In the beginning, God created the heavens and the earth.",
+    "references": {
+      "verses": [
+        "Genesis 1:1"
+      ],
+      "book": "Genesis",
+      "startChapter": 1,
+      "startVerse": 1,
+      "endChapter": 1,
+      "endVerse": 1
+    },
+    "metadata": {
+      "tags": [],
+      "translation": "web"
+    }
+  },
+  {
+    "id": "chunk-4",
+    "content": "Blessed are the poor in spirit, for theirs is the Kingdom of Heaven. Blessed are those who mourn, for they shall be comforted.",
+    "references": {
+      "verses": [
+        "Matthew 5:3",
+        "Matthew 5:4"
+      ],
+      "book": "Matthew",
+      "startChapter": 5,
+      "startVerse": 3,
+      "endChapter": 5,
+      "endVerse": 4
+    },
+    "metadata": {
+      "tags": [],
+      "translation": "web"
+    }
+  }
+]

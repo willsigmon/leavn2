@@ -419,6 +419,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Get verse comparison data between translations - public endpoint
+  app.get("/api/bible/verse/:book/:chapter/:verse/compare", async (req: Request, res: Response) => {
+    try {
+      const book = req.params.book;
+      const chapter = parseInt(req.params.chapter);
+      const verse = parseInt(req.params.verse);
+      
+      if (isNaN(chapter) || isNaN(verse)) {
+        return res.status(400).json({ error: "Invalid chapter or verse number" });
+      }
+      
+      const verseData = await storage.getVerse(book, chapter, verse);
+      
+      if (!verseData) {
+        return res.status(404).json({ error: "Verse not found" });
+      }
+      
+      // Return both translations
+      res.json({
+        kjv: verseData.textKjv || (verseData.text?.kjv || ""),
+        web: verseData.textWeb || (verseData.text?.web || "")
+      });
+    } catch (error) {
+      console.error("Error fetching verse comparison:", error);
+      res.status(500).json({ error: "Failed to fetch verse comparison" });
+    }
+  });
+  
+  // RAG-powered semantic search endpoint - public endpoint
+  app.get("/api/bible/rag/search", async (req: Request, res: Response) => {
+    try {
+      const query = req.query.query as string;
+      const translation = (req.query.translation as string) || 'kjv';
+      
+      if (!query) {
+        return res.status(400).json({ error: "Query parameter is required" });
+      }
+      
+      if (translation !== 'kjv' && translation !== 'web') {
+        return res.status(400).json({ error: "Translation must be 'kjv' or 'web'" });
+      }
+      
+      // Use the RAG system to find relevant chunks
+      const results = await findSimilarChunks(query, translation as 'kjv' | 'web', 5);
+      
+      res.json(results);
+    } catch (error) {
+      console.error("Error performing semantic search:", error);
+      res.status(500).json({ error: "Failed to perform semantic search" });
+    }
+  });
+  
   // Get narrative mode for chapter - protected by authentication
   app.get("/api/ai/narrative/:book/:chapter", isAuthenticated, async (req: Request, res: Response) => {
     try {

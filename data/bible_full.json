@@ -1,0 +1,62 @@
+[
+  {
+    "id": "Proverbs 3:5",
+    "book": "Proverbs",
+    "chapter": 3,
+    "verse": 5,
+    "text": {
+      "kjv": "Trust in the LORD with all thine heart; and lean not unto thine own understanding.",
+      "web": "Trust in Yahweh with all your heart, and don't lean on your own understanding."
+    }
+  },
+  {
+    "id": "Proverbs 3:6",
+    "book": "Proverbs",
+    "chapter": 3,
+    "verse": 6,
+    "text": {
+      "kjv": "In all thy ways acknowledge him, and he shall direct thy paths.",
+      "web": "In all your ways acknowledge him, and he will make your paths straight."
+    }
+  },
+  {
+    "id": "John 3:16",
+    "book": "John",
+    "chapter": 3,
+    "verse": 16,
+    "text": {
+      "kjv": "For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.",
+      "web": "For God so loved the world, that he gave his one and only Son, that whoever believes in him should not perish, but have eternal life."
+    }
+  },
+  {
+    "id": "Genesis 1:1",
+    "book": "Genesis",
+    "chapter": 1,
+    "verse": 1,
+    "text": {
+      "kjv": "In the beginning God created the heaven and the earth.",
+      "web": "In the beginning, God created the heavens and the earth."
+    }
+  },
+  {
+    "id": "Matthew 5:3",
+    "book": "Matthew",
+    "chapter": 5,
+    "verse": 3,
+    "text": {
+      "kjv": "Blessed are the poor in spirit: for theirs is the kingdom of heaven.",
+      "web": "Blessed are the poor in spirit, for theirs is the Kingdom of Heaven."
+    }
+  },
+  {
+    "id": "Matthew 5:4",
+    "book": "Matthew",
+    "chapter": 5,
+    "verse": 4,
+    "text": {
+      "kjv": "Blessed are they that mourn: for they shall be comforted.",
+      "web": "Blessed are those who mourn, for they shall be comforted."
+    }
+  }
+]
