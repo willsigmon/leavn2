@@ -37,33 +37,33 @@
 }
 
 .dark {
-  --background: 130 12% 8%;
-  --foreground: 80 30% 90%;
-  --muted: 120 12% 14%;
-  --muted-foreground: 100 8% 60%;
-  --popover: var(--background);
-  --popover-foreground: var(--foreground);
-  --card: var(--background);
-  --card-foreground: var(--foreground);
-  --border: 120 8% 25%;
-  --input: var(--border);
+  --background: 150 15% 8%;
+  --foreground: 150 20% 95%;
+  --muted: 150 10% 14%;
+  --muted-foreground: 150 10% 65%;
+  --popover: 150 14% 10%;
+  --popover-foreground: 150 20% 95%;
+  --card: 150 14% 10%;
+  --card-foreground: 150 20% 95%;
+  --border: 150 12% 20%;
+  --input: 150 12% 20%;
 
-  --primary: 130 40% 48%;  /* Main green */
-  --primary-foreground: 130 35% 93%;
-  --secondary: 32 45% 40%;  /* Warm brown */
-  --secondary-foreground: 35 30% 92%;
+  --primary: 160 50% 45%;  /* Enhanced emerald for dark mode */
+  --primary-foreground: 160 45% 98%;
+  --secondary: 190 40% 40%;  /* Teal secondary */
+  --secondary-foreground: 190 40% 98%;
 
-  --accent: 170 50% 55%;  /* Teal accent instead of golden */
-  --accent-foreground: 170 30% 92%;
+  --accent: 175 55% 50%;  /* Brighter teal accent for dark mode */
+  --accent-foreground: 175 40% 98%;
 
   --destructive: 0 70% 50%;
   --destructive-foreground: 0 0% 98%;
 
-  --chart-1: 130 40% 48%;
-  --chart-2: 32 45% 40%;
-  --chart-3: 55 50% 55%;
-  --chart-4: 180 15% 45%;
-  --chart-5: 250 15% 45%;
+  --chart-1: 160 60% 50%;
+  --chart-2: 170 55% 45%;
+  --chart-3: 180 50% 55%;
+  --chart-4: 190 45% 60%;
+  --chart-5: 200 40% 55%;
 
   --ring: var(--border);
 }

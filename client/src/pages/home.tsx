@@ -111,102 +111,102 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-white rounded-lg shadow-md border border-slate-100 overflow-hidden hover:shadow-lg transition-shadow">
+            <div className="bg-card rounded-lg shadow-md border border-border overflow-hidden hover:shadow-lg transition-shadow">
               <div className="p-5">
-                <div className="h-12 w-12 rounded-lg bg-blue-100 flex items-center justify-center mb-4">
-                  <Sparkles className="h-6 w-6 text-blue-600" />
+                <div className="h-12 w-12 rounded-lg bg-blue-100 dark:bg-blue-950 flex items-center justify-center mb-4">
+                  <Sparkles className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2 text-stone-800">Multiple Theological Lenses</h3>
-                <p className="text-slate-600 mb-4">
+                <h3 className="text-lg font-semibold mb-2 text-foreground">Multiple Theological Lenses</h3>
+                <p className="text-muted-foreground mb-4">
                   Study passages through Evangelical, Catholic, Jewish, and other perspectives.
                 </p>
                 <div className="pt-2">
-                  <p className="text-sm text-slate-500">
+                  <p className="text-sm text-muted-foreground/80">
                     Each theological tradition brings unique insights to deepen your understanding.
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow-md border border-slate-100 overflow-hidden hover:shadow-lg transition-shadow">
+            <div className="bg-card rounded-lg shadow-md border border-border overflow-hidden hover:shadow-lg transition-shadow">
               <div className="p-5">
-                <div className="h-12 w-12 rounded-lg bg-indigo-100 flex items-center justify-center mb-4">
-                  <PenLine className="h-6 w-6 text-indigo-600" />
+                <div className="h-12 w-12 rounded-lg bg-indigo-100 dark:bg-indigo-950 flex items-center justify-center mb-4">
+                  <PenLine className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2 text-stone-800">Narrative Mode</h3>
-                <p className="text-slate-600 mb-4">
+                <h3 className="text-lg font-semibold mb-2 text-foreground">Narrative Mode</h3>
+                <p className="text-muted-foreground mb-4">
                   Transform Bible chapters into immersive, flowing narratives.
                 </p>
                 <div className="pt-2">
-                  <p className="text-sm text-slate-500">
+                  <p className="text-sm text-muted-foreground/80">
                     Experience Scripture as a continuous story for better context and understanding.
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow-md border border-slate-100 overflow-hidden hover:shadow-lg transition-shadow">
+            <div className="bg-card rounded-lg shadow-md border border-border overflow-hidden hover:shadow-lg transition-shadow">
               <div className="p-5">
-                <div className="h-12 w-12 rounded-lg bg-teal-100 flex items-center justify-center mb-4">
-                  <LightbulbIcon className="h-6 w-6 text-teal-600" />
+                <div className="h-12 w-12 rounded-lg bg-teal-100 dark:bg-teal-950 flex items-center justify-center mb-4">
+                  <LightbulbIcon className="h-6 w-6 text-teal-600 dark:text-teal-400" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2 text-stone-800">"Did You Know" Facts</h3>
-                <p className="text-slate-600 mb-4">
+                <h3 className="text-lg font-semibold mb-2 text-foreground">"Did You Know" Facts</h3>
+                <p className="text-muted-foreground mb-4">
                   Discover fascinating historical and cultural contexts.
                 </p>
                 <div className="pt-2">
-                  <p className="text-sm text-slate-500">
+                  <p className="text-sm text-muted-foreground/80">
                     Uncover interesting facts about the time period and historical background.
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow-md border border-slate-100 overflow-hidden hover:shadow-lg transition-shadow">
+            <div className="bg-card rounded-lg shadow-md border border-border overflow-hidden hover:shadow-lg transition-shadow">
               <div className="p-5">
-                <div className="h-12 w-12 rounded-lg bg-purple-100 flex items-center justify-center mb-4">
-                  <MessageCircle className="h-6 w-6 text-purple-600" />
+                <div className="h-12 w-12 rounded-lg bg-purple-100 dark:bg-purple-950 flex items-center justify-center mb-4">
+                  <MessageCircle className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2 text-stone-800">Contextual Questions</h3>
-                <p className="text-slate-600 mb-4">
+                <h3 className="text-lg font-semibold mb-2 text-foreground">Contextual Questions</h3>
+                <p className="text-muted-foreground mb-4">
                   Ask questions about passages and receive detailed explanations.
                 </p>
                 <div className="pt-2">
-                  <p className="text-sm text-slate-500">
+                  <p className="text-sm text-muted-foreground/80">
                     Get thoughtful answers that consider the historical and literary context.
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow-md border border-slate-100 overflow-hidden hover:shadow-lg transition-shadow">
+            <div className="bg-card rounded-lg shadow-md border border-border overflow-hidden hover:shadow-lg transition-shadow">
               <div className="p-5">
-                <div className="h-12 w-12 rounded-lg bg-emerald-100 flex items-center justify-center mb-4">
-                  <Compass className="h-6 w-6 text-emerald-600" />
+                <div className="h-12 w-12 rounded-lg bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center mb-4">
+                  <Compass className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2 text-stone-800">Reading Plans</h3>
-                <p className="text-slate-600 mb-4">
+                <h3 className="text-lg font-semibold mb-2 text-foreground">Reading Plans</h3>
+                <p className="text-muted-foreground mb-4">
                   Follow curated daily reading schedules for structured study.
                 </p>
                 <div className="pt-2">
-                  <p className="text-sm text-slate-500">
+                  <p className="text-sm text-muted-foreground/80">
                     Stay consistent with guided plans focused on specific themes and topics.
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow-md border border-slate-100 overflow-hidden hover:shadow-lg transition-shadow">
+            <div className="bg-card rounded-lg shadow-md border border-border overflow-hidden hover:shadow-lg transition-shadow">
               <div className="p-5">
-                <div className="h-12 w-12 rounded-lg bg-sky-100 flex items-center justify-center mb-4">
-                  <Search className="h-6 w-6 text-sky-600" />
+                <div className="h-12 w-12 rounded-lg bg-sky-100 dark:bg-sky-950 flex items-center justify-center mb-4">
+                  <Search className="h-6 w-6 text-sky-600 dark:text-sky-400" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2 text-stone-800">Semantic Search</h3>
-                <p className="text-slate-600 mb-4">
+                <h3 className="text-lg font-semibold mb-2 text-foreground">Semantic Search</h3>
+                <p className="text-muted-foreground mb-4">
                   Find verses based on concepts, not just keywords.
                 </p>
                 <div className="pt-2">
-                  <p className="text-sm text-slate-500">
+                  <p className="text-sm text-muted-foreground/80">
                     Discover related passages you might otherwise miss with concept-based search.
                   </p>
                 </div>
