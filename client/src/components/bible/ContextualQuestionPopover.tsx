@@ -19,7 +19,7 @@ import { Loader2 } from "lucide-react";
 type Question = {
   id: string;
   text: string;
-  answer?: string;
+  answer?: string | any;  // Allow any type for answer to handle various response formats
   timestamp: Date;
 };
 
@@ -69,9 +69,31 @@ export default function ContextualQuestionPopover({
       );
       
       // Add answer to question
+      // Check the response format
+      console.log("Response from API:", response);
+      
+      // Parse the response
+      let answerContent;
+      try {
+        if (response && typeof response === 'object') {
+          if ('content' in response) {
+            answerContent = response.content;
+          } else if (typeof response === 'string') {
+            answerContent = response;
+          } else {
+            answerContent = JSON.stringify(response);
+          }
+        } else {
+          answerContent = "Received response but couldn't find content";
+        }
+      } catch (err) {
+        console.error("Error parsing response:", err);
+        answerContent = "I'm having trouble processing this answer right now.";
+      }
+      
       const answeredQuestion = {
         ...newQuestion,
-        answer: response?.content || "I'm sorry, I couldn't generate an answer at this time."
+        answer: answerContent
       };
       
       // Add to recent questions list
