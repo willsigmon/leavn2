@@ -27,7 +27,7 @@ interface ContextualQuestionPopoverProps {
   book: string;
   chapter: number;
   verse: number;
-  verseText: string;
+  verseText: any;
 }
 
 export default function ContextualQuestionPopover({ 
@@ -55,6 +55,12 @@ export default function ContextualQuestionPopover({
     };
     
     try {
+      // Extract text from multiple possible formats
+      const extractedText = typeof verseText === 'string' 
+        ? verseText 
+        : verseText?.textKjv || verseText?.kjv || 
+          (typeof verseText?.text === 'string' ? verseText.text : verseText?.text?.kjv || 'Verse text unavailable');
+      
       // Call API to get AI generated answer
       const response = await apiRequest(
         "POST",
@@ -63,7 +69,7 @@ export default function ContextualQuestionPopover({
           book,
           chapter,
           verse,
-          verseText,
+          verseText: extractedText,
           question
         }
       );

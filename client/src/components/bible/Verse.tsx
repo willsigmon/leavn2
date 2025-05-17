@@ -67,25 +67,33 @@ export default function Verse({
     enabled: !compact && (verse.verseNumber % 5 === 0 || verse.verseNumber === 1),
   });
 
-  // Verse text based on reader mode
+  // Verse text based on reader mode and translation preference
   const getVerseText = () => {
-    if (readerMode === "standard" || !translationData) {
+    // If using a special reader mode and we have translation data
+    if (readerMode !== "standard" && translationData) {
+      if (readerMode === "genz" && translationData.genz) {
+        return translationData.genz;
+      } else if (readerMode === "kids" && translationData.kids) {
+        return translationData.kids;
+      } else if (readerMode === "devotional" && translationData.devotional) {
+        return translationData.devotional;
+      } else if (readerMode === "scholarly" && translationData.scholarly) {
+        return translationData.scholarly;
+      }
+    }
+    
+    // Default to showing KJV translation if we have it or legacy text field for backward compatibility
+    if (verse.textKjv) {
+      return verse.textKjv;
+    } else if (verse.text) {
       return verse.text;
+    } else if (verse.text?.kjv) {
+      // Support for backward compatibility with nested structure
+      return verse.text.kjv;
     }
     
-    // If we have a specific reader mode translation
-    if (readerMode === "genz" && translationData.genz) {
-      return translationData.genz;
-    } else if (readerMode === "kids" && translationData.kids) {
-      return translationData.kids;
-    } else if (readerMode === "devotional" && translationData.devotional) {
-      return translationData.devotional;
-    } else if (readerMode === "scholarly" && translationData.scholarly) {
-      return translationData.scholarly;
-    }
-    
-    // Fallback to original text
-    return verse.text;
+    // Ultimate fallback
+    return "Verse text not available";
   };
 
   return (
