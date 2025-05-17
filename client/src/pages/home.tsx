@@ -1,801 +1,326 @@
-import { Link } from "wouter";
-import Sidebar from "@/components/layout/Sidebar";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { useState } from "react";
-import { FaBookOpen, FaBible, FaLightbulb, FaUserFriends, FaQuestionCircle, FaCommentAlt, FaChartBar, FaLock } from "react-icons/fa";
+import { useAuth } from '../lib/auth';
+import { useLocation } from 'wouter';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-  CheckCircle, 
   BookOpen, 
-  User, 
-  Heart, 
-  MessageSquare, 
-  Share,
-  Lightbulb,
-  Sparkles,
-  Check
-} from "lucide-react";
+  Calendar, 
+  Search, 
+  Sparkles, 
+  MessageCircle, 
+  LightbulbIcon, 
+  Compass,
+  PenLine
+} from 'lucide-react';
 
 export default function Home() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
+  const { user, isAuthenticated, login } = useAuth();
+  const [, navigate] = useLocation();
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground">
-      <div className="flex flex-1 overflow-hidden">
-        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        
-        <main className="flex-1 overflow-y-auto bg-background">
-          {/* Hero Section */}
-          <section className="relative overflow-hidden py-20 md:py-28">
-            <div className="absolute inset-0 bg-gradient-to-r from-background via-background to-accent/10 z-0"></div>
-            {/* Decorative grid pattern */}
-            <div className="absolute inset-0 opacity-5 z-0">
-              {Array.from({ length: 10 }).map((_, i) => (
-                <div key={i} className="h-px w-full bg-primary/20" style={{ top: `${i * 10}%` }}></div>
-              ))}
-              {Array.from({ length: 10 }).map((_, i) => (
-                <div key={i} className="w-px h-full bg-primary/20" style={{ left: `${i * 10}%` }}></div>
-              ))}
-            </div>
-            
-            <div className="container mx-auto px-4 max-w-6xl relative z-10">
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-                <div className="md:col-span-7 text-center md:text-left">
-                  <h1 className="font-serif text-4xl md:text-6xl font-bold mb-6">
-                    <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Bible study made</span>
-                    <br />
-                    <span className="text-foreground">simple.</span>
-                  </h1>
-                  <p className="text-lg md:text-xl text-muted-foreground max-w-2xl md:max-w-none mb-8">
-                    Experience a richer Bible study with AI-powered multi-lens commentary, personal notes, 
-                    and contextual information. <span className="font-medium text-primary">An account is required</span> to 
-                    access all Bible study features.
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                    <Link href="/api/login">
-                      <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                        <FaBookOpen className="mr-2" /> Sign In to Read
-                      </Button>
-                    </Link>
-                    <Button variant="outline" size="lg" className="border-primary border text-primary hover:bg-primary/5">
-                      View Demo
-                    </Button>
-                  </div>
-                  <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-4 mt-8">
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <CheckCircle className="h-4 w-4 mr-2 text-primary" />
-                      <span>Private account</span>
-                    </div>
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <CheckCircle className="h-4 w-4 mr-2 text-primary" />
-                      <span>Secure storage</span>
-                    </div>
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <CheckCircle className="h-4 w-4 mr-2 text-primary" />
-                      <span>Privacy focused</span>
-                    </div>
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <CheckCircle className="h-4 w-4 mr-2 text-primary" />
-                      <span>Instant insights</span>
-                    </div>
-                  </div>
-                  <div className="mt-4 text-xs italic text-muted-foreground/70 md:text-left text-center">
-                    <span className="font-medium">Leavn</span> — like leaven, a small influence that causes a widespread transformation for the better.
-                  </div>
-                </div>
-                <div className="md:col-span-5">
-                  <div className="bg-card rounded-xl shadow-lg border border-border overflow-hidden">
-                    <div className="p-4 border-b border-border bg-muted/50">
-                      <div className="flex items-center gap-2">
-                        <div className="h-3 w-3 rounded-full bg-destructive/70"></div>
-                        <div className="h-3 w-3 rounded-full bg-accent/70"></div>
-                        <div className="h-3 w-3 rounded-full bg-primary/70"></div>
-                        <div className="ml-2 text-sm font-medium text-primary">John 3:16</div>
-                      </div>
-                    </div>
-                    <div className="p-5">
-                      <p className="text-foreground mb-2">
-                        "For God so loved the world, that he gave his only Son, that whoever believes in him should not perish but have eternal life."
-                      </p>
-                      <div className="mt-4 p-3 rounded-lg bg-accent/10 border border-border">
-                        <h4 className="text-sm font-semibold text-primary mb-1">Choose a Lens:</h4>
-                        <div className="flex flex-wrap gap-2">
-                          <button 
-                            className="hero-lens catholic px-3 py-1 bg-primary text-primary-foreground text-xs rounded-full hover:brightness-110 transition-all"
-                            onClick={(e) => {
-                              // Reset all buttons
-                              e.currentTarget.parentElement?.querySelectorAll('button').forEach(btn => {
-                                btn.classList.remove('bg-primary', 'text-primary-foreground');
-                                btn.classList.add('bg-background', 'border', 'border-border');
-                              });
-                              
-                              // Highlight clicked button
-                              e.currentTarget.classList.remove('bg-background', 'border', 'border-border');
-                              e.currentTarget.classList.add('bg-primary', 'text-primary-foreground');
-                              
-                              // Update verse text based on lens - Catholic perspective
-                              const verseElement = e.currentTarget.closest('.p-5')?.querySelector('p');
-                              if (verseElement) {
-                                verseElement.textContent = "\"For God so loved the world, that he gave his only Son, that whoever believes in him should not perish but have eternal life.\"";
-                              }
-                            }}
-                          >
-                            Catholic
-                          </button>
-                          <button 
-                            className="hero-lens evangelical px-3 py-1 bg-background border border-border text-xs rounded-full hover:bg-accent/10 transition-colors"
-                            onClick={(e) => {
-                              // Reset all buttons
-                              e.currentTarget.parentElement?.querySelectorAll('button').forEach(btn => {
-                                btn.classList.remove('bg-primary', 'text-primary-foreground');
-                                btn.classList.add('bg-background', 'border', 'border-border');
-                              });
-                              
-                              // Highlight clicked button
-                              e.currentTarget.classList.remove('bg-background', 'border', 'border-border');
-                              e.currentTarget.classList.add('bg-primary', 'text-primary-foreground');
-                              
-                              // Update verse text based on lens - Evangelical perspective
-                              const verseElement = e.currentTarget.closest('.p-5')?.querySelector('p');
-                              if (verseElement) {
-                                verseElement.textContent = "\"For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.\"";
-                              }
-                            }}
-                          >
-                            Evangelical
-                          </button>
-                          <button 
-                            className="hero-lens jewish px-3 py-1 bg-background border border-border text-xs rounded-full hover:bg-accent/10 transition-colors"
-                            onClick={(e) => {
-                              // Reset all buttons
-                              e.currentTarget.parentElement?.querySelectorAll('button').forEach(btn => {
-                                btn.classList.remove('bg-primary', 'text-primary-foreground');
-                                btn.classList.add('bg-background', 'border', 'border-border');
-                              });
-                              
-                              // Highlight clicked button
-                              e.currentTarget.classList.remove('bg-background', 'border', 'border-border');
-                              e.currentTarget.classList.add('bg-primary', 'text-primary-foreground');
-                              
-                              // Update verse text based on lens - Jewish perspective
-                              const verseElement = e.currentTarget.closest('.p-5')?.querySelector('p');
-                              if (verseElement) {
-                                verseElement.textContent = "\"For God so loved the world that he gave his unique Son, so that everyone who trusts in him may have eternal life instead of being utterly destroyed.\"";
-                              }
-                            }}
-                          >
-                            Jewish
-                          </button>
-                          <button 
-                            className="hero-lens genz px-3 py-1 bg-background border border-border text-xs rounded-full hover:bg-accent/10 transition-colors"
-                            onClick={(e) => {
-                              // Reset all buttons
-                              e.currentTarget.parentElement?.querySelectorAll('button').forEach(btn => {
-                                btn.classList.remove('bg-primary', 'text-primary-foreground');
-                                btn.classList.add('bg-background', 'border', 'border-border');
-                              });
-                              
-                              // Highlight clicked button
-                              e.currentTarget.classList.remove('bg-background', 'border', 'border-border');
-                              e.currentTarget.classList.add('bg-primary', 'text-primary-foreground');
-                              
-                              // Update verse text based on lens - Gen-Z perspective
-                              const verseElement = e.currentTarget.closest('.p-5')?.querySelector('p');
-                              if (verseElement) {
-                                verseElement.textContent = "\"God literally loved everyone so much that he sent his only Son, so anyone who believes in him won't die but will have life forever.\"";
-                              }
-                            }}
-                          >
-                            Gen-Z
-                          </button>
-                          <button 
-                            className="hero-lens kids px-3 py-1 bg-background border border-border text-xs rounded-full hover:bg-accent/10 transition-colors"
-                            onClick={(e) => {
-                              // Reset all buttons
-                              e.currentTarget.parentElement?.querySelectorAll('button').forEach(btn => {
-                                btn.classList.remove('bg-primary', 'text-primary-foreground');
-                                btn.classList.add('bg-background', 'border', 'border-border');
-                              });
-                              
-                              // Highlight clicked button
-                              e.currentTarget.classList.remove('bg-background', 'border', 'border-border');
-                              e.currentTarget.classList.add('bg-primary', 'text-primary-foreground');
-                              
-                              // Update verse text based on lens - Kids perspective
-                              const verseElement = e.currentTarget.closest('.p-5')?.querySelector('p');
-                              if (verseElement) {
-                                verseElement.textContent = "\"God loves everyone so much that He gave us Jesus, His special Son! If you believe in Jesus, you will live with God forever and ever!\"";
-                              }
-                            }}
-                          >
-                            Kids
-                          </button>
-                        </div>
-                      </div>
-                      <Button className="mt-4 w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-                        Read More
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Features Section */}
-          <section className="py-16 bg-accent/5">
-            <div className="container mx-auto px-4 max-w-6xl">
-              <div className="text-center mb-16">
-                <h2 className="font-serif text-3xl md:text-4xl font-bold text-primary mb-4">
-                  Bible study designed for <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">deeper insights</span>
-                </h2>
-                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                  Everything you need to explore Scripture with understanding and depth
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <Card className="bg-card border-border shadow-sm">
-                  <CardContent className="pt-6">
-                    <div className="rounded-full bg-primary/15 p-3 w-12 h-12 flex items-center justify-center mb-5">
-                      <FaLightbulb className="text-primary text-xl" />
-                    </div>
-                    <h3 className="font-medium text-xl text-primary mb-3">Multi-lens Commentary</h3>
-                    <p className="text-muted-foreground mb-4">
-                      View any passage through Catholic, Evangelical, Jewish, Gen-Z, or Kids perspectives.
-                    </p>
-                    <div className="mt-2 pt-4 border-t border-border">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center text-sm text-primary">
-                          <span>All lenses included</span>
-                          <CheckCircle className="h-4 w-4 ml-2 text-primary/80" />
-                        </div>
-                        <div className="flex items-center text-sm text-primary/80">
-                          <FaLock className="h-3 w-3 mr-1" />
-                          <span>Account required</span>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-card border-border shadow-sm">
-                  <CardContent className="pt-6">
-                    <div className="rounded-full bg-primary/15 p-3 w-12 h-12 flex items-center justify-center mb-5">
-                      <FaCommentAlt className="text-primary text-xl" />
-                    </div>
-                    <h3 className="font-medium text-xl text-primary mb-3">Narrative Mode</h3>
-                    <p className="text-muted-foreground mb-4">
-                      Transform any chapter into immersive prose for a fresh perspective and deeper appreciation.
-                    </p>
-                    <div className="mt-2 pt-4 border-t border-border">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center text-sm text-primary">
-                          <span>All books supported</span>
-                          <CheckCircle className="h-4 w-4 ml-2 text-primary/80" />
-                        </div>
-                        <div className="flex items-center text-sm text-primary/80">
-                          <FaLock className="h-3 w-3 mr-1" />
-                          <span>Account required</span>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-card border-border shadow-sm">
-                  <CardContent className="pt-6">
-                    <div className="rounded-full bg-primary/15 p-3 w-12 h-12 flex items-center justify-center mb-5">
-                      <FaQuestionCircle className="text-primary text-xl" />
-                    </div>
-                    <h3 className="font-medium text-xl text-primary mb-3">"Did You Know" Facts</h3>
-                    <p className="text-muted-foreground mb-4">
-                      Discover fascinating historical, cultural, and theological insights about each passage.
-                    </p>
-                    <div className="mt-2 pt-4 border-t border-border">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center text-sm text-primary">
-                          <span>Updated regularly</span>
-                          <CheckCircle className="h-4 w-4 ml-2 text-primary/80" />
-                        </div>
-                        <div className="flex items-center text-sm text-primary/80">
-                          <FaLock className="h-3 w-3 mr-1" />
-                          <span>Account required</span>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
-                <Card className="bg-card border-border shadow-sm">
-                  <CardContent className="pt-6">
-                    <div className="flex items-start gap-4">
-                      <div className="rounded-full bg-primary/15 p-3 w-12 h-12 flex items-center justify-center">
-                        <FaUserFriends className="text-primary text-xl" />
-                      </div>
-                      <div>
-                        <h3 className="font-medium text-xl text-primary mb-2">AI Artwork</h3>
-                        <p className="text-muted-foreground">
-                          Experience stunning AI-generated artwork for each chapter that captures the essence of the text.
-                        </p>
-                        <div className="mt-3 flex items-center text-sm text-primary/80">
-                          <FaLock className="h-3 w-3 mr-1" />
-                          <span>Account required</span>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-card border-border shadow-sm">
-                  <CardContent className="pt-6">
-                    <div className="flex items-start gap-4">
-                      <div className="rounded-full bg-primary/15 p-3 w-12 h-12 flex items-center justify-center">
-                        <FaChartBar className="text-primary text-xl" />
-                      </div>
-                      <div>
-                        <h3 className="font-medium text-xl text-primary mb-2">Smart Search</h3>
-                        <p className="text-muted-foreground">
-                          Find verses by theme, people, places, or semantic meaning with advanced AI search capabilities.
-                        </p>
-                        <div className="mt-3 flex items-center text-sm text-primary/80">
-                          <FaLock className="h-3 w-3 mr-1" />
-                          <span>Account required</span>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-          </section>
-
-          {/* Call to Action */}
-          <section className="py-20 bg-gradient-to-r from-primary/20 via-primary/10 to-accent/10">
-            <div className="container mx-auto px-4 max-w-6xl text-center">
-              <h2 className="font-serif text-3xl md:text-4xl font-bold text-primary mb-6">
-                Ready to explore Scripture more deeply?
-              </h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-                Create your free account to start your journey with Leavn and experience 
-                the Bible in a whole new way. All features require an account.
+    <div className="flex flex-col">
+      {/* Hero section */}
+      <section className="py-20 px-4 md:px-0 bg-gradient-to-b from-background to-muted/30">
+        <div className="container mx-auto max-w-5xl">
+          <div className="flex flex-col lg:flex-row gap-12 items-center">
+            <div className="lg:w-1/2 space-y-6">
+              <h1 className="text-4xl md:text-5xl font-bold leading-tight">
+                Explore Scripture with <span className="bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-transparent">Deeper Understanding</span>
+              </h1>
+              <p className="text-xl text-muted-foreground">
+                Engage with the Bible through multiple theological perspectives, immersive narratives, 
+                and AI-powered spiritual insights.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/api/login">
-                  <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                    <FaBookOpen className="mr-2" /> Create Your Account
+              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                {isAuthenticated ? (
+                  <Button size="lg" onClick={() => navigate('/bible-reader')} className="bg-primary hover:bg-primary/90">
+                    <BookOpen className="mr-2 h-5 w-5" />
+                    Open Bible Reader
                   </Button>
-                </Link>
-                <Button variant="outline" size="lg" className="border-primary text-primary hover:bg-primary/10">
-                  Learn More
+                ) : (
+                  <Button size="lg" onClick={() => login()} className="bg-primary hover:bg-primary/90">
+                    <BookOpen className="mr-2 h-5 w-5" />
+                    Start Your Journey
+                  </Button>
+                )}
+                <Button size="lg" variant="outline" onClick={() => navigate('/reading-plans')}>
+                  <Calendar className="mr-2 h-5 w-5" />
+                  Browse Reading Plans
                 </Button>
               </div>
-              <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto text-left">
-                <div className="flex flex-col items-center md:items-start">
-                  <div className="p-3 rounded-full bg-accent/20 text-primary mb-3">
-                    <FaLock className="h-5 w-5" />
-                  </div>
-                  <h3 className="text-lg font-medium mb-1">Secure Account</h3>
-                  <p className="text-sm text-muted-foreground text-center md:text-left">
-                    Your notes and preferences are securely stored in your personal account.
-                  </p>
-                </div>
-                <div className="flex flex-col items-center md:items-start">
-                  <div className="p-3 rounded-full bg-accent/20 text-primary mb-3">
-                    <FaUserFriends className="h-5 w-5" />
-                  </div>
-                  <h3 className="text-lg font-medium mb-1">Personalized Study</h3>
-                  <p className="text-sm text-muted-foreground text-center md:text-left">
-                    Track your progress and receive tailored insights based on your interests.
-                  </p>
-                </div>
-                <div className="flex flex-col items-center md:items-start">
-                  <div className="p-3 rounded-full bg-accent/20 text-primary mb-3">
-                    <FaChartBar className="h-5 w-5" />
-                  </div>
-                  <h3 className="text-lg font-medium mb-1">Advanced Features</h3>
-                  <p className="text-sm text-muted-foreground text-center md:text-left">
-                    Access premium tools like AI artwork and cross-reference capabilities.
-                  </p>
-                </div>
-              </div>
             </div>
-          </section>
-          
-          {/* Animated CTA Section */}
-          <section className="py-16 md:py-24 bg-primary relative overflow-hidden">
-            {/* Animated dots background */}
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute inset-0" style={{ 
-                backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)',
-                backgroundSize: '30px 30px' 
-              }}></div>
+            <div className="lg:w-1/2 rounded-xl overflow-hidden shadow-xl">
+              <img 
+                src="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80" 
+                alt="Bible study" 
+                className="w-full h-full object-cover"
+              />
             </div>
-            
-            {/* Wave animation */}
-            <div className="absolute inset-x-0 bottom-0 h-20 opacity-10">
-              <svg className="absolute bottom-0 w-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-                <path fill="#ffffff" fillOpacity="1" d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,261.3C960,256,1056,224,1152,213.3C1248,203,1344,213,1392,218.7L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
-                  <animate attributeName="d" dur="10s" repeatCount="indefinite" values="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,261.3C960,256,1056,224,1152,213.3C1248,203,1344,213,1392,218.7L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z;
-                  M0,288L48,272C96,256,192,224,288,218.7C384,213,480,235,576,250.7C672,267,768,277,864,261.3C960,245,1056,203,1152,186.7C1248,171,1344,181,1392,186.7L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z;
-                  M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,261.3C960,256,1056,224,1152,213.3C1248,203,1344,213,1392,218.7L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></animate>
-                </path>
-              </svg>
-            </div>
-            
-            {/* Light rays animation */}
-            <div className="absolute inset-0 overflow-hidden">
-              <div className="absolute w-full h-full opacity-10 origin-top-right">
-                <div className="w-[200%] h-[200%] -rotate-45 bg-gradient-radial from-white/20 via-transparent to-transparent animate-pulse-slow"></div>
-              </div>
-            </div>
-            
-            <div className="container mx-auto px-4 relative z-10">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                <div className="text-primary-foreground">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-6 font-serif animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-                    Ready to gather spiritual insights?
-                  </h2>
-                  <p className="text-lg text-primary-foreground/90 mb-8 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-                    Start using Leavn Bible Study today and transform your Scripture experience.
-                  </p>
-                  
-                  <div className="space-y-4">
-                    <div className="flex items-center animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
-                      <div className="rounded-full bg-accent p-1 mr-3">
-                        <CheckCircle className="h-5 w-5 text-primary" />
-                      </div>
-                      <span className="text-primary-foreground/90">Free for personal Bible study</span>
-                    </div>
-                    <div className="flex items-center animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
-                      <div className="rounded-full bg-accent p-1 mr-3">
-                        <CheckCircle className="h-5 w-5 text-primary" />
-                      </div>
-                      <span className="text-primary-foreground/90">No account required to preview</span>
-                    </div>
-                    <div className="flex items-center animate-fade-in-up" style={{ animationDelay: '0.7s' }}>
-                      <div className="rounded-full bg-accent p-1 mr-3">
-                        <CheckCircle className="h-5 w-5 text-primary" />
-                      </div>
-                      <span className="text-primary-foreground/90">Premium features for deeper study</span>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-8 flex flex-col sm:flex-row gap-4 animate-fade-in-up" style={{ animationDelay: '0.9s' }}>
-                    <Link href="/api/login">
-                      <Button size="lg" className="bg-card text-primary hover:bg-card/90 transition-all duration-300 hover:shadow-lg">
-                        Create Account
-                      </Button>
-                    </Link>
-                    <Button variant="outline" size="lg" className="border-card text-card hover:bg-primary-foreground/10 transition-all duration-300">
-                      View Example
-                    </Button>
-                  </div>
-                </div>
-                
-                <div className="bg-primary-foreground/10 backdrop-blur-sm p-6 rounded-xl border border-primary-foreground/20 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-                  <div className="relative">
-                    {/* App Interface Preview */}
-                    <div className="bg-card rounded-lg shadow-lg overflow-hidden">
-                      {/* App Header */}
-                      <div className="bg-primary p-3 flex items-center justify-between">
-                        <div className="flex items-center">
-                          <FaBookOpen className="h-5 w-5 text-primary-foreground mr-2" />
-                          <span className="text-primary-foreground font-medium">Leavn Bible Study</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <div className="w-6 h-6 rounded-full bg-primary-foreground/20 flex items-center justify-center cursor-pointer hover:bg-primary-foreground/30 transition-colors">
-                            <FaUserFriends className="h-3 w-3 text-primary-foreground" />
-                          </div>
-                        </div>
-                      </div>
-                      
-                      {/* App Body */}
-                      <div className="p-4 space-y-4">
-                        <div className="flex items-center justify-between">
-                          <div className="relative group">
-                            <h3 className="text-foreground font-medium cursor-pointer group-hover:text-primary transition-colors">John 3:16</h3>
-                            <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></div>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <button className="text-primary p-1 rounded-full hover:bg-primary/10 transition-colors active:scale-95 transform duration-100">
-                              <FaLock className="h-4 w-4" />
-                            </button>
-                            <button className="text-primary p-1 rounded-full hover:bg-primary/10 transition-colors active:scale-95 transform duration-100">
-                              <FaCommentAlt className="h-4 w-4" />
-                            </button>
-                            <button className="text-primary p-1 rounded-full hover:bg-primary/10 transition-colors active:scale-95 transform duration-100">
-                              <FaChartBar className="h-4 w-4" />
-                            </button>
-                          </div>
-                        </div>
-                        
-                        <div className="group">
-                          <div className="bg-accent/10 p-3 rounded-lg border border-accent/20 hover:bg-accent/15 transition-colors cursor-pointer">
-                            <p className="text-foreground">
-                              <span className="group-hover:bg-accent/30 px-1 py-0.5 rounded transition-colors">For God</span> so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have <span className="group-hover:bg-accent/30 px-1 py-0.5 rounded transition-colors">everlasting life</span>.
-                            </p>
-                          </div>
-                          <div className="hidden group-hover:block mt-2 text-xs text-primary animate-fade-in-up">
-                            <span>Click to highlight key phrases</span>
-                          </div>
-                        </div>
-                        
-                        <div className="border-t border-border pt-3">
-                          <h4 className="text-sm font-medium text-foreground mb-2">Multi-lens Commentary</h4>
-                          
-                          {/* Interactive Lens Selector */}
-                          <div className="lens-selector flex gap-2 overflow-x-auto pb-2 mb-2">
-                            <button 
-                              className="lens-btn catholic bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs whitespace-nowrap hover:brightness-110 transition-all active:scale-95 transform duration-100"
-                              onClick={(e) => {
-                                // Remove active class from all buttons
-                                e.currentTarget.parentElement?.querySelectorAll('.lens-btn').forEach(btn => {
-                                  btn.classList.remove('bg-primary', 'text-primary-foreground');
-                                  btn.classList.add('bg-accent/20', 'text-primary');
-                                });
-                                
-                                // Add active class to clicked button
-                                e.currentTarget.classList.remove('bg-accent/20', 'text-primary');
-                                e.currentTarget.classList.add('bg-primary', 'text-primary-foreground');
-                                
-                                // Show corresponding commentary
-                                const commentaryContainer = e.currentTarget.closest('.border-t')?.querySelector('.commentary-container');
-                                if (commentaryContainer) {
-                                  commentaryContainer.querySelectorAll('.commentary').forEach(c => c.classList.add('hidden'));
-                                  commentaryContainer.querySelector('.commentary.catholic')?.classList.remove('hidden');
-                                }
-                              }}
-                            >
-                              Catholic
-                            </button>
-                            <button 
-                              className="lens-btn evangelical bg-accent/20 text-primary px-3 py-1 rounded-full text-xs whitespace-nowrap hover:bg-accent/30 transition-colors active:scale-95 transform duration-100"
-                              onClick={(e) => {
-                                // Remove active class from all buttons
-                                e.currentTarget.parentElement?.querySelectorAll('.lens-btn').forEach(btn => {
-                                  btn.classList.remove('bg-primary', 'text-primary-foreground');
-                                  btn.classList.add('bg-accent/20', 'text-primary');
-                                });
-                                
-                                // Add active class to clicked button
-                                e.currentTarget.classList.remove('bg-accent/20', 'text-primary');
-                                e.currentTarget.classList.add('bg-primary', 'text-primary-foreground');
-                                
-                                // Show corresponding commentary
-                                const commentaryContainer = e.currentTarget.closest('.border-t')?.querySelector('.commentary-container');
-                                if (commentaryContainer) {
-                                  commentaryContainer.querySelectorAll('.commentary').forEach(c => c.classList.add('hidden'));
-                                  commentaryContainer.querySelector('.commentary.evangelical')?.classList.remove('hidden');
-                                }
-                              }}
-                            >
-                              Evangelical
-                            </button>
-                            <button 
-                              className="lens-btn jewish bg-accent/20 text-primary px-3 py-1 rounded-full text-xs whitespace-nowrap hover:bg-accent/30 transition-colors active:scale-95 transform duration-100"
-                              onClick={(e) => {
-                                // Remove active class from all buttons
-                                e.currentTarget.parentElement?.querySelectorAll('.lens-btn').forEach(btn => {
-                                  btn.classList.remove('bg-primary', 'text-primary-foreground');
-                                  btn.classList.add('bg-accent/20', 'text-primary');
-                                });
-                                
-                                // Add active class to clicked button
-                                e.currentTarget.classList.remove('bg-accent/20', 'text-primary');
-                                e.currentTarget.classList.add('bg-primary', 'text-primary-foreground');
-                                
-                                // Show corresponding commentary
-                                const commentaryContainer = e.currentTarget.closest('.border-t')?.querySelector('.commentary-container');
-                                if (commentaryContainer) {
-                                  commentaryContainer.querySelectorAll('.commentary').forEach(c => c.classList.add('hidden'));
-                                  commentaryContainer.querySelector('.commentary.jewish')?.classList.remove('hidden');
-                                }
-                              }}
-                            >
-                              Jewish
-                            </button>
-                            <button 
-                              className="lens-btn genz bg-accent/20 text-primary px-3 py-1 rounded-full text-xs whitespace-nowrap hover:bg-accent/30 transition-colors active:scale-95 transform duration-100"
-                              onClick={(e) => {
-                                // Remove active class from all buttons
-                                e.currentTarget.parentElement?.querySelectorAll('.lens-btn').forEach(btn => {
-                                  btn.classList.remove('bg-primary', 'text-primary-foreground');
-                                  btn.classList.add('bg-accent/20', 'text-primary');
-                                });
-                                
-                                // Add active class to clicked button
-                                e.currentTarget.classList.remove('bg-accent/20', 'text-primary');
-                                e.currentTarget.classList.add('bg-primary', 'text-primary-foreground');
-                                
-                                // Show corresponding commentary
-                                const commentaryContainer = e.currentTarget.closest('.border-t')?.querySelector('.commentary-container');
-                                if (commentaryContainer) {
-                                  commentaryContainer.querySelectorAll('.commentary').forEach(c => c.classList.add('hidden'));
-                                  commentaryContainer.querySelector('.commentary.genz')?.classList.remove('hidden');
-                                }
-                              }}
-                            >
-                              Gen-Z
-                            </button>
-                            <button 
-                              className="lens-btn kids bg-accent/20 text-primary px-3 py-1 rounded-full text-xs whitespace-nowrap hover:bg-accent/30 transition-colors active:scale-95 transform duration-100"
-                              onClick={(e) => {
-                                // Remove active class from all buttons
-                                e.currentTarget.parentElement?.querySelectorAll('.lens-btn').forEach(btn => {
-                                  btn.classList.remove('bg-primary', 'text-primary-foreground');
-                                  btn.classList.add('bg-accent/20', 'text-primary');
-                                });
-                                
-                                // Add active class to clicked button
-                                e.currentTarget.classList.remove('bg-accent/20', 'text-primary');
-                                e.currentTarget.classList.add('bg-primary', 'text-primary-foreground');
-                                
-                                // Show corresponding commentary
-                                const commentaryContainer = e.currentTarget.closest('.border-t')?.querySelector('.commentary-container');
-                                if (commentaryContainer) {
-                                  commentaryContainer.querySelectorAll('.commentary').forEach(c => c.classList.add('hidden'));
-                                  commentaryContainer.querySelector('.commentary.kids')?.classList.remove('hidden');
-                                }
-                              }}
-                            >
-                              Kids
-                            </button>
-                          </div>
-                          
-                          {/* Commentary Container with all perspectives */}
-                          <div className="commentary-container">
-                            <div className="commentary catholic bg-primary/5 p-3 rounded-lg hover:bg-primary/10 transition-colors cursor-pointer">
-                              <p className="text-sm text-muted-foreground italic">
-                                This verse expresses the core of Christian faith: God's immense love for humanity manifested through Christ's sacrifice, offering eternal salvation to all believers...
-                              </p>
-                            </div>
-                            
-                            <div className="commentary evangelical hidden bg-primary/5 p-3 rounded-lg hover:bg-primary/10 transition-colors cursor-pointer">
-                              <p className="text-sm text-muted-foreground italic">
-                                This central verse emphasizes personal faith in Jesus Christ as the only way to salvation. It's the perfect summary of the Gospel message of grace through faith.
-                              </p>
-                            </div>
-                            
-                            <div className="commentary jewish hidden bg-primary/5 p-3 rounded-lg hover:bg-primary/10 transition-colors cursor-pointer">
-                              <p className="text-sm text-muted-foreground italic">
-                                While not a Jewish text, this verse can be understood through the lens of God's covenant love (chesed) and the theme of divine sacrifice that appears in various Jewish traditions.
-                              </p>
-                            </div>
-                            
-                            <div className="commentary genz hidden bg-primary/5 p-3 rounded-lg hover:bg-primary/10 transition-colors cursor-pointer">
-                              <p className="text-sm text-muted-foreground italic">
-                                Basically God's love is next level - He cared so much He sent His son to give us a second chance. It's the ultimate "I got you" moment from the universe.
-                              </p>
-                            </div>
-                            
-                            <div className="commentary kids hidden bg-primary/5 p-3 rounded-lg hover:bg-primary/10 transition-colors cursor-pointer">
-                              <p className="text-sm text-muted-foreground italic">
-                                God loves you so much! He sent Jesus to be your special friend forever. When you believe in Jesus, you get to be with God forever and ever!
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center justify-between text-xs text-primary mt-2">
-                          <div className="flex items-center cursor-pointer hover:text-primary/70 transition-colors">
-                            <FaBookOpen className="h-3 w-3 mr-1" />
-                            <span>Narrative Mode</span>
-                          </div>
-                          <div className="relative group">
-                            <div className="flex items-center cursor-pointer hover:text-primary/70 transition-colors">
-                              <FaLightbulb className="h-3 w-3 mr-1" />
-                              <span>Did You Know?</span>
-                            </div>
-                            <div className="absolute bottom-full right-0 mb-2 w-48 p-2 bg-card shadow-lg rounded-lg scale-0 group-hover:scale-100 origin-bottom-right transition-transform duration-200 z-10">
-                              <p className="text-xs text-muted-foreground">This verse is one of the most widely quoted verses in Christianity and is often considered a summary of the central theme of the Gospel.</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Floating elements to show interactivity */}
-                    <div className="absolute -top-3 -right-3 bg-accent text-primary p-2 rounded-lg shadow-lg text-xs font-medium">
-                      <div className="flex items-center">
-                        <FaLightbulb className="h-3 w-3 mr-1" />
-                        <span>AI-powered insights</span>
-                      </div>
-                    </div>
-                    
-                    <div className="absolute -bottom-3 -left-3 bg-card text-foreground p-2 rounded-lg shadow-lg text-xs">
-                      <div className="flex items-center">
-                        <FaLock className="h-3 w-3 mr-1 text-primary" />
-                        <span>Personalized for you</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-          
-          {/* Footer */}
-          <footer className="bg-card border-t border-border py-12">
-            <div className="container mx-auto px-4 max-w-6xl">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div>
-                  <h3 className="font-medium text-lg text-primary mb-4">Leavn Bible Study</h3>
-                  <p className="text-sm text-muted-foreground mb-6">
-                    An advanced Bible study platform designed to transform how you engage with Scripture.
-                  </p>
-                  <div className="flex space-x-4">
-                    <a href="#" className="text-primary hover:text-primary/80">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-                      </svg>
-                    </a>
-                    <a href="#" className="text-primary hover:text-primary/80">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
-                      </svg>
-                    </a>
-                    <a href="#" className="text-primary hover:text-primary/80">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                      </svg>
-                    </a>
-                  </div>
-                </div>
-                
-                <div>
-                  <h4 className="font-medium text-primary mb-4">Resources</h4>
-                  <ul className="space-y-2 text-sm">
-                    <li><a href="#" className="text-muted-foreground hover:text-primary">Bible Translations</a></li>
-                    <li><a href="#" className="text-muted-foreground hover:text-primary">Study Guides</a></li>
-                    <li><a href="#" className="text-muted-foreground hover:text-primary">Commentary</a></li>
-                    <li><a href="#" className="text-muted-foreground hover:text-primary">Audio Bible</a></li>
-                  </ul>
-                </div>
-                
-                <div>
-                  <h4 className="font-medium text-primary mb-4">Community</h4>
-                  <ul className="space-y-2 text-sm">
-                    <li><a href="#" className="text-muted-foreground hover:text-primary">Online Groups</a></li>
-                    <li><a href="#" className="text-muted-foreground hover:text-primary">Bible Q&A</a></li>
-                    <li><a href="#" className="text-muted-foreground hover:text-primary">Study Partners</a></li>
-                    <li><a href="#" className="text-muted-foreground hover:text-primary">Discussions</a></li>
-                  </ul>
-                </div>
-                
-                <div>
-                  <h4 className="font-medium text-primary mb-4">Legal</h4>
-                  <ul className="space-y-2 text-sm">
-                    <li><a href="#" className="text-muted-foreground hover:text-primary">Privacy Policy</a></li>
-                    <li><a href="#" className="text-muted-foreground hover:text-primary">Terms of Service</a></li>
-                    <li><a href="#" className="text-muted-foreground hover:text-primary">Cookie Policy</a></li>
-                    <li><a href="#" className="text-muted-foreground hover:text-primary">Copyright</a></li>
-                  </ul>
-                </div>
-              </div>
-              
-              <div className="border-t border-border mt-10 pt-6 flex flex-col md:flex-row justify-between items-center">
-                <p className="text-sm text-muted-foreground mb-4 md:mb-0">
-                  © {new Date().getFullYear()} Leavn Bible Study. All rights reserved.
+          </div>
+        </div>
+      </section>
+
+      {/* Features section */}
+      <section className="py-20 px-4 md:px-0">
+        <div className="container mx-auto max-w-5xl">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold mb-4">Features Designed for Deeper Study</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Discover new dimensions of Scripture with features that enhance your understanding
+              and bring the text to life.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <Card>
+              <CardHeader>
+                <Sparkles className="h-10 w-10 text-primary mb-2" />
+                <CardTitle>Multiple Theological Lenses</CardTitle>
+                <CardDescription>
+                  Study passages through Evangelical, Catholic, Jewish, and other perspectives.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Each theological tradition brings unique insights to Scripture. Explore these different viewpoints to deepen your understanding.
                 </p>
-                <div className="flex space-x-6">
-                  <a href="#" className="text-sm text-muted-foreground hover:text-primary">Help</a>
-                  <a href="#" className="text-sm text-muted-foreground hover:text-primary">Support</a>
-                  <a href="#" className="text-sm text-muted-foreground hover:text-primary">Contact</a>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <PenLine className="h-10 w-10 text-primary mb-2" />
+                <CardTitle>Narrative Mode</CardTitle>
+                <CardDescription>
+                  Transform Bible chapters into immersive, flowing narratives.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Experience Scripture as a continuous story, making it easier to grasp context and meaning in a more engaging format.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <LightbulbIcon className="h-10 w-10 text-primary mb-2" />
+                <CardTitle>"Did You Know" Facts</CardTitle>
+                <CardDescription>
+                  Discover fascinating historical and cultural contexts.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Uncover interesting facts about the time period, culture, and historical background of each passage.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <MessageCircle className="h-10 w-10 text-primary mb-2" />
+                <CardTitle>Contextual Questions</CardTitle>
+                <CardDescription>
+                  Ask questions about passages and receive detailed explanations.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  When you have questions about a verse or passage, get thoughtful explanations tailored to the specific context.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <Compass className="h-10 w-10 text-primary mb-2" />
+                <CardTitle>Reading Plans</CardTitle>
+                <CardDescription>
+                  Follow curated daily reading schedules for structured study.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Stay consistent with your Bible reading through guided plans focused on specific themes, books, or topics.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <Search className="h-10 w-10 text-primary mb-2" />
+                <CardTitle>Semantic Search</CardTitle>
+                <CardDescription>
+                  Find verses based on concepts, not just keywords.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Search for ideas and themes rather than exact words, helping you discover related passages you might otherwise miss.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-20 px-4 md:px-0 bg-muted/30">
+        <div className="container mx-auto max-w-5xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">What Users Are Saying</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Hear from people who have experienced deeper understanding through Leavn's approach to Bible study.
+            </p>
+          </div>
+
+          <Tabs defaultValue="pastors" className="w-full">
+            <div className="flex justify-center mb-8">
+              <TabsList>
+                <TabsTrigger value="pastors">Pastors</TabsTrigger>
+                <TabsTrigger value="students">Students</TabsTrigger>
+                <TabsTrigger value="families">Families</TabsTrigger>
+              </TabsList>
+            </div>
+            
+            <TabsContent value="pastors">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="bg-background rounded-lg p-6 shadow-sm">
+                  <p className="italic mb-4">
+                    "Leavn has transformed my sermon preparation process. The multiple theological lenses help me consider viewpoints I might have overlooked, and the contextual information is incredibly valuable."
+                  </p>
+                  <div className="flex items-center">
+                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
+                      JM
+                    </div>
+                    <div className="ml-3">
+                      <p className="font-medium">Pastor James Miller</p>
+                      <p className="text-sm text-muted-foreground">Community Church</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-background rounded-lg p-6 shadow-sm">
+                  <p className="italic mb-4">
+                    "The ability to instantly access different commentaries and perspectives saves me hours of research time, and the narrative mode helps bring passages to life for my congregation."
+                  </p>
+                  <div className="flex items-center">
+                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
+                      SR
+                    </div>
+                    <div className="ml-3">
+                      <p className="font-medium">Rev. Sarah Rodriguez</p>
+                      <p className="text-sm text-muted-foreground">Hillside Fellowship</p>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </footer>
-        </main>
-      </div>
+            </TabsContent>
+            
+            <TabsContent value="students">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="bg-background rounded-lg p-6 shadow-sm">
+                  <p className="italic mb-4">
+                    "As a theology student, the multiple perspectives feature is invaluable. I can quickly compare different theological traditions' interpretations of the same passage."
+                  </p>
+                  <div className="flex items-center">
+                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
+                      DJ
+                    </div>
+                    <div className="ml-3">
+                      <p className="font-medium">David Johnson</p>
+                      <p className="text-sm text-muted-foreground">Seminary Student</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-background rounded-lg p-6 shadow-sm">
+                  <p className="italic mb-4">
+                    "The 'Did You Know' facts and contextual questions help me understand cultural nuances I would have missed. It's like having a professor available 24/7."
+                  </p>
+                  <div className="flex items-center">
+                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
+                      AT
+                    </div>
+                    <div className="ml-3">
+                      <p className="font-medium">Amanda Torres</p>
+                      <p className="text-sm text-muted-foreground">Religious Studies Major</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="families">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="bg-background rounded-lg p-6 shadow-sm">
+                  <p className="italic mb-4">
+                    "The kids' translation makes family devotions so much more engaging. Our children actually look forward to Bible time now!"
+                  </p>
+                  <div className="flex items-center">
+                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
+                      WF
+                    </div>
+                    <div className="ml-3">
+                      <p className="font-medium">Wilson Family</p>
+                      <p className="text-sm text-muted-foreground">Parents of three</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-background rounded-lg p-6 shadow-sm">
+                  <p className="italic mb-4">
+                    "We use the reading plans to keep our family consistent with Bible study. The narrative mode helps our teenagers connect with stories in a fresh way."
+                  </p>
+                  <div className="flex items-center">
+                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
+                      LP
+                    </div>
+                    <div className="ml-3">
+                      <p className="font-medium">Liu-Parker Family</p>
+                      <p className="text-sm text-muted-foreground">Home church group</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </section>
+
+      {/* Call to action */}
+      <section className="py-20 px-4 md:px-0 text-center">
+        <div className="container mx-auto max-w-3xl">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            Begin Your Journey of Deeper Understanding
+          </h2>
+          <p className="text-xl text-muted-foreground mb-8">
+            Join thousands of others discovering new dimensions of Scripture through Leavn's
+            innovative study tools.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            {isAuthenticated ? (
+              <Button size="lg" onClick={() => navigate('/bible-reader')} className="bg-primary hover:bg-primary/90">
+                <BookOpen className="mr-2 h-5 w-5" />
+                Open Bible Reader
+              </Button>
+            ) : (
+              <Button size="lg" onClick={() => login()} className="bg-primary hover:bg-primary/90">
+                <BookOpen className="mr-2 h-5 w-5" />
+                Get Started Now
+              </Button>
+            )}
+            <Button size="lg" variant="outline" onClick={() => navigate('/reading-plans')}>
+              Explore Reading Plans
+            </Button>
+          </div>
+          <p className="text-sm text-muted-foreground mt-6">
+            No registration required to start. Personalized features available with free account.
+          </p>
+        </div>
+      </section>
     </div>
   );
 }

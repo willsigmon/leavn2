@@ -1,15 +1,13 @@
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useRoute, Link } from "wouter";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ChevronLeft, Calendar, BookOpen } from "lucide-react";
-import Header from "@/components/layout/Header";
-import Sidebar from "@/components/layout/Sidebar";
-import { useMobile } from "@/hooks/use-mobile";
+import { useState, useEffect } from 'react';
+import { useParams, useLocation } from 'wouter';
+import { useQuery } from '@tanstack/react-query';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { Progress } from '@/components/ui/progress';
+import { Skeleton } from '@/components/ui/skeleton';
+import { ArrowLeft, Calendar, Check, Clock, BookOpen, Bookmark, ChevronRight } from 'lucide-react';
+import { useAuth } from '../lib/auth';
 
 interface ReadingPlanEntry {
   day: number;
@@ -29,123 +27,166 @@ interface ReadingPlan {
 }
 
 export default function ReadingPlanDetail() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { isMobile } = useMobile();
-  const [, params] = useRoute<{ id: string }>("/reading-plan/:id");
-  const planId = params?.id;
+  const { user, isAuthenticated } = useAuth();
+  const params = useParams();
+  const [, navigate] = useLocation();
+  const [currentDay, setCurrentDay] = useState(1);
 
-  const { data: plan, isLoading, error } = useQuery<ReadingPlan>({
-    queryKey: ["/api/reading-plans", planId],
-    enabled: !!planId,
+  // Fetch the reading plan details
+  const { data: readingPlan, isLoading, error } = useQuery<ReadingPlan>({
+    queryKey: [`/api/reading-plans/${params.id}`],
+    enabled: isAuthenticated && !!params.id,
   });
+  
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login');
+    }
+  }, [isAuthenticated, navigate]);
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen((prev) => !prev);
-  };
-
-  function capitalizeFirstLetter(string: string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+  if (!isAuthenticated) {
+    return null;
   }
 
-  return (
-    <div className="flex min-h-screen flex-col bg-background text-foreground">
-      <Header toggleSidebar={toggleSidebar} />
-      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+  const handleDayClick = (day: number) => {
+    setCurrentDay(day);
+  };
+  
+  const navigateToVerse = (entry: ReadingPlanEntry) => {
+    navigate(`/bible/${entry.book}/${entry.chapter}`);
+  };
 
-      <main className={`container mx-auto py-6 px-4 ${isMobile ? "mt-16" : "mt-8"}`}>
-        <div className="flex flex-col space-y-6">
-          <Link href="/reading-plans">
-            <Button variant="ghost" className="w-fit flex items-center gap-2 mb-4">
-              <ChevronLeft size={16} />
-              Back to Reading Plans
-            </Button>
-          </Link>
-          
-          {isLoading ? (
-            <div className="space-y-6">
-              <Skeleton className="h-10 w-3/4 mb-2" />
-              <Skeleton className="h-6 w-full mb-4" />
-              <Skeleton className="h-64 w-full rounded-lg mb-6" />
-              <div className="space-y-4">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <Skeleton key={i} className="h-24 w-full" />
-                ))}
-              </div>
-            </div>
-          ) : error ? (
-            <Alert variant="destructive">
-              <AlertTitle>Error</AlertTitle>
-              <AlertDescription>
-                Failed to load reading plan. Please try again later.
-              </AlertDescription>
-            </Alert>
-          ) : plan ? (
-            <>
-              <div>
-                <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  {plan.title}
-                </h1>
-                <p className="text-lg text-muted-foreground mb-6">
-                  {plan.description}
-                </p>
+  return (
+    <div className="container mx-auto py-8 px-4 md:px-0">
+      <div className="flex flex-col gap-6">
+        {/* Header with back button */}
+        <div className="flex items-center gap-4">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => navigate('/reading-plans')}
+            className="p-0"
+          >
+            <ArrowLeft className="h-4 w-4 mr-1" />
+            Back to Plans
+          </Button>
+        </div>
+        
+        {isLoading ? (
+          <div className="space-y-6">
+            <Skeleton className="h-10 w-3/4" />
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-64 w-full" />
+          </div>
+        ) : error ? (
+          <div className="text-center py-12 text-red-500">
+            <p>Failed to load reading plan. Please try again later.</p>
+          </div>
+        ) : readingPlan ? (
+          <>
+            {/* Plan Header */}
+            <div className="flex flex-col md:flex-row gap-8">
+              <div className="md:w-2/3">
+                <h1 className="text-3xl font-bold text-primary mb-2">{readingPlan.title}</h1>
+                <p className="text-muted-foreground mb-4">{readingPlan.description}</p>
                 
-                <div className="rounded-lg overflow-hidden mb-8">
-                  <img
-                    src={plan.image}
-                    alt={plan.title}
-                    className="w-full h-64 object-cover"
+                <div className="flex flex-wrap gap-6 mb-6">
+                  <div className="flex items-center">
+                    <Calendar className="h-5 w-5 mr-2 text-primary" />
+                    <span>{readingPlan.days} Days</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Clock className="h-5 w-5 mr-2 text-primary" />
+                    <span>~10 minutes daily</span>
+                  </div>
+                  <div className="flex items-center">
+                    <BookOpen className="h-5 w-5 mr-2 text-primary" />
+                    <span>Multiple Books</span>
+                  </div>
+                </div>
+                
+                <div className="space-y-2 mb-6">
+                  <div className="flex justify-between text-sm mb-1">
+                    <span>Your Progress</span>
+                    <span className="font-medium">{Math.round((currentDay / readingPlan.days) * 100)}%</span>
+                  </div>
+                  <Progress value={(currentDay / readingPlan.days) * 100} className="h-2" />
+                </div>
+                
+                <Button className="w-full md:w-auto" onClick={() => navigateToVerse(readingPlan.entries[currentDay - 1])}>
+                  Continue Day {currentDay}
+                  <ChevronRight className="h-4 w-4 ml-1" />
+                </Button>
+              </div>
+              
+              <div className="md:w-1/3">
+                <div className="rounded-lg overflow-hidden h-48">
+                  <img 
+                    src={readingPlan.image} 
+                    alt={readingPlan.title} 
+                    className="w-full h-full object-cover"
                   />
                 </div>
-                
-                <div className="flex items-center gap-3 mb-6">
-                  <Calendar className="text-primary" />
-                  <span className="font-medium">{plan.days} days</span>
-                </div>
-                
-                <Separator className="my-6" />
-                
-                <h2 className="text-2xl font-semibold mb-4">Reading Schedule</h2>
-                
-                <div className="space-y-4">
-                  {Array.isArray(plan.entries) ? plan.entries.map((entry) => (
-                    <Card key={entry.day} className="transition-all hover:shadow-md">
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-lg">Day {entry.day}</CardTitle>
-                        <CardDescription>
-                          {capitalizeFirstLetter(entry.book)} {entry.chapter}
-                          {entry.startVerse ? `: ${entry.startVerse}${entry.endVerse ? `-${entry.endVerse}` : ''}` : ''}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <Link href={`/bible/${entry.book}/${entry.chapter}`}>
-                          <Button variant="outline" className="flex items-center gap-2 border-input hover:bg-accent hover:text-accent-foreground">
-                            <BookOpen size={16} />
-                            Read Passage
-                          </Button>
-                        </Link>
-                      </CardContent>
-                    </Card>
-                  )) : (
-                    <Alert>
-                      <AlertTitle>No Entries</AlertTitle>
-                      <AlertDescription>
-                        This reading plan doesn't have any entries yet.
-                      </AlertDescription>
-                    </Alert>
-                  )}
-                </div>
               </div>
-            </>
-          ) : (
-            <Alert>
-              <AlertTitle>Not Found</AlertTitle>
-              <AlertDescription>
-                Reading plan not found. Please return to the reading plans page and try again.
-              </AlertDescription>
-            </Alert>
-          )}
-        </div>
-      </main>
+            </div>
+            
+            <Separator className="my-6" />
+            
+            {/* Plan days listing */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {readingPlan.entries.map((entry) => (
+                <Card 
+                  key={entry.day} 
+                  className={`cursor-pointer transition-colors ${
+                    entry.day === currentDay ? 'border-primary bg-primary/5' : ''
+                  } ${entry.day < currentDay ? 'bg-muted/30' : ''}`}
+                  onClick={() => handleDayClick(entry.day)}
+                >
+                  <CardHeader className="py-4 px-5">
+                    <div className="flex justify-between items-center">
+                      <CardTitle className="text-lg">Day {entry.day}</CardTitle>
+                      {entry.day < currentDay && (
+                        <div className="bg-primary text-primary-foreground rounded-full p-1">
+                          <Check className="h-4 w-4" />
+                        </div>
+                      )}
+                    </div>
+                    <CardDescription>
+                      {entry.book} {entry.chapter}
+                      {entry.startVerse && entry.startVerse > 1 ? 
+                        `:${entry.startVerse}-${entry.endVerse || 'end'}` 
+                        : ''}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="pt-0 pb-4 px-5">
+                    <div className="flex justify-between items-center">
+                      <div className="text-sm text-muted-foreground">
+                        Approximately {entry.endVerse ? (entry.endVerse - entry.startVerse + 1) : 'all'} verses
+                      </div>
+                      <Button 
+                        size="sm" 
+                        variant="ghost"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigateToVerse(entry);
+                        }}
+                      >
+                        <Bookmark className="h-4 w-4 mr-1" />
+                        Read
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </>
+        ) : (
+          <div className="text-center py-12">
+            <p>No reading plan found.</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

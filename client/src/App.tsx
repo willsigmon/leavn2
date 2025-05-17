@@ -14,6 +14,7 @@ import Settings from "@/pages/settings";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "./hooks/useAuth";
 import { NavBar } from "./components/NavBar";
+import Footer from "./components/layout/Footer";
 
 function Router() {
   return (
@@ -28,10 +29,12 @@ function Router() {
           <Route path="/login" component={Login} />
           <Route path="/profile" component={Profile} />
           <Route path="/settings" component={Settings} />
+          <Route path="/resources/bible-translations" component={() => import('./pages/resources/bible-translations').then(module => module.default)} />
           {/* Fallback to 404 */}
           <Route component={NotFound} />
         </Switch>
       </main>
+      <Footer />
     </div>
   );
 }
