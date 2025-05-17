@@ -52,9 +52,9 @@ export function NavBar() {
               className="flex items-center space-x-2 cursor-pointer relative"
             >
               <BookOpenText className="h-6 w-6 text-primary" />
-              <span className="text-xl font-semibold text-primary">Leavn</span>
-              <div className="absolute -right-8 -top-1">
-                <span className="bg-primary text-primary-foreground text-[10px] px-1.5 py-0.5 rounded-full font-semibold">
+              <span className="text-xl font-semibold text-primary mr-1">Leavn</span>
+              <div className="flex items-center">
+                <span className="bg-primary text-primary-foreground text-[10px] px-2 py-0.5 rounded-full font-semibold ml-1">
                   BETA
                 </span>
               </div>
