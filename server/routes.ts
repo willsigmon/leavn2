@@ -484,8 +484,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Answer contextual questions
-  app.post("/api/ai/contextual-question", async (req: Request, res: Response) => {
+  // Answer contextual questions - protected by authentication
+  app.post("/api/ai/contextual-question", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const { verseText, question } = req.body;
       

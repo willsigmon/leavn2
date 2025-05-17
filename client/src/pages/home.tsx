@@ -45,7 +45,8 @@ export default function Home() {
                   </h1>
                   <p className="text-lg md:text-xl text-muted-foreground max-w-2xl md:max-w-none mb-8">
                     Experience a richer Bible study with AI-powered multi-lens commentary, personal notes, 
-                    and contextual information in your secure, private account.
+                    and contextual information. <span className="font-medium text-primary">An account is required</span> to 
+                    access all Bible study features.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
                     <Link href="/api/login">
@@ -190,6 +191,10 @@ export default function Home() {
                         <p className="text-muted-foreground">
                           Experience stunning AI-generated artwork for each chapter that captures the essence of the text.
                         </p>
+                        <div className="mt-3 flex items-center text-sm text-primary/80">
+                          <FaLock className="h-3 w-3 mr-1" />
+                          <span>Account required</span>
+                        </div>
                       </div>
                     </div>
                   </CardContent>
@@ -221,7 +226,8 @@ export default function Home() {
                 Ready to explore Scripture more deeply?
               </h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-                Start your journey with Leavn today and experience the Bible in a whole new way.
+                Create your free account to start your journey with Leavn and experience 
+                the Bible in a whole new way. All features require an account.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/api/login">
