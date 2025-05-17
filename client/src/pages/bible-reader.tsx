@@ -51,6 +51,7 @@ export default function BibleReader() {
   const [, navigate] = useLocation();
   const [activeTranslation, setActiveTranslation] = useState('web');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [insightsPanelOpen, setInsightsPanelOpen] = useState(false);
   const [showToolbar, setShowToolbar] = useState(true);
   const [fontSize, setFontSize] = useState('base'); // 'sm', 'base', 'lg', 'xl'
   const readerRef = useRef<HTMLDivElement>(null);
@@ -129,6 +130,14 @@ export default function BibleReader() {
         </div>
         
         <div className="flex items-center space-x-2">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="text-stone-700 hover:text-emerald-600"
+            onClick={() => setInsightsPanelOpen(true)}
+          >
+            <Info className="h-5 w-5" />
+          </Button>
           <Button variant="ghost" size="icon" className="text-stone-700 hover:text-emerald-600">
             <Search className="h-5 w-5" />
           </Button>
@@ -225,9 +234,20 @@ export default function BibleReader() {
           />
         )}
 
-        {/* Insights Sidebar (fixed on the right side) */}
-        <div className="hidden lg:block w-80 bg-white border-l border-stone-200 h-full overflow-y-auto">
-          <div className="p-6 space-y-6">
+        {/* Insights Slide-over Panel (right side) */}
+        <div className={cn(
+          "fixed inset-0 z-40 w-80 bg-white transform transition-transform duration-300 ease-in-out shadow-lg",
+          "ml-auto", // Position on the right side
+          insightsPanelOpen ? "translate-x-0" : "translate-x-full" // Slide from right
+        )}>
+          <div className="flex justify-between items-center p-4 border-b">
+            <h2 className="text-lg font-medium text-emerald-700">Insights</h2>
+            <Button variant="ghost" size="icon" onClick={() => setInsightsPanelOpen(false)}>
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
+          
+          <div className="p-6 space-y-6 overflow-y-auto h-full pb-20">
             <div>
               <h3 className="text-lg font-medium flex items-center text-emerald-700">
                 <Book className="h-5 w-5 mr-2" />
@@ -289,6 +309,14 @@ export default function BibleReader() {
             </div>
           </div>
         </div>
+        
+        {/* Backdrop overlay when insights panel is open */}
+        {insightsPanelOpen && (
+          <div 
+            className="fixed inset-0 bg-black/20 z-30"
+            onClick={() => setInsightsPanelOpen(false)}
+          />
+        )}
         
         {/* Main Reading Area with Content */}
         <div
