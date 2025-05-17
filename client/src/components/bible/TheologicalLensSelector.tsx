@@ -39,9 +39,9 @@ export default function TheologicalLensSelector({
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-6 w-6">
-                <Info className="h-4 w-4" />
-              </Button>
+              <span className="inline-flex h-6 w-6 items-center justify-center rounded-full hover:bg-gray-100 cursor-help">
+                <Info className="h-4 w-4 text-gray-500" />
+              </span>
             </TooltipTrigger>
             <TooltipContent className="max-w-sm">
               <p className="text-sm">
@@ -60,45 +60,45 @@ export default function TheologicalLensSelector({
           className="w-full md:w-auto"
         >
           <TabsList className="grid grid-cols-5 w-full md:w-auto">
-            <TabsTrigger value="standard" className="text-xs md:text-sm">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger className="w-full h-full">Standard</TooltipTrigger>
-                  <TooltipContent><p>{lensInfo.standard}</p></TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+            <TabsTrigger value="standard" className="text-xs md:text-sm relative group">
+              Standard
+              <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 hidden group-hover:block z-10">
+                <div className="bg-black text-white text-xs rounded py-1 px-2 w-48">
+                  <p>{lensInfo.standard}</p>
+                </div>
+              </div>
             </TabsTrigger>
-            <TabsTrigger value="catholic" className="text-xs md:text-sm">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger className="w-full h-full">Catholic</TooltipTrigger>
-                  <TooltipContent><p>{lensInfo.catholic}</p></TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+            <TabsTrigger value="catholic" className="text-xs md:text-sm relative group">
+              Catholic
+              <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 hidden group-hover:block z-10">
+                <div className="bg-black text-white text-xs rounded py-1 px-2 w-48">
+                  <p>{lensInfo.catholic}</p>
+                </div>
+              </div>
             </TabsTrigger>
-            <TabsTrigger value="evangelical" className="text-xs md:text-sm">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger className="w-full h-full">Evangelical</TooltipTrigger>
-                  <TooltipContent><p>{lensInfo.evangelical}</p></TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+            <TabsTrigger value="evangelical" className="text-xs md:text-sm relative group">
+              Evangelical
+              <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 hidden group-hover:block z-10">
+                <div className="bg-black text-white text-xs rounded py-1 px-2 w-48">
+                  <p>{lensInfo.evangelical}</p>
+                </div>
+              </div>
             </TabsTrigger>
-            <TabsTrigger value="jewish" className="text-xs md:text-sm">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger className="w-full h-full">Jewish</TooltipTrigger>
-                  <TooltipContent><p>{lensInfo.jewish}</p></TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+            <TabsTrigger value="jewish" className="text-xs md:text-sm relative group">
+              Jewish
+              <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 hidden group-hover:block z-10">
+                <div className="bg-black text-white text-xs rounded py-1 px-2 w-48">
+                  <p>{lensInfo.jewish}</p>
+                </div>
+              </div>
             </TabsTrigger>
-            <TabsTrigger value="atheist" className="text-xs md:text-sm">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger className="w-full h-full">Secular</TooltipTrigger>
-                  <TooltipContent><p>{lensInfo.atheist}</p></TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+            <TabsTrigger value="atheist" className="text-xs md:text-sm relative group">
+              Secular
+              <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 hidden group-hover:block z-10">
+                <div className="bg-black text-white text-xs rounded py-1 px-2 w-48">
+                  <p>{lensInfo.atheist}</p>
+                </div>
+              </div>
             </TabsTrigger>
           </TabsList>
         </Tabs>

@@ -1,21 +1,20 @@
 import { useState } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { 
-  Popover, 
-  PopoverContent, 
-  PopoverTrigger 
-} from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { 
-  HelpCircle, 
-  Send, 
-  HistoryIcon, 
-  Clock 
-} from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Textarea } from "@/components/ui/textarea";
-import { Separator } from "@/components/ui/separator";
+import { v4 as uuidv4 } from "uuid";
+import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import { FaQuestionCircle, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Loader2 } from "lucide-react";
 
 type Question = {
   id: string;
@@ -31,155 +30,163 @@ interface ContextualQuestionPopoverProps {
   verseText: string;
 }
 
-// Sample contextual questions that users might want to ask
-const sampleQuestions = [
-  "What would this mean to a first-century Jew?",
-  "How was this interpreted in early Christianity?",
-  "What cultural context is important to understand here?",
-  "Are there any translation nuances from the original language?"
-];
-
 export default function ContextualQuestionPopover({ 
   book, 
   chapter, 
   verse, 
   verseText 
 }: ContextualQuestionPopoverProps) {
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [question, setQuestion] = useState("");
+  const [isAsking, setIsAsking] = useState(false);
   const [recentQuestions, setRecentQuestions] = useState<Question[]>([]);
-  const [showHistory, setShowHistory] = useState(false);
+  const [expandedQuestionId, setExpandedQuestionId] = useState<string | null>(null);
 
-  // Mutation for submitting a question
-  const askQuestionMutation = useMutation({
-    mutationFn: async (question: string) => {
-      const response = await apiRequest("POST", "/api/ai/contextual-question", {
-        verseText,
-        question
-      });
-      return response;
-    },
-    onSuccess: (data) => {
-      // Add the question and answer to recent questions
-      const newQuestion: Question = {
-        id: Date.now().toString(),
-        text: question,
-        answer: data.content,
-        timestamp: new Date()
-      };
-      setRecentQuestions(prev => [newQuestion, ...prev].slice(0, 5));
-      setQuestion("");
-    }
-  });
-
-  const handleSubmitQuestion = () => {
+  const handleAskQuestion = async () => {
     if (!question.trim()) return;
-    askQuestionMutation.mutate(question);
+    
+    setIsAsking(true);
+    
+    // Create new question
+    const newQuestion: Question = {
+      id: uuidv4(),
+      text: question,
+      timestamp: new Date()
+    };
+    
+    try {
+      // Call API to get AI generated answer
+      const response = await apiRequest(
+        "POST",
+        "/api/ai/contextual-question",
+        {
+          book,
+          chapter,
+          verse,
+          verseText,
+          question
+        }
+      );
+      
+      // Add answer to question
+      const answeredQuestion = {
+        ...newQuestion,
+        answer: response.content
+      };
+      
+      // Add to recent questions list
+      setRecentQuestions(prev => [answeredQuestion, ...prev.slice(0, 4)]);
+      setQuestion("");
+      setExpandedQuestionId(answeredQuestion.id);
+    } catch (error) {
+      console.error("Failed to get answer:", error);
+      setRecentQuestions(prev => [
+        {
+          ...newQuestion,
+          answer: "I'm sorry, I couldn't generate an answer at this time. Please try again later."
+        }, 
+        ...prev.slice(0, 4)
+      ]);
+    } finally {
+      setIsAsking(false);
+    }
   };
 
-  const handleSampleQuestion = (sampleQuestion: string) => {
-    setQuestion(sampleQuestion);
-    askQuestionMutation.mutate(sampleQuestion);
+  const toggleQuestion = (id: string) => {
+    setExpandedQuestionId(expandedQuestionId === id ? null : id);
+  };
+
+  // Sample presets for contextual questions
+  const questionPresets = [
+    "What would this verse mean to a first-century Jew?",
+    "How does this connect to Jesus' teachings?",
+    "What's the historical context of this passage?",
+    "How do different denominations interpret this?"
+  ];
+  
+  const handleQuestionPresetClick = (preset: string) => {
+    setQuestion(preset);
   };
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button 
-          variant="ghost" 
-          size="sm"
-          className="h-8 w-8 p-0 rounded-full bg-blue-50 hover:bg-blue-100 text-blue-600"
-        >
-          <HelpCircle size={16} />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-96 p-4" align="start">
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h3 className="font-medium text-sm flex items-center text-blue-600">
-              <HelpCircle size={16} className="mr-2" />
-              Ask a Question About This Verse
-            </h3>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="h-7 w-7 p-0 rounded-full"
-              onClick={() => setShowHistory(!showHistory)}
-            >
-              {showHistory ? <Clock size={14} /> : <HistoryIcon size={14} />}
-            </Button>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <button className="bg-purple-50 text-purple-700 hover:bg-purple-100 text-xs px-2 py-1 rounded-full flex items-center">
+          <FaQuestionCircle className="mr-1 h-3 w-3" />
+          <span>Ask about this</span>
+        </button>
+      </DialogTrigger>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle className="text-xl font-bold text-center mb-1">
+            Ask about {book} {chapter}:{verse}
+          </DialogTitle>
+          <div className="text-sm text-gray-500 text-center py-2 px-4 bg-gray-50 rounded border mb-4">
+            {verseText}
+          </div>
+        </DialogHeader>
+        
+        <div className="space-y-4">
+          <div>
+            <Label htmlFor="question">Your question</Label>
+            <div className="flex mt-1.5">
+              <Input
+                id="question"
+                value={question}
+                onChange={(e) => setQuestion(e.target.value)}
+                placeholder="Ask anything about this verse..."
+                className="flex-1"
+              />
+              <Button 
+                onClick={handleAskQuestion}
+                disabled={isAsking || !question.trim()}
+                className="ml-2"
+              >
+                {isAsking ? <Loader2 className="h-4 w-4 animate-spin" /> : "Ask"}
+              </Button>
+            </div>
           </div>
           
-          {showHistory ? (
-            <div className="max-h-60 overflow-y-auto space-y-3">
-              <h4 className="text-sm font-medium text-gray-700">Recent Questions</h4>
-              {recentQuestions.length === 0 ? (
-                <p className="text-sm text-gray-500 italic">No questions yet</p>
-              ) : (
-                recentQuestions.map(q => (
-                  <div key={q.id} className="space-y-1 pb-2 border-b border-gray-100">
-                    <p className="text-sm font-medium text-gray-800">{q.text}</p>
-                    <p className="text-sm text-gray-600">{q.answer}</p>
-                  </div>
-                ))
-              )}
-            </div>
-          ) : (
-            <>
+          <div className="flex flex-wrap gap-2">
+            {questionPresets.map((preset) => (
+              <button
+                key={preset}
+                onClick={() => handleQuestionPresetClick(preset)}
+                className="text-xs bg-purple-50 text-purple-700 hover:bg-purple-100 rounded-full px-2 py-1"
+              >
+                {preset}
+              </button>
+            ))}
+          </div>
+          
+          {recentQuestions.length > 0 && (
+            <div className="mt-4 space-y-3">
+              <h3 className="font-medium text-sm">Recent Questions</h3>
               <div className="space-y-2">
-                <Textarea 
-                  placeholder="Ask a question about historical context, original language, or cultural significance..."
-                  value={question}
-                  onChange={(e) => setQuestion(e.target.value)}
-                  className="min-h-[80px]"
-                />
-                <div className="flex justify-end">
-                  <Button 
-                    size="sm" 
-                    onClick={handleSubmitQuestion}
-                    disabled={!question.trim() || askQuestionMutation.isPending}
-                    className="flex items-center"
-                  >
-                    {askQuestionMutation.isPending ? "Thinking..." : "Ask"}
-                    <Send size={14} className="ml-2" />
-                  </Button>
-                </div>
-              </div>
-              
-              {askQuestionMutation.isPending ? (
-                <div className="pt-2 pb-2">
-                  <Skeleton className="h-4 w-full mb-2" />
-                  <Skeleton className="h-4 w-3/4" />
-                </div>
-              ) : askQuestionMutation.data ? (
-                <div className="pt-2 pb-2 text-sm text-gray-700">
-                  <p className="font-medium text-blue-600 mb-1">Answer:</p>
-                  <p>{askQuestionMutation.data.content}</p>
-                </div>
-              ) : null}
-              
-              <Separator />
-              
-              <div className="space-y-2">
-                <h4 className="text-xs font-medium text-gray-500">SUGGESTED QUESTIONS</h4>
-                <div className="flex flex-wrap gap-2">
-                  {sampleQuestions.map((q, i) => (
-                    <Button 
-                      key={i} 
-                      variant="outline" 
-                      size="sm" 
-                      className="text-xs py-1 h-auto"
-                      onClick={() => handleSampleQuestion(q)}
+                {recentQuestions.map((q) => (
+                  <div key={q.id} className="border rounded-md overflow-hidden">
+                    <button
+                      onClick={() => toggleQuestion(q.id)}
+                      className="w-full flex justify-between items-center p-3 text-left hover:bg-gray-50"
                     >
-                      {q}
-                    </Button>
-                  ))}
-                </div>
+                      <span className="font-medium text-sm">{q.text}</span>
+                      {expandedQuestionId === q.id ? 
+                        <FaChevronUp className="h-3 w-3 text-gray-400" /> : 
+                        <FaChevronDown className="h-3 w-3 text-gray-400" />
+                      }
+                    </button>
+                    {expandedQuestionId === q.id && (
+                      <div className="p-3 border-t bg-gray-50">
+                        <p className="text-sm">{q.answer}</p>
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
-            </>
+            </div>
           )}
         </div>
-      </PopoverContent>
-    </Popover>
+      </DialogContent>
+    </Dialog>
   );
 }

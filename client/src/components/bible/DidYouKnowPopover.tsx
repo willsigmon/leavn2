@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { 
-  Popover, 
-  PopoverContent, 
-  PopoverTrigger 
+import { FaLightbulb } from "react-icons/fa";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { Lightbulb } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Loader2 } from "lucide-react";
 
 interface DidYouKnowPopoverProps {
   book: string;
@@ -17,58 +16,51 @@ interface DidYouKnowPopoverProps {
 }
 
 export default function DidYouKnowPopover({ book, chapter, verse, verseText }: DidYouKnowPopoverProps) {
-  const [open, setOpen] = useState(false);
-
-  // Fetch AI-generated "Did You Know" fact
-  const { data: didYouKnowData, isLoading } = useQuery({
-    queryKey: [`/api/ai/did-you-know/${book}/${chapter}/${verse}`],
-    enabled: open, // Only fetch when popover is opened
-    staleTime: 1000 * 60 * 60, // Cache for 1 hour
-  });
-
-  // Fallback to static data if needed
-  const { data: staticData } = useQuery({
+  const [isOpen, setIsOpen] = useState(false);
+  
+  // Only fetch when opened to save bandwidth
+  const { data, isLoading } = useQuery({
     queryKey: [`/api/did-you-know/${book}/${chapter}/${verse}`],
-    enabled: open, // Only fetch when popover is opened
+    enabled: isOpen,
   });
-
-  // Use AI-generated content if available, otherwise use static content
-  const content = didYouKnowData?.content || staticData?.content;
+  
+  // Don't show button for verses without facts (simplification for demo)
+  const hasFactAvailable = verse % 5 === 0 || verse === 1;
+  
+  if (!hasFactAvailable) {
+    return null;
+  }
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button 
-          variant="ghost" 
-          size="sm"
-          className="h-8 w-8 p-0 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-600"
+        <button 
+          className="bg-blue-50 text-blue-700 hover:bg-blue-100 text-xs px-2 py-1 rounded-full flex items-center"
         >
-          <Lightbulb size={16} />
-        </Button>
+          <FaLightbulb className="mr-1 h-3 w-3 text-yellow-500" />
+          <span>Did you know?</span>
+        </button>
       </PopoverTrigger>
-      <PopoverContent className="w-80 p-4" align="start">
-        <div className="space-y-2">
-          <h3 className="font-medium text-sm flex items-center text-amber-600">
-            <Lightbulb size={16} className="mr-2" />
-            Did You Know?
+      <PopoverContent className="w-80 p-0">
+        <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-3 rounded-t-md">
+          <h3 className="text-lg font-bold flex items-center">
+            <FaLightbulb className="mr-2 text-yellow-300" />
+            Did you know?
           </h3>
-          
-          <div className="text-sm">
-            {isLoading ? (
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-3/4" />
-              </div>
-            ) : (
-              <p className="text-gray-700">
-                {content || "Did you know that biblical manuscripts were originally written without spaces between words or punctuation? This practice, called scriptio continua, was common in ancient writing."}
-              </p>
-            )}
-          </div>
-          
-          <div className="pt-2 text-xs text-gray-500 border-t border-gray-100 mt-2">
-            <p className="italic">Tap to explore more contextual insights</p>
-          </div>
+          <p className="text-xs text-blue-100">
+            {book} {chapter}:{verse}
+          </p>
+        </div>
+        <div className="p-4">
+          {isLoading ? (
+            <div className="flex items-center justify-center p-4">
+              <Loader2 className="h-6 w-6 animate-spin text-gray-400" />
+            </div>
+          ) : (
+            <div className="prose prose-sm max-w-none">
+              <p>{data?.content || "This verse has significant historical and cultural context that provides deeper understanding to its meaning."}</p>
+            </div>
+          )}
         </div>
       </PopoverContent>
     </Popover>

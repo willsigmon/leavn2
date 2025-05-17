@@ -1,108 +1,153 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Book, Image } from "lucide-react";
-import { apiRequest } from "@/lib/queryClient";
+import { Separator } from "@/components/ui/separator";
+import { Image, Volume2, Bookmark, Share } from "lucide-react";
 
 interface NarrativeViewProps {
   book: string;
   chapter: number;
-  onToggleView: () => void;
+  lens: string;
 }
 
-export default function NarrativeView({ book, chapter, onToggleView }: NarrativeViewProps) {
+export default function NarrativeView({ book, chapter, lens }: NarrativeViewProps) {
+  const [fontFamily, setFontFamily] = useState<"serif" | "sans-serif">("serif");
+  const [fontSize, setFontSize] = useState<"normal" | "large">("normal");
   const [showArtwork, setShowArtwork] = useState(true);
-
-  // Fetch narrative version of chapter
-  const { data: narrativeData, isLoading: narrativeLoading } = useQuery({
-    queryKey: [`/api/ai/narrative/${book}/${chapter}`],
-    staleTime: 1000 * 60 * 60, // Cache for 1 hour
-  });
-
-  // Fetch AI-generated artwork for the chapter
-  const { data: artworkData, isLoading: artworkLoading } = useQuery({
-    queryKey: [`/api/ai/artwork/${book}/${chapter}`],
-    staleTime: 1000 * 60 * 60, // Cache for 1 hour
-  });
-
-  const bookTitle = book.charAt(0).toUpperCase() + book.slice(1);
-
-  // Format narrative text with proper paragraph breaks
-  const formatNarrative = (text: string) => {
-    if (!text) return [];
-    return text.split("\n\n").filter(paragraph => paragraph.trim().length > 0);
-  };
   
-  const narrativeParagraphs = narrativeData?.content ? formatNarrative(narrativeData.content) : [];
-
+  // Query for the narrative version of this chapter
+  const { data: narrativeData, isLoading: isNarrativeLoading } = useQuery({
+    queryKey: [`/api/ai/narrative/${book}/${chapter}`, lens],
+    // Don't refetch on window focus for performance
+    refetchOnWindowFocus: false,
+  });
+  
+  // Query for the AI-generated artwork for this chapter
+  const { data: artworkData, isLoading: isArtworkLoading } = useQuery({
+    queryKey: [`/api/ai/artwork/${book}/${chapter}`],
+    // Only fetch artwork if showArtwork is true
+    enabled: showArtwork,
+    // Don't refetch on window focus for performance
+    refetchOnWindowFocus: false,
+  });
+  
+  const fontSizeClass = fontSize === "large" ? "text-xl" : "text-lg";
+  const fontFamilyClass = fontFamily === "serif" ? "font-serif" : "font-sans";
+  
   return (
-    <div className="narrative-view">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-serif font-semibold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-          Narrative Mode: {bookTitle} {chapter}
-        </h2>
-        <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={() => setShowArtwork(!showArtwork)}
-            className="flex items-center gap-1"
+    <div className="py-6">
+      {/* Reading Controls */}
+      <div className="flex justify-between items-center mb-6">
+        <div className="flex items-center space-x-2">
+          <Button
+            variant={fontFamily === "serif" ? "default" : "outline"}
+            size="sm"
+            onClick={() => setFontFamily("serif")}
+            className="text-xs"
           >
-            <Image size={16} />
+            Serif
+          </Button>
+          <Button
+            variant={fontFamily === "sans-serif" ? "default" : "outline"}
+            size="sm"
+            onClick={() => setFontFamily("sans-serif")}
+            className="text-xs"
+          >
+            Sans
+          </Button>
+          <Separator orientation="vertical" className="h-6" />
+          <Button
+            variant={fontSize === "normal" ? "default" : "outline"}
+            size="sm"
+            onClick={() => setFontSize("normal")}
+            className="text-xs"
+          >
+            A
+          </Button>
+          <Button
+            variant={fontSize === "large" ? "default" : "outline"}
+            size="sm"
+            onClick={() => setFontSize("large")}
+            className="text-xs font-bold"
+          >
+            A
+          </Button>
+        </div>
+        
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-xs"
+            onClick={() => setShowArtwork(!showArtwork)}
+          >
+            <Image className="h-4 w-4 mr-1" />
             {showArtwork ? "Hide" : "Show"} Artwork
           </Button>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={onToggleView}
-            className="flex items-center gap-1"
-          >
-            <BookOpen size={16} />
-            Verse View
+          <Button variant="ghost" size="sm" className="text-xs">
+            <Volume2 className="h-4 w-4 mr-1" />
+            Listen
+          </Button>
+          <Button variant="ghost" size="sm" className="text-xs">
+            <Bookmark className="h-4 w-4 mr-1" />
+            Save
+          </Button>
+          <Button variant="ghost" size="sm" className="text-xs">
+            <Share className="h-4 w-4 mr-1" />
+            Share
           </Button>
         </div>
       </div>
-
+      
+      {/* Chapter Artwork */}
       {showArtwork && (
-        <div className="mb-6">
-          {artworkLoading ? (
-            <Skeleton className="w-full h-[300px] rounded-lg" />
+        <div className="w-full h-64 mb-8 relative overflow-hidden rounded-xl bg-gray-100">
+          {isArtworkLoading ? (
+            <Skeleton className="w-full h-full" />
           ) : (
-            <div className="w-full overflow-hidden rounded-lg">
+            <div className="w-full h-full">
               <img 
-                src={artworkData?.url || "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=800&auto=format"} 
-                alt={`${bookTitle} ${chapter} artwork`} 
-                className="w-full h-[300px] object-cover"
+                src={artworkData?.url || "https://placehold.co/1200x800/e2e8f0/64748b?text=Chapter+Artwork"} 
+                alt={`Artwork for ${book} ${chapter}`}
+                className="w-full h-full object-cover"
               />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                <h2 className="text-white font-bold text-xl">
+                  {book} {chapter}
+                </h2>
+                <p className="text-white/80 text-sm">
+                  AI-generated artwork inspired by this chapter
+                </p>
+              </div>
             </div>
           )}
         </div>
       )}
-
-      <Card className="mb-6 border-gray-200">
-        <CardContent className="p-6">
-          {narrativeLoading ? (
-            <div className="space-y-4">
-              <Skeleton className="w-full h-5" />
-              <Skeleton className="w-full h-5" />
-              <Skeleton className="w-full h-5" />
-              <Skeleton className="w-full h-5" />
-              <Skeleton className="w-full h-5" />
-              <Skeleton className="w-3/4 h-5" />
-            </div>
-          ) : (
-            <div className="prose prose-slate max-w-none">
-              {narrativeParagraphs.map((paragraph, index) => (
-                <p key={index} className="font-serif text-lg leading-relaxed mb-4">
-                  {paragraph}
-                </p>
-              ))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      
+      {/* Chapter Narrative */}
+      <div className="prose prose-lg max-w-none">
+        {isNarrativeLoading ? (
+          <div className="space-y-4">
+            <Skeleton className="h-6 w-full" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-5/6" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-4/5" />
+            <Skeleton className="h-20 w-full" />
+          </div>
+        ) : (
+          <div className={`narrative-content ${fontFamilyClass} ${fontSizeClass} leading-relaxed`}>
+            {narrativeData?.content ? (
+              <div dangerouslySetInnerHTML={{ __html: narrativeData.content }} />
+            ) : (
+              <p className="text-gray-600 italic">
+                Narrative version is not available for this chapter yet. Please try another chapter or check back later.
+              </p>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

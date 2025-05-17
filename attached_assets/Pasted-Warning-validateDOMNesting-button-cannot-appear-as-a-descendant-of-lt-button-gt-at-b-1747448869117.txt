@@ -1,0 +1,32 @@
+Warning: validateDOMNesting(...): <button> cannot appear as a descendant of &lt;button&gt;.
+    at button
+    at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-GVTGVYSA.js?v=9d354eca:42:13
+    at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-5S42QOQO.js?v=9d354eca:79:13
+    at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-5S42QOQO.js?v=9d354eca:56:13
+    at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-GVTGVYSA.js?v=9d354eca:42:13
+    at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-ZQPOFGK6.js?v=9d354eca:1961:13
+    at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=9d354eca:193:13
+    at Provider (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-VIFX6DEG.js?v=9d354eca:48:15)
+    at Provider (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-VIFX6DEG.js?v=9d354eca:48:15)
+    at Popper (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-ZQPOFGK6.js?v=9d354eca:1953:11)
+    at Tooltip (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=9d354eca:102:5)
+    at Provider (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-VIFX6DEG.js?v=9d354eca:48:15)
+    at TooltipProvider (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=9d354eca:58:5)
+    at button
+    at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-GVTGVYSA.js?v=9d354eca:42:13
+    at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-5S42QOQO.js?v=9d354eca:79:13
+    at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-5S42QOQO.js?v=9d354eca:56:13
+    at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-GVTGVYSA.js?v=9d354eca:42:13
+    at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-5S42QOQO.js?v=9d354eca:79:13
+    at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-5S42QOQO.js?v=9d354eca:56:13
+    at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-65EBGUUX.js?v=9d354eca:51:15
+    at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tabs.js?v=9d354eca:151:7
+    at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tabs.js?v=9d354eca:331:13
+    at _c3 (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/src/components/ui/tabs.tsx:47:12)
+    at div
+    at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-GVTGVYSA.js?v=9d354eca:42:13
+    at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-5S42QOQO.js?v=9d354eca:79:13
+    at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-5S42QOQO.js?v=9d354eca:56:13
+    at https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-GVTGVYSA.js?v=9d354eca:42:13
+    at Provider (https://243ed6f2-fb32-4c81-8907-ef83a5b8aabb-00-1hydbfegwiw70.spock.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-VIFX6DEG.js?v=9d354eca:48:15)
+    at…
