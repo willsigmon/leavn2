@@ -340,7 +340,7 @@ export default function BibleReader() {
           isOpen={noteModalOpen} 
           onClose={() => setNoteModalOpen(false)}
           verseNumber={selectedVerse}
-          verseText={chapterData?.verses?.find(v => v.verseNumber === selectedVerse)?.text || ""}
+          verseText={chapterData?.verses?.find(v => v.verseNumber === selectedVerse)}
           existingNote={notes?.find(note => note.verse === selectedVerse)}
           book={book}
           chapter={parseInt(chapter)}
