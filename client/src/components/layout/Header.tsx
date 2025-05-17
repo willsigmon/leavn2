@@ -20,13 +20,13 @@ export default function Header({ toggleSidebar }: HeaderProps) {
           <div className="flex items-center space-x-4">
             <button 
               onClick={toggleSidebar}
-              className="md:hidden text-primary" 
+              className="md:hidden text-primary/90" 
               aria-label="Toggle sidebar"
             >
               <FaBars className="text-xl" />
             </button>
             <Link href="/" className="flex items-center">
-                <span className="text-primary-dark font-serif font-bold text-2xl">Leavn</span>
+                <span className="text-primary font-serif font-bold text-2xl">Leavn</span>
             </Link>
           </div>
           
@@ -35,9 +35,9 @@ export default function Header({ toggleSidebar }: HeaderProps) {
               <Input
                 type="text"
                 placeholder="Search verses, topics..."
-                className="w-full py-2 pl-10 pr-4 rounded-lg bg-gray-100 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                className="w-full py-2 pl-10 pr-4 rounded-lg bg-muted border-input focus:outline-none focus:ring-2 focus:ring-primary/50"
               />
-              <div className="absolute left-3 top-2.5 text-gray-400">
+              <div className="absolute left-3 top-2.5 text-muted-foreground">
                 <FaSearch />
               </div>
             </div>
@@ -45,7 +45,7 @@ export default function Header({ toggleSidebar }: HeaderProps) {
           
           <div className="flex items-center space-x-4">
             <button 
-              className="md:hidden text-primary" 
+              className="md:hidden text-primary/90" 
               aria-label="Search"
             >
               <FaSearch className="text-xl" />
@@ -63,11 +63,11 @@ export default function Header({ toggleSidebar }: HeaderProps) {
               <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
             </Button>
             
-            <Button className="bg-primary-dark hover:bg-primary text-white">
+            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
               Sign In
             </Button>
             <div className="relative">
-              <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-primary">
+              <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-primary/90">
                 <FaUser />
               </div>
             </div>

@@ -35,18 +35,18 @@ export default function BibleHeader({ book, chapter, totalChapters, translation 
     <div className="mb-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between">
         <div>
-          <h1 className="font-serif text-3xl font-bold text-primary-dark mb-2">{book} {chapter}</h1>
+          <h1 className="font-serif text-3xl font-bold text-primary mb-2">{book} {chapter}</h1>
           <div className="flex items-center space-x-3 mb-4">
             <div className="flex space-x-1">
               <button 
-                className={`text-gray-500 hover:text-primary ${chapter <= 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`text-muted-foreground hover:text-primary ${chapter <= 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
                 onClick={handlePrevChapter}
                 disabled={chapter <= 1}
               >
                 <FaChevronLeft />
               </button>
               <button 
-                className={`text-gray-500 hover:text-primary ${chapter >= totalChapters ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`text-muted-foreground hover:text-primary ${chapter >= totalChapters ? 'opacity-50 cursor-not-allowed' : ''}`}
                 onClick={handleNextChapter}
                 disabled={chapter >= totalChapters}
               >
@@ -54,7 +54,7 @@ export default function BibleHeader({ book, chapter, totalChapters, translation 
               </button>
             </div>
             <Select value={`Chapter ${chapter}`} onValueChange={handleChapterChange}>
-              <SelectTrigger className="bg-white border border-gray-300 rounded-md w-32 h-8 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+              <SelectTrigger className="bg-background border-input rounded-md w-32 h-8 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
                 <SelectValue placeholder="Select chapter" />
               </SelectTrigger>
               <SelectContent>
@@ -63,22 +63,22 @@ export default function BibleHeader({ book, chapter, totalChapters, translation 
                 ))}
               </SelectContent>
             </Select>
-            <div className="text-gray-500 text-sm hidden md:block">
+            <div className="text-muted-foreground text-sm hidden md:block">
               {translation}
             </div>
           </div>
         </div>
         
         <div className="flex space-x-2 mb-4 md:mb-0">
-          <Button variant="outline" size="sm" className="inline-flex items-center">
+          <Button variant="outline" size="sm" className="inline-flex items-center border-input hover:bg-accent hover:text-accent-foreground">
             <FaBookmark className="mr-1.5" />
             <span>Save</span>
           </Button>
-          <Button variant="outline" size="sm" className="inline-flex items-center">
+          <Button variant="outline" size="sm" className="inline-flex items-center border-input hover:bg-accent hover:text-accent-foreground">
             <FaShareAlt className="mr-1.5" />
             <span>Share</span>
           </Button>
-          <Button variant="outline" size="sm" className="inline-flex items-center">
+          <Button variant="outline" size="sm" className="inline-flex items-center border-input hover:bg-accent hover:text-accent-foreground">
             <FaCog className="mr-1.5" />
             <span>Settings</span>
           </Button>
