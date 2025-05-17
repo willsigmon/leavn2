@@ -379,6 +379,85 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Get narrative mode for chapter
+  app.get("/api/ai/narrative/:book/:chapter", async (req: Request, res: Response) => {
+    try {
+      const { book, chapter } = req.params;
+      const chapterNum = parseInt(chapter);
+      
+      if (isNaN(chapterNum)) {
+        return res.status(400).json({ message: "Invalid chapter number" });
+      }
+      
+      // Get all verses for the chapter
+      const verses = await storage.getVerses(book, chapterNum);
+      
+      if (!verses || verses.length === 0) {
+        return res.status(404).json({ message: "Chapter not found" });
+      }
+      
+      // Extract text from verses
+      const verseTexts = verses.map(verse => verse.text);
+      
+      // Generate narrative mode
+      const narrative = await generateNarrativeMode(verseTexts, { book, chapter: chapterNum });
+      
+      return res.json({ content: narrative });
+    } catch (error) {
+      console.error("Error generating narrative mode:", error);
+      return res.status(500).json({ message: "Failed to generate narrative mode" });
+    }
+  });
+  
+  // Generate AI artwork for chapter
+  app.get("/api/ai/artwork/:book/:chapter", async (req: Request, res: Response) => {
+    try {
+      const { book, chapter } = req.params;
+      const chapterNum = parseInt(chapter);
+      
+      if (isNaN(chapterNum)) {
+        return res.status(400).json({ message: "Invalid chapter number" });
+      }
+      
+      // Get all verses for the chapter
+      const verses = await storage.getVerses(book, chapterNum);
+      
+      if (!verses || verses.length === 0) {
+        return res.status(404).json({ message: "Chapter not found" });
+      }
+      
+      // Create a simple summary for the artwork prompt
+      const firstFewVerses = verses.slice(0, Math.min(5, verses.length)).map(v => v.text).join(" ");
+      
+      // Generate artwork
+      const artwork = await generateArtwork(firstFewVerses);
+      
+      return res.json(artwork);
+    } catch (error) {
+      console.error("Error generating artwork:", error);
+      return res.status(500).json({ message: "Failed to generate artwork" });
+    }
+  });
+  
+  // Answer contextual questions
+  app.post("/api/ai/contextual-question", async (req: Request, res: Response) => {
+    try {
+      const { verseText, question } = req.body;
+      
+      if (!verseText || !question) {
+        return res.status(400).json({ message: "Verse text and question are required" });
+      }
+      
+      // Generate contextual answer
+      const answer = await generateContextualAnswer(verseText, question);
+      
+      return res.json({ content: answer });
+    } catch (error) {
+      console.error("Error generating contextual answer:", error);
+      return res.status(500).json({ message: "Failed to generate answer" });
+    }
+  });
+  
   // Get all reading plans
   app.get("/api/reading-plans", async (req: Request, res: Response) => {
     try {

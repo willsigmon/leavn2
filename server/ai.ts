@@ -88,6 +88,186 @@ export async function generateTranslation(verseText: string): Promise<{genz: str
 }
 
 /**
+ * Generate narrative mode for a chapter
+ */
+export async function generateNarrativeMode(verses: string[], chapterInfo: { book: string, chapter: number }): Promise<string> {
+  // In development mode, return mock narrative
+  if (process.env.NODE_ENV !== "production" || !process.env.OPENAI_API_KEY) {
+    return "The evening shadows stretched long across the dusty path as Solomon, now in his later years but still possessing the sharp wisdom that had defined his reign, gathered his advisors. His eyes, having witnessed both the glory and folly of humankind, held a certain gravity as he began to speak. \"My children,\" he said, his voice carrying through the chamber with practiced authority, \"what I share with you now is not merely advice, but wisdom purchased through years of communion with God Himself.\" He paused, ensuring every ear was attentive. \"Trust in the LORD with all your heart,\" he continued, his tone softening with reverence at the mention of the divine name. \"Do not rely on your own understanding, for it is limited by mortal perspective.\" Solomon's gaze swept across the faces before him, seeing in some the same prideful resistance he had once harbored in his youth. \"In everything you do, acknowledge Him,\" he urged, remembering how his own paths had gone awry when he failed this very principle. \"Make Him the center of every decision, every ambition, and He will make your paths straight – not always easy, but true and righteous.\"";
+  }
+  
+  try {
+    const fullText = verses.join(" ");
+    
+    // The newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+    const response = await openai.chat.completions.create({
+      model: "gpt-4.1-mini", // As specified in requirements
+      messages: [
+        { 
+          role: "system", 
+          content: `You are a biblical narrative expert who transforms Bible chapters into immersive, novel-style prose while maintaining absolute theological accuracy. 
+          
+          Guidelines:
+          - Rewrite the chapter as flowing literary prose without verse breaks
+          - Expand scenes with historically grounded, theologically sound details
+          - Add sensory details, settings, character emotions, and cultural context
+          - Maintain complete spiritual reverence - no heresy or theological errors
+          - Keep the narrative style similar to quality historical fiction (like works by Francine Rivers or Dan Brown's attention to detail)
+          - Do not add your own theological interpretation beyond what's necessary to bridge contextual gaps
+          - Ensure the narrative flows naturally as a cohesive story
+          - If the passage is poetic or wisdom literature, adapt your approach accordingly while maintaining the immersive quality
+          
+          Your goal is to make the scripture come alive while remaining absolutely faithful to the original text's meaning.`
+        },
+        { 
+          role: "user", 
+          content: `Transform this chapter (${chapterInfo.book} ${chapterInfo.chapter}) into immersive narrative prose:
+
+          ${fullText}`
+        }
+      ],
+      max_tokens: 1000,
+      temperature: 0.7,
+    });
+
+    return response.choices[0].message.content || "Unable to generate narrative mode.";
+  } catch (error) {
+    console.error("Error generating narrative mode:", error);
+    return "Unable to generate narrative mode at this time.";
+  }
+}
+
+/**
+ * Generate "Did You Know" facts about a verse
+ */
+export async function generateDidYouKnow(verseText: string, book: string, chapter: number, verse: number): Promise<string> {
+  // In development mode, return mock facts
+  if (process.env.NODE_ENV !== "production" || !process.env.OPENAI_API_KEY) {
+    return "The Hebrew word for 'trust' in this verse is 'batach,' which implies resting in safety and security. In ancient Hebrew culture, trust wasn't merely a feeling but a committed action.";
+  }
+  
+  try {
+    // The newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+    const response = await openai.chat.completions.create({
+      model: "gpt-4.1-mini", // As specified in requirements
+      messages: [
+        { 
+          role: "system", 
+          content: `You are a biblical scholar with expertise in ancient languages, history, archaeology, and cultural practices of biblical times. Provide fascinating, accurate "Did You Know" trivia about this verse focusing on:
+          
+          - Original language insights (Hebrew, Greek, Aramaic)
+          - Cultural customs of the time
+          - Historical context
+          - Word origins or etymologies
+          - Archaeological findings
+          - Ancient Near Eastern connections
+          - Interesting numerology or symbolism
+          - Historical reception or impact
+          
+          Keep your response to 2-3 sentences, focusing on the most interesting and academically sound information that would surprise most readers.`
+        },
+        { 
+          role: "user", 
+          content: `Provide a "Did You Know" fact for ${book} ${chapter}:${verse}:
+          
+          "${verseText}"`
+        }
+      ],
+      max_tokens: 150,
+      temperature: 0.7,
+    });
+
+    return response.choices[0].message.content || "Unable to generate a fact.";
+  } catch (error) {
+    console.error("Error generating Did You Know fact:", error);
+    return "Unable to generate a fact at this time.";
+  }
+}
+
+/**
+ * Generate contextual question answers
+ */
+export async function generateContextualAnswer(verseText: string, question: string): Promise<string> {
+  // In development mode, return mock answer
+  if (process.env.NODE_ENV !== "production" || !process.env.OPENAI_API_KEY) {
+    return "In the first-century Jewish context, this verse would have resonated deeply with the Jewish tradition of complete reliance on God's wisdom over human reasoning. The phrase 'lean not on your own understanding' would have been understood through the lens of Torah study, where divine wisdom was considered vastly superior to human intellect.";
+  }
+  
+  try {
+    // The newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+    const response = await openai.chat.completions.create({
+      model: "gpt-4.1-mini", // As specified in requirements
+      messages: [
+        { 
+          role: "system", 
+          content: `You are a biblical scholar with expertise in historical-cultural context, ancient languages, and theological traditions. Provide clear, academically sound answers to contextual questions about Bible verses.
+          
+          Your answers should be:
+          - Historically accurate and well-researched
+          - Sensitive to the original context and meaning
+          - Free from modern anachronisms
+          - Balanced in perspective
+          - Concise but thorough (3-4 sentences)
+          
+          Draw upon archaeological findings, primary historical sources, linguistic insights, and scholarly consensus in your response.`
+        },
+        { 
+          role: "user", 
+          content: `For this verse: "${verseText}"
+          
+          Answer this contextual question: "${question}"`
+        }
+      ],
+      max_tokens: 200,
+      temperature: 0.7,
+    });
+
+    return response.choices[0].message.content || "Unable to generate an answer.";
+  } catch (error) {
+    console.error("Error generating contextual answer:", error);
+    return "Unable to generate an answer at this time.";
+  }
+}
+
+/**
+ * Generate AI artwork for a chapter
+ */
+export async function generateArtwork(chapterSummary: string): Promise<{ url: string }> {
+  // In development mode, return mock artwork URL
+  if (process.env.NODE_ENV !== "production" || !process.env.OPENAI_API_KEY) {
+    return { url: "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=800&auto=format" };
+  }
+  
+  try {
+    // The newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+    const response = await openai.images.generate({
+      model: "dall-e-3",
+      prompt: `Create a sacred, serene, minimalist artwork representing this Bible chapter: ${chapterSummary}. 
+      
+      Style guidelines:
+      - Calm, peaceful palette with subtle lighting
+      - Simple, clean composition with clear focal point
+      - Aesthetic resembling Dwell + Calm + Notion apps - modern, soothing, elegant
+      - Avoid depicting God or Jesus directly
+      - No text or verse references in the image
+      - Subtle bread/leaven metaphors may be incorporated where appropriate
+      - Style should feel timeless, sacred yet contemporary
+      - Image should work well as a chapter header in a Bible app
+      
+      The image should convey spiritual depth while remaining visually minimal.`,
+      n: 1,
+      size: "1024x1024",
+      quality: "standard",
+    });
+
+    return { url: response.data[0].url || "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=800&auto=format" };
+  } catch (error) {
+    console.error("Error generating artwork:", error);
+    return { url: "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=800&auto=format" };
+  }
+}
+
+/**
  * Search for verses using semantic understanding
  */
 export async function searchVerses(query: string) {
