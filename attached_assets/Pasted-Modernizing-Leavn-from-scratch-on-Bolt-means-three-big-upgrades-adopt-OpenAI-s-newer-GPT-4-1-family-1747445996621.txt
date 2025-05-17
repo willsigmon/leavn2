@@ -1,0 +1,121 @@
+Modernizing Leavn from scratch on Bolt means three big upgrades: adopt OpenAI’s newer GPT‑4.1 family (mini for cheap, nano for on‑device), switch to a single full‑stack React meta‑framework (Next 14) to keep UI + API in one place, and bake retrieval‑augmented “lenses” so every passage can be viewed through Catholic, Evangelical, Jewish, Gen‑Z, or Kids filters on the fly. GPT‑4.1 mini already ships in the public API and offers a million‑token context—ideal for multi‑view commentary—while GPT‑4.1 nano can later sit inside a mobile wrapper for offline reading + kids mode  ￼ ￼.
+Denominational contrast cards are grounded in long‑standing interpretive differences between Catholic and Protestant hermeneutics  ￼ ￼, while RAG with pgvector lets you label every verse with people, places, themes, and pull “Did you know?” bubbles instantly  ￼ ￼.  Simplified and Gen‑Z renderings can lean on existing child‑friendly translations (ICB, ERV) and pop‑culture slang projects like GenZ.Bible  ￼ ￼ ￼ ￼.
+Next.js, Prisma, and Neon Postgres play nicely inside StackBlitz WebContainers and have abundant tutorials  ￼ ￼, while React Bubble‑UI components make engaging pop‑over facts simple  ￼.
+
+⸻
+
+Architecture choices
+
+GPT models
+	•	GPT‑4.1 mini for server‑side commentary and kids/Gen‑Z paraphrase (fast, cheap).
+	•	GPT‑4.1 nano reserved for offline mobile mode—same API shape, smaller weights.
+
+Stack
+	•	Next.js 14 App Router (TypeScript) – UI + API routes + React 19 streaming.
+	•	Tailwind 4 + shadcn/ui – accessible components.
+	•	Prisma → Neon Postgres + pgvector – plain SQL, lightning vector search.
+	•	TanStack Query v5 – caching notes & lenses.
+	•	NextAuth (mock user header in dev).
+
+Core data
+	•	Verse (text, embedding)
+	•	Note (user, verse ref, highlight, markdown)
+	•	Commentary (verse ref, lens, gptResponse)
+	•	Tag  (person/place/theme) → many‑to‑many verses
+	•	Plan, PlanEntry, UserProgress
+
+⸻
+
+Feature buckets
+
+Bucket	Key details
+Lenses	Async server actions hit /api/ai/commentary?lens=catholic, caching GPT‑4.1 mini completions so Baptist vs Catholic reads differ.
+Kids / Gen‑Z Translators	/api/ai/translate?mode=kids uses a system prompt anchored to ICB/ERV style; Gen‑Z uses slang corpus.
+Context Cards	Query Tag → people/places/themes and render Bubble‑UI pop‑overs with “Did you know…”.
+Authors	On chapter load, prepend a short GPT‑4.1 mini summary: “About the author of John…”.
+RAG	pgvector search on embedded verses enables cross‑chapter links and semantic search.
+
+
+⸻
+
+Copy‑paste MEGAPROMPT for Bolt.new
+
+# 📜 Leavn Bible Study — scratch build (Next 14 + GPT‑4.1 mini/nano)
+
+## Goals
+1. Multi‑lens commentary (Catholic • Evangelical • Jewish • Atheist • Orthodox • Kids • Gen‑Z).
+2. Notes & highlights per verse.
+3. RAG tagging: people, places, themes; surface “Did you know?” bubbles.
+4. Author blurb atop every chapter.
+5. PWA + mobile‑ready; later swap GPT‑4.1 nano for offline.
+
+## Stack
+- Next.js 14 (App Router, React 19, TS)
+- Tailwind 4 + shadcn/ui
+- Prisma → Neon Postgres + pgvector
+- OpenAI GPT‑4.1 **mini** (server) / **nano** (future mobile)
+- TanStack Query v5
+- NextAuth (mock header in dev)
+- Vitest + Playwright
+
+## Phases
+### 1 Scaffold
+```bash
+npx create-next-app@latest leavn --ts --tailwind --app --src-dir
+pnpm add prisma @prisma/client @neondatabase/serverless pgvector
+pnpm add -D drizzle-orm vitest playwright
+
+Add Tailwind brand palette (#4a5b4a, #344034).
+
+2 DB & Notes
+
+Prisma schema
+
+model User        { id String @id @default(cuid()) email String }
+model Note        { id String @id @default(cuid()) userId String book String chapter Int verse Int highlight Boolean @default(false) content String? createdAt DateTime @default(now()) updatedAt DateTime @updatedAt }
+model Commentary  { id String @id @default(cuid()) verseRef String lens String content Text }
+model Verse       { ref String @id text Text embedding Vector(1536) }
+model Tag         { id String @id name String @unique }
+model VerseTag    { verseRef String tagId String @@id([verseRef,tagId]) }
+
+Routes /api/notes/*, /api/ai/commentary.
+
+3 AI Lenses
+
+OpenAI call
+
+POST https://api.openai.com/v1/chat/completions
+model: "gpt-4.1-mini"
+system: "You are a {lens} theologian..."
+
+Cache to Commentary.
+
+4 Search
+
+Create embeddings, upsert to Verse.embedding, vector index.
+
+5 Reading Plans & PWA
+
+CRUD plans; next-pwa plugin; toast install prompt.
+
+Dev script & ports
+
+"dev": "concurrently -k \"next dev -p 3000\" \"pnpm postgres:start\""
+
+/app/(api)/ folders serve API routes; 3000 will show UI.
+
+Gates
+	•	pnpm lint && pnpm tsc --noEmit = 0 errors
+	•	Coverage ≥ 90 %
+	•	Bundle main ≤ 150 kB gzip
+
+Ask‑only‑if
+
+Secret missing, pgvector fails, spec clash.
+
+👉 Begin Phase 1 scaffold now; print:
+
+✅ Phase 1 scaffold complete
+Next: Phase 2 – Notes & Highlights
+
+Paste above into Bolt’s AI and let it run. 🎉
