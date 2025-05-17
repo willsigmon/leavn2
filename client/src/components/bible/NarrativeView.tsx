@@ -165,11 +165,22 @@ export default function NarrativeView({ book, chapter, lens, onToggleView }: Nar
             <Skeleton className="h-20 w-full" />
           </div>
         ) : (
-          <div className={`narrative-content ${fontFamilyClass} ${fontSizeClass} leading-relaxed`}>
+          <div className={`narrative-content ${fontFamilyClass} ${fontSizeClass} leading-relaxed bg-card p-8 border border-border rounded-lg`}>
             {narrativeData?.content ? (
-              <div dangerouslySetInnerHTML={{ __html: narrativeData.content }} />
+              <>
+                <div className="mb-6 text-center">
+                  <h2 className="text-3xl font-serif font-bold text-primary mb-2 capitalize">
+                    {book} {chapter}
+                  </h2>
+                  <div className="w-16 h-1 bg-accent mx-auto"></div>
+                </div>
+                <div 
+                  className="first-letter:text-4xl first-letter:font-serif first-letter:font-bold first-letter:float-left first-letter:mr-2"
+                  dangerouslySetInnerHTML={{ __html: narrativeData.content }} 
+                />
+              </>
             ) : (
-              <p className="text-gray-600 italic">
+              <p className="text-muted-foreground italic">
                 Narrative version is not available for this chapter yet. Please try another chapter or check back later.
               </p>
             )}

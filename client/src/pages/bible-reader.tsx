@@ -159,6 +159,38 @@ export default function BibleReader() {
                 </div>
                 
                 {/* Narrative Mode */}
+                {/* View Mode Toggle Banner */}
+                <div className="mb-6 bg-accent/10 rounded-lg border border-border p-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                  <div className="flex-1">
+                    <h3 className="font-medium text-primary mb-1 flex items-center">
+                      {viewMode === "verse" ? (
+                        <>
+                          <BookOpen className="h-5 w-5 mr-2 text-primary/80" />
+                          <span>Verse-by-Verse Mode</span>
+                        </>
+                      ) : (
+                        <>
+                          <BookText className="h-5 w-5 mr-2 text-primary/80" />
+                          <span>Immersive Novel Mode</span>
+                        </>
+                      )}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      {viewMode === "verse" 
+                        ? "Reading with traditional verse structure and commentary." 
+                        : "Experience this chapter as flowing narrative with artistic layout."}
+                    </p>
+                  </div>
+                  <Button 
+                    onClick={toggleViewMode} 
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground whitespace-nowrap"
+                  >
+                    {viewMode === "verse" 
+                      ? "Switch to Novel Mode" 
+                      : "Switch to Verse Mode"}
+                  </Button>
+                </div>
+                
                 {viewMode === "narrative" ? (
                   <NarrativeView 
                     book={book} 
