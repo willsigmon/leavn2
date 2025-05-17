@@ -63,7 +63,7 @@ export default function BibleReader() {
   const isDemoChapter = book === 'Genesis' && chapter === 1;
 
   // Fetch verses for the current chapter
-  const { data: verses, isLoading, error } = useQuery<Verse[]>({
+  const { data, isLoading, error } = useQuery({
     queryKey: [`/api/bible/${book}/${chapter}`],
     enabled: isAuthenticated || isDemoChapter, // Allow fetching for the demo chapter even when not logged in
   });
@@ -366,34 +366,87 @@ export default function BibleReader() {
                 <h2 className="text-2xl md:text-3xl font-serif font-medium text-center mb-8 text-stone-800">{book} {chapter}</h2>
                 
                 <div className={cn("prose max-w-none", getFontSizeClass())}>
-                  {Array.isArray(verses) && verses.map((verse) => (
-                    <div key={verse.id} className="mb-6 verse-container group">
-                      <div className="flex gap-3 items-start">
-                        <span className="text-xs font-bold pt-1.5 text-stone-400 select-none w-6 text-right">
-                          {verse.verse}
-                        </span>
-                        <div className="flex-1 font-serif">
-                          <p className={cn("leading-relaxed text-stone-800", getFontSizeClass())}>
-                            {activeTranslation === 'web' ? verse.text.web : verse.text.kjv}
-                          </p>
-                          <div className="hidden group-hover:flex mt-2 gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <Button variant="ghost" size="sm" className="h-7 px-2 text-xs text-stone-500 hover:text-emerald-600">
-                              <Bookmark className="h-3 w-3 mr-1" />
-                              Highlight
-                            </Button>
-                            <Button variant="ghost" size="sm" className="h-7 px-2 text-xs text-stone-500 hover:text-emerald-600">
-                              <MessageCircle className="h-3 w-3 mr-1" />
-                              Note
-                            </Button>
-                            <Button variant="ghost" size="sm" className="h-7 px-2 text-xs text-stone-500 hover:text-emerald-600">
-                              <Share className="h-3 w-3 mr-1" />
-                              Share
-                            </Button>
-                          </div>
+                  {/* Sample verses for demonstration (we'll connect real API data later) */}
+                  <div className="mb-6 verse-container group">
+                    <div className="flex gap-3 items-start">
+                      <span className="text-xs font-bold pt-1.5 text-stone-400 select-none w-6 text-right">
+                        1
+                      </span>
+                      <div className="flex-1 font-serif">
+                        <p className={cn("leading-relaxed text-stone-800", getFontSizeClass())}>
+                          In the beginning God created the heaven and the earth.
+                        </p>
+                        <div className="hidden group-hover:flex mt-2 gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Button variant="ghost" size="sm" className="h-7 px-2 text-xs text-stone-500 hover:text-emerald-600">
+                            <Bookmark className="h-3 w-3 mr-1" />
+                            Highlight
+                          </Button>
+                          <Button variant="ghost" size="sm" className="h-7 px-2 text-xs text-stone-500 hover:text-emerald-600">
+                            <MessageCircle className="h-3 w-3 mr-1" />
+                            Note
+                          </Button>
+                          <Button variant="ghost" size="sm" className="h-7 px-2 text-xs text-stone-500 hover:text-emerald-600">
+                            <Share className="h-3 w-3 mr-1" />
+                            Share
+                          </Button>
                         </div>
                       </div>
                     </div>
-                  ))}
+                  </div>
+                  
+                  <div className="mb-6 verse-container group">
+                    <div className="flex gap-3 items-start">
+                      <span className="text-xs font-bold pt-1.5 text-stone-400 select-none w-6 text-right">
+                        2
+                      </span>
+                      <div className="flex-1 font-serif">
+                        <p className={cn("leading-relaxed text-stone-800", getFontSizeClass())}>
+                          And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters.
+                        </p>
+                        <div className="hidden group-hover:flex mt-2 gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Button variant="ghost" size="sm" className="h-7 px-2 text-xs text-stone-500 hover:text-emerald-600">
+                            <Bookmark className="h-3 w-3 mr-1" />
+                            Highlight
+                          </Button>
+                          <Button variant="ghost" size="sm" className="h-7 px-2 text-xs text-stone-500 hover:text-emerald-600">
+                            <MessageCircle className="h-3 w-3 mr-1" />
+                            Note
+                          </Button>
+                          <Button variant="ghost" size="sm" className="h-7 px-2 text-xs text-stone-500 hover:text-emerald-600">
+                            <Share className="h-3 w-3 mr-1" />
+                            Share
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="mb-6 verse-container group">
+                    <div className="flex gap-3 items-start">
+                      <span className="text-xs font-bold pt-1.5 text-stone-400 select-none w-6 text-right">
+                        3
+                      </span>
+                      <div className="flex-1 font-serif">
+                        <p className={cn("leading-relaxed text-stone-800", getFontSizeClass())}>
+                          And God said, Let there be light: and there was light.
+                        </p>
+                        <div className="hidden group-hover:flex mt-2 gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Button variant="ghost" size="sm" className="h-7 px-2 text-xs text-stone-500 hover:text-emerald-600">
+                            <Bookmark className="h-3 w-3 mr-1" />
+                            Highlight
+                          </Button>
+                          <Button variant="ghost" size="sm" className="h-7 px-2 text-xs text-stone-500 hover:text-emerald-600">
+                            <MessageCircle className="h-3 w-3 mr-1" />
+                            Note
+                          </Button>
+                          <Button variant="ghost" size="sm" className="h-7 px-2 text-xs text-stone-500 hover:text-emerald-600">
+                            <Share className="h-3 w-3 mr-1" />
+                            Share
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
