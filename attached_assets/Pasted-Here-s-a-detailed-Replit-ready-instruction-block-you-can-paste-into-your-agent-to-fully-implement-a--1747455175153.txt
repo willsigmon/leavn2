@@ -1,0 +1,106 @@
+Here’s a detailed Replit-ready instruction block you can paste into your agent to fully implement a RAG-based tagging system for Leavn, using the cached WEB & KJV Bibles as source material.
+
+This plan includes caching, keyword analysis, spiritual metadata tagging, and creating a serendipitous retrieval engine.
+
+⸻
+
+
+🧠 TASK: Build a RAG-powered tagging + retrieval system using the full Bible (WEB + KJV)
+
+---
+
+A. 📥 CACHE FULL BIBLE TEXT (WEB + KJV)
+
+1. Download both versions from a public domain source (like https://ebible.org or https://www.kingjamesbibleonline.org).
+2. Store each version as a JSON file:
+   Structure:
+   {
+     "Genesis 1:1": {
+       "web": "In the beginning, God created the heavens and the earth.",
+       "kjv": "In the beginning God created the heaven and the earth."
+     },
+     ...
+   }
+
+3. Save as `bible_cache.json`
+   - Load into memory on app start or stream-load by book for performance
+
+---
+
+B. 🧩 ANALYZE EACH VERSE FOR KEYWORDS
+
+1. Use keyword extraction (via OpenAI embedding, `keybert`, or regex + TF-IDF) to find:
+   - Named people
+   - Places
+   - Time markers (e.g., “on the third day”, “in the year of…”)
+   - Spiritual themes (manual seed list + LLM enrichment)
+
+2. Optional: Augment with GPT-powered enrichment:
+   For each verse, prompt:
+   > “What spiritual themes, people, places, timeframes, and symbols are referenced or implied in this verse?”
+
+3. Save this metadata per verse:
+   ```json
+   {
+     "Genesis 1:1": {
+       "themes": ["Creation", "Divine Power"],
+       "figures": ["God"],
+       "places": ["Heaven", "Earth"],
+       "timeframe": ["Beginning of Time"],
+       "symbols": ["Light", "Darkness"]
+     }
+   }
+
+
+⸻
+
+C. 🧠 BUILD RAG TAGGING SYSTEM
+	1.	Index all extracted tags in a vector store (e.g., pinecone, weaviate, or in-memory embeddings).
+	2.	Use a reverse index:
+
+{
+  "Creation": ["Genesis 1:1", "Genesis 1:3", "Psalm 104:30"],
+  "Jesus": ["John 3:16", "Matthew 1:1", "Isaiah 53:5"]
+}
+
+
+	3.	On user interaction:
+	•	Get verse embedding or query context
+	•	Retrieve top matching tags
+	•	Pull linked verses, themes, commentary, etc.
+	4.	Cache “Featured Tags” per verse on load using:
+
+getTopTags(verseId) => pickRandom(matchingTags, 2–3)
+
+
+
+⸻
+
+D. 🎯 FINAL TAG TYPES (MAP TO UI + AI CONTEXT)
+
+Define each tag schema:
+
+Tag Type	Key	Examples
+🌍 Location	places	Egypt, Sea of Galilee, Mount Sinai
+🧍 Figure	figures	Moses, Jesus, Mary, Nicodemus
+📜 Theme	themes	Covenant, Rebirth, Forgiveness
+⏳ Time	timeframe	“In the beginning,” “Passover,” “Exile”
+🔣 Symbol	symbols	Water, Fire, Bread, Light
+🧠 Lens	lens_notes	Interpretive notes per tradition
+🔗 CrossRef	cross_refs	Similar or echoing passages
+❤️ Emotion	emotions	Joy, Trust, Betrayal, Fear
+
+Each tag links to: verses, commentary, and other tag relationships.
+
+⸻
+
+Let me know when you’re ready for:
+	•	A starter tag JSON structure
+	•	GPT tagging prompts for enrichment
+	•	Live retrieval UI examples (Tag → Verse → Context)
+
+---
+
+This system makes the app feel **alive and interconnected**, surfacing hidden meaning without being heavy-handed.
+
+Want to run tagging offline first or fully LLM-based? I can help with either path.
