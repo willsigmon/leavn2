@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "wouter";
-import Header from "@/components/layout/Header";
 import Sidebar from "@/components/layout/Sidebar";
 import BibleHeader from "@/components/bible/BibleHeader";
 import VerseContainer from "@/components/bible/VerseContainer";
