@@ -1,7 +1,8 @@
 import { 
-  User, InsertUser, Note, InsertNote, InsertVerse, 
+  User, Note, InsertNote, InsertVerse, 
   Commentary, InsertCommentary, Tag, InsertTag,
-  Author, InsertAuthor, DidYouKnow, InsertDidYouKnow 
+  Author, InsertAuthor, DidYouKnow, InsertDidYouKnow,
+  UpsertUser
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, sql } from "drizzle-orm";
@@ -12,6 +13,7 @@ export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  upsertUser(user: UpsertUser): Promise<User>;
   
   // Bible
   getVerse(book: string, chapter: number, verse: number): Promise<schema.Verse | undefined>;
@@ -56,6 +58,21 @@ export class DatabaseStorage implements IStorage {
     const [user] = await db
       .insert(schema.users)
       .values({ ...insertUser, id: uuidv4() })
+      .returning();
+    return user;
+  }
+
+  async upsertUser(userData: UpsertUser): Promise<User> {
+    const [user] = await db
+      .insert(schema.users)
+      .values(userData)
+      .onConflictDoUpdate({
+        target: schema.users.id,
+        set: {
+          ...userData,
+          updatedAt: new Date(),
+        },
+      })
       .returning();
     return user;
   }
