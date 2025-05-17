@@ -134,9 +134,15 @@ export default function Home() {
                       View any passage through Catholic, Evangelical, Jewish, Gen-Z, or Kids perspectives.
                     </p>
                     <div className="mt-2 pt-4 border-t border-border">
-                      <div className="flex items-center text-sm text-primary">
-                        <span>All lenses included</span>
-                        <CheckCircle className="h-4 w-4 ml-2 text-primary/80" />
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center text-sm text-primary">
+                          <span>All lenses included</span>
+                          <CheckCircle className="h-4 w-4 ml-2 text-primary/80" />
+                        </div>
+                        <div className="flex items-center text-sm text-primary/80">
+                          <FaLock className="h-3 w-3 mr-1" />
+                          <span>Account required</span>
+                        </div>
                       </div>
                     </div>
                   </CardContent>
@@ -152,9 +158,15 @@ export default function Home() {
                       Transform any chapter into immersive prose for a fresh perspective and deeper appreciation.
                     </p>
                     <div className="mt-2 pt-4 border-t border-border">
-                      <div className="flex items-center text-sm text-primary">
-                        <span>All books supported</span>
-                        <CheckCircle className="h-4 w-4 ml-2 text-primary/80" />
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center text-sm text-primary">
+                          <span>All books supported</span>
+                          <CheckCircle className="h-4 w-4 ml-2 text-primary/80" />
+                        </div>
+                        <div className="flex items-center text-sm text-primary/80">
+                          <FaLock className="h-3 w-3 mr-1" />
+                          <span>Account required</span>
+                        </div>
                       </div>
                     </div>
                   </CardContent>
@@ -170,9 +182,15 @@ export default function Home() {
                       Discover fascinating historical, cultural, and theological insights about each passage.
                     </p>
                     <div className="mt-2 pt-4 border-t border-border">
-                      <div className="flex items-center text-sm text-primary">
-                        <span>Updated regularly</span>
-                        <CheckCircle className="h-4 w-4 ml-2 text-primary/80" />
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center text-sm text-primary">
+                          <span>Updated regularly</span>
+                          <CheckCircle className="h-4 w-4 ml-2 text-primary/80" />
+                        </div>
+                        <div className="flex items-center text-sm text-primary/80">
+                          <FaLock className="h-3 w-3 mr-1" />
+                          <span>Account required</span>
+                        </div>
                       </div>
                     </div>
                   </CardContent>
@@ -211,6 +229,10 @@ export default function Home() {
                         <p className="text-muted-foreground">
                           Find verses by theme, people, places, or semantic meaning with advanced AI search capabilities.
                         </p>
+                        <div className="mt-3 flex items-center text-sm text-primary/80">
+                          <FaLock className="h-3 w-3 mr-1" />
+                          <span>Account required</span>
+                        </div>
                       </div>
                     </div>
                   </CardContent>
