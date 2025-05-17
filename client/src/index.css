@@ -3,67 +3,67 @@
 @tailwind utilities;
 
 :root {
-  --background: 30 40% 96%;
-  --foreground: 25 15% 12%;
-  --muted: 45 20% 92%;
-  --muted-foreground: 32 8% 35%;
+  --background: 70 30% 97%;
+  --foreground: 110 15% 12%;
+  --muted: 90 15% 92%;
+  --muted-foreground: 110 8% 35%;
   --popover: var(--background);
   --popover-foreground: var(--foreground);
   --card: var(--background);
   --card-foreground: var(--foreground);
-  --border: 30 15% 85%;
+  --border: 100 15% 85%;
   --input: var(--border);
 
-  --primary: 32 70% 38%;
-  --primary-foreground: 32 30% 96%;
-  --secondary: 112 24% 38%;
+  --primary: 130 40% 38%;  /* Main green */
+  --primary-foreground: 130 30% 96%;
+  --secondary: 32 60% 50%;  /* Warm brown */
   --secondary-foreground: 30 25% 96%;
 
-  --accent: 42 35% 55%;
+  --accent: 55 60% 55%;  /* Golden accent */
   --accent-foreground: 30 25% 96%;
 
   --destructive: 0 65% 35%;
   --destructive-foreground: 0 0% 98%;
 
   /* optional data-viz */
-  --chart-1: 32 70% 38%;
-  --chart-2: 112 24% 38%;
-  --chart-3: 42 35% 55%;
-  --chart-4: 20 20% 50%;
-  --chart-5: 190 20% 40%;
+  --chart-1: 130 40% 38%;
+  --chart-2: 32 60% 50%;
+  --chart-3: 55 60% 55%;
+  --chart-4: 180 20% 50%;
+  --chart-5: 250 20% 40%;
 
   --ring: var(--border);
   --radius: 0.5rem;
 }
 
 .dark {
-  --background: 25 12% 8%;
-  --foreground: 35 30% 90%;
-  --muted: 35 12% 14%;
-  --muted-foreground: 38 8% 60%;
+  --background: 130 12% 8%;
+  --foreground: 80 30% 90%;
+  --muted: 120 12% 14%;
+  --muted-foreground: 100 8% 60%;
   --popover: var(--background);
   --popover-foreground: var(--foreground);
   --card: var(--background);
   --card-foreground: var(--foreground);
-  --border: 25 8% 25%;
+  --border: 120 8% 25%;
   --input: var(--border);
 
-  --primary: 32 65% 48%;
-  --primary-foreground: 35 35% 93%;
-  --secondary: 112 20% 55%;
+  --primary: 130 40% 48%;  /* Main green */
+  --primary-foreground: 130 35% 93%;
+  --secondary: 32 45% 40%;  /* Warm brown */
   --secondary-foreground: 35 30% 92%;
 
-  --accent: 42 30% 62%;
+  --accent: 55 50% 55%;  /* Golden accent */
   --accent-foreground: 35 30% 92%;
 
   --destructive: 0 70% 50%;
   --destructive-foreground: 0 0% 98%;
 
-  --chart-1: 32 65% 48%;
-  --chart-2: 112 20% 55%;
-  --chart-3: 42 30% 62%;
-  --chart-4: 20 15% 60%;
-  --chart-5: 190 15% 50%;
+  --chart-1: 130 40% 48%;
+  --chart-2: 32 45% 40%;
+  --chart-3: 55 50% 55%;
+  --chart-4: 180 15% 45%;
+  --chart-5: 250 15% 45%;
 
   --ring: var(--border);
 }

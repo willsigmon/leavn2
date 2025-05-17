@@ -44,27 +44,27 @@ export default function Home() {
                     <span className="text-foreground">simple.</span>
                   </h1>
                   <p className="text-lg md:text-xl text-muted-foreground max-w-2xl md:max-w-none mb-8">
-                    Study the Bible with AI-powered multi-lens commentary, personal notes, 
-                    and contextual information - all without creating an account.
+                    Experience a richer Bible study with AI-powered multi-lens commentary, personal notes, 
+                    and contextual information in your secure, private account.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                    <Link href="/bible/john/3">
+                    <Link href="/api/login">
                       <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                        <FaBookOpen className="mr-2" /> Start Reading
+                        <FaBookOpen className="mr-2" /> Sign In to Read
                       </Button>
                     </Link>
-                    <Button variant="outline" size="lg" className="border-input">
-                      View Example
+                    <Button variant="outline" size="lg" className="border-primary border text-primary hover:bg-primary/5">
+                      View Demo
                     </Button>
                   </div>
                   <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-4 mt-8">
                     <div className="flex items-center text-sm text-muted-foreground">
                       <CheckCircle className="h-4 w-4 mr-2 text-primary" />
-                      <span>Free to use</span>
+                      <span>Private account</span>
                     </div>
                     <div className="flex items-center text-sm text-muted-foreground">
                       <CheckCircle className="h-4 w-4 mr-2 text-primary" />
-                      <span>No sign-up required</span>
+                      <span>Secure storage</span>
                     </div>
                     <div className="flex items-center text-sm text-muted-foreground">
                       <CheckCircle className="h-4 w-4 mr-2 text-primary" />
@@ -215,7 +215,7 @@ export default function Home() {
           </section>
 
           {/* Call to Action */}
-          <section className="py-20 bg-primary/10">
+          <section className="py-20 bg-gradient-to-r from-primary/20 via-primary/10 to-accent/10">
             <div className="container mx-auto px-4 max-w-6xl text-center">
               <h2 className="font-serif text-3xl md:text-4xl font-bold text-primary mb-6">
                 Ready to explore Scripture more deeply?
@@ -224,18 +224,43 @@ export default function Home() {
                 Start your journey with Leavn today and experience the Bible in a whole new way.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/bible/john/3">
+                <Link href="/api/login">
                   <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                    <FaBookOpen className="mr-2" /> Start Reading Now
+                    <FaBookOpen className="mr-2" /> Create Your Account
                   </Button>
                 </Link>
                 <Button variant="outline" size="lg" className="border-primary text-primary hover:bg-primary/10">
                   Learn More
                 </Button>
               </div>
-              <div className="mt-12 flex items-center justify-center text-sm text-muted-foreground">
-                <FaLock className="h-4 w-4 mr-2" />
-                <span>No account required. Your notes are saved locally.</span>
+              <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto text-left">
+                <div className="flex flex-col items-center md:items-start">
+                  <div className="p-3 rounded-full bg-accent/20 text-primary mb-3">
+                    <FaLock className="h-5 w-5" />
+                  </div>
+                  <h3 className="text-lg font-medium mb-1">Secure Account</h3>
+                  <p className="text-sm text-muted-foreground text-center md:text-left">
+                    Your notes and preferences are securely stored in your personal account.
+                  </p>
+                </div>
+                <div className="flex flex-col items-center md:items-start">
+                  <div className="p-3 rounded-full bg-accent/20 text-primary mb-3">
+                    <FaUserFriends className="h-5 w-5" />
+                  </div>
+                  <h3 className="text-lg font-medium mb-1">Personalized Study</h3>
+                  <p className="text-sm text-muted-foreground text-center md:text-left">
+                    Track your progress and receive tailored insights based on your interests.
+                  </p>
+                </div>
+                <div className="flex flex-col items-center md:items-start">
+                  <div className="p-3 rounded-full bg-accent/20 text-primary mb-3">
+                    <FaChartBar className="h-5 w-5" />
+                  </div>
+                  <h3 className="text-lg font-medium mb-1">Advanced Features</h3>
+                  <p className="text-sm text-muted-foreground text-center md:text-left">
+                    Access premium tools like AI artwork and cross-reference capabilities.
+                  </p>
+                </div>
               </div>
             </div>
           </section>
