@@ -186,8 +186,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Toggle highlight for a verse
-  app.post("/api/highlights/:book/:chapter/:verse", async (req: Request, res: Response) => {
+  // Toggle highlight for a verse - protected by authentication
+  app.post("/api/highlights/:book/:chapter/:verse", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const { book, chapter, verse } = req.params;
       const { highlighted } = req.body;
@@ -203,7 +203,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid highlight value" });
       }
       
-      const success = await storage.toggleHighlight(MOCK_USER_ID, book, chapterNum, verseNum, highlighted);
+      const userId = getUserId(req);
+      const success = await storage.toggleHighlight(userId, book, chapterNum, verseNum, highlighted);
       
       if (!success) {
         return res.status(500).json({ message: "Failed to toggle highlight" });
@@ -216,8 +217,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Get AI-generated commentary
-  app.get("/api/ai/commentary/:book/:chapter/:verse", async (req: Request, res: Response) => {
+  // Get AI-generated commentary - protected by authentication
+  app.get("/api/ai/commentary/:book/:chapter/:verse", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const { book, chapter, verse } = req.params;
       const { lens = "standard" } = req.query;
@@ -269,8 +270,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Get AI-generated translations
-  app.get("/api/ai/translate/:book/:chapter/:verse", async (req: Request, res: Response) => {
+  // Get AI-generated translations - protected by authentication
+  app.get("/api/ai/translate/:book/:chapter/:verse", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const { book, chapter, verse } = req.params;
       
@@ -306,8 +307,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Get tags for a verse
-  app.get("/api/tags/:book/:chapter/:verse", async (req: Request, res: Response) => {
+  // Get tags for a verse - protected by authentication
+  app.get("/api/tags/:book/:chapter/:verse", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const { book, chapter, verse } = req.params;
       
