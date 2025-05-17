@@ -107,11 +107,116 @@ export default function Home() {
                       <div className="mt-4 p-3 rounded-lg bg-accent/10 border border-border">
                         <h4 className="text-sm font-semibold text-primary mb-1">Choose a Lens:</h4>
                         <div className="flex flex-wrap gap-2">
-                          <div className="px-3 py-1 bg-primary text-primary-foreground text-xs rounded-full">Catholic</div>
-                          <div className="px-3 py-1 bg-background border border-border text-xs rounded-full">Evangelical</div>
-                          <div className="px-3 py-1 bg-background border border-border text-xs rounded-full">Jewish</div>
-                          <div className="px-3 py-1 bg-background border border-border text-xs rounded-full">Gen-Z</div>
-                          <div className="px-3 py-1 bg-background border border-border text-xs rounded-full">Kids</div>
+                          <button 
+                            className="hero-lens catholic px-3 py-1 bg-primary text-primary-foreground text-xs rounded-full hover:brightness-110 transition-all"
+                            onClick={(e) => {
+                              // Reset all buttons
+                              e.currentTarget.parentElement?.querySelectorAll('button').forEach(btn => {
+                                btn.classList.remove('bg-primary', 'text-primary-foreground');
+                                btn.classList.add('bg-background', 'border', 'border-border');
+                              });
+                              
+                              // Highlight clicked button
+                              e.currentTarget.classList.remove('bg-background', 'border', 'border-border');
+                              e.currentTarget.classList.add('bg-primary', 'text-primary-foreground');
+                              
+                              // Update verse text based on lens - Catholic perspective
+                              const verseElement = e.currentTarget.closest('.p-5')?.querySelector('p');
+                              if (verseElement) {
+                                verseElement.textContent = "\"For God so loved the world, that he gave his only Son, that whoever believes in him should not perish but have eternal life.\"";
+                              }
+                            }}
+                          >
+                            Catholic
+                          </button>
+                          <button 
+                            className="hero-lens evangelical px-3 py-1 bg-background border border-border text-xs rounded-full hover:bg-accent/10 transition-colors"
+                            onClick={(e) => {
+                              // Reset all buttons
+                              e.currentTarget.parentElement?.querySelectorAll('button').forEach(btn => {
+                                btn.classList.remove('bg-primary', 'text-primary-foreground');
+                                btn.classList.add('bg-background', 'border', 'border-border');
+                              });
+                              
+                              // Highlight clicked button
+                              e.currentTarget.classList.remove('bg-background', 'border', 'border-border');
+                              e.currentTarget.classList.add('bg-primary', 'text-primary-foreground');
+                              
+                              // Update verse text based on lens - Evangelical perspective
+                              const verseElement = e.currentTarget.closest('.p-5')?.querySelector('p');
+                              if (verseElement) {
+                                verseElement.textContent = "\"For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.\"";
+                              }
+                            }}
+                          >
+                            Evangelical
+                          </button>
+                          <button 
+                            className="hero-lens jewish px-3 py-1 bg-background border border-border text-xs rounded-full hover:bg-accent/10 transition-colors"
+                            onClick={(e) => {
+                              // Reset all buttons
+                              e.currentTarget.parentElement?.querySelectorAll('button').forEach(btn => {
+                                btn.classList.remove('bg-primary', 'text-primary-foreground');
+                                btn.classList.add('bg-background', 'border', 'border-border');
+                              });
+                              
+                              // Highlight clicked button
+                              e.currentTarget.classList.remove('bg-background', 'border', 'border-border');
+                              e.currentTarget.classList.add('bg-primary', 'text-primary-foreground');
+                              
+                              // Update verse text based on lens - Jewish perspective
+                              const verseElement = e.currentTarget.closest('.p-5')?.querySelector('p');
+                              if (verseElement) {
+                                verseElement.textContent = "\"For God so loved the world that he gave his unique Son, so that everyone who trusts in him may have eternal life instead of being utterly destroyed.\"";
+                              }
+                            }}
+                          >
+                            Jewish
+                          </button>
+                          <button 
+                            className="hero-lens genz px-3 py-1 bg-background border border-border text-xs rounded-full hover:bg-accent/10 transition-colors"
+                            onClick={(e) => {
+                              // Reset all buttons
+                              e.currentTarget.parentElement?.querySelectorAll('button').forEach(btn => {
+                                btn.classList.remove('bg-primary', 'text-primary-foreground');
+                                btn.classList.add('bg-background', 'border', 'border-border');
+                              });
+                              
+                              // Highlight clicked button
+                              e.currentTarget.classList.remove('bg-background', 'border', 'border-border');
+                              e.currentTarget.classList.add('bg-primary', 'text-primary-foreground');
+                              
+                              // Update verse text based on lens - Gen-Z perspective
+                              const verseElement = e.currentTarget.closest('.p-5')?.querySelector('p');
+                              if (verseElement) {
+                                verseElement.textContent = "\"God literally loved everyone so much that he sent his only Son, so anyone who believes in him won't die but will have life forever.\"";
+                              }
+                            }}
+                          >
+                            Gen-Z
+                          </button>
+                          <button 
+                            className="hero-lens kids px-3 py-1 bg-background border border-border text-xs rounded-full hover:bg-accent/10 transition-colors"
+                            onClick={(e) => {
+                              // Reset all buttons
+                              e.currentTarget.parentElement?.querySelectorAll('button').forEach(btn => {
+                                btn.classList.remove('bg-primary', 'text-primary-foreground');
+                                btn.classList.add('bg-background', 'border', 'border-border');
+                              });
+                              
+                              // Highlight clicked button
+                              e.currentTarget.classList.remove('bg-background', 'border', 'border-border');
+                              e.currentTarget.classList.add('bg-primary', 'text-primary-foreground');
+                              
+                              // Update verse text based on lens - Kids perspective
+                              const verseElement = e.currentTarget.closest('.p-5')?.querySelector('p');
+                              if (verseElement) {
+                                verseElement.textContent = "\"God loves everyone so much that He gave us Jesus, His special Son! If you believe in Jesus, you will live with God forever and ever!\"";
+                              }
+                            }}
+                          >
+                            Kids
+                          </button>
                         </div>
                       </div>
                       <Button className="mt-4 w-full bg-primary hover:bg-primary/90 text-primary-foreground">
@@ -427,17 +532,157 @@ export default function Home() {
                         
                         <div className="border-t border-border pt-3">
                           <h4 className="text-sm font-medium text-foreground mb-2">Multi-lens Commentary</h4>
-                          <div className="flex gap-2 overflow-x-auto pb-2 mb-2">
-                            <button className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs whitespace-nowrap hover:brightness-110 transition-all active:scale-95 transform duration-100">Catholic</button>
-                            <button className="bg-accent/20 text-primary px-3 py-1 rounded-full text-xs whitespace-nowrap hover:bg-accent/30 transition-colors active:scale-95 transform duration-100">Evangelical</button>
-                            <button className="bg-accent/20 text-primary px-3 py-1 rounded-full text-xs whitespace-nowrap hover:bg-accent/30 transition-colors active:scale-95 transform duration-100">Jewish</button>
-                            <button className="bg-accent/20 text-primary px-3 py-1 rounded-full text-xs whitespace-nowrap hover:bg-accent/30 transition-colors active:scale-95 transform duration-100">Gen-Z</button>
-                            <button className="bg-accent/20 text-primary px-3 py-1 rounded-full text-xs whitespace-nowrap hover:bg-accent/30 transition-colors active:scale-95 transform duration-100">Kids</button>
+                          
+                          {/* Interactive Lens Selector */}
+                          <div className="lens-selector flex gap-2 overflow-x-auto pb-2 mb-2">
+                            <button 
+                              className="lens-btn catholic bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs whitespace-nowrap hover:brightness-110 transition-all active:scale-95 transform duration-100"
+                              onClick={(e) => {
+                                // Remove active class from all buttons
+                                e.currentTarget.parentElement?.querySelectorAll('.lens-btn').forEach(btn => {
+                                  btn.classList.remove('bg-primary', 'text-primary-foreground');
+                                  btn.classList.add('bg-accent/20', 'text-primary');
+                                });
+                                
+                                // Add active class to clicked button
+                                e.currentTarget.classList.remove('bg-accent/20', 'text-primary');
+                                e.currentTarget.classList.add('bg-primary', 'text-primary-foreground');
+                                
+                                // Show corresponding commentary
+                                const commentaryContainer = e.currentTarget.closest('.border-t')?.querySelector('.commentary-container');
+                                if (commentaryContainer) {
+                                  commentaryContainer.querySelectorAll('.commentary').forEach(c => c.classList.add('hidden'));
+                                  commentaryContainer.querySelector('.commentary.catholic')?.classList.remove('hidden');
+                                }
+                              }}
+                            >
+                              Catholic
+                            </button>
+                            <button 
+                              className="lens-btn evangelical bg-accent/20 text-primary px-3 py-1 rounded-full text-xs whitespace-nowrap hover:bg-accent/30 transition-colors active:scale-95 transform duration-100"
+                              onClick={(e) => {
+                                // Remove active class from all buttons
+                                e.currentTarget.parentElement?.querySelectorAll('.lens-btn').forEach(btn => {
+                                  btn.classList.remove('bg-primary', 'text-primary-foreground');
+                                  btn.classList.add('bg-accent/20', 'text-primary');
+                                });
+                                
+                                // Add active class to clicked button
+                                e.currentTarget.classList.remove('bg-accent/20', 'text-primary');
+                                e.currentTarget.classList.add('bg-primary', 'text-primary-foreground');
+                                
+                                // Show corresponding commentary
+                                const commentaryContainer = e.currentTarget.closest('.border-t')?.querySelector('.commentary-container');
+                                if (commentaryContainer) {
+                                  commentaryContainer.querySelectorAll('.commentary').forEach(c => c.classList.add('hidden'));
+                                  commentaryContainer.querySelector('.commentary.evangelical')?.classList.remove('hidden');
+                                }
+                              }}
+                            >
+                              Evangelical
+                            </button>
+                            <button 
+                              className="lens-btn jewish bg-accent/20 text-primary px-3 py-1 rounded-full text-xs whitespace-nowrap hover:bg-accent/30 transition-colors active:scale-95 transform duration-100"
+                              onClick={(e) => {
+                                // Remove active class from all buttons
+                                e.currentTarget.parentElement?.querySelectorAll('.lens-btn').forEach(btn => {
+                                  btn.classList.remove('bg-primary', 'text-primary-foreground');
+                                  btn.classList.add('bg-accent/20', 'text-primary');
+                                });
+                                
+                                // Add active class to clicked button
+                                e.currentTarget.classList.remove('bg-accent/20', 'text-primary');
+                                e.currentTarget.classList.add('bg-primary', 'text-primary-foreground');
+                                
+                                // Show corresponding commentary
+                                const commentaryContainer = e.currentTarget.closest('.border-t')?.querySelector('.commentary-container');
+                                if (commentaryContainer) {
+                                  commentaryContainer.querySelectorAll('.commentary').forEach(c => c.classList.add('hidden'));
+                                  commentaryContainer.querySelector('.commentary.jewish')?.classList.remove('hidden');
+                                }
+                              }}
+                            >
+                              Jewish
+                            </button>
+                            <button 
+                              className="lens-btn genz bg-accent/20 text-primary px-3 py-1 rounded-full text-xs whitespace-nowrap hover:bg-accent/30 transition-colors active:scale-95 transform duration-100"
+                              onClick={(e) => {
+                                // Remove active class from all buttons
+                                e.currentTarget.parentElement?.querySelectorAll('.lens-btn').forEach(btn => {
+                                  btn.classList.remove('bg-primary', 'text-primary-foreground');
+                                  btn.classList.add('bg-accent/20', 'text-primary');
+                                });
+                                
+                                // Add active class to clicked button
+                                e.currentTarget.classList.remove('bg-accent/20', 'text-primary');
+                                e.currentTarget.classList.add('bg-primary', 'text-primary-foreground');
+                                
+                                // Show corresponding commentary
+                                const commentaryContainer = e.currentTarget.closest('.border-t')?.querySelector('.commentary-container');
+                                if (commentaryContainer) {
+                                  commentaryContainer.querySelectorAll('.commentary').forEach(c => c.classList.add('hidden'));
+                                  commentaryContainer.querySelector('.commentary.genz')?.classList.remove('hidden');
+                                }
+                              }}
+                            >
+                              Gen-Z
+                            </button>
+                            <button 
+                              className="lens-btn kids bg-accent/20 text-primary px-3 py-1 rounded-full text-xs whitespace-nowrap hover:bg-accent/30 transition-colors active:scale-95 transform duration-100"
+                              onClick={(e) => {
+                                // Remove active class from all buttons
+                                e.currentTarget.parentElement?.querySelectorAll('.lens-btn').forEach(btn => {
+                                  btn.classList.remove('bg-primary', 'text-primary-foreground');
+                                  btn.classList.add('bg-accent/20', 'text-primary');
+                                });
+                                
+                                // Add active class to clicked button
+                                e.currentTarget.classList.remove('bg-accent/20', 'text-primary');
+                                e.currentTarget.classList.add('bg-primary', 'text-primary-foreground');
+                                
+                                // Show corresponding commentary
+                                const commentaryContainer = e.currentTarget.closest('.border-t')?.querySelector('.commentary-container');
+                                if (commentaryContainer) {
+                                  commentaryContainer.querySelectorAll('.commentary').forEach(c => c.classList.add('hidden'));
+                                  commentaryContainer.querySelector('.commentary.kids')?.classList.remove('hidden');
+                                }
+                              }}
+                            >
+                              Kids
+                            </button>
                           </div>
-                          <div className="bg-primary/5 p-3 rounded-lg hover:bg-primary/10 transition-colors cursor-pointer">
-                            <p className="text-sm text-muted-foreground italic">
-                              This verse expresses the core of Christian faith: God's immense love for humanity manifested through Christ's sacrifice, offering eternal salvation to all believers...
-                            </p>
+                          
+                          {/* Commentary Container with all perspectives */}
+                          <div className="commentary-container">
+                            <div className="commentary catholic bg-primary/5 p-3 rounded-lg hover:bg-primary/10 transition-colors cursor-pointer">
+                              <p className="text-sm text-muted-foreground italic">
+                                This verse expresses the core of Christian faith: God's immense love for humanity manifested through Christ's sacrifice, offering eternal salvation to all believers...
+                              </p>
+                            </div>
+                            
+                            <div className="commentary evangelical hidden bg-primary/5 p-3 rounded-lg hover:bg-primary/10 transition-colors cursor-pointer">
+                              <p className="text-sm text-muted-foreground italic">
+                                This central verse emphasizes personal faith in Jesus Christ as the only way to salvation. It's the perfect summary of the Gospel message of grace through faith.
+                              </p>
+                            </div>
+                            
+                            <div className="commentary jewish hidden bg-primary/5 p-3 rounded-lg hover:bg-primary/10 transition-colors cursor-pointer">
+                              <p className="text-sm text-muted-foreground italic">
+                                While not a Jewish text, this verse can be understood through the lens of God's covenant love (chesed) and the theme of divine sacrifice that appears in various Jewish traditions.
+                              </p>
+                            </div>
+                            
+                            <div className="commentary genz hidden bg-primary/5 p-3 rounded-lg hover:bg-primary/10 transition-colors cursor-pointer">
+                              <p className="text-sm text-muted-foreground italic">
+                                Basically God's love is next level - He cared so much He sent His son to give us a second chance. It's the ultimate "I got you" moment from the universe.
+                              </p>
+                            </div>
+                            
+                            <div className="commentary kids hidden bg-primary/5 p-3 rounded-lg hover:bg-primary/10 transition-colors cursor-pointer">
+                              <p className="text-sm text-muted-foreground italic">
+                                God loves you so much! He sent Jesus to be your special friend forever. When you believe in Jesus, you get to be with God forever and ever!
+                              </p>
+                            </div>
                           </div>
                         </div>
                         

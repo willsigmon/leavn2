@@ -30,8 +30,8 @@ export default function Header({ toggleSidebar }: HeaderProps) {
             </Link>
           </div>
           
-          <div className="hidden md:flex items-center space-x-3">
-            <div className="relative w-64">
+          <div className="hidden md:flex items-center flex-1 px-4">
+            <div className="relative w-full max-w-2xl">
               <Input
                 type="text"
                 placeholder="Search verses, topics..."
