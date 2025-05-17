@@ -18,19 +18,39 @@ export default function NarrativeView({ book, chapter, lens, onToggleView }: Nar
   const [showArtwork, setShowArtwork] = useState(true);
   
   // Query for the narrative version of this chapter
-  const { data: narrativeData, isLoading: isNarrativeLoading } = useQuery({
+  const { data: narrativeData, isLoading: isNarrativeLoading, error: narrativeError } = useQuery({
     queryKey: [`/api/ai/narrative/${book}/${chapter}`, lens],
     // Don't refetch on window focus for performance
     refetchOnWindowFocus: false,
+    // Handle errors gracefully
+    onError: (error) => {
+      console.error('Error fetching narrative content:', error);
+    },
+    // Ensure we always have a valid content structure
+    select: (data) => {
+      return {
+        content: data?.content || 'Narrative content currently unavailable. Please try again later.'
+      };
+    }
   });
   
   // Query for the AI-generated artwork for this chapter
-  const { data: artworkData, isLoading: isArtworkLoading } = useQuery({
+  const { data: artworkData, isLoading: isArtworkLoading, error: artworkError } = useQuery({
     queryKey: [`/api/ai/artwork/${book}/${chapter}`],
     // Only fetch artwork if showArtwork is true
     enabled: showArtwork,
     // Don't refetch on window focus for performance
     refetchOnWindowFocus: false,
+    // Handle errors gracefully
+    onError: (error) => {
+      console.error('Error fetching artwork:', error);
+    },
+    // Ensure we always have a valid URL
+    select: (data) => {
+      return {
+        url: data?.url || 'https://placehold.co/1200x800/e2e8f0/64748b?text=Chapter+Artwork'
+      };
+    }
   });
   
   const fontSizeClass = fontSize === "large" ? "text-xl" : "text-lg";
@@ -74,6 +94,20 @@ export default function NarrativeView({ book, chapter, lens, onToggleView }: Nar
           >
             A
           </Button>
+          
+          {onToggleView && (
+            <>
+              <Separator orientation="vertical" className="h-6" />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onToggleView}
+                className="text-xs"
+              >
+                Switch to Verse View
+              </Button>
+            </>
+          )}
         </div>
         
         <div className="flex items-center space-x-2">

@@ -162,7 +162,8 @@ export default function BibleReader() {
                 {viewMode === "narrative" ? (
                   <NarrativeView 
                     book={book} 
-                    chapter={parseInt(chapter)} 
+                    chapter={parseInt(chapter)}
+                    lens={selectedLens}
                     onToggleView={toggleViewMode} 
                   />
                 ) : (

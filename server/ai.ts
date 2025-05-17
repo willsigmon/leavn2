@@ -260,7 +260,15 @@ export async function generateArtwork(chapterSummary: string): Promise<{ url: st
       quality: "standard",
     });
 
-    return { url: response.data[0].url || "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=800&auto=format" };
+    // Safely handle potential undefined values
+    const imageUrl = response.data && 
+                    Array.isArray(response.data) && 
+                    response.data.length > 0 && 
+                    response.data[0].url
+                      ? response.data[0].url
+                      : "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=800&auto=format";
+    
+    return { url: imageUrl };
   } catch (error) {
     console.error("Error generating artwork:", error);
     return { url: "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=800&auto=format" };
