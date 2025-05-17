@@ -10,6 +10,7 @@ import ReadingPlans from "@/pages/reading-plans";
 import ReadingPlanDetail from "@/pages/reading-plan-detail";
 import Login from "@/pages/login";
 import Profile from "@/pages/profile";
+import Settings from "@/pages/settings";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "./hooks/useAuth";
 import { NavBar } from "./components/NavBar";
@@ -26,6 +27,7 @@ function Router() {
           <Route path="/reading-plan/:id" component={ReadingPlanDetail} />
           <Route path="/login" component={Login} />
           <Route path="/profile" component={Profile} />
+          <Route path="/settings" component={Settings} />
           {/* Fallback to 404 */}
           <Route component={NotFound} />
         </Switch>

@@ -1,13 +1,9 @@
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import Header from "@/components/layout/Header";
-import Sidebar from "@/components/layout/Sidebar";
-import { useMobile } from "@/hooks/use-mobile";
 
 interface ReadingPlanEntry {
   day: number;
@@ -27,23 +23,13 @@ interface ReadingPlan {
 }
 
 export default function ReadingPlans() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { isMobile } = useMobile();
-
   const { data: readingPlans, isLoading, error } = useQuery<ReadingPlan[]>({
     queryKey: ["/api/reading-plans"],
   });
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen((prev) => !prev);
-  };
-
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
-      <Header toggleSidebar={toggleSidebar} />
-      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-
-      <main className={`container mx-auto py-6 px-4 ${isMobile ? "mt-16" : "mt-8"}`}>
+      <main className="container mx-auto py-6 px-4">
         <div className="flex flex-col space-y-6">
           <section>
             <h1 className="text-3xl font-bold mb-4 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
