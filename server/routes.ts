@@ -11,6 +11,7 @@ import {
   getRAGContext, 
   loadBibleCache 
 } from "./rag-bible";
+import { getSuggestedTags } from "./tag-suggest";
 import { db } from "./db";
 
 export async function registerRoutes(app: Express): Promise<Server> {
