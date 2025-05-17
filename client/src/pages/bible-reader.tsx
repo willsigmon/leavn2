@@ -541,7 +541,7 @@ export default function BibleReader() {
                         >
                           <span className="text-xs text-stone-400 align-top mr-1.5">{6}</span>
                           <span className="relative inline">
-                            And God said, Let there be a <span className="border-b border-amber-400 hover:text-amber-700 cursor-help font-medium" title="Hebrew: 'raqia' - an expanse">firmament</span> in the midst of the waters, and let it divide the waters from the waters.
+                            And God said, Let there be a <span className="border-b-2 border-teal-500 hover:text-teal-700 cursor-help font-medium" title="Hebrew: 'raqia' - an expanse">firmament</span> in the midst of the waters, and let it divide the waters from the waters.
                           </span>
                         </div>
                         
@@ -694,7 +694,7 @@ export default function BibleReader() {
                         >
                           <span className="text-xs text-stone-400 align-top mr-1.5">{20}</span>
                           <span className="relative inline">
-                            And God said, Let the waters bring forth abundantly the <span className="border-b border-amber-400 hover:text-amber-700 cursor-help font-medium" title="Hebrew: 'sherets' - teeming creatures">moving creature that hath life</span>, and fowl that may fly above the earth in the open firmament of heaven.
+                            And God said, Let the waters bring forth abundantly the <span className="border-b-2 border-teal-500 hover:text-teal-700 cursor-help font-medium" title="Hebrew: 'sherets' - teeming creatures">moving creature that hath life</span>, and fowl that may fly above the earth in the open firmament of heaven.
                           </span>
                         </div>
                         
@@ -716,7 +716,7 @@ export default function BibleReader() {
                         >
                           <span className="text-xs text-stone-400 align-top mr-1.5">{22}</span>
                           <span className="relative inline">
-                            And God <span className="border-b border-amber-400 hover:text-amber-700 cursor-help font-medium" title="First blessing in the Bible">blessed</span> them, saying, Be fruitful, and multiply, and fill the waters in the seas, and let fowl multiply in the earth.
+                            And God <span className="border-b-2 border-teal-500 hover:text-teal-700 cursor-help font-medium" title="First blessing in the Bible">blessed</span> them, saying, Be fruitful, and multiply, and fill the waters in the seas, and let fowl multiply in the earth.
                           </span>
                         </div>
                         
@@ -771,7 +771,7 @@ export default function BibleReader() {
                         >
                           <span className="text-xs text-stone-400 align-top mr-1.5">{27}</span>
                           <span className="relative inline">
-                            So God created man in his own image, in the <span className="border-b border-amber-400 hover:text-amber-700 cursor-help font-medium" title="Both genders reflect God's image">image of God created he him; male and female created he them</span>.
+                            So God created man in his own image, in the <span className="border-b-2 border-teal-500 hover:text-teal-700 cursor-help font-medium" title="Both genders reflect God's image">image of God created he him; male and female created he them</span>.
                           </span>
                         </div>
                         
@@ -814,7 +814,7 @@ export default function BibleReader() {
                         >
                           <span className="text-xs text-stone-400 align-top mr-1.5">{31}</span>
                           <span className="relative inline">
-                            And God saw every thing that he had made, and, behold, it was <span className="border-b border-amber-400 hover:text-amber-700 cursor-help font-medium" title="Hebrew: 'tov meod' - very good, indicating complete perfection">very good</span>. And the evening and the morning were the sixth day.
+                            And God saw every thing that he had made, and, behold, it was <span className="border-b-2 border-teal-500 hover:text-teal-700 cursor-help font-medium" title="Hebrew: 'tov meod' - very good, indicating complete perfection">very good</span>. And the evening and the morning were the sixth day.
                           </span>
                         </div>
                       </div>
