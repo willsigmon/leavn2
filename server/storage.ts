@@ -340,7 +340,7 @@ export class MemStorage implements IStorage {
     });
     
     // Sample author info
-    const authorInfo: Author = {
+    const proverbsAuthor: Author = {
       id: "a1",
       book: "proverbs",
       name: "King Solomon",
@@ -348,7 +348,16 @@ export class MemStorage implements IStorage {
       imageUrl: "https://pixabay.com/get/g2c2c7f3c50dfbd784104f9b97b564c4cbf780ebd69b05b7443732707c150c390ae074942de59fafc2eb0a7609db1d1101a844b586f6db041b712bea21d467096_1280.jpg"
     };
     
-    this.authors.set(authorInfo.book, authorInfo);
+    const genesisAuthor: Author = {
+      id: "a2",
+      book: "genesis",
+      name: "Moses",
+      description: "Traditionally attributed to Moses, Genesis is the first book of the Bible and covers creation, the fall of mankind, the flood, and the patriarchs Abraham, Isaac, Jacob, and Joseph. It spans approximately 2,000 years of human history.",
+      imageUrl: "https://pixabay.com/get/g055bc4e5f89ae0b254f6b72f19ac6cd4dff2ffbfdf0ad33c851f6a31c49e64e79b80caa43c01d1c1c6c4264e20c4d7add9aecb01b3ab54a18fc55e80ffa3a95c_1280.jpg"
+    };
+    
+    this.authors.set(proverbsAuthor.book, proverbsAuthor);
+    this.authors.set(genesisAuthor.book, genesisAuthor);
     
     // Sample "Did you know" fact
     const didYouKnowFact: DidYouKnow = {

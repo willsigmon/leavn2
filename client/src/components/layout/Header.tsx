@@ -23,10 +23,8 @@ export default function Header({ toggleSidebar }: HeaderProps) {
             >
               <FaBars className="text-xl" />
             </button>
-            <Link href="/">
-              <a className="flex items-center">
+            <Link href="/" className="flex items-center">
                 <span className="text-primary-dark font-serif font-bold text-2xl">Leavn</span>
-              </a>
             </Link>
           </div>
           
