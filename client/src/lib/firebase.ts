@@ -9,7 +9,12 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  GithubAuthProvider,
+  TwitterAuthProvider,
+  FacebookAuthProvider,
+  OAuthProvider,
+  AuthProvider
 } from "firebase/auth";
 
 // Firebase configuration with environment variables
@@ -24,17 +29,54 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const googleProvider = new GoogleAuthProvider();
 
-// Google Sign-In
-export const signInWithGoogle = async () => {
+// Auth providers
+const googleProvider = new GoogleAuthProvider();
+const githubProvider = new GithubAuthProvider();
+const twitterProvider = new TwitterAuthProvider();
+const facebookProvider = new FacebookAuthProvider();
+const microsoftProvider = new OAuthProvider('microsoft.com');
+const appleProvider = new OAuthProvider('apple.com');
+
+// Generic SSO sign-in function
+export const signInWithProvider = async (providerName: string) => {
   try {
-    const result = await signInWithPopup(auth, googleProvider);
+    let provider: AuthProvider;
+
+    switch (providerName) {
+      case 'google':
+        provider = googleProvider;
+        break;
+      case 'github':
+        provider = githubProvider;
+        break;
+      case 'twitter':
+        provider = twitterProvider;
+        break;
+      case 'facebook':
+        provider = facebookProvider;
+        break;
+      case 'microsoft':
+        provider = microsoftProvider;
+        break;
+      case 'apple':
+        provider = appleProvider;
+        break;
+      default:
+        throw new Error(`Provider ${providerName} not supported`);
+    }
+
+    const result = await signInWithPopup(auth, provider);
     return result.user;
   } catch (error) {
-    console.error("Error signing in with Google:", error);
+    console.error(`Error signing in with ${providerName}:`, error);
     throw error;
   }
+};
+
+// Google Sign-In (keeping for backward compatibility)
+export const signInWithGoogle = async () => {
+  return signInWithProvider('google');
 };
 
 // Email/Password Authentication
