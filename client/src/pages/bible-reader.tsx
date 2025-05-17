@@ -301,7 +301,7 @@ export default function BibleReader() {
                 <h2 className="text-2xl md:text-3xl font-serif font-medium text-center mb-8 text-stone-800">{book} {chapter}</h2>
                 
                 <div className={cn("prose max-w-none", getFontSizeClass())}>
-                  {verses?.map((verse) => (
+                  {Array.isArray(verses) && verses.map((verse) => (
                     <div key={verse.id} className="mb-6 verse-container group">
                       <div className="flex gap-3 items-start">
                         <span className="text-xs font-bold pt-1.5 text-stone-400 select-none w-6 text-right">
