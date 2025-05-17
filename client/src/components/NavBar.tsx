@@ -1,6 +1,7 @@
 import { useAuth } from '../hooks/useAuth';
 import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { logOut } from '../lib/firebase';
 import { useToast } from '@/hooks/use-toast';
 import { 
@@ -12,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { BookOpenText, Settings, LogOut, User as UserIcon, Search } from 'lucide-react';
+import { BookOpenText, Settings, LogOut, User as UserIcon, Search, SunMoon } from 'lucide-react';
 
 export function NavBar() {
   const { user } = useAuth();
@@ -40,22 +41,21 @@ export function NavBar() {
     : 'U';
 
   return (
-    <header className="bg-background border-b">
+    <div className="w-full border-b border-border">
+      {/* Main navigation */}
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo and brand */}
-          <div className="flex items-center">
-            <div 
-              onClick={() => navigate('/')}
-              className="flex items-center cursor-pointer"
-            >
-              <BookOpenText className="w-7 h-7 mr-2 text-primary" />
-              <span className="text-xl font-semibold">Leavn</span>
-            </div>
+          {/* Logo */}
+          <div 
+            onClick={() => navigate('/')}
+            className="flex items-center cursor-pointer text-primary"
+          >
+            <BookOpenText className="h-6 w-6 mr-2" />
+            <span className="text-xl font-semibold">Leavn</span>
           </div>
           
           {/* Navigation Links */}
-          <nav className="hidden md:flex space-x-8">
+          <nav className="hidden md:flex space-x-6">
             <div 
               onClick={() => navigate('/bible-reader')}
               className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
@@ -70,8 +70,8 @@ export function NavBar() {
             </div>
           </nav>
           
-          {/* User section */}
-          <div className="flex items-center space-x-4">
+          {/* Auth section */}
+          <div>
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -120,6 +120,45 @@ export function NavBar() {
           </div>
         </div>
       </div>
-    </header>
+      
+      {/* Search bar */}
+      <div className="border-t border-border py-3 px-4">
+        <div className="container mx-auto">
+          <div className="flex items-center justify-between">
+            <div className="flex-1 max-w-3xl">
+              <div className="relative">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder="Search verses, topics..."
+                  className="w-full rounded-md pl-8 bg-muted/50 border-muted"
+                />
+              </div>
+            </div>
+            <div className="flex gap-2 items-center ml-4">
+              <Button variant="ghost" size="icon" className="rounded-full">
+                <SunMoon className="h-[1.2rem] w-[1.2rem]" />
+                <span className="sr-only">Toggle theme</span>
+              </Button>
+              {user && (
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  className="rounded-full md:hidden"
+                  onClick={() => navigate('/profile')}
+                >
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={user.photoURL || undefined} />
+                    <AvatarFallback className="bg-primary text-primary-foreground">
+                      {userInitials}
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
