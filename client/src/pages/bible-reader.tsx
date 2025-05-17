@@ -8,11 +8,8 @@ import LensSelector from "@/components/bible/LensSelector";
 import VerseContainer from "@/components/bible/VerseContainer";
 import NotePanel from "@/components/bible/NotePanel";
 import NoteModal from "@/components/bible/NoteModal";
-import VerseComparison from "@/components/bible/VerseComparison";
 import { Verse } from "@shared/schema";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
-import { FaExchangeAlt } from "react-icons/fa";
 
 export default function BibleReader() {
   const { book = "proverbs", chapter = "3" } = useParams();

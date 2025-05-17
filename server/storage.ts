@@ -209,14 +209,11 @@ export class DatabaseStorage implements IStorage {
     
     if (tagIds.length === 0) return [];
     
-    // Create a WHERE clause for multiple tag IDs
     const tags = await db
       .select()
       .from(schema.tags)
       .where(
-        tagIds.length > 0 
-          ? eq(schema.tags.id, tagIds[0]) 
-          : undefined as any
+        schema.tags.id.in(tagIds)
       );
     
     return tags;
@@ -266,7 +263,7 @@ export class MemStorage implements IStorage {
     this.users.set(sampleUser.id, sampleUser);
     
     // Sample verses for Proverbs 3
-    const proverbsVerses = [
+    const verses = [
       { id: "v1", book: "proverbs", chapter: 3, verseNumber: 1, text: "My son, do not forget my teaching, but keep my commands in your heart," },
       { id: "v2", book: "proverbs", chapter: 3, verseNumber: 2, text: "for they will prolong your life many years and bring you peace and prosperity." },
       { id: "v3", book: "proverbs", chapter: 3, verseNumber: 3, text: "Let love and faithfulness never leave you; bind them around your neck, write them on the tablet of your heart." },
@@ -277,34 +274,8 @@ export class MemStorage implements IStorage {
       { id: "v8", book: "proverbs", chapter: 3, verseNumber: 8, text: "This will bring health to your body and nourishment to your bones." }
     ];
     
-    // Sample verses for Genesis 1
-    const genesisVerses = [
-      { id: "g1", book: "genesis", chapter: 1, verseNumber: 1, text: "In the beginning God created the heavens and the earth." },
-      { id: "g2", book: "genesis", chapter: 1, verseNumber: 2, text: "Now the earth was formless and empty, darkness was over the surface of the deep, and the Spirit of God was hovering over the waters." },
-      { id: "g3", book: "genesis", chapter: 1, verseNumber: 3, text: "And God said, \"Let there be light,\" and there was light." },
-      { id: "g4", book: "genesis", chapter: 1, verseNumber: 4, text: "God saw that the light was good, and he separated the light from the darkness." },
-      { id: "g5", book: "genesis", chapter: 1, verseNumber: 5, text: "God called the light \"day,\" and the darkness he called \"night.\" And there was evening, and there was morning—the first day." },
-      { id: "g6", book: "genesis", chapter: 1, verseNumber: 6, text: "And God said, \"Let there be a vault between the waters to separate water from water.\"" },
-      { id: "g7", book: "genesis", chapter: 1, verseNumber: 7, text: "So God made the vault and separated the water under the vault from the water above it. And it was so." },
-      { id: "g8", book: "genesis", chapter: 1, verseNumber: 8, text: "God called the vault \"sky.\" And there was evening, and there was morning—the second day." }
-    ];
-
-    // Sample verses for John 3
-    const johnVerses = [
-      { id: "j1", book: "john", chapter: 3, verseNumber: 1, text: "Now there was a Pharisee, a man named Nicodemus who was a member of the Jewish ruling council." },
-      { id: "j2", book: "john", chapter: 3, verseNumber: 2, text: "He came to Jesus at night and said, \"Rabbi, we know that you are a teacher who has come from God. For no one could perform the signs you are doing if God were not with him.\"" },
-      { id: "j3", book: "john", chapter: 3, verseNumber: 3, text: "Jesus replied, \"Very truly I tell you, no one can see the kingdom of God unless they are born again.\"" },
-      { id: "j4", book: "john", chapter: 3, verseNumber: 4, text: "\"How can someone be born when they are old?\" Nicodemus asked. \"Surely they cannot enter a second time into their mother's womb to be born!\"" },
-      { id: "j5", book: "john", chapter: 3, verseNumber: 5, text: "Jesus answered, \"Very truly I tell you, no one can enter the kingdom of God unless they are born of water and the Spirit.\"" },
-      { id: "j16", book: "john", chapter: 3, verseNumber: 16, text: "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life." },
-      { id: "j17", book: "john", chapter: 3, verseNumber: 17, text: "For God did not send his Son into the world to condemn the world, but to save the world through him." },
-      { id: "j18", book: "john", chapter: 3, verseNumber: 18, text: "Whoever believes in him is not condemned, but whoever does not believe stands condemned already because they have not believed in the name of God's one and only Son." }
-    ];
-    
-    // Add all verses to the verses map
-    [...proverbsVerses, ...genesisVerses, ...johnVerses].forEach((verse: {id: string, book: string, chapter: number, verseNumber: number, text: string}) => {
-      // Add null embedding for TypeScript compatibility
-      this.verses.set(verse.id, {...verse, embedding: null});
+    verses.forEach(verse => {
+      this.verses.set(verse.id, verse);
     });
     
     // Sample commentaries
@@ -385,17 +356,8 @@ export class MemStorage implements IStorage {
       imageUrl: "https://pixabay.com/get/g055bc4e5f89ae0b254f6b72f19ac6cd4dff2ffbfdf0ad33c851f6a31c49e64e79b80caa43c01d1c1c6c4264e20c4d7add9aecb01b3ab54a18fc55e80ffa3a95c_1280.jpg"
     };
     
-    const johnAuthor: Author = {
-      id: "a3",
-      book: "john",
-      name: "John the Apostle",
-      description: "Written by the apostle John around 85-95 AD, this Gospel emphasizes Jesus' divinity and contains many unique stories and teachings not found in the other Gospels. John was one of Jesus' closest disciples, often referred to as 'the disciple whom Jesus loved.'",
-      imageUrl: "https://pixabay.com/get/gf49aa93bdfec3ccf90ed6bad8e8a3ee48d39c5fcd77cf35f09aa0eb00a5fdee24a01968df7723a9d39ed0f6c7b7a77cf26ec6beb8b84b7e7ed9d1b77df626cc5_1280.jpg"
-    };
-    
     this.authors.set(proverbsAuthor.book, proverbsAuthor);
     this.authors.set(genesisAuthor.book, genesisAuthor);
-    this.authors.set(johnAuthor.book, johnAuthor);
     
     // Sample "Did you know" fact
     const didYouKnowFact: DidYouKnow = {
