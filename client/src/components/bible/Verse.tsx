@@ -10,6 +10,8 @@ import DidYouKnow from "./DidYouKnow";
 import DidYouKnowPopover from "./DidYouKnowPopover";
 import ContextualQuestionPopover from "./ContextualQuestionPopover";
 import SmartTagsDisplay from "./SmartTagsDisplay";
+import { SmartTags } from "./SmartTags";
+import { RelatedVerses } from "./RelatedVerses";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FaHighlighter, FaStickyNote, FaBookmark, FaExchangeAlt } from "react-icons/fa";
@@ -118,14 +120,34 @@ export default function Verse({
             {getVerseText()}
           </p>
           
-          {/* Smart tags for key verses */}
-          {!compact && tags && tags.length > 0 && (
-            <div className="mt-2">
-              <SmartTagsDisplay 
-                book={verse.book} 
-                chapter={verse.chapter} 
-                verse={verse.verseNumber} 
+          {/* Enhanced RAG-based Smart tags for key verses */}
+          {!compact && (
+            <div className="mt-3">
+              <SmartTags 
+                book={verse.book}
+                chapter={verse.chapter}
+                verse={verse.verseNumber}
+                variant="inline"
+                onTagClick={(tag) => {
+                  console.log(`Clicked tag: ${tag.name} (${tag.category})`);
+                }}
               />
+              
+              {/* Related verses based on tags - only shown when expanded */}
+              {verse.verseNumber % 5 === 0 && (
+                <RelatedVerses
+                  book={verse.book}
+                  chapter={verse.chapter}
+                  verse={verse.verseNumber}
+                  onVerseSelect={(book, chapter, verse) => {
+                    // This would navigate to that verse
+                    const element = document.getElementById(`verse-${verse}`);
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                  }}
+                />
+              )}
             </div>
           )}
           
