@@ -14,12 +14,12 @@
   --border: 100 15% 85%;
   --input: var(--border);
 
-  --primary: 130 40% 38%;  /* Main green */
-  --primary-foreground: 130 30% 96%;
-  --secondary: 32 60% 50%;  /* Warm brown */
+  --primary: 140 30% 45%;  /* More neutral sage green */
+  --primary-foreground: 140 15% 96%;
+  --secondary: 32 40% 48%;  /* Muted warm brown */
   --secondary-foreground: 30 25% 96%;
 
-  --accent: 55 60% 55%;  /* Golden accent */
+  --accent: 45 50% 50%;  /* Softer golden accent */
   --accent-foreground: 30 25% 96%;
 
   --destructive: 0 65% 35%;
