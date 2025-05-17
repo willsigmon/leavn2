@@ -1,351 +1,239 @@
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "wouter";
-import Sidebar from "@/components/layout/Sidebar";
-import BibleHeader from "@/components/bible/BibleHeader";
-import VerseContainer from "@/components/bible/VerseContainer";
-import NotePanel from "@/components/bible/NotePanel";
-import NoteModal from "@/components/bible/NoteModal";
-import NarrativeView from "@/components/bible/NarrativeView";
-import DidYouKnowPopover from "@/components/bible/DidYouKnowPopover";
-import ContextualQuestionPopover from "@/components/bible/ContextualQuestionPopover";
-import SmartTagsDisplay from "@/components/bible/SmartTagsDisplay";
-import { SmartTags } from "@/components/bible/SmartTags";
-import { RelatedVerses } from "@/components/bible/RelatedVerses";
-import { TagExplorer } from "@/components/bible/TagExplorer";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { BookOpen, BookText, SplitSquareVertical, LayoutGrid } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
+import { useState, useEffect } from 'react';
+import { useParams, useLocation } from 'wouter';
+import { useQuery } from '@tanstack/react-query';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
+import { 
+  ChevronLeft, 
+  ChevronRight, 
+  Bookmark, 
+  MessageCircle, 
+  Share, 
+  Book, 
+  PenLine,
+  Volume2,
+  Info
+} from 'lucide-react';
+import { useAuth } from '../lib/auth';
 
-// Import our new theological perspective components
-import TheologicalLensSelector from "@/components/bible/TheologicalLensSelector";
-import ReaderModeSelector from "@/components/bible/ReaderModeSelector";
-
-// Define our types
-type ViewMode = "verse" | "narrative";
-type CompareMode = "single" | "compare";
-type TheologicalLens = "standard" | "catholic" | "evangelical" | "jewish" | "atheist";
-type ReaderMode = "standard" | "genz" | "kids" | "devotional" | "scholarly";
+interface Verse {
+  id: string;
+  book: string;
+  chapter: number;
+  verse: number;
+  text: {
+    kjv: string;
+    web: string;
+  };
+}
 
 export default function BibleReader() {
-  const { book = "proverbs", chapter = "3" } = useParams();
-  // UI state
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [selectedVerse, setSelectedVerse] = useState<number | null>(null);
-  const [noteModalOpen, setNoteModalOpen] = useState(false);
-  
-  // Reader features
-  const [viewMode, setViewMode] = useState<ViewMode>("verse");
-  const [compareMode, setCompareMode] = useState<CompareMode>("single");
-  const [selectedLens, setSelectedLens] = useState<TheologicalLens>("standard");
-  const [readerMode, setReaderMode] = useState<ReaderMode>("standard");
-  
-  // Fetch chapter data
-  const { data: chapterData, isLoading } = useQuery({
+  const { user, isAuthenticated } = useAuth();
+  const params = useParams();
+  const [, navigate] = useLocation();
+  const [activeTranslation, setActiveTranslation] = useState('web');
+
+  // Default to Genesis 1 if no parameters are provided
+  const book = params.book || 'Genesis';
+  const chapter = params.chapter ? parseInt(params.chapter) : 1;
+
+  // Fetch verses for the current chapter
+  const { data: verses, isLoading, error } = useQuery<Verse[]>({
     queryKey: [`/api/bible/${book}/${chapter}`],
-    staleTime: Infinity,
+    enabled: isAuthenticated,
   });
 
-  // Fetch notes
-  const { data: notes } = useQuery({
-    queryKey: [`/api/notes/${book}/${chapter}`],
-    staleTime: 60000,
-  });
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login');
+    }
+  }, [isAuthenticated, navigate]);
 
-  // Fetch author info
-  const { data: authorInfo } = useQuery({
-    queryKey: [`/api/author/${book}`],
-    staleTime: Infinity,
-  });
+  if (!isAuthenticated) {
+    return null;
+  }
 
-  // Handle UI interactions
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
+  const navigateToChapter = (offset: number) => {
+    const nextChapter = chapter + offset;
+    if (nextChapter > 0) {
+      navigate(`/bible/${book}/${nextChapter}`);
+    }
   };
-
-  const openNoteModal = (verseNum: number) => {
-    setSelectedVerse(verseNum);
-    setNoteModalOpen(true);
-  };
-
-  const toggleViewMode = () => {
-    setViewMode(prev => prev === "verse" ? "narrative" : "verse");
-  };
-
-  const toggleCompareMode = () => {
-    setCompareMode(prev => prev === "single" ? "compare" : "single");
-  };
-
-  const handleSelectLens = (lens: string) => {
-    setSelectedLens(lens as TheologicalLens);
-  };
-
-  const handleSelectReaderMode = (mode: string) => {
-    setReaderMode(mode as ReaderMode);
-  };
-
-  const bookTitle = book.charAt(0).toUpperCase() + book.slice(1);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 text-gray-900">
-      <div className="flex flex-1 overflow-hidden">
-        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} currentBook={book} />
+    <div className="container mx-auto py-8 px-4 md:px-0">
+      <div className="flex flex-col gap-6">
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-primary">
+              {book} {chapter}
+            </h1>
+            <p className="text-muted-foreground">
+              Explore and study the Word with multiple perspectives
+            </p>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => navigateToChapter(-1)}
+              disabled={chapter <= 1}
+            >
+              <ChevronLeft className="h-4 w-4 mr-1" />
+              Previous
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => navigateToChapter(1)}
+            >
+              Next
+              <ChevronRight className="h-4 w-4 ml-1" />
+            </Button>
+          </div>
+        </div>
         
-        <main className="flex-1 overflow-y-auto bg-gray-50">
-          <div className="container mx-auto px-4 py-6 max-w-5xl">
-            {isLoading ? (
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <Skeleton className="h-12 w-80" />
-                  <Skeleton className="h-6 w-60" />
-                </div>
-                <Skeleton className="h-40 w-full rounded-xl" />
-                <Skeleton className="h-10 w-full rounded-xl" />
-                <div className="space-y-4">
-                  {Array(8).fill(0).map((_, i) => (
-                    <Skeleton key={i} className="h-24 w-full rounded-xl" />
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <>
-                <BibleHeader 
-                  book={bookTitle} 
-                  chapter={parseInt(chapter)} 
-                  totalChapters={chapterData?.totalChapters || 31} 
-                  translation={chapterData?.translation || "English Standard Version"} 
-                />
-                
-                {/* View mode selector */}
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 my-6">
-                  <div className="flex items-center space-x-2">
-                    <Tabs value={viewMode} onValueChange={(value) => setViewMode(value as ViewMode)}>
-                      <TabsList>
-                        <TabsTrigger value="verse" className="flex items-center">
-                          <BookText className="mr-2 h-4 w-4" />
-                          Verse
-                        </TabsTrigger>
-                        <TabsTrigger value="narrative" className="flex items-center">
-                          <BookOpen className="mr-2 h-4 w-4" />
-                          Narrative
-                        </TabsTrigger>
-                      </TabsList>
-                    </Tabs>
-                    
-                    {viewMode === "verse" && (
-                      <Button 
-                        variant={compareMode === "compare" ? "default" : "outline"} 
-                        size="sm"
-                        onClick={toggleCompareMode}
-                        className="flex items-center"
-                      >
-                        {compareMode === "compare" ? (
-                          <>
-                            <LayoutGrid className="mr-2 h-4 w-4" />
-                            Single View
-                          </>
-                        ) : (
-                          <>
-                            <SplitSquareVertical className="mr-2 h-4 w-4" />
-                            Compare
-                          </>
-                        )}
-                      </Button>
-                    )}
-                  </div>
-                </div>
-                
-                {/* Narrative Mode */}
-                {/* View Mode Toggle Banner */}
-                <div className="mb-6 bg-accent/10 rounded-lg border border-border p-4 flex flex-col md:flex-row justify-between items-center gap-4">
-                  <div className="flex-1">
-                    <h3 className="font-medium text-primary mb-1 flex items-center">
-                      {viewMode === "verse" ? (
-                        <>
-                          <BookOpen className="h-5 w-5 mr-2 text-primary/80" />
-                          <span>Verse-by-Verse Mode</span>
-                        </>
-                      ) : (
-                        <>
-                          <BookText className="h-5 w-5 mr-2 text-primary/80" />
-                          <span>Immersive Novel Mode</span>
-                        </>
-                      )}
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      {viewMode === "verse" 
-                        ? "Reading with traditional verse structure and commentary." 
-                        : "Experience this chapter as flowing narrative with artistic layout."}
-                    </p>
-                  </div>
-                  <Button 
-                    onClick={toggleViewMode} 
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground whitespace-nowrap"
+        <Separator />
+        
+        {/* Main Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Bible Text Column */}
+          <div className="lg:col-span-8">
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex justify-between items-center mb-4">
+                  <Tabs 
+                    defaultValue={activeTranslation} 
+                    onValueChange={setActiveTranslation}
+                    className="w-full"
                   >
-                    {viewMode === "verse" 
-                      ? "Switch to Novel Mode" 
-                      : "Switch to Verse Mode"}
-                  </Button>
+                    <TabsList>
+                      <TabsTrigger value="web">WEB</TabsTrigger>
+                      <TabsTrigger value="kjv">KJV</TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                  
+                  <div className="flex gap-2">
+                    <Button variant="ghost" size="sm">
+                      <PenLine className="h-4 w-4 mr-1" />
+                      Notes
+                    </Button>
+                    <Button variant="ghost" size="sm">
+                      <Volume2 className="h-4 w-4 mr-1" />
+                      Listen
+                    </Button>
+                  </div>
                 </div>
                 
-                {viewMode === "narrative" ? (
-                  <NarrativeView 
-                    book={book} 
-                    chapter={parseInt(chapter)}
-                    lens={selectedLens}
-                    onToggleView={toggleViewMode} 
-                  />
+                {isLoading ? (
+                  <div className="space-y-4">
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <div key={i} className="flex gap-2">
+                        <Skeleton className="h-5 w-5 rounded-full" />
+                        <Skeleton className="h-5 w-full" />
+                      </div>
+                    ))}
+                  </div>
+                ) : error ? (
+                  <div className="py-10 text-center text-red-500">
+                    <p>Error loading chapter. Please try again.</p>
+                  </div>
                 ) : (
-                  /* Verse Mode */
-                  <>
-                    <div className="space-y-6 mb-6">
-                      {/* Theological lens selector */}
-                      <TheologicalLensSelector 
-                        selectedLens={selectedLens} 
-                        onSelectLens={handleSelectLens}
-                        compareMode={compareMode === "compare"}
-                        onToggleCompareMode={toggleCompareMode}
-                      />
-                      
-                      {/* Reader mode selector */}
-                      <ReaderModeSelector 
-                        selectedMode={readerMode} 
-                        onSelectMode={handleSelectReaderMode} 
-                      />
-                    </div>
-                    
-                    {compareMode === "single" ? (
-                      /* Single lens view */
-                      <div className="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6">
-                        <div className="flex-1">
-                          <VerseContainer 
-                            verses={chapterData?.verses || []} 
-                            selectedLens={selectedLens}
-                            readerMode={readerMode}
-                            notes={notes || []}
-                            onOpenNoteModal={openNoteModal}
-                          />
-                        </div>
-                        
-                        <div className="md:w-80">
-                          <div className="space-y-4">
-                            <NotePanel 
-                              notes={notes || []} 
-                              book={book}
-                              chapter={parseInt(chapter)}
-                              onOpenNoteModal={openNoteModal}
-                            />
-                            
-                            {/* RAG Tagging Explorer */}
-                            <div className="mt-6 border-t border-border pt-4">
-                              <h3 className="text-lg font-serif font-semibold mb-4 text-primary">Explore Connections</h3>
-                              <p className="text-sm text-muted-foreground mb-4">
-                                Discover related verses and themes using our intelligent tagging system.
-                              </p>
-                              <TagExplorer 
-                                onVerseSelect={(selectedBook, selectedChapter, verse) => {
-                                  // Navigate to the selected verse
-                                  const element = document.getElementById(`verse-${verse}`);
-                                  if (element) {
-                                    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                  }
-                                }}
-                              />
+                  <div className="prose prose-emerald max-w-none">
+                    {verses?.map((verse) => (
+                      <div key={verse.id} className="mb-4 verse-container group">
+                        <div className="flex gap-2 items-start">
+                          <span className="text-xs font-bold mt-1 text-muted-foreground">{verse.verse}</span>
+                          <div className="flex-1">
+                            <p className="text-lg leading-relaxed">
+                              {activeTranslation === 'web' ? verse.text.web : verse.text.kjv}
+                            </p>
+                            <div className="hidden group-hover:flex mt-2 gap-2">
+                              <Button variant="ghost" size="sm" className="h-7 px-2">
+                                <Bookmark className="h-3.5 w-3.5 mr-1" />
+                                Highlight
+                              </Button>
+                              <Button variant="ghost" size="sm" className="h-7 px-2">
+                                <MessageCircle className="h-3.5 w-3.5 mr-1" />
+                                Note
+                              </Button>
+                              <Button variant="ghost" size="sm" className="h-7 px-2">
+                                <Share className="h-3.5 w-3.5 mr-1" />
+                                Share
+                              </Button>
                             </div>
                           </div>
                         </div>
                       </div>
-                    ) : (
-                      /* Compare theological perspectives */
-                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <Card className="overflow-hidden">
-                          <CardContent className="p-6">
-                            <h3 className="text-lg font-serif font-semibold mb-4 text-primary">Catholic Perspective</h3>
-                            {chapterData?.verses && (
-                              <VerseContainer 
-                                verses={chapterData.verses.slice(0, 3)} 
-                                selectedLens="catholic"
-                                readerMode={readerMode}
-                                notes={[]}
-                                onOpenNoteModal={openNoteModal}
-                                compact={true}
-                              />
-                            )}
-                          </CardContent>
-                        </Card>
-                        
-                        <Card className="overflow-hidden">
-                          <CardContent className="p-6">
-                            <h3 className="text-lg font-serif font-semibold mb-4 text-primary">Evangelical Perspective</h3>
-                            {chapterData?.verses && (
-                              <VerseContainer 
-                                verses={chapterData.verses.slice(0, 3)} 
-                                selectedLens="evangelical"
-                                readerMode={readerMode}
-                                notes={[]}
-                                onOpenNoteModal={openNoteModal}
-                                compact={true}
-                              />
-                            )}
-                          </CardContent>
-                        </Card>
-                        
-                        <Card className="overflow-hidden">
-                          <CardContent className="p-6">
-                            <h3 className="text-lg font-serif font-semibold mb-4 text-primary">Jewish Perspective</h3>
-                            {chapterData?.verses && (
-                              <VerseContainer 
-                                verses={chapterData.verses.slice(0, 3)} 
-                                selectedLens="jewish"
-                                readerMode={readerMode}
-                                notes={[]}
-                                onOpenNoteModal={openNoteModal}
-                                compact={true}
-                              />
-                            )}
-                          </CardContent>
-                        </Card>
-                        
-                        <Card className="overflow-hidden">
-                          <CardContent className="p-6">
-                            <h3 className="text-lg font-serif font-semibold mb-4 text-primary">Secular Perspective</h3>
-                            {chapterData?.verses && (
-                              <VerseContainer 
-                                verses={chapterData.verses.slice(0, 3)} 
-                                selectedLens="atheist"
-                                readerMode={readerMode}
-                                notes={[]}
-                                onOpenNoteModal={openNoteModal}
-                                compact={true}
-                              />
-                            )}
-                          </CardContent>
-                        </Card>
-                      </div>
-                    )}
-                  </>
+                    ))}
+                  </div>
                 )}
-              </>
-            )}
+              </CardContent>
+            </Card>
           </div>
-        </main>
+          
+          {/* Sidebar Column */}
+          <div className="lg:col-span-4">
+            <div className="space-y-6">
+              {/* Theological Lenses */}
+              <Card>
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center">
+                    <Book className="h-5 w-5 mr-2 text-primary" />
+                    Theological Lenses
+                  </h3>
+                  
+                  <div className="space-y-3">
+                    <Button variant="outline" className="w-full justify-start">
+                      Evangelical
+                    </Button>
+                    <Button variant="outline" className="w-full justify-start">
+                      Catholic
+                    </Button>
+                    <Button variant="outline" className="w-full justify-start">
+                      Jewish
+                    </Button>
+                    <Button variant="outline" className="w-full justify-start">
+                      Historical
+                    </Button>
+                    <Button variant="outline" className="w-full justify-start">
+                      Gen-Z
+                    </Button>
+                    <Button variant="outline" className="w-full justify-start">
+                      Kids
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              {/* Chapter Context */}
+              <Card>
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center">
+                    <Info className="h-5 w-5 mr-2 text-primary" />
+                    Chapter Context
+                  </h3>
+                  
+                  <div className="text-sm text-muted-foreground">
+                    <p className="mb-2">
+                      This chapter was written approximately around 1445-1405 BC during Israel's wilderness wanderings.
+                    </p>
+                    <p>
+                      The author likely drew from both oral traditions and divine inspiration to compose this account of creation, establishing foundational theological principles about God, humanity, and the natural world.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
       </div>
-      
-      {/* Note modal */}
-      {selectedVerse !== null && (
-        <NoteModal 
-          isOpen={noteModalOpen} 
-          onClose={() => setNoteModalOpen(false)}
-          verseNumber={selectedVerse}
-          verseText={chapterData?.verses?.find(v => v.verseNumber === selectedVerse)}
-          existingNote={notes?.find(note => note.verse === selectedVerse)}
-          book={book}
-          chapter={parseInt(chapter)}
-        />
-      )}
     </div>
   );
 }
