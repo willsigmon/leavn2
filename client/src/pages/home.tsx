@@ -21,147 +21,197 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero section */}
-      <section className="py-20 px-4 md:px-0 bg-gradient-to-b from-background to-muted/30">
-        <div className="container mx-auto max-w-5xl">
+      <section className="py-20 px-4 md:px-0 bg-gradient-to-b from-blue-50 to-indigo-50 relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-12 left-12 w-24 h-24 bg-yellow-200 rounded-lg opacity-20 rotate-12"></div>
+        <div className="absolute bottom-20 right-20 w-32 h-32 bg-blue-200 rounded-full opacity-30"></div>
+        <div className="absolute top-1/4 right-10 w-16 h-16 bg-emerald-200 rounded-lg opacity-20 -rotate-12"></div>
+        <div className="absolute bottom-32 left-20 w-20 h-20 bg-indigo-200 rounded-full opacity-30"></div>
+        
+        <div className="container mx-auto max-w-5xl relative z-10">
           <div className="flex flex-col lg:flex-row gap-12 items-center">
             <div className="lg:w-1/2 space-y-6">
+              <div className="inline-block px-4 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-semibold mb-4">
+                Spiritually Intelligent Bible Study
+              </div>
               <h1 className="text-4xl md:text-5xl font-bold leading-tight">
-                Explore Scripture with <span className="bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-transparent">Deeper Understanding</span>
+                Bible Study made <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">simple.</span>
               </h1>
-              <p className="text-xl text-muted-foreground">
-                Engage with the Bible through multiple theological perspectives, immersive narratives, 
-                and AI-powered spiritual insights.
+              <p className="text-xl text-slate-600">
+                Engage with Scripture through multiple theological lenses, immersive narratives, 
+                and AI-powered spiritual insights – all in one place.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+              <div className="flex flex-col sm:flex-row gap-4 pt-6">
                 {isAuthenticated ? (
-                  <Button size="lg" onClick={() => navigate('/bible-reader')} className="bg-primary hover:bg-primary/90">
+                  <Button size="lg" onClick={() => navigate('/reader')} className="bg-blue-600 hover:bg-blue-700 text-white border-0 rounded-lg">
                     <BookOpen className="mr-2 h-5 w-5" />
                     Open Bible Reader
                   </Button>
                 ) : (
-                  <Button size="lg" onClick={() => login()} className="bg-primary hover:bg-primary/90">
+                  <Button size="lg" onClick={() => login()} className="bg-blue-600 hover:bg-blue-700 text-white border-0 rounded-lg">
                     <BookOpen className="mr-2 h-5 w-5" />
-                    Start Your Journey
+                    Get Started
                   </Button>
                 )}
-                <Button size="lg" variant="outline" onClick={() => navigate('/reading-plans')}>
+                <Button size="lg" variant="outline" onClick={() => navigate('/reading-plans')} className="border-blue-300 text-blue-700 hover:bg-blue-50 rounded-lg">
                   <Calendar className="mr-2 h-5 w-5" />
-                  Browse Reading Plans
+                  View Reading Plans
                 </Button>
               </div>
+              
+              {/* Feature badges */}
+              <div className="flex flex-wrap gap-4 pt-6">
+                <div className="flex items-center text-sm text-slate-600">
+                  <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-2">
+                    <span className="text-blue-700 text-xs">✓</span>
+                  </div>
+                  Free to use
+                </div>
+                <div className="flex items-center text-sm text-slate-600">
+                  <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-2">
+                    <span className="text-blue-700 text-xs">✓</span>
+                  </div>
+                  Multiple translations
+                </div>
+                <div className="flex items-center text-sm text-slate-600">
+                  <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-2">
+                    <span className="text-blue-700 text-xs">✓</span>
+                  </div>
+                  AI-powered insights
+                </div>
+              </div>
             </div>
-            <div className="lg:w-1/2 rounded-xl overflow-hidden shadow-xl">
-              <img 
-                src="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80" 
-                alt="Bible study" 
-                className="w-full h-full object-cover"
-              />
+            <div className="lg:w-1/2 relative">
+              <div className="absolute inset-0 -left-6 -top-6 bg-yellow-100 rounded-xl"></div>
+              <div className="absolute inset-0 -right-6 -bottom-6 bg-blue-100 rounded-xl"></div>
+              <div className="relative rounded-xl overflow-hidden shadow-xl border-4 border-white">
+                <img 
+                  src="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80" 
+                  alt="Bible study" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Features section */}
-      <section className="py-20 px-4 md:px-0">
+      <section className="py-20 px-4 md:px-0 bg-white">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Features Designed for Deeper Study</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Discover new dimensions of Scripture with features that enhance your understanding
+            <div className="inline-block px-4 py-1 rounded-full bg-indigo-100 text-indigo-700 text-sm font-semibold mb-4">
+              Powerful Features
+            </div>
+            <h2 className="text-3xl font-bold mb-4">Bible Study designed for <span className="text-blue-600">deeper understanding</span></h2>
+            <p className="text-slate-600 max-w-2xl mx-auto">
+              Everything you need to explore Scripture more deeply and meaningfully with features that enhance your understanding
               and bring the text to life.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card>
-              <CardHeader>
-                <Sparkles className="h-10 w-10 text-primary mb-2" />
-                <CardTitle>Multiple Theological Lenses</CardTitle>
-                <CardDescription>
+            <div className="bg-white rounded-lg shadow-md border border-slate-100 overflow-hidden hover:shadow-lg transition-shadow">
+              <div className="p-5">
+                <div className="h-12 w-12 rounded-lg bg-blue-100 flex items-center justify-center mb-4">
+                  <Sparkles className="h-6 w-6 text-blue-600" />
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Multiple Theological Lenses</h3>
+                <p className="text-slate-600 mb-4">
                   Study passages through Evangelical, Catholic, Jewish, and other perspectives.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Each theological tradition brings unique insights to Scripture. Explore these different viewpoints to deepen your understanding.
                 </p>
-              </CardContent>
-            </Card>
+                <div className="pt-2">
+                  <p className="text-sm text-slate-500">
+                    Each theological tradition brings unique insights to deepen your understanding.
+                  </p>
+                </div>
+              </div>
+            </div>
 
-            <Card>
-              <CardHeader>
-                <PenLine className="h-10 w-10 text-primary mb-2" />
-                <CardTitle>Narrative Mode</CardTitle>
-                <CardDescription>
+            <div className="bg-white rounded-lg shadow-md border border-slate-100 overflow-hidden hover:shadow-lg transition-shadow">
+              <div className="p-5">
+                <div className="h-12 w-12 rounded-lg bg-indigo-100 flex items-center justify-center mb-4">
+                  <PenLine className="h-6 w-6 text-indigo-600" />
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Narrative Mode</h3>
+                <p className="text-slate-600 mb-4">
                   Transform Bible chapters into immersive, flowing narratives.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Experience Scripture as a continuous story, making it easier to grasp context and meaning in a more engaging format.
                 </p>
-              </CardContent>
-            </Card>
+                <div className="pt-2">
+                  <p className="text-sm text-slate-500">
+                    Experience Scripture as a continuous story for better context and understanding.
+                  </p>
+                </div>
+              </div>
+            </div>
 
-            <Card>
-              <CardHeader>
-                <LightbulbIcon className="h-10 w-10 text-primary mb-2" />
-                <CardTitle>"Did You Know" Facts</CardTitle>
-                <CardDescription>
+            <div className="bg-white rounded-lg shadow-md border border-slate-100 overflow-hidden hover:shadow-lg transition-shadow">
+              <div className="p-5">
+                <div className="h-12 w-12 rounded-lg bg-amber-100 flex items-center justify-center mb-4">
+                  <LightbulbIcon className="h-6 w-6 text-amber-600" />
+                </div>
+                <h3 className="text-lg font-semibold mb-2">"Did You Know" Facts</h3>
+                <p className="text-slate-600 mb-4">
                   Discover fascinating historical and cultural contexts.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Uncover interesting facts about the time period, culture, and historical background of each passage.
                 </p>
-              </CardContent>
-            </Card>
+                <div className="pt-2">
+                  <p className="text-sm text-slate-500">
+                    Uncover interesting facts about the time period and historical background.
+                  </p>
+                </div>
+              </div>
+            </div>
 
-            <Card>
-              <CardHeader>
-                <MessageCircle className="h-10 w-10 text-primary mb-2" />
-                <CardTitle>Contextual Questions</CardTitle>
-                <CardDescription>
+            <div className="bg-white rounded-lg shadow-md border border-slate-100 overflow-hidden hover:shadow-lg transition-shadow">
+              <div className="p-5">
+                <div className="h-12 w-12 rounded-lg bg-purple-100 flex items-center justify-center mb-4">
+                  <MessageCircle className="h-6 w-6 text-purple-600" />
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Contextual Questions</h3>
+                <p className="text-slate-600 mb-4">
                   Ask questions about passages and receive detailed explanations.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  When you have questions about a verse or passage, get thoughtful explanations tailored to the specific context.
                 </p>
-              </CardContent>
-            </Card>
+                <div className="pt-2">
+                  <p className="text-sm text-slate-500">
+                    Get thoughtful answers that consider the historical and literary context.
+                  </p>
+                </div>
+              </div>
+            </div>
 
-            <Card>
-              <CardHeader>
-                <Compass className="h-10 w-10 text-primary mb-2" />
-                <CardTitle>Reading Plans</CardTitle>
-                <CardDescription>
+            <div className="bg-white rounded-lg shadow-md border border-slate-100 overflow-hidden hover:shadow-lg transition-shadow">
+              <div className="p-5">
+                <div className="h-12 w-12 rounded-lg bg-emerald-100 flex items-center justify-center mb-4">
+                  <Compass className="h-6 w-6 text-emerald-600" />
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Reading Plans</h3>
+                <p className="text-slate-600 mb-4">
                   Follow curated daily reading schedules for structured study.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Stay consistent with your Bible reading through guided plans focused on specific themes, books, or topics.
                 </p>
-              </CardContent>
-            </Card>
+                <div className="pt-2">
+                  <p className="text-sm text-slate-500">
+                    Stay consistent with guided plans focused on specific themes and topics.
+                  </p>
+                </div>
+              </div>
+            </div>
 
-            <Card>
-              <CardHeader>
-                <Search className="h-10 w-10 text-primary mb-2" />
-                <CardTitle>Semantic Search</CardTitle>
-                <CardDescription>
+            <div className="bg-white rounded-lg shadow-md border border-slate-100 overflow-hidden hover:shadow-lg transition-shadow">
+              <div className="p-5">
+                <div className="h-12 w-12 rounded-lg bg-sky-100 flex items-center justify-center mb-4">
+                  <Search className="h-6 w-6 text-sky-600" />
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Semantic Search</h3>
+                <p className="text-slate-600 mb-4">
                   Find verses based on concepts, not just keywords.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Search for ideas and themes rather than exact words, helping you discover related passages you might otherwise miss.
                 </p>
-              </CardContent>
-            </Card>
+                <div className="pt-2">
+                  <p className="text-sm text-slate-500">
+                    Discover related passages you might otherwise miss with concept-based search.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -291,34 +341,64 @@ export default function Home() {
       </section>
 
       {/* Call to action */}
-      <section className="py-20 px-4 md:px-0 text-center">
-        <div className="container mx-auto max-w-3xl">
+      <section className="py-20 px-4 md:px-0 bg-gradient-to-b from-blue-500 to-blue-600 text-white relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-20 left-10 w-32 h-32 bg-white/10 rounded-full"></div>
+        <div className="absolute bottom-10 right-10 w-24 h-24 bg-white/5 rounded-lg rotate-12"></div>
+        <div className="absolute top-1/2 right-1/3 w-16 h-16 bg-white/10 rounded-full"></div>
+        
+        <div className="container mx-auto max-w-4xl relative z-10 text-center">
+          <div className="inline-block px-4 py-1 rounded-full bg-white/20 text-white text-sm font-semibold mb-6">
+            Ready to get started?
+          </div>
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Begin Your Journey of Deeper Understanding
           </h2>
-          <p className="text-xl text-muted-foreground mb-8">
+          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
             Join thousands of others discovering new dimensions of Scripture through Leavn's
             innovative study tools.
           </p>
+          
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {isAuthenticated ? (
-              <Button size="lg" onClick={() => navigate('/bible-reader')} className="bg-primary hover:bg-primary/90">
+              <Button size="lg" onClick={() => navigate('/reader')} className="bg-white text-blue-600 hover:bg-blue-50 border-0 rounded-lg shadow-lg">
                 <BookOpen className="mr-2 h-5 w-5" />
                 Open Bible Reader
               </Button>
             ) : (
-              <Button size="lg" onClick={() => login()} className="bg-primary hover:bg-primary/90">
+              <Button size="lg" onClick={() => login()} className="bg-white text-blue-600 hover:bg-blue-50 border-0 rounded-lg shadow-lg">
                 <BookOpen className="mr-2 h-5 w-5" />
-                Get Started Now
+                Get Started Free
               </Button>
             )}
-            <Button size="lg" variant="outline" onClick={() => navigate('/reading-plans')}>
+            
+            <Button size="lg" variant="outline" onClick={() => navigate('/reading-plans')} className="border-white/50 text-white hover:bg-white/10 rounded-lg">
+              <Calendar className="mr-2 h-5 w-5" />
               Explore Reading Plans
             </Button>
           </div>
-          <p className="text-sm text-muted-foreground mt-6">
-            No registration required to start. Personalized features available with free account.
-          </p>
+          
+          {/* Feature badges */}
+          <div className="flex flex-wrap justify-center gap-8 mt-12">
+            <div className="flex items-center text-sm text-blue-100">
+              <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center mr-2">
+                <span className="text-white text-xs">✓</span>
+              </div>
+              Free for unlimited users
+            </div>
+            <div className="flex items-center text-sm text-blue-100">
+              <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center mr-2">
+                <span className="text-white text-xs">✓</span>
+              </div>
+              No account required to explore
+            </div>
+            <div className="flex items-center text-sm text-blue-100">
+              <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center mr-2">
+                <span className="text-white text-xs">✓</span>
+              </div>
+              Premium features with free account
+            </div>
+          </div>
         </div>
       </section>
     </div>
