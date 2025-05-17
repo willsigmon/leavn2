@@ -38,7 +38,7 @@ export function NavBar() {
   };
 
   const userInitials = user?.name
-    ? user.name.split(' ').map(n => n[0]).join('').toUpperCase()
+    ? user.name.split(' ').map((n: string) => n[0]).join('').toUpperCase()
     : 'U';
 
   return (
@@ -64,10 +64,10 @@ export function NavBar() {
             {/* Desktop navigation */}
             <nav className="hidden md:flex items-center space-x-6">
               <div 
-                onClick={() => navigate('/bible-reader')}
+                onClick={() => navigate('/reader')}
                 className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer text-sm font-medium"
               >
-                Bible Study
+                Bible Reader
               </div>
               <div 
                 onClick={() => navigate('/reading-plans')}

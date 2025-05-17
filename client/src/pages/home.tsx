@@ -29,66 +29,66 @@ export default function Home() {
         <div className="absolute bottom-32 left-20 w-20 h-20 bg-lime-200 rounded-full opacity-30"></div>
         
         <div className="container mx-auto max-w-5xl relative z-10">
-          <div className="flex flex-col lg:flex-row gap-12 items-center">
-            <div className="lg:w-1/2 space-y-6">
-              <div className="inline-block px-4 py-1 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold mb-4">
+          <div className="flex flex-col lg:flex-row gap-8 md:gap-12 items-center">
+            <div className="w-full lg:w-1/2 space-y-4 md:space-y-6">
+              <div className="inline-block px-4 py-1 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold mb-2 md:mb-4">
                 Spiritually Intelligent Bible Study
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold leading-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
                 Bible Study made <span className="bg-gradient-to-r from-emerald-600 to-green-700 bg-clip-text text-transparent">simple.</span>
               </h1>
-              <p className="text-xl text-stone-600">
+              <p className="text-lg md:text-xl text-stone-600">
                 Engage with Scripture through multiple theological lenses, immersive narratives, 
                 and AI-powered spiritual insights – all in one place.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 pt-6">
+              <div className="flex flex-col sm:flex-row gap-4 pt-4 md:pt-6">
                 {isAuthenticated ? (
-                  <Button size="lg" onClick={() => navigate('/reader')} className="bg-emerald-600 hover:bg-emerald-700 text-white border-0 rounded-lg">
+                  <Button size="lg" onClick={() => navigate('/reader')} className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white border-0 rounded-lg">
                     <BookOpen className="mr-2 h-5 w-5" />
                     Open Bible Reader
                   </Button>
                 ) : (
-                  <Button size="lg" onClick={() => login()} className="bg-emerald-600 hover:bg-emerald-700 text-white border-0 rounded-lg">
+                  <Button size="lg" onClick={() => login()} className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white border-0 rounded-lg">
                     <BookOpen className="mr-2 h-5 w-5" />
                     Get Started
                   </Button>
                 )}
-                <Button size="lg" variant="outline" onClick={() => navigate('/reading-plans')} className="border-emerald-300 text-emerald-700 hover:bg-emerald-50 rounded-lg">
+                <Button size="lg" variant="outline" onClick={() => navigate('/reading-plans')} className="w-full sm:w-auto border-emerald-300 text-emerald-700 hover:bg-emerald-50 rounded-lg">
                   <Calendar className="mr-2 h-5 w-5" />
                   View Reading Plans
                 </Button>
               </div>
               
               {/* Feature badges */}
-              <div className="flex flex-wrap gap-4 pt-6">
+              <div className="flex flex-wrap gap-3 md:gap-4 pt-6 justify-center sm:justify-start">
                 <div className="flex items-center text-sm text-stone-600">
-                  <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center mr-2">
+                  <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-emerald-100 flex items-center justify-center mr-2">
                     <span className="text-emerald-700 text-xs">✓</span>
                   </div>
-                  Free to use
+                  <span className="whitespace-nowrap">Free to use</span>
                 </div>
                 <div className="flex items-center text-sm text-stone-600">
-                  <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center mr-2">
+                  <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-emerald-100 flex items-center justify-center mr-2">
                     <span className="text-emerald-700 text-xs">✓</span>
                   </div>
-                  Multiple translations
+                  <span className="whitespace-nowrap">Multiple translations</span>
                 </div>
                 <div className="flex items-center text-sm text-stone-600">
-                  <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center mr-2">
+                  <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-emerald-100 flex items-center justify-center mr-2">
                     <span className="text-emerald-700 text-xs">✓</span>
                   </div>
-                  AI-powered insights
+                  <span className="whitespace-nowrap">AI-powered insights</span>
                 </div>
               </div>
             </div>
-            <div className="lg:w-1/2 relative">
-              <div className="absolute inset-0 -left-6 -top-6 bg-amber-100 rounded-xl"></div>
-              <div className="absolute inset-0 -right-6 -bottom-6 bg-emerald-100 rounded-xl"></div>
-              <div className="relative rounded-xl overflow-hidden shadow-xl border-4 border-white">
+            <div className="w-full mt-8 lg:mt-0 lg:w-1/2 relative">
+              <div className="hidden md:block absolute inset-0 -left-6 -top-6 bg-amber-100 rounded-xl"></div>
+              <div className="hidden md:block absolute inset-0 -right-6 -bottom-6 bg-emerald-100 rounded-xl"></div>
+              <div className="relative rounded-xl overflow-hidden shadow-xl border-2 md:border-4 border-white">
                 <img 
                   src="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80" 
                   alt="Bible study" 
-                  className="w-full h-full object-cover"
+                  className="w-full h-64 md:h-80 lg:h-full object-cover"
                 />
               </div>
             </div>
@@ -217,52 +217,61 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 px-4 md:px-0 bg-muted/30">
+      <section className="py-20 px-4 md:px-0 bg-amber-50">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-12">
+            <div className="inline-block px-4 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-semibold mb-4">
+              Testimonials
+            </div>
             <h2 className="text-3xl font-bold mb-4">What Users Are Saying</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-stone-600 max-w-2xl mx-auto">
               Hear from people who have experienced deeper understanding through Leavn's approach to Bible study.
             </p>
           </div>
 
           <Tabs defaultValue="pastors" className="w-full">
             <div className="flex justify-center mb-8">
-              <TabsList>
-                <TabsTrigger value="pastors">Pastors</TabsTrigger>
-                <TabsTrigger value="students">Students</TabsTrigger>
-                <TabsTrigger value="families">Families</TabsTrigger>
+              <TabsList className="bg-amber-100/50">
+                <TabsTrigger value="pastors" className="data-[state=active]:bg-emerald-100 data-[state=active]:text-emerald-700">Pastors</TabsTrigger>
+                <TabsTrigger value="students" className="data-[state=active]:bg-emerald-100 data-[state=active]:text-emerald-700">Students</TabsTrigger>
+                <TabsTrigger value="families" className="data-[state=active]:bg-emerald-100 data-[state=active]:text-emerald-700">Families</TabsTrigger>
               </TabsList>
             </div>
             
             <TabsContent value="pastors">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="bg-background rounded-lg p-6 shadow-sm">
-                  <p className="italic mb-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                <div className="bg-white rounded-lg p-6 shadow-md border border-amber-100">
+                  <div className="w-10 h-10 rounded-full bg-amber-100 mb-4 flex items-center justify-center">
+                    <span className="text-amber-600">❝</span>
+                  </div>
+                  <p className="italic mb-4 text-stone-700">
                     "Leavn has transformed my sermon preparation process. The multiple theological lenses help me consider viewpoints I might have overlooked, and the contextual information is incredibly valuable."
                   </p>
                   <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
+                    <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold">
                       JM
                     </div>
                     <div className="ml-3">
-                      <p className="font-medium">Pastor James Miller</p>
-                      <p className="text-sm text-muted-foreground">Community Church</p>
+                      <p className="font-medium text-slate-800">Pastor James Miller</p>
+                      <p className="text-sm text-stone-500">Community Church</p>
                     </div>
                   </div>
                 </div>
                 
-                <div className="bg-background rounded-lg p-6 shadow-sm">
-                  <p className="italic mb-4">
+                <div className="bg-white rounded-lg p-6 shadow-md border border-amber-100">
+                  <div className="w-10 h-10 rounded-full bg-amber-100 mb-4 flex items-center justify-center">
+                    <span className="text-amber-600">❝</span>
+                  </div>
+                  <p className="italic mb-4 text-stone-700">
                     "The ability to instantly access different commentaries and perspectives saves me hours of research time, and the narrative mode helps bring passages to life for my congregation."
                   </p>
                   <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
+                    <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold">
                       SR
                     </div>
                     <div className="ml-3">
-                      <p className="font-medium">Rev. Sarah Rodriguez</p>
-                      <p className="text-sm text-muted-foreground">Hillside Fellowship</p>
+                      <p className="font-medium text-slate-800">Rev. Sarah Rodriguez</p>
+                      <p className="text-sm text-stone-500">Hillside Fellowship</p>
                     </div>
                   </div>
                 </div>
@@ -270,33 +279,39 @@ export default function Home() {
             </TabsContent>
             
             <TabsContent value="students">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="bg-background rounded-lg p-6 shadow-sm">
-                  <p className="italic mb-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                <div className="bg-white rounded-lg p-6 shadow-md border border-amber-100">
+                  <div className="w-10 h-10 rounded-full bg-amber-100 mb-4 flex items-center justify-center">
+                    <span className="text-amber-600">❝</span>
+                  </div>
+                  <p className="italic mb-4 text-stone-700">
                     "As a theology student, the multiple perspectives feature is invaluable. I can quickly compare different theological traditions' interpretations of the same passage."
                   </p>
                   <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
+                    <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold">
                       DJ
                     </div>
                     <div className="ml-3">
-                      <p className="font-medium">David Johnson</p>
-                      <p className="text-sm text-muted-foreground">Seminary Student</p>
+                      <p className="font-medium text-slate-800">David Johnson</p>
+                      <p className="text-sm text-stone-500">Seminary Student</p>
                     </div>
                   </div>
                 </div>
                 
-                <div className="bg-background rounded-lg p-6 shadow-sm">
-                  <p className="italic mb-4">
+                <div className="bg-white rounded-lg p-6 shadow-md border border-amber-100">
+                  <div className="w-10 h-10 rounded-full bg-amber-100 mb-4 flex items-center justify-center">
+                    <span className="text-amber-600">❝</span>
+                  </div>
+                  <p className="italic mb-4 text-stone-700">
                     "The 'Did You Know' facts and contextual questions help me understand cultural nuances I would have missed. It's like having a professor available 24/7."
                   </p>
                   <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
+                    <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold">
                       AT
                     </div>
                     <div className="ml-3">
-                      <p className="font-medium">Amanda Torres</p>
-                      <p className="text-sm text-muted-foreground">Religious Studies Major</p>
+                      <p className="font-medium text-slate-800">Amanda Torres</p>
+                      <p className="text-sm text-stone-500">Religious Studies Major</p>
                     </div>
                   </div>
                 </div>
@@ -304,33 +319,39 @@ export default function Home() {
             </TabsContent>
             
             <TabsContent value="families">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="bg-background rounded-lg p-6 shadow-sm">
-                  <p className="italic mb-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                <div className="bg-white rounded-lg p-6 shadow-md border border-amber-100">
+                  <div className="w-10 h-10 rounded-full bg-amber-100 mb-4 flex items-center justify-center">
+                    <span className="text-amber-600">❝</span>
+                  </div>
+                  <p className="italic mb-4 text-stone-700">
                     "The kids' translation makes family devotions so much more engaging. Our children actually look forward to Bible time now!"
                   </p>
                   <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
+                    <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold">
                       WF
                     </div>
                     <div className="ml-3">
-                      <p className="font-medium">Wilson Family</p>
-                      <p className="text-sm text-muted-foreground">Parents of three</p>
+                      <p className="font-medium text-slate-800">Wilson Family</p>
+                      <p className="text-sm text-stone-500">Parents of three</p>
                     </div>
                   </div>
                 </div>
                 
-                <div className="bg-background rounded-lg p-6 shadow-sm">
-                  <p className="italic mb-4">
+                <div className="bg-white rounded-lg p-6 shadow-md border border-amber-100">
+                  <div className="w-10 h-10 rounded-full bg-amber-100 mb-4 flex items-center justify-center">
+                    <span className="text-amber-600">❝</span>
+                  </div>
+                  <p className="italic mb-4 text-stone-700">
                     "We use the reading plans to keep our family consistent with Bible study. The narrative mode helps our teenagers connect with stories in a fresh way."
                   </p>
                   <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
+                    <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold">
                       LP
                     </div>
                     <div className="ml-3">
-                      <p className="font-medium">Liu-Parker Family</p>
-                      <p className="text-sm text-muted-foreground">Home church group</p>
+                      <p className="font-medium text-slate-800">Liu-Parker Family</p>
+                      <p className="text-sm text-stone-500">Home church group</p>
                     </div>
                   </div>
                 </div>
