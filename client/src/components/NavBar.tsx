@@ -41,37 +41,64 @@ export function NavBar() {
     : 'U';
 
   return (
-    <div className="w-full border-b border-border">
-      {/* Main navigation */}
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div 
-            onClick={() => navigate('/')}
-            className="flex items-center cursor-pointer text-primary"
-          >
-            <BookOpenText className="h-6 w-6 mr-2" />
-            <span className="text-xl font-semibold">Leavn</span>
+    <header className="sticky top-0 z-40 w-full border-b border-border bg-background">
+      <div className="container mx-auto">
+        {/* Top navigation bar with logo, links and auth */}
+        <div className="flex h-16 items-center justify-between">
+          <div className="flex items-center gap-6 md:gap-10">
+            {/* Logo */}
+            <div 
+              onClick={() => navigate('/')}
+              className="flex items-center space-x-2 cursor-pointer"
+            >
+              <BookOpenText className="h-6 w-6 text-primary" />
+              <span className="text-xl font-semibold text-primary">Leavn</span>
+            </div>
+            
+            {/* Desktop navigation */}
+            <nav className="hidden md:flex items-center space-x-6">
+              <div 
+                onClick={() => navigate('/bible-reader')}
+                className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer text-sm font-medium"
+              >
+                Bible Study
+              </div>
+              <div 
+                onClick={() => navigate('/reading-plans')}
+                className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer text-sm font-medium"
+              >
+                Reading Plans
+              </div>
+            </nav>
           </div>
           
-          {/* Navigation Links */}
-          <nav className="hidden md:flex space-x-6">
-            <div 
-              onClick={() => navigate('/bible-reader')}
-              className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-            >
-              Bible Study
+          {/* Search bar (integrated in the main navigation) */}
+          <div className="hidden md:flex flex-1 items-center justify-center px-2">
+            <div className="w-full max-w-md relative">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Search verses, topics..."
+                className="w-full pl-9 bg-background"
+              />
             </div>
-            <div 
-              onClick={() => navigate('/reading-plans')}
-              className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-            >
-              Reading Plans
-            </div>
-          </nav>
+          </div>
           
-          {/* Auth section */}
-          <div>
+          {/* Right side controls */}
+          <div className="flex items-center gap-3">
+            {/* Theme toggle */}
+            <Button variant="ghost" size="icon" className="rounded-full">
+              <SunMoon className="h-5 w-5" />
+              <span className="sr-only">Toggle theme</span>
+            </Button>
+            
+            {/* Mobile search button */}
+            <Button variant="ghost" size="icon" className="md:hidden rounded-full">
+              <Search className="h-5 w-5" />
+              <span className="sr-only">Search</span>
+            </Button>
+            
+            {/* Auth */}
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -119,46 +146,19 @@ export function NavBar() {
             )}
           </div>
         </div>
-      </div>
-      
-      {/* Search bar */}
-      <div className="border-t border-border py-3 px-4">
-        <div className="container mx-auto">
-          <div className="flex items-center justify-between">
-            <div className="flex-1 max-w-3xl">
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="search"
-                  placeholder="Search verses, topics..."
-                  className="w-full rounded-md pl-8 bg-muted/50 border-muted"
-                />
-              </div>
-            </div>
-            <div className="flex gap-2 items-center ml-4">
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <SunMoon className="h-[1.2rem] w-[1.2rem]" />
-                <span className="sr-only">Toggle theme</span>
-              </Button>
-              {user && (
-                <Button 
-                  variant="ghost" 
-                  size="icon"
-                  className="rounded-full md:hidden"
-                  onClick={() => navigate('/profile')}
-                >
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src={user.photoURL || undefined} />
-                    <AvatarFallback className="bg-primary text-primary-foreground">
-                      {userInitials}
-                    </AvatarFallback>
-                  </Avatar>
-                </Button>
-              )}
-            </div>
+        
+        {/* Mobile search bar (only visible on mobile) */}
+        <div className="md:hidden py-2 px-2">
+          <div className="relative">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Search verses, topics..."
+              className="w-full pl-9 bg-background"
+            />
           </div>
         </div>
       </div>
-    </div>
+    </header>
   );
 }
