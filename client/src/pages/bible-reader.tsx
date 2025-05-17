@@ -401,33 +401,33 @@ export default function BibleReader() {
                     
                     {/* Theological lens selector toolbar */}
                     <div className="relative mb-8 flex flex-col items-center justify-center">
-                      <div className="mb-2 text-sm text-stone-600 font-medium">View Through Theological Lens</div>
-                      <div className="inline-flex p-1 bg-stone-100 rounded-lg shadow-sm">
+                      <div className="mb-2 text-base text-stone-700 font-medium">View Through Theological Lens</div>
+                      <div className="inline-flex p-1.5 bg-stone-100 rounded-lg shadow-sm">
                         <Button 
                           variant="ghost" 
-                          size="sm"
-                          className="rounded-md bg-emerald-100 text-emerald-800 hover:bg-emerald-200 font-medium"
+                          size="default"
+                          className="rounded-md bg-emerald-100 text-emerald-800 hover:bg-emerald-200 font-medium px-4"
                         >
                           Historical
                         </Button>
                         <Button 
                           variant="ghost" 
-                          size="sm"
-                          className="rounded-md text-stone-700 hover:bg-stone-200 font-medium"
+                          size="default"
+                          className="rounded-md text-stone-700 hover:bg-stone-200 font-medium px-4"
                         >
                           Evangelical
                         </Button>
                         <Button 
                           variant="ghost" 
-                          size="sm"
-                          className="rounded-md text-stone-700 hover:bg-stone-200 font-medium"
+                          size="default"
+                          className="rounded-md text-stone-700 hover:bg-stone-200 font-medium px-4"
                         >
                           Catholic
                         </Button>
                         <Button 
                           variant="ghost" 
-                          size="sm"
-                          className="rounded-md text-stone-700 hover:bg-stone-200 font-medium"
+                          size="default"
+                          className="rounded-md text-stone-700 hover:bg-stone-200 font-medium px-4"
                         >
                           Jewish
                         </Button>
@@ -435,9 +435,9 @@ export default function BibleReader() {
                     </div>
                     
                     {/* Scripture text with tighter spacing and more book-like format */}
-                    <div className={cn("relative prose max-w-none font-serif", getFontSizeClass())}>
+                    <div className={cn("relative prose max-w-none font-serif text-stone-800", getFontSizeClass())}>
                       {/* Chapter number as a decorative element */}
-                      <div className="float-left mr-4 font-sans text-6xl font-bold text-emerald-100 leading-none">
+                      <div className="float-left mr-4 font-sans text-7xl font-bold text-emerald-100 leading-none">
                         1
                       </div>
                       
@@ -450,7 +450,7 @@ export default function BibleReader() {
                         >
                           <span className="text-xs text-stone-400 align-top mr-1.5">{1}</span>
                           <span className="relative inline">
-                            In the beginning God <span className="border-b border-emerald-400 hover:text-emerald-700 cursor-help font-medium" title="Key concept: Creation">created</span> the heaven and the earth.
+                            In the beginning God <span className="border-b-2 border-emerald-500 hover:text-emerald-700 cursor-help font-medium" title="Key concept: Creation">created</span> the heaven and the earth.
                             {/* Hover interaction */}
                             <div className="hidden group-hover:flex absolute -top-1 right-0 transform translate-x-full bg-white shadow-lg rounded-md p-2 z-10 gap-2">
                               <Button variant="ghost" size="icon" className="h-8 w-8 text-amber-600">
@@ -473,7 +473,7 @@ export default function BibleReader() {
                         >
                           <span className="text-xs text-stone-400 align-top mr-1.5">{2}</span>
                           <span className="relative inline">
-                            And the earth was <span className="border-b border-amber-400 hover:text-amber-700 cursor-help font-medium" title="Hebrew: 'tohu vabohu'">without form, and void</span>; and darkness was upon the face of the deep. And the <span className="border-b border-emerald-400 hover:text-emerald-700 cursor-help font-medium" title="Hebrew: 'ruach Elohim'">Spirit of God</span> moved upon the face of the waters.
+                            And the earth was <span className="border-b-2 border-amber-500 hover:text-amber-700 cursor-help font-medium" title="Hebrew: 'tohu vabohu'">without form, and void</span>; and darkness was upon the face of the deep. And the <span className="border-b-2 border-emerald-500 hover:text-emerald-700 cursor-help font-medium" title="Hebrew: 'ruach Elohim'">Spirit of God</span> moved upon the face of the waters.
                             {/* Hover interaction */}
                             <div className="hidden group-hover:flex absolute -top-1 right-0 transform translate-x-full bg-white shadow-lg rounded-md p-2 z-10 gap-2">
                               <Button variant="ghost" size="icon" className="h-8 w-8 text-amber-600">
@@ -496,7 +496,7 @@ export default function BibleReader() {
                         >
                           <span className="text-xs text-stone-400 align-top mr-1.5">{3}</span>
                           <span className="relative inline">
-                            And God said, <span className="border-b border-amber-400 hover:text-amber-700 cursor-help font-medium" title="Divine speech as creative act">Let there be light</span>: and there was light.
+                            And God said, <span className="border-b-2 border-amber-500 hover:text-amber-700 cursor-help font-medium" title="Divine speech as creative act">Let there be light</span>: and there was light.
                             {/* Hover interaction */}
                             <div className="hidden group-hover:flex absolute -top-1 right-0 transform translate-x-full bg-white shadow-lg rounded-md p-2 z-10 gap-2">
                               <Button variant="ghost" size="icon" className="h-8 w-8 text-amber-600">
