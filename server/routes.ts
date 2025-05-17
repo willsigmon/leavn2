@@ -355,8 +355,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Get "Did you know" facts
-  app.get("/api/did-you-know/:book/:chapter/:verse", async (req: Request, res: Response) => {
+  // Get "Did you know" facts - protected by authentication
+  app.get("/api/did-you-know/:book/:chapter/:verse", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const { book, chapter, verse } = req.params;
       
@@ -395,8 +395,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Search verses
-  app.get("/api/search", async (req: Request, res: Response) => {
+  // Search verses - protected by authentication
+  app.get("/api/search", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const { query } = req.query;
       
@@ -413,8 +413,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Get narrative mode for chapter
-  app.get("/api/ai/narrative/:book/:chapter", async (req: Request, res: Response) => {
+  // Get narrative mode for chapter - protected by authentication
+  app.get("/api/ai/narrative/:book/:chapter", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const { book, chapter } = req.params;
       const lens = req.query.lens as string || "standard";
@@ -453,8 +453,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Generate AI artwork for chapter
-  app.get("/api/ai/artwork/:book/:chapter", async (req: Request, res: Response) => {
+  // Generate AI artwork for chapter - protected by authentication
+  app.get("/api/ai/artwork/:book/:chapter", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const { book, chapter } = req.params;
       const chapterNum = parseInt(chapter);
