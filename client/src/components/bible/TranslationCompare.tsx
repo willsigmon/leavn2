@@ -40,7 +40,7 @@ export function TranslationCompare({ book, chapter, verse }: TranslationCompareP
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <CompareIcon className="h-5 w-5" />
+            <GitCompareIcon className="h-5 w-5" />
             <span>Loading verse translations...</span>
           </CardTitle>
         </CardHeader>
@@ -57,7 +57,7 @@ export function TranslationCompare({ book, chapter, verse }: TranslationCompareP
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <CompareIcon className="h-5 w-5" />
+            <GitCompareIcon className="h-5 w-5" />
             <span>Translation Comparison</span>
           </CardTitle>
         </CardHeader>
@@ -73,7 +73,7 @@ export function TranslationCompare({ book, chapter, verse }: TranslationCompareP
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
-            <CompareIcon className="h-5 w-5" />
+            <GitCompareIcon className="h-5 w-5" />
             <span>Translation Comparison</span>
           </CardTitle>
           <div className="flex items-center space-x-2">

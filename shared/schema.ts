@@ -30,8 +30,25 @@ export const verses = pgTable("verses", {
   book: text("book").notNull(),
   chapter: integer("chapter").notNull(),
   verseNumber: integer("verse_number").notNull(),
-  text: text("text").notNull(),
+  textKjv: text("text_kjv").notNull(),
+  textWeb: text("text_web").notNull(),
   embedding: text("embedding"),
+});
+
+// Bible chunks for RAG
+export const bibleChunks = pgTable("bible_chunks", {
+  id: text("id").primaryKey(),
+  content: text("content").notNull(),
+  translation: text("translation").notNull(),
+  book: text("book").notNull(),
+  startChapter: integer("start_chapter").notNull(),
+  startVerse: integer("start_verse").notNull(),
+  endChapter: integer("end_chapter").notNull(),
+  endVerse: integer("end_verse").notNull(),
+  verses: text("verses").array().notNull(),
+  tags: text("tags").array(),
+  embedding: jsonb("embedding"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 // Notes for users
@@ -121,6 +138,7 @@ export const didYouKnow = pgTable("did_you_know", {
 
 // Insert schemas
 export const insertVerseSchema = createInsertSchema(verses).omit({ id: true });
+export const insertBibleChunkSchema = createInsertSchema(bibleChunks).omit({ id: true, createdAt: true });
 export const insertNoteSchema = createInsertSchema(notes).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertCommentarySchema = createInsertSchema(commentaries).omit({ id: true, createdAt: true });
 export const insertTagSchema = createInsertSchema(tags).omit({ id: true });
@@ -140,7 +158,14 @@ export type Verse = typeof verses.$inferSelect & {
   highlighted?: boolean;
   hasCommentary?: boolean;
   commentary?: string;
+  text?: { // For backward compatibility
+    kjv: string;
+    web: string;
+  };
 };
+
+export type InsertBibleChunk = z.infer<typeof insertBibleChunkSchema>;
+export type BibleChunk = typeof bibleChunks.$inferSelect;
 
 export type InsertNote = z.infer<typeof insertNoteSchema>;
 export type Note = typeof notes.$inferSelect;
