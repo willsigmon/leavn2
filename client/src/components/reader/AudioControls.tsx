@@ -12,16 +12,24 @@ import {
 } from 'lucide-react';
 
 interface AudioControlsProps {
-  verseTexts: string[];
+  text?: string;
+  verseTexts?: string[];
   currentVerseIndex?: number;
   onVerseChange?: (index: number) => void;
+  onHighlight?: (index: number) => void;
+  onPlayStateChange?: (isPlaying: boolean) => void;
 }
 
-export function AudioControls({ 
-  verseTexts, 
+const AudioControls = ({ 
+  text,
+  verseTexts = [], 
   currentVerseIndex = 0,
-  onVerseChange 
-}: AudioControlsProps) {
+  onVerseChange,
+  onHighlight,
+  onPlayStateChange
+}: AudioControlsProps) => {
+  // If text is provided, convert it to an array of individual verses
+  const verses = text ? [text] : verseTexts;
   const [isPlaying, setIsPlaying] = useState(false);
   const [rate, setRate] = useState(1);
   const [volume, setVolume] = useState(1);
@@ -77,8 +85,12 @@ export function AudioControls({
       utteranceRef.current.onend = () => {
         setIsPlaying(false);
         
+        if (onPlayStateChange) {
+          onPlayStateChange(false);
+        }
+        
         // Move to next verse if available
-        if (currentVerse < verseTexts.length - 1) {
+        if (currentVerse < verses.length - 1) {
           const nextVerse = currentVerse + 1;
           setCurrentVerse(nextVerse);
           if (onVerseChange) {
@@ -92,16 +104,38 @@ export function AudioControls({
         }
       };
       
+      // Use this for word boundary events to track current reading position
+      utteranceRef.current.onboundary = (event) => {
+        if (event.name === 'word' && onHighlight && verses[currentVerse]) {
+          // Calculate the position in the overall text
+          let position = event.charIndex;
+          
+          // Add lengths of previous verses
+          for (let i = 0; i < currentVerse; i++) {
+            if (verses[i]) {
+              position += verses[i].length + 1; // +1 for space between verses
+            }
+          }
+          
+          if (onHighlight) {
+            onHighlight(position);
+          }
+        }
+      };
+      
       utteranceRef.current.onerror = (event) => {
         console.error('Speech synthesis error:', event);
         setIsPlaying(false);
+        if (onPlayStateChange) {
+          onPlayStateChange(false);
+        }
       };
     }
-  }, [currentVerse, verseTexts.length, isPlaying, onVerseChange]);
+  }, [currentVerse, verses, isPlaying, onVerseChange, onHighlight, onPlayStateChange]);
 
   // Play current verse
   const playCurrentVerse = () => {
-    if (!speechSynthRef.current || currentVerse >= verseTexts.length) return;
+    if (!speechSynthRef.current || !verses[currentVerse]) return;
     
     // Cancel any ongoing speech
     if (speechSynthRef.current.speaking) {
@@ -109,7 +143,7 @@ export function AudioControls({
     }
     
     // Create new utterance
-    const utterance = new SpeechSynthesisUtterance(verseTexts[currentVerse]);
+    const utterance = new SpeechSynthesisUtterance(verses[currentVerse]);
     
     // Set properties
     if (selectedVoice) {
@@ -131,6 +165,9 @@ export function AudioControls({
     if (isPlaying) {
       speechSynthRef.current.pause();
       setIsPlaying(false);
+      if (onPlayStateChange) {
+        onPlayStateChange(false);
+      }
     } else {
       if (speechSynthRef.current.paused) {
         speechSynthRef.current.resume();
@@ -138,6 +175,9 @@ export function AudioControls({
         playCurrentVerse();
       }
       setIsPlaying(true);
+      if (onPlayStateChange) {
+        onPlayStateChange(true);
+      }
     }
   };
 
@@ -166,7 +206,7 @@ export function AudioControls({
 
   // Go to next verse
   const goToNextVerse = () => {
-    if (currentVerse < verseTexts.length - 1) {
+    if (currentVerse < verses.length - 1) {
       stopPlayback();
       const nextVerse = currentVerse + 1;
       setCurrentVerse(nextVerse);
@@ -235,7 +275,7 @@ export function AudioControls({
           size="sm"
           className="h-8 w-8 p-0"
           onClick={goToNextVerse}
-          disabled={currentVerse >= verseTexts.length - 1}
+          disabled={currentVerse >= verses.length - 1}
           aria-label="Next verse"
         >
           <SkipForward className="h-4 w-4" />
