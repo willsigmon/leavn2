@@ -71,9 +71,9 @@ export function VerseCanvas({
   ];
   
   const sampleKidsTexts = [
-    "God said, \"Let's make light!\" And wow! Light appeared! God made light with His special words.",
-    "God saw the light was super good! He put the light and dark in different places.",
-    "God called the light \"Day\" and the dark \"Night.\" That was the end of the very first day ever!"
+    "God said, \"Let's make light!\" And POOF! Bright, shiny light appeared everywhere! God made it just by speaking His special words!",
+    "God looked at the light and said, \"This light is AWESOME!\" Then He put the light and dark in their own special places so they wouldn't get mixed up.",
+    "God gave special names to His creation. He called the light \"Day\" (that's when we play!) and the dark \"Night\" (that's when we sleep!). And that was the very first day God ever made!"
   ];
   
   // Function to get the appropriate text based on the mode
@@ -95,46 +95,29 @@ export function VerseCanvas({
     onSelect?.([verseRef]);
   };
   
+  // Sample verses for when API data isn't loaded yet
+  const sampleVerses = [
+    { verse: 1, text: "In the beginning, God created the heavens and the earth." },
+    { verse: 2, text: "The earth was without form and void, and darkness was over the face of the deep. And the Spirit of God was hovering over the face of the waters." },
+    { verse: 3, text: "And God said, \"Let there be light,\" and there was light." }
+  ];
+  
+  // Use actual verses if available, otherwise use sample data
+  const versesToRender = verses.length > 0 ? verses : sampleVerses;
+  
   return (
     <div className={cn("overflow-y-auto p-4", className)}>
-      {verses.length > 0 ? (
-        verses.map((verse, index) => (
-          <Verse
-            key={`${book}-${chapter}-${verse.verse}`}
-            book={book}
-            chapter={chapter}
-            verse={verse.verse}
-            text={getVerseText(index, verse.text)}
-            isSelected={selectedVerses.includes(verse.verse)}
-            onClick={() => handleVerseClick(verse.verse)}
-          />
-        ))
-      ) : (
-        // Loading state and sample verses for preview
-        <>
-          <Verse 
-            key={`${book}-${chapter}-1`} 
-            book={book} 
-            chapter={chapter} 
-            verse={1} 
-            text={getVerseText(0, "In the beginning, God created the heavens and the earth.")} 
-          />
-          <Verse 
-            key={`${book}-${chapter}-2`} 
-            book={book} 
-            chapter={chapter} 
-            verse={2} 
-            text={getVerseText(1, "The earth was without form and void, and darkness was over the face of the deep. And the Spirit of God was hovering over the face of the waters.")} 
-          />
-          <Verse 
-            key={`${book}-${chapter}-3`} 
-            book={book} 
-            chapter={chapter} 
-            verse={3} 
-            text={getVerseText(2, "And God said, \"Let there be light,\" and there was light.")} 
-          />
-        </>
-      )}
+      {versesToRender.map((verse, index) => (
+        <Verse
+          key={`${book}-${chapter}-${verse.verse}`}
+          book={book}
+          chapter={chapter}
+          verse={verse.verse}
+          text={getVerseText(index, verse.text)}
+          isSelected={selectedVerses.includes(verse.verse)}
+          onClick={() => handleVerseClick(verse.verse)}
+        />
+      ))}
     </div>
   );
 }

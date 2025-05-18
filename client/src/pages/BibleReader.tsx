@@ -31,6 +31,9 @@ export default function BibleReader() {
   const handleTextModeChange = (mode: string) => {
     setTextMode(mode);
     console.log(`Text mode changed to ${mode}`);
+    
+    // In a real app, this would fetch the appropriate version of the text
+    // based on the selected mode from the server
   };
 
   // Handle verse selection
