@@ -50,6 +50,7 @@ export default function BibleReader() {
   const params = useParams();
   const [, navigate] = useLocation();
   const [activeTranslation, setActiveTranslation] = useState('web');
+  const [activeLens, setActiveLens] = useState('default'); // 'default', 'evangelical', 'catholic', 'jewish', 'genz', 'kids'
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [insightsPanelOpen, setInsightsPanelOpen] = useState(false);
   const [showToolbar, setShowToolbar] = useState(true);
@@ -348,29 +349,70 @@ export default function BibleReader() {
             </div>
           )}
           
-          {/* Translation tabs */}
+          {/* Translation and Lens tabs */}
           <div className="sticky top-0 z-10 bg-stone-50 border-b border-stone-200 mb-6 px-4 md:px-6">
             <div className="max-w-3xl mx-auto py-2">
-              <Tabs 
-                defaultValue={activeTranslation} 
-                onValueChange={setActiveTranslation}
-                className="w-full"
-              >
-                <TabsList className="bg-stone-200/70">
-                  <TabsTrigger 
-                    value="web" 
-                    className="data-[state=active]:bg-emerald-100 data-[state=active]:text-emerald-700"
+              <div className="flex flex-col md:flex-row gap-3 md:items-center">
+                {/* Translation selection */}
+                <div className="w-full md:w-auto">
+                  <Tabs 
+                    defaultValue={activeTranslation} 
+                    onValueChange={setActiveTranslation}
+                    className="w-full"
                   >
-                    WEB
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="kjv"
-                    className="data-[state=active]:bg-emerald-100 data-[state=active]:text-emerald-700"
+                    <TabsList className="bg-stone-200/70">
+                      <TabsTrigger 
+                        value="web" 
+                        className="data-[state=active]:bg-[#e8efe5] data-[state=active]:text-[#2c4c3b]"
+                      >
+                        WEB
+                      </TabsTrigger>
+                      <TabsTrigger 
+                        value="kjv"
+                        className="data-[state=active]:bg-[#e8efe5] data-[state=active]:text-[#2c4c3b]"
+                      >
+                        KJV
+                      </TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                </div>
+                
+                {/* Theological lens selection */}
+                <div className="w-full md:w-auto md:ml-auto">
+                  <Tabs 
+                    defaultValue={activeLens} 
+                    onValueChange={setActiveLens}
+                    className="w-full"
                   >
-                    KJV
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
+                    <TabsList className="bg-stone-200/70">
+                      <TabsTrigger 
+                        value="default" 
+                        className="data-[state=active]:bg-[#e8efe5] data-[state=active]:text-[#2c4c3b]"
+                      >
+                        Default
+                      </TabsTrigger>
+                      <TabsTrigger 
+                        value="evangelical"
+                        className="data-[state=active]:bg-[#e8efe5] data-[state=active]:text-[#2c4c3b]"
+                      >
+                        Evangelical
+                      </TabsTrigger>
+                      <TabsTrigger 
+                        value="catholic"
+                        className="data-[state=active]:bg-[#e8efe5] data-[state=active]:text-[#2c4c3b]"
+                      >
+                        Catholic
+                      </TabsTrigger>
+                      <TabsTrigger 
+                        value="jewish"
+                        className="data-[state=active]:bg-[#e8efe5] data-[state=active]:text-[#2c4c3b]"
+                      >
+                        Jewish
+                      </TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                </div>
+              </div>
             </div>
           </div>
           
@@ -397,7 +439,25 @@ export default function BibleReader() {
                   {/* Book-like page with closer text layout */}
                   <div className="relative bg-white rounded-md shadow-md p-8 md:p-10 max-w-3xl mx-auto">
                     {/* Paper texture background */}
-                    <div className="absolute inset-0 bg-stone-50 dark:bg-gray-900 opacity-50 rounded-md"></div>
+                    <div className="absolute inset-0 bg-[#f8f9f5] dark:bg-gray-900 opacity-70 rounded-md"></div>
+                    
+                    {/* Lens badge */}
+                    {activeLens !== 'default' && (
+                      <div className="absolute top-3 right-3">
+                        <div className={cn(
+                          "px-3 py-1 rounded-full text-xs font-medium",
+                          {
+                            "bg-[#e8efe5] text-[#2c4c3b]": activeLens === "evangelical",
+                            "bg-amber-100 text-amber-800": activeLens === "catholic",
+                            "bg-blue-100 text-blue-800": activeLens === "jewish",
+                            "bg-purple-100 text-purple-800": activeLens === "genz",
+                            "bg-pink-100 text-pink-800": activeLens === "kids",
+                          }
+                        )}>
+                          {activeLens.charAt(0).toUpperCase() + activeLens.slice(1)} Lens
+                        </div>
+                      </div>
+                    )}
                     
                     {/* Theological lens selector toolbar */}
                     <div className="relative mb-8 flex flex-col items-center justify-center">
