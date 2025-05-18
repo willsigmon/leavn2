@@ -16,13 +16,16 @@ import {
   ChevronRight,
   Moon,
   Sun,
-  VolumeIcon
+  VolumeIcon,
+  TagsIcon,
+  Network
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { TableOfContents } from './TableOfContents';
 import { VerseHighlighter } from './VerseHighlighter';
 import { ViewModeSelector, ViewMode } from './ViewModeSelector';
 import { SimpleAudioControls } from './SimpleAudioControls';
+import { ThematicExplorer } from './ThematicExplorer';
 import { useTheme } from '../ThemeProvider';
 import { bibleStructure, getNextChapter, getPrevChapter } from '@/lib/bibleStructure';
 import { colors } from '@/lib/theme-utils';
@@ -199,6 +202,13 @@ export function ReaderLayout({
               <Clock className="h-5 w-5" />
             </TabsTrigger>
             <TabsTrigger 
+              value="thematic" 
+              className="w-10 h-10 p-0 data-[state=active]:bg-[#e8efe5] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#2c4c3b]/20 dark:data-[state=active]:text-[#a5c2a5]"
+              title="Explore themes, people and places"
+            >
+              <Network className="h-5 w-5" />
+            </TabsTrigger>
+            <TabsTrigger 
               value="insights" 
               className="w-10 h-10 p-0 data-[state=active]:bg-amber-100 data-[state=active]:text-amber-900 dark:data-[state=active]:bg-amber-900/20 dark:data-[state=active]:text-amber-50"
             >
@@ -344,6 +354,43 @@ export function ReaderLayout({
                     Please select a verse from the text to see insights
                   </div>
                 )}
+              </div>
+            </TabsContent>
+            
+            {/* Thematic Explorer Tab */}
+            <TabsContent 
+              value="thematic" 
+              className="flex-1 p-6 m-0 border-0 overflow-auto"
+            >
+              <div className="max-w-4xl mx-auto">
+                <h2 className="text-2xl font-serif font-semibold mb-4 text-[#2c4c3b] dark:text-[#a5c2a5]">
+                  Thematic Explorer
+                </h2>
+                <p className="text-stone-600 dark:text-stone-400 mb-4">
+                  Explore the themes, people, places and symbols in {book} {chapter}.
+                </p>
+                <ThematicExplorer
+                  book={book}
+                  chapter={chapter}
+                  onNavigateToPassage={(book, chapter, verse) => {
+                    navigate(`/reader/${book}/${chapter}`);
+                    if (verse) {
+                      // Wait for navigation to complete and then scroll to verse
+                      setTimeout(() => {
+                        const verseElement = document.getElementById(`verse-${verse}`);
+                        if (verseElement) {
+                          verseElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                          // Highlight the verse temporarily
+                          verseElement.classList.add('bg-[#e8efe5]', 'dark:bg-[#2c4c3b]/20');
+                          setTimeout(() => {
+                            verseElement.classList.remove('bg-[#e8efe5]', 'dark:bg-[#2c4c3b]/20');
+                          }, 2000);
+                        }
+                      }, 300);
+                    }
+                    setActiveTab('read');
+                  }}
+                />
               </div>
             </TabsContent>
             
