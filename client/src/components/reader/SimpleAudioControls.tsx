@@ -7,11 +7,10 @@ import {
   Volume2, 
   VolumeX,
   SkipForward, 
-  SkipBack,
-  Repeat
+  SkipBack
 } from 'lucide-react';
 
-interface AudioControlsProps {
+interface SimpleAudioControlsProps {
   text?: string;
   verseTexts?: string[];
   currentVerseIndex?: number;
@@ -20,22 +19,20 @@ interface AudioControlsProps {
   onPlayStateChange?: (isPlaying: boolean) => void;
 }
 
-export function AudioControls({ 
+export function SimpleAudioControls({ 
   text,
   verseTexts = [], 
   currentVerseIndex = 0,
   onVerseChange,
   onHighlight,
   onPlayStateChange
-}: AudioControlsProps) {
+}: SimpleAudioControlsProps) {
   // If text is provided, convert it to an array of individual verses
   const verses = text ? [text] : verseTexts;
   const [isPlaying, setIsPlaying] = useState(false);
   const [rate, setRate] = useState(1);
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
-  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
-  const [selectedVoice, setSelectedVoice] = useState<SpeechSynthesisVoice | null>(null);
   const [currentVerse, setCurrentVerse] = useState(currentVerseIndex);
   const speechSynthRef = useRef<SpeechSynthesis | null>(null);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
@@ -44,24 +41,6 @@ export function AudioControls({
   useEffect(() => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       speechSynthRef.current = window.speechSynthesis;
-      
-      // Get available voices
-      const voicesChanged = () => {
-        const voices = speechSynthRef.current?.getVoices() || [];
-        setAvailableVoices(voices);
-        
-        // Default to an English voice if available
-        const englishVoice = voices.find(voice => voice.lang.includes('en'));
-        if (englishVoice) {
-          setSelectedVoice(englishVoice);
-        } else if (voices.length > 0) {
-          setSelectedVoice(voices[0]);
-        }
-      };
-      
-      // Chrome loads voices asynchronously
-      speechSynthRef.current.onvoiceschanged = voicesChanged;
-      voicesChanged();
       
       // Clean up
       return () => {
@@ -77,7 +56,7 @@ export function AudioControls({
     if (currentVerseIndex !== currentVerse) {
       setCurrentVerse(currentVerseIndex);
     }
-  }, [currentVerseIndex]);
+  }, [currentVerseIndex, currentVerse]);
 
   // Handle speech synthesis end event
   useEffect(() => {
@@ -146,9 +125,6 @@ export function AudioControls({
     const utterance = new SpeechSynthesisUtterance(verses[currentVerse]);
     
     // Set properties
-    if (selectedVoice) {
-      utterance.voice = selectedVoice;
-    }
     utterance.rate = rate;
     utterance.volume = isMuted ? 0 : volume;
     

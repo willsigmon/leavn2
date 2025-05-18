@@ -5,7 +5,7 @@ import { useReaderPreferences } from '@/hooks/useReaderPreferences';
 import { VerseHighlighter } from './VerseHighlighter';
 import { ReaderNav } from './ReaderNav';
 import { ViewModeSelector, ViewMode } from './ViewModeSelector';
-import { AudioControls } from './AudioControls';
+import { SimpleAudioControls } from './SimpleAudioControls';
 import { NoteEditor } from './NoteEditor';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -249,7 +249,7 @@ export function Reader({
       {/* Audio controls panel */}
       {isReading && (
         <div className="border-t bg-card p-4">
-          <AudioControls 
+          <SimpleAudioControls 
             text={verseTexts.join(' ')}
             onHighlight={(index) => {
               // Find which verse contains the current word

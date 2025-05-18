@@ -9,7 +9,7 @@ import { ContextBox } from '@/components/ContextSidebar/ContextBox';
 import { MapPane } from '@/components/ContextSidebar/MapPane';
 import { TypographyDialog } from '@/components/reader/TypographyDialog';
 import type { TypographyPreferences } from '@/components/reader/TypographyDialog';
-import { AudioControls } from '@/components/reader/AudioControls';
+import { SimpleAudioControls } from '@/components/reader/SimpleAudioControls';
 import speechSynthesis from '@/lib/speechSynthesis';
 import useMediaQuery from '../hooks/useMediaQuery';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
@@ -456,7 +456,7 @@ export default function NewReader() {
                 {/* Audio controls panel for read-aloud feature */}
                 {isReading && (
                   <div className="p-4 bg-stone-100 dark:bg-stone-800 border-t border-stone-200 dark:border-stone-700">
-                    <AudioControls 
+                    <SimpleAudioControls 
                       text={verses.map(v => v.text).join(' ')}
                       onHighlight={(index) => {
                         // Find which verse contains the current word
