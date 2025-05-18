@@ -2,7 +2,7 @@ import {
   User, Note, InsertNote, InsertVerse, 
   Commentary, InsertCommentary, Tag, InsertTag,
   Author, InsertAuthor, DidYouKnow, InsertDidYouKnow,
-  UpsertUser
+  UpsertUser, UserPreferences, InsertUserPreferences
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, sql } from "drizzle-orm";

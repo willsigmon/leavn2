@@ -129,6 +129,19 @@ export const userProgress = pgTable("user_progress", {
   completedAt: timestamp("completed_at"),
 });
 
+// User reader preferences
+export const userPreferences = pgTable("user_preferences", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  fontSize: text("font_size").default("medium"), // small, medium, large, x-large
+  fontFamily: text("font_family").default("serif"), // serif, sans-serif, dyslexic
+  lineSpacing: text("line_spacing").default("normal"), // tight, normal, relaxed
+  theme: text("theme").default("light"), // light, dark, sepia
+  isOpenDyslexicEnabled: boolean("is_open_dyslexic_enabled").default(false),
+  readingPosition: jsonb("reading_position").default({}),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 // "Did you know" facts
 export const didYouKnow = pgTable("did_you_know", {
   id: text("id").primaryKey(),
@@ -147,6 +160,7 @@ export const insertAuthorSchema = createInsertSchema(authors).omit({ id: true })
 export const insertReadingPlanSchema = createInsertSchema(readingPlans).omit({ id: true, createdAt: true });
 export const insertPlanEntrySchema = createInsertSchema(planEntries).omit({ id: true });
 export const insertUserProgressSchema = createInsertSchema(userProgress).omit({ id: true, startedAt: true, completedAt: true });
+export const insertUserPreferencesSchema = createInsertSchema(userPreferences).omit({ id: true, updatedAt: true });
 export const insertDidYouKnowSchema = createInsertSchema(didYouKnow).omit({ id: true });
 
 // Types
@@ -193,3 +207,6 @@ export type UserProgress = typeof userProgress.$inferSelect;
 
 export type InsertDidYouKnow = z.infer<typeof insertDidYouKnowSchema>;
 export type DidYouKnow = typeof didYouKnow.$inferSelect;
+
+export type InsertUserPreferences = z.infer<typeof insertUserPreferencesSchema>;
+export type UserPreferences = typeof userPreferences.$inferSelect;

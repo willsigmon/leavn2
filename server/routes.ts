@@ -22,6 +22,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/login", handleLogin);
   app.get("/api/logout", handleLogout);
   app.get("/api/auth/user", getUserData);
+  
+  // User preferences endpoints
+  app.get("/api/preferences", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const userId = getUserId(req);
+      const preferences = await storage.getUserPreferences(userId);
+      res.json(preferences || {});
+    } catch (error) {
+      console.error("Error fetching user preferences:", error);
+      res.status(500).json({ message: "Failed to fetch user preferences" });
+    }
+  });
+
+  app.post("/api/preferences", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const userId = getUserId(req);
+      const preferences = req.body;
+      const updatedPreferences = await storage.saveUserPreferences(userId, preferences);
+      res.json(updatedPreferences);
+    } catch (error) {
+      console.error("Error saving user preferences:", error);
+      res.status(500).json({ message: "Failed to save user preferences" });
+    }
+  });
 
   // Helper to get the current user ID from the session
   const getUserId = (req: Request): string => {
