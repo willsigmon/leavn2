@@ -9,7 +9,7 @@ import { ContextBox } from '@/components/ContextSidebar/ContextBox';
 import { MapPane } from '@/components/ContextSidebar/MapPane';
 import { TypographyDialog } from '@/components/reader/TypographyDialog';
 import type { TypographyPreferences } from '@/components/reader/TypographyDialog';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
+import useMediaQuery from '../hooks/useMediaQuery';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import { ChevronUp, Menu, BookOpen, Brush, Bookmark, Share2, FileText, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { LensButtons } from './LensButtons';
+import LensButtons from './LensButtons';
 import { RelatedContent } from './RelatedContent';
 
 interface ContextBoxProps {

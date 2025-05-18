@@ -214,6 +214,7 @@ export function VerseCanvas({
   
   return (
     <div className={cn("overflow-y-auto p-4 reader-paper shadow-inner", className)}>
+      <div className="bible-text-content">
       {versesToRender.map((verse, index) => (
         <Verse
           key={`${book}-${chapter}-${verse.verse || index}`}
@@ -226,6 +227,7 @@ export function VerseCanvas({
           typography={typography}
         />
       ))}
+      </div>
     </div>
   );
 }
