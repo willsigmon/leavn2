@@ -10,7 +10,8 @@ import {
   MapPin,
   Users,
   Clock,
-  Sparkles
+  Sparkles,
+  PenTool
 } from 'lucide-react';
 import { 
   Tabs, 
@@ -69,6 +70,12 @@ export function ContextSidebar({ book, chapter, verse, viewMode }: ContextSideba
   const { data: commentaryData, isLoading: isLoadingCommentary } = useQuery({
     queryKey: [`/api/ai/commentary/${book}/${chapter}/${verse}`, { lens: viewMode }],
     enabled: !!verse,
+  });
+  
+  // Fetch author information for the current book
+  const { data: authorData, isLoading: isLoadingAuthor } = useQuery({
+    queryKey: [`/api/author/${book}`],
+    enabled: !!book,
   });
   
   // Get tags categorized
@@ -148,6 +155,41 @@ export function ContextSidebar({ book, chapter, verse, viewMode }: ContextSideba
         <TabsContent value="insights" className="mt-0">
           <ScrollArea className="h-[calc(100vh-280px)]">
             <div className="space-y-4">
+              {/* Author Information Section */}
+              <div>
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="text-sm font-semibold text-stone-800 dark:text-stone-200 flex items-center">
+                    <PenTool className="h-3.5 w-3.5 mr-1.5" />
+                    Author
+                  </h3>
+                </div>
+                
+                {isLoadingAuthor ? (
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-3/4" />
+                  </div>
+                ) : authorData ? (
+                  <div className="text-sm text-stone-700 dark:text-stone-300 bg-amber-50/50 dark:bg-amber-950/20 p-3 rounded-md border border-amber-200/50 dark:border-amber-800/30">
+                    <div className="font-medium text-amber-800 dark:text-amber-300 mb-1">
+                      {authorData.name || "Unknown"}
+                    </div>
+                    <p>{authorData.description || "Information about the author is not available."}</p>
+                    {authorData.period && (
+                      <div className="mt-1 text-xs text-amber-700/70 dark:text-amber-400/70 flex items-center">
+                        <Clock className="h-3 w-3 mr-1 inline-block" />
+                        {authorData.period}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="text-sm italic text-stone-500 dark:text-stone-400 bg-stone-50 dark:bg-stone-800 p-3 rounded-md border border-stone-200 dark:border-stone-700">
+                    Author information is not available.
+                  </div>
+                )}
+              </div>
+
+              {/* Commentary Section */}
               <div>
                 <div className="flex items-start justify-between mb-2">
                   <h3 className="text-sm font-semibold text-stone-800 dark:text-stone-200">

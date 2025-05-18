@@ -194,6 +194,7 @@ export function VerseHighlighter({
             verse.highlightColor ? `highlight-${verse.highlightColor}` : ''
           } ${selectedVerse === verse.number ? 'bg-amber-50/70 dark:bg-amber-950/20' : ''}
           ${animating === verse.number ? 'animate-pulse ring-2 ring-amber-500 dark:ring-amber-500/70' : ''}
+          ${selectedVerse === verse.number ? 'relative before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-amber-300/10 before:to-transparent before:animate-shine-subtle' : ''}
           hover:bg-stone-100 dark:hover:bg-stone-800`}
         >
           <span 
