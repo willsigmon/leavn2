@@ -43,9 +43,16 @@ export function BibleContent({
   const { data: allCrossReferences = [] } = useQuery<CrossReference[]>({
     queryKey: [`/api/reader/cross-references/chapter/${book}/${chapter}`],
     queryFn: async () => {
-      // This would typically fetch all cross-references for the chapter
-      // For now, we'll use the mock data from our component
-      return [];
+      try {
+        const response = await fetch(`/api/reader/cross-references/chapter/${book}/${chapter}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch chapter cross-references');
+        }
+        return response.json();
+      } catch (error) {
+        console.error('Error fetching chapter cross-references:', error);
+        return [];
+      }
     },
     enabled: !!chapterData
   });

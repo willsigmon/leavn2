@@ -18,6 +18,76 @@ interface CrossReference {
 
 // Cross-reference relationship database (simplified for demonstration)
 // In a real implementation, this would be stored in the database
+
+// Function to generate mock cross-references data for development
+function generateMockCrossReferences(reference: string): CrossReference[] {
+  const connectionTypes = ['thematic', 'quotation', 'fulfillment', 'parallel', 'contrast'];
+  const referenceText = {
+    'Genesis 1:1': 'In the beginning God created the heaven and the earth.',
+    'John 1:1': 'In the beginning was the Word, and the Word was with God, and the Word was God.',
+    'Hebrews 11:3': 'Through faith we understand that the worlds were framed by the word of God.',
+    'Psalm 33:6': 'By the word of the LORD were the heavens made; and all the host of them by the breath of his mouth.',
+    'Romans 5:8': 'But God commendeth his love toward us, in that, while we were yet sinners, Christ died for us.',
+    'John 3:16': 'For God so loved the world, that he gave his only begotten Son.',
+    'Colossians 1:16': 'For by him were all things created, that are in heaven, and that are in earth.',
+    'Isaiah 40:26': 'Lift up your eyes on high, and behold who hath created these things.',
+    'Revelation 4:11': 'Thou art worthy, O Lord, to receive glory and honour and power: for thou hast created all things.',
+    'Matthew 11:28': 'Come unto me, all ye that labour and are heavy laden, and I will give you rest.',
+    'Psalm 23:1': 'The LORD is my shepherd; I shall not want.',
+  };
+  
+  const possibleRefs = Object.keys(referenceText).filter(ref => ref !== reference);
+  const limit = 3; // Default number of references to generate
+  const selectedRefs = possibleRefs.sort(() => Math.random() - 0.5).slice(0, limit);
+  
+  return selectedRefs.map((toRef, index) => {
+    // Get random connection type and relevance
+    const connection = connectionTypes[Math.floor(Math.random() * connectionTypes.length)];
+    const relevance = Math.floor(Math.random() * 30) + 70; // 70-100
+    
+    // Generate explanation based on connection type
+    let explanation = '';
+    switch (connection) {
+      case 'thematic':
+        explanation = `Both verses address the theme of ${['creation', 'redemption', 'faithfulness', 'judgment'][Math.floor(Math.random() * 4)]}.`;
+        break;
+      case 'quotation':
+        explanation = 'This passage directly quotes or alludes to the source text.';
+        break;
+      case 'fulfillment':
+        explanation = 'This passage shows the fulfillment of the promise or prophecy.';
+        break;
+      case 'parallel':
+        explanation = 'These passages describe similar events or teachings.';
+        break;
+      case 'contrast':
+        explanation = 'These passages present contrasting perspectives or requirements.';
+        break;
+    }
+    
+    // Generate tags
+    const allTags = ['creation', 'word', 'beginning', 'faith', 'power', 'love', 'redemption', 'glory', 'wisdom'];
+    const numTags = Math.floor(Math.random() * 3) + 1; // 1-3 tags
+    const tags = [];
+    for (let i = 0; i < numTags; i++) {
+      const tag = allTags[Math.floor(Math.random() * allTags.length)];
+      if (!tags.includes(tag)) {
+        tags.push(tag);
+      }
+    }
+    
+    return {
+      id: `${reference.replace(/\s+/g, '-')}-${index}`,
+      fromRef: reference,
+      toRef: toRef,
+      toText: referenceText[toRef] || 'Verse text would appear here.',
+      connection,
+      relevance,
+      explanation,
+      tags
+    };
+  });
+}
 const crossReferenceDB: Record<string, string[]> = {
   // Genesis connections
   'Genesis 1:1': ['John 1:1', 'Hebrews 11:3', 'Psalm 33:6', 'Colossians 1:16', 'Isaiah 40:26'],
@@ -65,6 +135,36 @@ const tags: Record<string, string[]> = {
   'Psalm 23:1': ['shepherd', 'provision', 'guidance', 'comfort'],
   'default': ['scripture', 'connection', 'reference']
 };
+
+// Get cross-references for an entire chapter
+router.get('/chapter/:book/:chapter', async (req: Request, res: Response) => {
+  try {
+    const { book, chapter } = req.params;
+    const chapterNum = parseInt(chapter);
+    
+    // In a production app, this would query the database for all cross-references
+    // where either fromRef or toRef is in this chapter
+    const crossRefs = [];
+    
+    // Create a few cross-references for the chapter
+    const bookName = book.charAt(0).toUpperCase() + book.slice(1).toLowerCase();
+    
+    // Generate for just a few verses to avoid overwhelming the display
+    for (let verse = 1; verse <= 20; verse++) {
+      // Only create references for every third verse
+      if (verse % 3 === 0) {
+        const verseRef = `${bookName} ${chapter}:${verse}`;
+        const mockRefs = generateMockCrossReferences(verseRef);
+        crossRefs.push(...mockRefs);
+      }
+    }
+    
+    return res.json(crossRefs);
+  } catch (error) {
+    console.error('Error fetching chapter cross-references:', error);
+    return res.status(500).json({ error: 'Failed to fetch cross-references' });
+  }
+});
 
 // Get cross-references for a specific verse
 router.get('/:book/:chapter/:verse', async (req: Request, res: Response) => {
