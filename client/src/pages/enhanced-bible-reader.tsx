@@ -289,7 +289,7 @@ export default function EnhancedBibleReader() {
   
   return (
     <div className="min-h-screen max-h-screen flex flex-col">
-      <div className="flex-1 overflow-hidden md:grid md:grid-cols-[2fr_1fr] relative">
+      <div className="flex-1 overflow-hidden md:grid md:grid-cols-[3fr_1fr] relative">
         {/* Main reading area - Bible Canvas (⅔ width on desktop) */}
         <div className={cn(
           "flex-1 flex flex-col overflow-hidden transition-all duration-300"
@@ -525,11 +525,12 @@ export default function EnhancedBibleReader() {
           </div>
         </div>
         
-        {/* Companion Sidebar - AI Lens Insights (⅓ width on desktop) */}
+        {/* Companion Sidebar - AI Lens Insights (floating next to scripture) */}
         <div className={cn(
           "companion-sidebar bg-white dark:bg-stone-900 border-l border-stone-200 dark:border-stone-800 overflow-hidden",
           "md:block", // Always visible on desktop with grid layout
-          "hidden absolute inset-x-0 bottom-0 top-auto z-10 h-[50vh] md:static md:h-auto" // Hidden on mobile unless activated
+          "md:sticky md:top-0 md:self-start", // Make it float/sticky next to the scripture
+          "hidden absolute inset-x-0 bottom-0 top-auto z-10 h-[50vh] md:static md:h-[calc(100vh-4rem)]" // Hidden on mobile unless activated, full height on desktop
         )}>
           <div className="h-full flex flex-col">
             {/* Sidebar header and search */}
