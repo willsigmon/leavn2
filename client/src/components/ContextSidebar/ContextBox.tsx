@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import LensButtons from './LensButtons';
 import { RelatedContent } from './RelatedContent';
+import AudioControls from '../reader/AudioControls';
 
 interface ContextBoxProps {
   onTranslationChange?: (translation: string) => void;
@@ -79,8 +80,14 @@ export function ContextBox({ onTranslationChange, onLensChange, onAudioOptionCha
                 </SelectContent>
               </Select>
               <p className="text-[0.65rem] text-stone-500 dark:text-stone-500">
-                Use the audio controls below to listen to scripture
+                Select voice type for read-aloud
               </p>
+            </div>
+            
+            <div className="pt-4">
+              <AudioControls 
+                text="This is a sample text to test the audio feature. The actual Bible text will be read when you select a passage."
+              />
             </div>
           </TabsContent>
           

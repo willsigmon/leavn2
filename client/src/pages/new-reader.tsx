@@ -9,6 +9,7 @@ import { ContextBox } from '@/components/ContextSidebar/ContextBox';
 import { MapPane } from '@/components/ContextSidebar/MapPane';
 import { TypographyDialog } from '@/components/reader/TypographyDialog';
 import type { TypographyPreferences } from '@/components/reader/TypographyDialog';
+import { AudioControls } from '@/components/reader/AudioControls';
 import useMediaQuery from '../hooks/useMediaQuery';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import { ChevronUp, Menu, BookOpen, Brush, Bookmark, Share2, FileText, X } from 'lucide-react';
@@ -186,6 +187,17 @@ export default function NewReader() {
     
     // Save to localStorage
     localStorage.setItem('aurora-warm-light', value.toString());
+  };
+  
+  // Handler for voice selection in audio controls
+  const handleVoiceChange = (voiceType: string) => {
+    setSelectedVoice(voiceType);
+    localStorage.setItem('aurora-voice-type', voiceType);
+  };
+  
+  // Handler for read-aloud play state
+  const handleReadingStateChange = (isPlaying: boolean) => {
+    setIsReading(isPlaying);
   };
   
   // Auto-scroll handler for "Did You Know" section
