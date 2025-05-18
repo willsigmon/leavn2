@@ -78,8 +78,11 @@ export default function BibleReader() {
   
   // Handle theme toggle
   const handleToggleTheme = () => {
-    // TODO: Implement theme toggle
-    console.log('Theme toggle clicked');
+    // Toggle between light and dark themes
+    const newTheme = typographySettings.theme === 'dark' ? 'light' : 'dark';
+    
+    // Update theme settings
+    handleTypographyChange({ theme: newTheme });
   };
   
   // Handle typography settings

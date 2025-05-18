@@ -213,7 +213,7 @@ export function VerseCanvas({
   const versesToRender = verses.length > 0 ? verses : sampleVerses;
   
   return (
-    <div className={cn("overflow-y-auto p-4", className)}>
+    <div className={cn("overflow-y-auto p-4 reader-paper shadow-inner", className)}>
       {versesToRender.map((verse, index) => (
         <Verse
           key={`${book}-${chapter}-${verse.verse}`}
