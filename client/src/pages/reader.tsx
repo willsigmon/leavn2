@@ -25,7 +25,7 @@ import { TableOfContents } from '@/components/reader/TableOfContents';
 import { VerseHighlighter } from '@/components/reader/VerseHighlighter';
 import { ViewModeSelector, ViewMode } from '@/components/reader/ViewModeSelector';
 import { SimpleAudioControls } from '@/components/reader/SimpleAudioControls';
-import { TypographyDialog } from '@/components/reader/TypographyDialog';
+import { TypographyDialog, type TypographyPreferences, type FontFamily, type FontSize, type LineSpacing, type TextAlignment, type MarginSize } from '@/components/reader/TypographyDialog';
 import { useTheme } from '@/components/ThemeProvider';
 import { bibleStructure, getNextChapter, getPrevChapter } from '@/lib/bibleStructure';
 import speechSynthesis from '@/lib/speechSynthesis';
@@ -66,12 +66,12 @@ export default function Reader() {
   const [isReading, setIsReading] = useState(false);
   const [warmLightValue, setWarmLightValue] = useState<number>(0);
   const [narrativeMode, setNarrativeMode] = useState(false);
-  const [typographySettings, setTypographySettings] = useState({
-    fontFamily: 'serif',
-    fontSize: 'base',
-    lineSpacing: 'relaxed',
-    textAlign: 'left', 
-    margins: 'md',
+  const [typographySettings, setTypographySettings] = useState<TypographyPreferences>({
+    fontFamily: 'serif' as FontFamily,
+    fontSize: 'base' as FontSize,
+    lineSpacing: 'relaxed' as LineSpacing,
+    textAlign: 'left' as TextAlignment, 
+    margins: 'md' as MarginSize,
     theme: 'light'
   });
   
@@ -163,10 +163,10 @@ export default function Reader() {
 
     return data.verses.map(verse => ({
       number: verse.verse,
-      text: verse.text || verse[viewMode === 'original' ? 'kjv' : viewMode],
-      highlightColor: null, // This would come from user data
-      hasNote: false,       // This would come from user data
-      isBookmarked: false   // This would come from user data
+      text: verse.text || verse[viewMode === 'original' ? 'kjv' : viewMode] || '',
+      highlightColor: undefined, // This would come from user data
+      hasNote: false,           // This would come from user data
+      isBookmarked: false       // This would come from user data
     }));
   };
   
@@ -391,7 +391,13 @@ export default function Reader() {
                     <VerseHighlighter
                       book={book}
                       chapter={chapter}
-                      verses={getVerses()}
+                      verses={verses.map(verse => ({
+                        number: verse.verse,
+                        text: verse.text || '',
+                        highlightColor: undefined,
+                        hasNote: false,
+                        isBookmarked: false
+                      }))}
                       onVerseSelect={handleVerseSelect}
                       translation="kjv"
                     />
