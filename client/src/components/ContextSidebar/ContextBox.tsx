@@ -9,7 +9,7 @@ interface ContextBoxProps {
   onTranslationChange?: (translation: string) => void;
   onLensChange?: (lens: string) => void;
   onAudioOptionChange?: (voiceType: string) => void;
-  currentVerseRef?: string;
+  currentVerseRef?: string | null;
   currentBookChapter?: string;
 }
 

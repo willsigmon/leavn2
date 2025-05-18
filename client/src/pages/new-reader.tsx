@@ -500,6 +500,9 @@ export default function NewReader() {
             <ContextBox 
               onTranslationChange={setTranslation}
               onLensChange={setActiveLens}
+              onAudioOptionChange={handleVoiceChange}
+              currentVerseRef={selectedVerse || undefined}
+              currentBookChapter={`${book} ${chapter}`}
             />
             
             <div className="px-4 pb-4">
@@ -737,6 +740,9 @@ export default function NewReader() {
               <ContextBox 
                 onTranslationChange={setTranslation}
                 onLensChange={setActiveLens}
+                onAudioOptionChange={handleVoiceChange}
+                currentVerseRef={selectedVerse || undefined}
+                currentBookChapter={`${book} ${chapter}`}
               />
               
               {selectedVerse && (
