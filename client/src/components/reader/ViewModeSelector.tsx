@@ -21,15 +21,13 @@ interface ViewModeSelectorProps {
   onModeChange: (mode: ViewMode) => void;
   allowedModes?: ViewMode[];
   isLoading?: boolean;
-  layout?: 'vertical' | 'horizontal';
 }
 
 export function ViewModeSelector({
   currentMode,
   onModeChange,
   allowedModes = ['original', 'genz', 'novelize', 'kids', 'scholarly'],
-  isLoading = false,
-  layout = 'vertical'
+  isLoading = false
 }: ViewModeSelectorProps) {
   // Mode descriptions for tooltips
   const modeDescriptions = {
@@ -58,14 +56,8 @@ export function ViewModeSelector({
     scholarly: 'Scholarly'
   };
   
-  // Choose layout style based on props
-  const isHorizontal = layout === 'horizontal';
-  
   return (
-    <div className={`${isHorizontal 
-      ? 'flex flex-row flex-wrap gap-2' 
-      : 'flex flex-col space-y-1'} 
-      p-1.5 bg-stone-100/60 dark:bg-stone-800/40 rounded-lg`}>
+    <div className="flex flex-col space-y-1 p-1.5 bg-muted/40 rounded-lg">
       <TooltipProvider>
         {allowedModes.map((mode) => (
           <Tooltip key={mode}>
@@ -75,17 +67,12 @@ export function ViewModeSelector({
                 size="sm"
                 onClick={() => onModeChange(mode)}
                 disabled={isLoading}
-                className={`${isHorizontal ? 'h-auto py-1.5 px-3' : 'justify-start'} ${
-                  currentMode === mode 
-                    ? 'bg-amber-600 hover:bg-amber-700 text-white dark:bg-amber-700 dark:hover:bg-amber-600' 
-                    : 'text-stone-700 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700'
+                className={`justify-start ${
+                  currentMode === mode ? 'bg-primary text-primary-foreground' : ''
                 }`}
               >
-                <span className={isHorizontal ? 'mr-1.5' : 'mr-2'}>{modeIcons[mode]}</span>
-                {isHorizontal 
-                  ? <span className="text-xs font-medium">{modeNames[mode]}</span>
-                  : <span>{modeNames[mode]}</span>
-                }
+                <span className="mr-2">{modeIcons[mode]}</span>
+                {modeNames[mode]}
                 {isLoading && currentMode === mode && (
                   <span className="ml-2">
                     <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -96,7 +83,7 @@ export function ViewModeSelector({
                 )}
               </Button>
             </TooltipTrigger>
-            <TooltipContent side={isHorizontal ? "bottom" : "right"}>
+            <TooltipContent side="right">
               <p>{modeDescriptions[mode]}</p>
             </TooltipContent>
           </Tooltip>

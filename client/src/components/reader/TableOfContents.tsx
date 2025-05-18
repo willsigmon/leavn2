@@ -100,23 +100,14 @@ export function TableOfContents({
                     <div key={book.id} className="mb-2">
                       <button
                         onClick={() => handleBookClick(book.id)}
-                        className={`w-full text-left py-2 px-3 rounded-md flex items-center transition-all duration-300 relative overflow-hidden group ${
+                        className={`w-full text-left py-1.5 px-2 rounded-md flex items-center hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors ${
                           currentBook?.toLowerCase() === book.id.toLowerCase()
-                            ? 'bg-amber-100 dark:bg-amber-900/40 font-medium text-amber-900 dark:text-amber-100 shadow-md border-l-4 border-amber-500 dark:border-amber-600 animate-highlight-fade'
-                            : 'text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 hover:translate-x-1 hover:border-l-4 hover:border-amber-400/50 dark:hover:border-amber-500/50'
+                            ? 'bg-stone-200 dark:bg-stone-700 font-medium text-stone-900 dark:text-stone-100'
+                            : 'text-stone-700 dark:text-stone-300'
                         }`}
                       >
-                        <div className="absolute inset-0 bg-amber-500/10 dark:bg-amber-500/10 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 rounded-md"></div>
-                        <ScrollText className={`h-4 w-4 mr-2 transition-all duration-300 ${
-                          currentBook?.toLowerCase() === book.id.toLowerCase()
-                            ? 'text-amber-700 dark:text-amber-400 animate-pulse-short'
-                            : 'text-stone-500 dark:text-stone-400 group-hover:text-amber-600 dark:group-hover:text-amber-300 group-hover:scale-125'
-                        }`} />
-                        <span className={`relative z-10 ${
-                          currentBook?.toLowerCase() === book.id.toLowerCase()
-                            ? 'animate-slide-right'
-                            : ''
-                        }`}>{book.name}</span>
+                        <ScrollText className="h-3.5 w-3.5 mr-2 text-stone-500 dark:text-stone-400" />
+                        <span>{book.name}</span>
                         {book.shortName && book.shortName !== book.name && (
                           <span className="ml-1 text-xs text-stone-500 dark:text-stone-400">
                             ({book.shortName})
@@ -131,23 +122,13 @@ export function TableOfContents({
                             <button
                               key={chapter}
                               onClick={() => handleChapterClick(book.id, chapter)}
-                              className={`text-center py-2 px-3 text-sm rounded-md relative overflow-hidden transition-all duration-300 ${
+                              className={`text-center py-1 px-1.5 text-sm rounded-md transition-colors ${
                                 currentChapter === chapter.toString()
-                                  ? 'bg-amber-600 text-white font-medium dark:bg-amber-700 dark:text-white shadow-md transform scale-110 border border-amber-300 dark:border-amber-500'
-                                  : 'hover:bg-amber-500 dark:hover:bg-amber-600 hover:text-white dark:hover:text-white text-stone-700 dark:text-stone-300 hover:scale-125 active:scale-95 hover:shadow-md'
+                                  ? 'bg-amber-700 text-amber-50 font-medium dark:bg-amber-800 dark:text-amber-50'
+                                  : 'hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300'
                               }`}
                             >
-                              <span className={`relative z-10 ${
-                                currentChapter === chapter.toString() 
-                                  ? 'animate-pulse-short' 
-                                  : ''
-                              }`}>{chapter}</span>
-                              <span className={`absolute inset-0 bg-gradient-to-r from-amber-500/20 to-amber-600/20 transform scale-0 transition-all duration-500 ${
-                                currentChapter !== chapter.toString() ? 'hover:scale-100 hover:rotate-180' : ''
-                              }`}></span>
-                              {currentChapter === chapter.toString() && (
-                                <span className="absolute inset-0 bg-amber-400/20 animate-pulse opacity-75 rounded-md"></span>
-                              )}
+                              {chapter}
                             </button>
                           ))}
                         </div>
