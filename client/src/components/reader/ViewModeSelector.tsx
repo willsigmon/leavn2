@@ -57,21 +57,25 @@ export function ViewModeSelector({
   };
   
   return (
-    <div className="flex flex-col space-y-1 p-1.5 bg-muted/40 rounded-lg">
+    <div className="flex flex-col space-y-1.5 rounded-lg">
       <TooltipProvider>
         {allowedModes.map((mode) => (
           <Tooltip key={mode}>
             <TooltipTrigger asChild>
               <Button
-                variant={currentMode === mode ? 'default' : 'ghost'}
+                variant={currentMode === mode ? 'secondary' : 'ghost'}
                 size="sm"
                 onClick={() => onModeChange(mode)}
                 disabled={isLoading}
-                className={`justify-start ${
-                  currentMode === mode ? 'bg-primary text-primary-foreground' : ''
-                }`}
+                className={`justify-start w-full ${
+                  currentMode === mode 
+                    ? 'bg-amber-100 text-amber-900 hover:bg-amber-200 dark:bg-amber-900/30 dark:text-amber-100 dark:hover:bg-amber-900/40' 
+                    : 'text-stone-700 hover:text-stone-900 hover:bg-stone-100 dark:text-stone-300 dark:hover:text-stone-100 dark:hover:bg-stone-800'
+                } transition-colors duration-200`}
               >
-                <span className="mr-2">{modeIcons[mode]}</span>
+                <span className={`mr-2 ${currentMode === mode ? 'text-amber-700 dark:text-amber-500' : 'text-stone-500 dark:text-stone-400'}`}>
+                  {modeIcons[mode]}
+                </span>
                 {modeNames[mode]}
                 {isLoading && currentMode === mode && (
                   <span className="ml-2">
@@ -83,7 +87,7 @@ export function ViewModeSelector({
                 )}
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="right">
+            <TooltipContent side="right" className="bg-stone-50 text-stone-800 border-stone-200 dark:bg-stone-800 dark:text-stone-100 dark:border-stone-700">
               <p>{modeDescriptions[mode]}</p>
             </TooltipContent>
           </Tooltip>

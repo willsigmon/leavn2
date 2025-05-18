@@ -172,12 +172,13 @@ export function VerseHighlighter({
       {verses.map((verse) => (
         <div
           key={verse.number}
-          className={`group relative mb-4 pl-8 pr-4 py-2 rounded-md transition-colors ${
+          id={`verse-${verse.number}`}
+          className={`group relative mb-4 pl-8 pr-4 py-2 rounded-md transition-all duration-150 ${
             verse.highlightColor ? `highlight-${verse.highlightColor}` : ''
-          } hover:bg-primary/5`}
+          } ${selectedVerse === verse.number ? 'bg-amber-50 dark:bg-amber-950/20 shadow-sm' : 'hover:bg-stone-50 dark:hover:bg-stone-900/50'}`}
         >
           <span 
-            className="absolute left-2 top-2 font-bold text-sm text-muted-foreground"
+            className="absolute left-3 top-2 font-semibold text-sm text-stone-500 dark:text-stone-400 select-none"
             aria-label={`Verse ${verse.number}`}
           >
             {verse.number}
@@ -185,23 +186,25 @@ export function VerseHighlighter({
           
           {/* Verse text */}
           <span 
-            className="text-foreground cursor-pointer"
+            className="text-stone-800 dark:text-stone-100 cursor-pointer leading-relaxed select-text"
             onClick={(e) => handleVerseClick(verse.number, e)}
           >
             {verse.text}
           </span>
           
           {/* Indicators */}
-          <div className="absolute right-2 top-2 flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className={`absolute right-2 top-2 flex items-center space-x-1.5 transition-opacity duration-200 ${
+            selectedVerse === verse.number ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+          }`}>
             {verse.hasNote && (
               <MessageSquareText 
-                className="h-3.5 w-3.5 text-primary" 
+                className="h-3.5 w-3.5 text-amber-700 dark:text-amber-500" 
                 aria-label="This verse has a note"
               />
             )}
             {verse.isBookmarked && (
               <Bookmark 
-                className="h-3.5 w-3.5 text-primary" 
+                className="h-3.5 w-3.5 text-amber-700 dark:text-amber-500" 
                 fill="currentColor"
                 aria-label="This verse is bookmarked"
               />

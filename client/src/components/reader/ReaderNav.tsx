@@ -176,9 +176,19 @@ export function ReaderNav({
           Prev
         </Button>
         
-        <div className="mx-2 font-medium text-sm px-2">
-          {currentBook?.name || book} {chapter}
-        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setSheetContent('toc')}
+          className="mx-2 font-medium h-9"
+        >
+          <span className="flex items-center">
+            <BookOpen className="h-4 w-4 mr-2 text-amber-700 dark:text-amber-500" />
+            <span>{currentBook?.name || book}</span>
+            <span className="mx-1">•</span>
+            <span>Chapter {chapter}</span>
+          </span>
+        </Button>
         
         <Button
           variant="ghost"

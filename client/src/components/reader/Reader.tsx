@@ -9,7 +9,7 @@ import { SimpleAudioControls } from './SimpleAudioControls';
 import { NoteEditor } from './NoteEditor';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertCircle, BookOpen } from 'lucide-react';
+import { AlertCircle, BookOpen, Sparkles } from 'lucide-react';
 
 interface ReaderProps {
   book: string;
@@ -111,11 +111,41 @@ export function Reader({
     }
   };
   
+  // Define types for the API responses
+  interface BibleVerse {
+    verse: number;
+    kjv: string;
+    web: string;
+    [key: string]: any;
+  }
+
+  interface ChapterData {
+    book: string;
+    bookName: string;
+    chapter: number;
+    totalChapters: number;
+    verses: BibleVerse[];
+  }
+
+  interface TranslationData {
+    genz?: string[];
+    kids?: string[];
+    narrative?: string[];
+    scholarly?: string[];
+  }
+
   // Helper to transform verse data based on view mode
   const getTransformedVerses = () => {
-    if (!chapterData || !chapterData.verses) return [];
+    if (!chapterData) return [];
     
-    return chapterData.verses.map(verse => {
+    // Check if verses exist in the data
+    const verses = 'verses' in chapterData ? chapterData.verses : [];
+    if (!verses || !Array.isArray(verses) || verses.length === 0) return [];
+    
+    const typedChapterData = chapterData as ChapterData;
+    const typedTranslationData = translationData as TranslationData;
+    
+    return typedChapterData.verses.map(verse => {
       // Find highlight for the verse if any
       const highlight = highlightsData && Array.isArray(highlightsData) 
         ? highlightsData.find(h => h.verse === verse.verse)
@@ -133,15 +163,15 @@ export function Reader({
         
       // Apply view mode transformations
       let text = verse[translation];
-      if (viewMode !== 'original' && translationData) {
-        if (viewMode === 'genz' && translationData.genz) {
-          text = translationData.genz[verse.verse - 1] || text;
-        } else if (viewMode === 'kids' && translationData.kids) {
-          text = translationData.kids[verse.verse - 1] || text;
-        } else if (viewMode === 'novelize' && translationData.narrative) {
-          text = translationData.narrative[verse.verse - 1] || text;
-        } else if (viewMode === 'scholarly' && translationData.scholarly) {
-          text = translationData.scholarly[verse.verse - 1] || text;
+      if (viewMode !== 'original' && typedTranslationData) {
+        if (viewMode === 'genz' && typedTranslationData.genz) {
+          text = typedTranslationData.genz[verse.verse - 1] || text;
+        } else if (viewMode === 'kids' && typedTranslationData.kids) {
+          text = typedTranslationData.kids[verse.verse - 1] || text;
+        } else if (viewMode === 'novelize' && typedTranslationData.narrative) {
+          text = typedTranslationData.narrative[verse.verse - 1] || text;
+        } else if (viewMode === 'scholarly' && typedTranslationData.scholarly) {
+          text = typedTranslationData.scholarly[verse.verse - 1] || text;
         }
       }
       
@@ -158,7 +188,7 @@ export function Reader({
   // Prepare verses array for the audio player
   const getVerseTexts = () => {
     const verses = getTransformedVerses();
-    return verses.map(v => v.text);
+    return verses.map((v: { text: string }) => v.text);
   };
   
   // Error handling
@@ -207,18 +237,36 @@ export function Reader({
       />
       
       <div className="flex flex-1 overflow-hidden">
-        {/* View mode selector sidebar */}
-        <div className="hidden md:block border-r">
-          <div className="p-4 h-full">
-            <div className="flex items-center mb-4">
-              <BookOpen className="mr-2 h-5 w-5" />
-              <h3 className="font-medium">Reading Modes</h3>
+        {/* Translation and Insights sidebar */}
+        <div className="hidden md:block border-r w-64 bg-stone-50 dark:bg-stone-900">
+          <div className="p-4 h-full flex flex-col">
+            {/* Translation section */}
+            <div className="mb-6">
+              <div className="flex items-center mb-4 border-b pb-2 border-stone-200 dark:border-stone-700">
+                <BookOpen className="mr-2 h-5 w-5 text-amber-700 dark:text-amber-500" />
+                <h3 className="font-medium text-stone-800 dark:text-stone-100">Translation</h3>
+              </div>
+              <ViewModeSelector 
+                currentMode={viewMode}
+                onModeChange={setViewMode}
+                allowedModes={['original', 'genz', 'novelize', 'kids']}
+                isLoading={isLoadingTranslation}
+              />
             </div>
-            <ViewModeSelector 
-              currentMode={viewMode}
-              onModeChange={setViewMode}
-              isLoading={isLoadingTranslation}
-            />
+            
+            {/* Insights section */}
+            <div>
+              <div className="flex items-center mb-4 border-b pb-2 border-stone-200 dark:border-stone-700">
+                <Sparkles className="mr-2 h-5 w-5 text-amber-700 dark:text-amber-500" />
+                <h3 className="font-medium text-stone-800 dark:text-stone-100">Insights</h3>
+              </div>
+              <ViewModeSelector 
+                currentMode={viewMode}
+                onModeChange={setViewMode}
+                allowedModes={['scholarly']}
+                isLoading={isLoadingTranslation}
+              />
+            </div>
           </div>
         </div>
         
