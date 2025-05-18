@@ -1,0 +1,200 @@
+{
+  "book": {
+    "name": "Genesis",
+    "meaning": "Beginning",
+    "author": "Moses (traditional attribution)",
+    "date": "circa 1440-1400 BCE (traditional dating)",
+    "canonicity": "Canonical in Judaism, Christianity, and Islam",
+    "languages": ["Hebrew", "Aramaic"],
+    "majorThemes": ["Creation", "Fall", "Flood", "Covenant", "Patriarchs"],
+    "structure": ["Primeval History (1-11)", "Patriarchal History (12-50)"]
+  },
+  "chapters": {
+    "1": {
+      "title": "Creation",
+      "summary": "God creates the universe, earth, plants, animals, and humans in six days and rests on the seventh.",
+      "themes": ["Creation", "Divine order", "Human dignity", "Stewardship"],
+      "keyVerses": [1, 26, 27, 28, 31],
+      "people": ["God"],
+      "places": ["Heaven", "Earth", "Seas", "Sky"],
+      "timeframe": "Beginning of creation",
+      "symbols": ["Light", "Darkness", "Water", "Land", "Animals", "Humanity"],
+      "narrative": "In majestic, rhythmic language, Genesis 1 portrays God as the sovereign creator who brings order from chaos through his spoken word. With each divine declaration, new aspects of creation emerge in a purposeful sequence, culminating in humanity who bears God's image and is given responsibility to care for creation. The repeated refrain 'and it was good' affirms the inherent value of the created world, while God's rest on the seventh day establishes a pattern for human living.",
+      "connections": [
+        { "id": "John 1:1-3", "type": "parallel", "theme": "Creation through the Word", "explanation": "John uses similar 'in the beginning' language to connect Jesus as the Word to Genesis creation." },
+        { "id": "Psalm 33:6", "type": "thematic", "theme": "Creation by God's word", "explanation": "The Psalm references creation by God's word, echoing Genesis 1's repeated 'God said.'" },
+        { "id": "Colossians 1:16", "type": "thematic", "theme": "Christ as creator", "explanation": "Paul identifies Christ as the one through whom all things were created." }
+      ]
+    },
+    "2": {
+      "title": "Garden of Eden",
+      "summary": "God creates Adam and Eve, places them in the Garden of Eden, and institutes the first marriage.",
+      "themes": ["Creation of humanity", "Garden of Eden", "Marriage", "Work", "First command"],
+      "keyVerses": [7, 18, 24],
+      "people": ["God", "Adam", "Eve"],
+      "places": ["Garden of Eden", "Four rivers (Pishon, Gihon, Tigris, Euphrates)"],
+      "timeframe": "Sixth day of creation and following",
+      "symbols": ["Dust", "Breath of life", "Tree of life", "Tree of knowledge", "Rivers", "Helper"],
+      "narrative": "Genesis 2 zooms in on the creation of humanity, giving a more intimate portrait of God forming Adam from dust and breathing life into him. The lush garden setting provides everything needed for human flourishing, with meaningful work and divine guidance providing structure. The creation of woman from man's side establishes their profound connection and complementarity, instituting marriage as a foundational human relationship. The chapter interweaves themes of divine provision, human responsibility, and the goodness of relationship.",
+      "connections": [
+        { "id": "1 Corinthians 15:45", "type": "thematic", "theme": "First Adam vs. Last Adam", "explanation": "Paul contrasts Adam as the first man of dust with Christ as the life-giving spirit from heaven." },
+        { "id": "Matthew 19:4-6", "type": "quotation", "theme": "Institution of marriage", "explanation": "Jesus quotes Genesis 2:24 when teaching about marriage, affirming its divine origin." },
+        { "id": "Revelation 22:1-2", "type": "parallel", "theme": "Tree of life", "explanation": "Revelation describes the tree of life in the New Jerusalem, connecting to Eden's tree." }
+      ]
+    },
+    "3": {
+      "title": "The Fall",
+      "summary": "The serpent tempts Eve, leading to the first sin and expulsion from Eden.",
+      "themes": ["Temptation", "Sin", "Fall", "Judgment", "Promise"],
+      "keyVerses": [6, 15, 19, 24],
+      "people": ["God", "Adam", "Eve", "Serpent"],
+      "places": ["Garden of Eden"],
+      "timeframe": "After creation, before expulsion",
+      "symbols": ["Serpent", "Fruit", "Nakedness", "Clothing", "Flaming sword"],
+      "narrative": "The serpent's subtle questioning of God's word leads to catastrophic consequences as Eve and Adam choose to disobey their Creator. The immediate effects of their sin—shame, fear, and blame—reveal the fracturing of relationships with God, each other, and creation itself. God's judgment pronounces difficult consequences while also offering the first hint of redemption in the promise of a serpent-crusher. The expulsion from Eden marks a profound transition in human history, as access to perfect communion with God is barred, yet divine provision continues in the midst of hardship.",
+      "connections": [
+        { "id": "Romans 5:12", "type": "thematic", "theme": "Sin entering the world", "explanation": "Paul identifies Adam's sin as bringing death to all humanity." },
+        { "id": "Revelation 12:9", "type": "interpretation", "theme": "Identity of the serpent", "explanation": "Revelation identifies the ancient serpent as Satan, the deceiver." },
+        { "id": "Hebrews 2:14", "type": "fulfillment", "theme": "Crushing the serpent", "explanation": "Christ's death is described as destroying the power of the devil." }
+      ]
+    },
+    "4": {
+      "title": "Cain and Abel",
+      "summary": "The first murder occurs when Cain kills his brother Abel out of jealousy.",
+      "themes": ["Sacrifice", "Jealousy", "Murder", "Judgment", "Wandering"],
+      "keyVerses": [4, 8, 10, 15],
+      "people": ["Cain", "Abel", "God"],
+      "places": ["East of Eden", "Land of Nod"],
+      "timeframe": "First generation after Eden",
+      "symbols": ["Offering", "Blood", "Mark", "Ground"],
+      "narrative": "The first human birth gives way to the first human death as sin's consequences unfold in the next generation. The brothers' contrasting sacrifices reveal heart attitudes toward God, with Abel's accepted and Cain's rejected. When confronted with divine correction, Cain's jealousy spirals into murderous rage against his brother. The blood that cries from the ground testifies to the heinous nature of taking human life, yet even in judgment, God shows mercy by protecting Cain with a mark. The chapter concludes with glimpses of both cultural development and continued moral decline.",
+      "connections": [
+        { "id": "Hebrews 11:4", "type": "commentary", "theme": "Abel's faith", "explanation": "Abel's sacrifice is identified as being offered by faith, making him righteous." },
+        { "id": "1 John 3:12", "type": "moral lesson", "theme": "Warning against hatred", "explanation": "John uses Cain as a negative example of one who hated and murdered his brother." },
+        { "id": "Jude 1:11", "type": "warning", "theme": "Way of Cain", "explanation": "Jude warns against following 'the way of Cain' in rebellion against God." }
+      ]
+    },
+    "5": {
+      "title": "From Adam to Noah",
+      "summary": "A genealogy from Adam to Noah, documenting the early generations of humanity.",
+      "themes": ["Genealogy", "Longevity", "Death", "Legacy"],
+      "keyVerses": [1, 24, 29],
+      "people": ["Adam", "Seth", "Enosh", "Kenan", "Mahalalel", "Jared", "Enoch", "Methuselah", "Lamech", "Noah"],
+      "places": ["Earth"],
+      "timeframe": "Early human history",
+      "symbols": ["Generations", "Years of life"],
+      "narrative": "The rhythmic pattern of birth, life, and death forms the structure of this genealogy, emphasizing the fulfillment of God's creation mandate to be fruitful and multiply. Each generation extends Adam's line, with lifespans stretching hundreds of years. Amid the repeated refrain 'and he died'—a stark reminder of sin's consequence—Enoch stands out as one who 'walked with God' and was taken without experiencing death. The genealogy points forward to Noah, whose name expresses hope for relief from the curse, setting the stage for the next major chapter in human history.",
+      "connections": [
+        { "id": "Hebrews 11:5", "type": "commentary", "theme": "Enoch's faith", "explanation": "Enoch is commended for his faith that pleased God, explaining his translation." },
+        { "id": "Jude 1:14-15", "type": "quotation", "theme": "Enoch's prophecy", "explanation": "Jude quotes Enoch prophesying about divine judgment on the ungodly." }
+      ]
+    },
+    "6": {
+      "title": "Wickedness and the Flood",
+      "summary": "God sees humanity's wickedness and plans to cleanse the earth with a flood, but finds favor with Noah.",
+      "themes": ["Corruption", "Judgment", "Grace", "Obedience"],
+      "keyVerses": [5, 8, 14, 22],
+      "people": ["God", "Noah", "Sons of God", "Nephilim"],
+      "places": ["Earth"],
+      "timeframe": "Pre-flood world",
+      "symbols": ["Ark", "Wickedness", "Corruption", "Violence"],
+      "narrative": "The world has descended into pervasive wickedness, grieving God's heart and prompting divine judgment. The mysterious reference to 'sons of God' and Nephilim points to extraordinary transgressions of created boundaries. Against this backdrop of corruption and violence, Noah stands as a righteous exception who finds favor with God. The detailed instructions for building the ark demonstrate both divine provision and Noah's meticulous obedience in preparing for an unprecedented deluge. The contrast between widespread human rebellion and one man's faithful response sets the pattern for God's redemptive work throughout history.",
+      "connections": [
+        { "id": "Matthew 24:37-39", "type": "parallel", "theme": "Days of Noah", "explanation": "Jesus compares the time before his return to Noah's day, when people were unprepared." },
+        { "id": "1 Peter 3:20", "type": "commentary", "theme": "God's patience", "explanation": "Peter highlights God's patience while the ark was being built." },
+        { "id": "Hebrews 11:7", "type": "commentary", "theme": "Noah's faith", "explanation": "Noah's faithful ark-building is presented as an example of faith and fear of God." }
+      ]
+    },
+    "7": {
+      "title": "The Flood Begins",
+      "summary": "Noah enters the ark with his family and animals before the waters cover the earth.",
+      "themes": ["Judgment", "Salvation", "Covenant faithfulness"],
+      "keyVerses": [1, 16, 19, 24],
+      "people": ["God", "Noah", "Noah's family"],
+      "places": ["Ark", "Mountains", "Earth"],
+      "timeframe": "Year 600 of Noah's life",
+      "symbols": ["Rain", "Floodwaters", "Animals", "Dove"],
+      "narrative": "After years of preparation, the moment of judgment arrives as Noah, his family, and representative animals enter the ark. The specific chronology and repetition of details emphasize the historical reality of these events. The unleashing of waters from above and below depicts creation returning to watery chaos in a reversal of the creation process. As the waters rise and completely cover even the highest mountains, all air-breathing life perishes except those sheltered in the ark. God's judgment is thorough, yet his saving grace preserves a remnant through whom he will make a new beginning for humanity and creation.",
+      "connections": [
+        { "id": "2 Peter 2:5", "type": "commentary", "theme": "Noah as preacher", "explanation": "Peter describes Noah as a 'preacher of righteousness' who was saved through the flood." },
+        { "id": "1 Peter 3:20-21", "type": "typology", "theme": "Baptism prefigured", "explanation": "Peter connects the salvation through water in Noah's day to Christian baptism." }
+      ]
+    },
+    "8": {
+      "title": "The Flood Recedes",
+      "summary": "The waters recede, and Noah, his family, and the animals leave the ark.",
+      "themes": ["Divine remembrance", "New beginning", "Patience", "Worship"],
+      "keyVerses": [1, 11, 20, 21],
+      "people": ["God", "Noah", "Noah's family"],
+      "places": ["Ark", "Mountains of Ararat", "Earth"],
+      "timeframe": "Year 601 of Noah's life",
+      "symbols": ["Raven", "Dove", "Olive leaf", "Altar", "Sacrifice"],
+      "narrative": "God's remembrance of Noah marks the turning point in the flood narrative as the waters begin to recede. The gradual return of dry land is tracked through Noah's dispatching of birds and observation of conditions. After more than a year confined in the ark, Noah receives God's command to disembark and begin afresh in a cleansed world. His first act upon setting foot on dry ground is to build an altar and offer sacrifices of thanksgiving and devotion. God's response of pleasure in Noah's worship leads to a divine commitment not to curse the ground again, despite the persisting problem of human sin. The rhythms of nature are restored, providing stability for human flourishing.",
+      "connections": [
+        { "id": "Isaiah 54:9", "type": "covenant reminder", "theme": "God's faithfulness", "explanation": "God compares his covenant with Israel to his promise to Noah never to flood the earth again." },
+        { "id": "Genesis 9:8-17", "type": "continuation", "theme": "Covenant established", "explanation": "God formalizes his promise not to flood the earth with a covenant and the sign of the rainbow." }
+      ]
+    },
+    "9": {
+      "title": "God's Covenant with Noah",
+      "summary": "God makes a covenant with Noah, establishes new principles, and Noah's sons repopulate the earth.",
+      "themes": ["Covenant", "Blessing", "Human authority", "Sanctity of life"],
+      "keyVerses": [1, 6, 13, 26],
+      "people": ["God", "Noah", "Shem", "Ham", "Japheth", "Canaan"],
+      "places": ["Earth"],
+      "timeframe": "Post-flood world",
+      "symbols": ["Rainbow", "Wine", "Nakedness", "Curse and blessing"],
+      "narrative": "God blesses Noah's family with the same creation mandate given to Adam, authorizing them to repopulate the earth, but with significant changes to human-animal relations and dietary permissions. The prohibition against murder, grounded in humanity's creation in God's image, establishes the foundation for human justice. The rainbow covenant represents God's unilateral promise never again to destroy all life by flood, regardless of human behavior. Noah's fall into drunkenness and the contrasting responses of his sons establish patterns of blessing and curse that will shape the destiny of their descendants, foreshadowing Israel's future relations with neighboring peoples.",
+      "connections": [
+        { "id": "Matthew 5:21-22", "type": "amplification", "theme": "Sanctity of life", "explanation": "Jesus builds on the command against murder to address hatred in the heart." },
+        { "id": "Revelation 4:3", "type": "symbolism", "theme": "Rainbow as divine promise", "explanation": "A rainbow encircles God's throne, recalling his covenant faithfulness." }
+      ]
+    },
+    "10": {
+      "title": "The Table of Nations",
+      "summary": "A genealogical record of Noah's descendants who spread throughout the earth.",
+      "themes": ["Nations", "Dispersion", "Fulfillment of blessing"],
+      "keyVerses": [1, 5, 32],
+      "people": ["Noah", "Shem", "Ham", "Japheth", "Nimrod"],
+      "places": ["Babylon", "Assyria", "Egypt", "Canaan", "Mediterranean coast"],
+      "timeframe": "Early post-flood generations",
+      "symbols": ["Nations", "Languages", "Territories"],
+      "narrative": "This detailed genealogy maps the development of nations and peoples from Noah's three sons, providing the biblical framework for understanding human diversity and relationships between ancient peoples. The seventy nations represented form a symbolic number of completeness, encompassing the known world. Special attention is given to Nimrod as the first empire-builder and to the Canaanites whose territory would later be promised to Israel. Rather than a dry list of names, this 'table of nations' establishes the interconnectedness of all peoples through common descent from Noah, while setting the stage for God's selection of Abraham's line through which all these scattered nations would eventually be blessed.",
+      "connections": [
+        { "id": "Acts 17:26", "type": "theological principle", "theme": "Common humanity", "explanation": "Paul teaches that God made all nations from one man and set their boundaries." },
+        { "id": "Revelation 7:9", "type": "fulfillment", "theme": "Gathering of nations", "explanation": "John's vision shows people from every nation gathered before God's throne." }
+      ]
+    },
+    "11": {
+      "title": "Tower of Babel and Shem's Genealogy",
+      "summary": "Humanity's pride leads to linguistic confusion at Babel; Shem's genealogy leads to Abram.",
+      "themes": ["Pride", "Divine judgment", "Dispersion", "Genealogy"],
+      "keyVerses": [4, 7, 9, 31],
+      "people": ["Babel builders", "Peleg", "Terah", "Abram", "Sarai", "Lot"],
+      "places": ["Plain of Shinar", "Babel/Babylon", "Ur of the Chaldeans", "Haran"],
+      "timeframe": "Post-flood generations",
+      "symbols": ["Tower", "Confusion of languages", "Migration"],
+      "narrative": "United by one language, early humanity attempts to build a city and tower to make a name for themselves and avoid being scattered. Their prideful self-exaltation prompts divine intervention as God confuses their language, causing the very dispersion they sought to prevent. The genealogy that follows narrows focus from humanity broadly to the specific line of Shem, culminating in Terah and his son Abram. The family's move from Ur toward Canaan, with a significant stopover in Haran, sets the stage for God's call to Abram. This chapter bridges the primeval history of Genesis 1-11 with the patriarchal narratives that follow, transitioning from God's dealings with all humanity to his specific covenant relationship with one family.",
+      "connections": [
+        { "id": "Acts 2:1-11", "type": "reversal", "theme": "Pentecost undoing Babel", "explanation": "At Pentecost, the Spirit enables communication across language barriers, reversing Babel's confusion." },
+        { "id": "Revelation 17-18", "type": "typology", "theme": "Babylon as prideful human system", "explanation": "Revelation portrays Babylon as the embodiment of human pride and rebellion against God." }
+      ]
+    },
+    "12": {
+      "title": "The Call of Abram",
+      "summary": "God calls Abram to leave his homeland for Canaan, promising blessing through his descendants.",
+      "themes": ["Call", "Promise", "Blessing", "Faith", "Deception"],
+      "keyVerses": [1-3, 7, 10],
+      "people": ["God", "Abram", "Sarai", "Lot", "Pharaoh"],
+      "places": ["Haran", "Canaan", "Shechem", "Bethel", "Negev", "Egypt"],
+      "timeframe": "Around 2000-1900 BCE",
+      "symbols": ["Altar", "Famine", "Journey"],
+      "narrative": "God's call to Abram marks a pivotal moment in biblical history as divine purpose narrows to one man through whom all nations will be blessed. The sevenfold blessing counters the seven judgments in Genesis 1-11, initiating God's redemptive plan. Abram responds with remarkable faith, leaving everything familiar to follow God into an unknown future. His journey through Canaan is marked by altar-building as he worships the God who appeared to him. However, when famine drives him to Egypt, Abram's faith falters as he resorts to deception about Sarai's identity to protect himself. Despite this moral failure, God protects Sarai and returns the family to Canaan, demonstrating that the fulfillment of divine promises depends more on God's faithfulness than human perfection.",
+      "connections": [
+        { "id": "Hebrews 11:8-10", "type": "commentary", "theme": "Abram's faith", "explanation": "The author commends Abram's faith in leaving his home and living as a stranger in the promised land." },
+        { "id": "Galatians 3:8-9", "type": "fulfillment", "theme": "Blessing to all nations", "explanation": "Paul identifies the promise to Abram as the gospel preached in advance, fulfilled in Christ." },
+        { "id": "Acts 7:2-5", "type": "historical summary", "theme": "God's progressive revelation", "explanation": "Stephen recounts Abraham's journey in his speech before the Sanhedrin." }
+      ]
+    }
+  }
+}
