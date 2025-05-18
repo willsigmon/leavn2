@@ -11,6 +11,7 @@ import ReadingPlanDetail from "@/pages/reading-plan-detail";
 import Login from "@/pages/login";
 import Profile from "@/pages/profile";
 import Settings from "@/pages/settings";
+import Explorer from "@/pages/explorer";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { AuthProvider } from "./hooks/useAuth";
 import { NavBar } from "./components/NavBar";
@@ -37,6 +38,7 @@ function Router() {
           <Route path="/login" component={Login} />
           <Route path="/profile" component={Profile} />
           <Route path="/settings" component={Settings} />
+          <Route path="/explorer" component={Explorer} />
           
           {/* Lazily loaded pages */}
           <Route path="/resources/bible-translations">

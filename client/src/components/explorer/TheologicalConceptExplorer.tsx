@@ -1,31 +1,21 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle 
-} from '@/components/ui/card';
-import { 
-  Tabs, 
-  TabsContent, 
-  TabsList, 
-  TabsTrigger 
-} from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { 
-  BookOpen, 
-  Users, 
-  MapPin, 
-  Lightbulb, 
-  Sparkles,
-  Search
-} from 'lucide-react';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Input } from '@/components/ui/input';
+import { useQuery } from '@tanstack/react-query';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Spinner } from "@/components/ui/spinner";
+import { useToast } from "@/hooks/use-toast";
+import { Separator } from "@/components/ui/separator";
 
+// Define node and link types for the graph
 interface Node {
   id: string;
   name: string;
@@ -37,10 +27,9 @@ interface Node {
 }
 
 interface Link {
-  source: string;
+  source: string; 
   target: string;
   value: number;
-  label?: string;
 }
 
 interface GraphData {
@@ -49,305 +38,453 @@ interface GraphData {
 }
 
 export function TheologicalConceptExplorer() {
-  const fgRef = useRef();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedNode, setSelectedNode] = useState<Node | null>(null);
+  const graphRef = useRef<any>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [highlightNodes, setHighlightNodes] = useState(new Set());
   const [highlightLinks, setHighlightLinks] = useState(new Set());
-  const [activeTab, setActiveTab] = useState('all');
-  
-  // Fetch the graph data from the API
+  const [selectedNode, setSelectedNode] = useState<Node | null>(null);
+  const [graphWidth, setGraphWidth] = useState(800);
+  const [graphHeight, setGraphHeight] = useState(600);
+  const [activeFilter, setActiveFilter] = useState('all');
+  const { toast } = useToast();
+
+  // Fetch graph data from API
   const { data: graphData, isLoading, error } = useQuery<GraphData>({
     queryKey: ['/api/explorer/graph'],
-    retry: 1,
-    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
+
+  // Update graph dimensions on resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (containerRef.current) {
+        setGraphWidth(containerRef.current.clientWidth);
+        setGraphHeight(Math.max(500, window.innerHeight * 0.65));
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   
-  // Filtered data based on active tab and search term
-  const filteredData = React.useMemo(() => {
+  // Return filtered graph data based on currently active filter
+  const getFilteredData = useCallback(() => {
     if (!graphData) return { nodes: [], links: [] };
     
-    let filteredNodes = [...graphData.nodes];
-    
-    // Filter by group/tab
-    if (activeTab !== 'all') {
-      filteredNodes = filteredNodes.filter(node => node.group === activeTab);
+    if (activeFilter === 'all') {
+      return graphData;
     }
     
-    // Filter by search term
-    if (searchTerm) {
-      const term = searchTerm.toLowerCase();
-      filteredNodes = filteredNodes.filter(node => 
-        node.name.toLowerCase().includes(term) || 
-        (node.description && node.description.toLowerCase().includes(term))
-      );
-    }
-    
-    // Only include links where both source and target are in the filtered nodes
-    const nodeIds = new Set(filteredNodes.map(node => node.id));
-    const filteredLinks = graphData.links.filter(link => 
-      nodeIds.has(typeof link.source === 'object' ? link.source.id : link.source) && 
-      nodeIds.has(typeof link.target === 'object' ? link.target.id : link.target)
+    // Filter nodes by group type
+    const filteredNodes = graphData.nodes.filter(node => 
+      activeFilter === 'all' || node.group === activeFilter
     );
+    
+    const nodeIds = new Set(filteredNodes.map(node => node.id));
+    
+    // Only keep links where both source and target are in our filtered nodes
+    const filteredLinks = graphData.links.filter(link => {
+      const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+      const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+      return nodeIds.has(sourceId) && nodeIds.has(targetId);
+    });
     
     return { nodes: filteredNodes, links: filteredLinks };
-  }, [graphData, activeTab, searchTerm]);
+  }, [graphData, activeFilter]);
   
-  // Node hover effects
-  const handleNodeHover = (node: Node | null) => {
-    if (!fgRef.current || !graphData) return;
+  // Handle node click to update selection and highlight connected nodes
+  const handleNodeClick = useCallback((node: Node) => {
+    // Clear previous highlights
+    setHighlightNodes(new Set());
+    setHighlightLinks(new Set());
     
-    const graph = fgRef.current;
+    // Set selected node
+    setSelectedNode(node);
+    
+    if (!graphData) return;
+    
+    // Create new highlight sets
+    const newHighlightNodes = new Set([node.id]);
+    const newHighlightLinks = new Set();
+
+    // Find connected links and nodes
+    graphData.links.forEach(link => {
+      const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+      const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+      
+      if (sourceId === node.id || targetId === node.id) {
+        newHighlightLinks.add(link);
+        newHighlightNodes.add(sourceId);
+        newHighlightNodes.add(targetId);
+      }
+    });
+    
+    // Update highlight state
+    setHighlightNodes(newHighlightNodes);
+    setHighlightLinks(newHighlightLinks);
+  }, [graphData]);
+  
+  // Handle node hover to provide visual feedback
+  const handleNodeHover = useCallback((node: Node | null) => {
+    if (!graphRef.current || !graphData) return;
+    
+    // Modify cursor
+    graphRef.current.d3Force('charge').strength(node ? -120 : -80);
     
     if (node) {
-      // Get all connected links
-      const connectedLinks = graphData.links.filter(link => 
-        link.source === node.id || 
-        link.target === node.id ||
-        (typeof link.source === 'object' && link.source.id === node.id) ||
-        (typeof link.target === 'object' && link.target.id === node.id)
-      );
-      
-      // Get all connected nodes
-      const connectedNodes = new Set([
-        node.id,
-        ...connectedLinks.map(link => 
-          typeof link.source === 'object' ? link.source.id : link.source
-        ),
-        ...connectedLinks.map(link => 
-          typeof link.target === 'object' ? link.target.id : link.target
-        )
-      ]);
-      
-      setHighlightNodes(connectedNodes);
-      setHighlightLinks(new Set(connectedLinks));
+      // Custom hover effect
+      document.body.style.cursor = 'pointer';
     } else {
-      setHighlightNodes(new Set());
-      setHighlightLinks(new Set());
+      document.body.style.cursor = '';
     }
-  };
-  
-  // Node click to show details
-  const handleNodeClick = (node: Node) => {
-    setSelectedNode(node);
-  };
-  
-  // Function to get a node color based on type
-  const getNodeColor = (node: Node) => {
-    if (highlightNodes.size > 0 && !highlightNodes.has(node.id)) {
-      return 'rgba(160, 160, 160, 0.3)'; // Faded for non-highlighted nodes
-    }
-    
-    switch (node.group) {
-      case 'theme':
-        return '#2c4c3b'; // Army green for themes
-      case 'person':
-        return '#8b4513'; // Brown for people
-      case 'place':
-        return '#1e3a8a'; // Deep blue for places
-      case 'concept':
-        return '#9333ea'; // Purple for concepts
-      case 'verse':
-        return '#b45309'; // Amber for verses
-      default:
-        return '#71717a';
-    }
-  };
-  
-  // Function to get link width
-  const getLinkWidth = (link: any) => {
-    return highlightLinks.has(link) ? 3 : 1;
-  };
-  
-  // Function to get link color
-  const getLinkColor = (link: any) => {
-    return highlightLinks.has(link) ? '#2c4c3b' : '#e2e8f0';
-  };
-  
-  // Force engine animation effects
+  }, [graphData]);
+
+  // Update physics configuration when graph renders
   useEffect(() => {
-    if (fgRef.current) {
-      const fg = fgRef.current;
-      fg.d3Force('charge').strength(-120);
-      fg.d3Force('link').distance(link => 60);
-      fg.d3Force('center').strength(0.3);
-    }
-  }, [filteredData]);
+    if (!graphRef.current) return;
+    
+    // Configure graph physics for the theological concept visualization
+    graphRef.current.d3Force('charge').strength(-120);
+    graphRef.current.d3Force('link').distance(link => 100 / (link.value || 1));
+    graphRef.current.d3Force('center').strength(0.3);
+    
+    // Auto-zoom to fit all nodes when first loaded
+    setTimeout(() => {
+      if (graphRef.current) {
+        graphRef.current.zoomToFit(400);
+      }
+    }, 500);
+  }, [graphData]);
   
+  // Handle filter changes
+  const handleFilterChange = (filter: string) => {
+    setActiveFilter(filter);
+    setSelectedNode(null);
+    setHighlightNodes(new Set());
+    setHighlightLinks(new Set());
+    
+    // Auto-zoom when filter changes
+    setTimeout(() => {
+      if (graphRef.current) {
+        graphRef.current.zoomToFit(400);
+      }
+    }, 100);
+  };
+
+  // Custom node paint function with highlights
+  const nodePaint = useCallback((node: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
+    const { val, x, y, color, name, id } = node;
+    const fontSize = 16 / globalScale;
+    const isHighlighted = highlightNodes.has(id);
+    const isSelected = selectedNode?.id === id;
+    
+    // Node rendering
+    ctx.beginPath();
+    ctx.arc(x, y, val / (isHighlighted ? 0.9 : 1), 0, 2 * Math.PI);
+    ctx.fillStyle = isHighlighted ? color : `${color}88`;
+    ctx.fill();
+
+    // Add a stroke for highlighted nodes
+    if (isHighlighted || isSelected) {
+      ctx.strokeStyle = isSelected ? '#ffffff' : '#ffffffaa';
+      ctx.lineWidth = 2 / globalScale;
+      ctx.stroke();
+    }
+
+    // Add label for larger nodes or selected/highlighted nodes
+    if (val > 5 || isHighlighted || globalScale > 0.7) {
+      ctx.font = `${fontSize}px Sans-Serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = isHighlighted ? '#ffffff' : '#ffffffcc';
+      
+      // Use shadow for better text readability against various node colors
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+      ctx.shadowBlur = 4;
+      ctx.shadowOffsetX = 1;
+      ctx.shadowOffsetY = 1;
+      
+      // Only show text if node is large enough or highlighted
+      if (val > 9 || isHighlighted || isSelected) {
+        ctx.fillText(name, x, y);
+      }
+      
+      // Reset shadow
+      ctx.shadowColor = 'transparent';
+    }
+  }, [highlightNodes, selectedNode]);
+
+  // Custom link paint function with highlights
+  const linkPaint = useCallback((link: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
+    const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+    const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+    const isHighlighted = highlightLinks.has(link);
+    
+    // Get start and end coordinates
+    const start = link.source;
+    const end = link.target;
+    
+    // Set link styling
+    ctx.strokeStyle = isHighlighted ? '#ffffff' : '#ffffff44';
+    ctx.lineWidth = isHighlighted ? 2 / globalScale : 1 / globalScale;
+    
+    // Draw link
+    ctx.beginPath();
+    ctx.moveTo(start.x, start.y);
+    ctx.lineTo(end.x, end.y);
+    ctx.stroke();
+  }, [highlightLinks]);
+
+  // Center graph on a node
+  const centerOnNode = (nodeId: string) => {
+    if (!graphRef.current) return;
+    
+    const node = graphData?.nodes.find(n => n.id === nodeId);
+    if (node) {
+      graphRef.current.centerAt(node.x, node.y, 1000);
+      graphRef.current.zoom(2, 1000);
+      handleNodeClick(node);
+    }
+  };
+
+  // Reset the view
+  const resetView = () => {
+    if (!graphRef.current) return;
+    
+    setSelectedNode(null);
+    setHighlightNodes(new Set());
+    setHighlightLinks(new Set());
+    graphRef.current.zoomToFit(400);
+  };
+
+  // Group nodes by type for legend and quick navigation
+  const getNodesByGroup = useCallback(() => {
+    if (!graphData) return {};
+    
+    return graphData.nodes.reduce((groups: Record<string, Node[]>, node) => {
+      if (!groups[node.group]) {
+        groups[node.group] = [];
+      }
+      groups[node.group].push(node);
+      return groups;
+    }, {});
+  }, [graphData]);
+
   if (isLoading) {
     return (
-      <div className="p-4 space-y-6">
-        <Skeleton className="h-10 w-1/3" />
-        <Skeleton className="h-[400px] w-full" />
+      <div className="flex items-center justify-center min-h-[600px]">
+        <Spinner size="lg" />
+        <p className="ml-3 text-lg">Loading theological concepts...</p>
       </div>
     );
   }
-  
+
   if (error) {
     return (
-      <div className="p-4 text-center">
-        <h2 className="text-xl font-semibold text-red-600 mb-2">Error Loading Explorer</h2>
-        <p>Could not load the theological concept explorer. Please try again later.</p>
-      </div>
+      <Card className="w-full max-w-4xl mx-auto bg-red-50 border-red-200">
+        <CardHeader>
+          <CardTitle className="text-red-700">Error Loading Explorer</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-red-600">
+            We couldn't load the theological concept explorer. Please try again later.
+          </p>
+          <Button 
+            className="mt-4" 
+            variant="outline"
+            onClick={() => window.location.reload()}
+          >
+            Retry
+          </Button>
+        </CardContent>
+      </Card>
     );
   }
+
+  const nodesByGroup = getNodesByGroup();
   
   return (
-    <div className="p-4">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold tracking-tight mb-2">Theological Concept Explorer</h2>
-        <p className="text-muted-foreground">
-          Explore the interconnected themes, people, places, and concepts in the Bible.
-        </p>
+    <div className="w-full max-w-6xl mx-auto">
+      <Card className="mb-6 border-none bg-gradient-to-br from-[#2c4c3b]/80 to-[#1a332a]/90 text-white shadow-xl">
+        <CardHeader>
+          <CardTitle className="text-2xl md:text-3xl font-serif">Theological Concept Explorer</CardTitle>
+          <CardDescription className="text-slate-200 text-base md:text-lg">
+            Visualize connections between biblical themes, people, places, and verses
+          </CardDescription>
+        </CardHeader>
+      </Card>
+      
+      {/* Controls and filters */}
+      <div className="flex flex-col md:flex-row gap-4 justify-between mb-6">
+        <Tabs 
+          defaultValue="all" 
+          value={activeFilter}
+          onValueChange={handleFilterChange}
+          className="w-full md:w-auto"
+        >
+          <TabsList className="w-full md:w-auto bg-[#2c4c3b]/10">
+            <TabsTrigger value="all">All Concepts</TabsTrigger>
+            <TabsTrigger value="theme">Themes</TabsTrigger>
+            <TabsTrigger value="person">People</TabsTrigger>
+            <TabsTrigger value="place">Places</TabsTrigger>
+            <TabsTrigger value="verse">Verses</TabsTrigger>
+          </TabsList>
+        </Tabs>
+        
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={resetView} className="flex-shrink-0">
+            Reset View
+          </Button>
+        </div>
       </div>
       
-      <div className="flex flex-col lg:flex-row gap-4">
-        {/* Main visualization area */}
-        <div className="lg:w-3/4 flex flex-col">
-          {/* Filters */}
-          <Card className="mb-4">
-            <CardContent className="p-4">
-              <div className="flex flex-col sm:flex-row gap-4">
-                <div className="flex-1">
-                  <div className="relative">
-                    <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      placeholder="Search concepts, themes, people..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-8"
-                    />
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        {/* Left sidebar with selection details */}
+        <div className="md:col-span-1">
+          <Card className="h-full">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg text-[#2c4c3b]">
+                {selectedNode ? 'Selection Details' : 'Explorer Guide'}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {selectedNode ? (
+                <>
+                  <div className="mb-3">
+                    <Badge 
+                      className={`
+                        ${selectedNode.group === 'theme' ? 'bg-[#5c8d76]' : ''}
+                        ${selectedNode.group === 'person' ? 'bg-[#8b6f4e]' : ''}
+                        ${selectedNode.group === 'place' ? 'bg-[#5e7e9b]' : ''}
+                        ${selectedNode.group === 'verse' ? 'bg-[#2c4c3b]' : ''}
+                      `}
+                    >
+                      {selectedNode.group.charAt(0).toUpperCase() + selectedNode.group.slice(1)}
+                    </Badge>
+                    <h3 className="text-lg font-medium mt-2">{selectedNode.name}</h3>
                   </div>
-                </div>
-                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full sm:w-auto">
-                  <TabsList>
-                    <TabsTrigger value="all">All</TabsTrigger>
-                    <TabsTrigger value="theme" className="flex items-center">
-                      <Lightbulb className="h-4 w-4 mr-1" />
-                      Themes
-                    </TabsTrigger>
-                    <TabsTrigger value="person" className="flex items-center">
-                      <Users className="h-4 w-4 mr-1" />
-                      People
-                    </TabsTrigger>
-                    <TabsTrigger value="place" className="flex items-center">
-                      <MapPin className="h-4 w-4 mr-1" />
-                      Places
-                    </TabsTrigger>
-                    <TabsTrigger value="concept" className="flex items-center">
-                      <Sparkles className="h-4 w-4 mr-1" />
-                      Concepts
-                    </TabsTrigger>
-                  </TabsList>
-                </Tabs>
-              </div>
-            </CardContent>
-          </Card>
-          
-          {/* Graph visualization */}
-          <Card className="flex-1 overflow-hidden min-h-[500px]">
-            <CardContent className="p-0 h-[500px]">
-              {filteredData.nodes.length > 0 ? (
-                <ForceGraph2D
-                  ref={fgRef}
-                  graphData={filteredData}
-                  nodeLabel={(node: Node) => node.name}
-                  nodeColor={getNodeColor}
-                  nodeRelSize={8}
-                  linkWidth={getLinkWidth}
-                  linkColor={getLinkColor}
-                  linkDirectionalParticles={4}
-                  linkDirectionalParticleWidth={link => highlightLinks.has(link) ? 4 : 0}
-                  onNodeHover={handleNodeHover}
-                  onNodeClick={handleNodeClick}
-                  linkCurvature={0.25}
-                  cooldownTicks={100}
-                  onEngineStop={() => fgRef.current?.zoomToFit(400, 30)}
-                />
+                  
+                  {selectedNode.description && (
+                    <p className="text-gray-600 mb-4">{selectedNode.description}</p>
+                  )}
+                  
+                  {selectedNode.references && selectedNode.references.length > 0 && (
+                    <>
+                      <h4 className="font-medium text-sm mb-2">Related References:</h4>
+                      <ul className="text-sm text-gray-600">
+                        {selectedNode.references.map((ref) => (
+                          <li key={ref}>{ref}</li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+                </>
               ) : (
-                <div className="h-full flex items-center justify-center flex-col p-6">
-                  <Sparkles className="h-12 w-12 text-muted-foreground mb-4" />
-                  <h3 className="text-xl font-medium mb-2">No Results Found</h3>
-                  <p className="text-center text-muted-foreground">
-                    Try adjusting your search or filters to see more connections.
+                <>
+                  <p className="text-gray-600 mb-4">
+                    This interactive visualization shows connections between biblical themes, people, places, and key verses.
                   </p>
-                </div>
+                  <ul className="text-sm text-gray-600 space-y-2">
+                    <li><span className="font-medium">Click</span> on nodes to see details and connections</li>
+                    <li><span className="font-medium">Drag</span> nodes to reorganize the graph</li>
+                    <li><span className="font-medium">Zoom</span> with mouse wheel or pinch gestures</li>
+                    <li><span className="font-medium">Pan</span> by dragging the background</li>
+                    <li><span className="font-medium">Filter</span> by type using the tabs above</li>
+                  </ul>
+                </>
               )}
             </CardContent>
           </Card>
+          
+          {/* Quick navigate section for frequently accessed nodes */}
+          {graphData && graphData.nodes.length > 0 && (
+            <Card className="mt-4">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-gray-600">Common Reference Points</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-1">
+                  {Object.keys(nodesByGroup).length > 0 && (
+                    ['theme', 'person', 'verse'].map(group => (
+                      nodesByGroup[group]?.slice(0, 3).map(node => (
+                        <Badge 
+                          key={node.id}
+                          variant="outline" 
+                          className="cursor-pointer hover:bg-slate-100 transition-colors"
+                          onClick={() => centerOnNode(node.id)}
+                        >
+                          {node.name.length > 15 ? `${node.name.substring(0, 15)}...` : node.name}
+                        </Badge>
+                      ))
+                    ))
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
         
-        {/* Details sidebar */}
-        <Card className="lg:w-1/4">
-          <CardHeader>
-            <CardTitle>Selected Node</CardTitle>
-            <CardDescription>
-              {selectedNode 
-                ? `${selectedNode.name} (${selectedNode.group.charAt(0).toUpperCase() + selectedNode.group.slice(1)})` 
-                : 'Click on a node to see details'}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {selectedNode ? (
-              <div>
-                <div className="mb-4">
-                  {selectedNode.description && (
-                    <p className="text-sm text-muted-foreground mb-4">{selectedNode.description}</p>
-                  )}
-                  
-                  <div className="flex flex-wrap gap-1 mb-4">
-                    <div 
-                      className="w-3 h-3 rounded-full" 
-                      style={{ backgroundColor: getNodeColor(selectedNode) }}
-                    />
-                    <span className="text-xs text-muted-foreground">
-                      {selectedNode.group.charAt(0).toUpperCase() + selectedNode.group.slice(1)}
-                    </span>
+        {/* Main graph visualization */}
+        <div className="md:col-span-3" ref={containerRef}>
+          <Card className="h-full p-0 overflow-hidden">
+            <div className="h-full w-full relative">
+              <ForceGraph2D
+                ref={graphRef}
+                width={graphWidth}
+                height={graphHeight}
+                graphData={getFilteredData()}
+                nodeRelSize={6}
+                nodeVal={node => node.val}
+                nodeColor={node => node.color}
+                nodeLabel={node => `${node.name}\n${node.description || ''}`}
+                linkWidth={link => 
+                  highlightLinks.has(link) ? 3 : 1
+                }
+                linkDirectionalParticles={link => 
+                  highlightLinks.has(link) ? 4 : 0
+                }
+                linkDirectionalParticleWidth={3}
+                onNodeClick={handleNodeClick}
+                onNodeHover={handleNodeHover}
+                cooldownTicks={100}
+                nodeCanvasObject={nodePaint}
+                nodePointerAreaPaint={nodePaint}
+                linkCanvasObject={linkPaint}
+                linkPointerAreaPaint={linkPaint}
+                enableNodeDrag={true}
+                enableZoomInteraction={true}
+                enablePanInteraction={true}
+                d3AlphaDecay={0.02}
+                d3VelocityDecay={0.3}
+                warmupTicks={100}
+              />
+              
+              {/* Legend overlay */}
+              <div className="absolute bottom-4 right-4 bg-white/80 backdrop-blur-sm p-2 rounded shadow-md">
+                <div className="text-xs font-medium mb-1">Legend</div>
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center gap-1">
+                    <div className="w-3 h-3 rounded-full bg-[#5c8d76]"></div>
+                    <span className="text-xs">Theme</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-3 h-3 rounded-full bg-[#8b6f4e]"></div>
+                    <span className="text-xs">Person</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-3 h-3 rounded-full bg-[#5e7e9b]"></div>
+                    <span className="text-xs">Place</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-3 h-3 rounded-full bg-[#2c4c3b]"></div>
+                    <span className="text-xs">Verse</span>
                   </div>
                 </div>
-                
-                {selectedNode.references && selectedNode.references.length > 0 && (
-                  <div>
-                    <h4 className="text-sm font-medium mb-2">Biblical References</h4>
-                    <div className="space-y-1">
-                      {selectedNode.references.map((ref, i) => (
-                        <div key={i} className="text-sm flex items-center">
-                          <BookOpen className="h-3 w-3 mr-1 text-muted-foreground" />
-                          <span>{ref}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                
-                <div className="mt-6">
-                  <Button 
-                    variant="outline" 
-                    className="w-full"
-                    onClick={() => {
-                      if (fgRef.current) {
-                        const node = fgRef.current.graph.nodes().find(n => n.id === selectedNode.id);
-                        if (node) {
-                          fgRef.current.centerAt(node.x, node.y, 1000);
-                          fgRef.current.zoom(2, 1000);
-                        }
-                      }
-                    }}
-                  >
-                    Center View
-                  </Button>
-                </div>
               </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center py-10 text-center">
-                <Sparkles className="h-10 w-10 text-muted-foreground mb-4" />
-                <p className="text-muted-foreground">
-                  Click on a node in the graph to see details about that theological concept
-                </p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+            </div>
+          </Card>
+        </div>
       </div>
     </div>
   );

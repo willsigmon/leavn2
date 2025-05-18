@@ -1,10 +1,12 @@
-import { Router, Request, Response } from 'express';
-import path from 'path';
+import express, { Request, Response } from 'express';
 import fs from 'fs';
-import { isAuthenticated } from '../replitAuth';
+import path from 'path';
 
-const router = Router();
+const router = express.Router();
 
+/**
+ * Interface for graph node data
+ */
 interface Node {
   id: string;
   name: string;
@@ -15,6 +17,9 @@ interface Node {
   description?: string;
 }
 
+/**
+ * Interface for graph link/edge data
+ */
 interface Link {
   source: string;
   target: string;
@@ -22,20 +27,25 @@ interface Link {
   label?: string;
 }
 
+/**
+ * Combined graph data structure
+ */
 interface GraphData {
   nodes: Node[];
   links: Link[];
 }
 
-// Endpoint to get the theological concept graph data
+/**
+ * GET /api/explorer/graph
+ * Returns the theological concept graph data
+ */
 router.get('/graph', async (req: Request, res: Response) => {
   try {
-    // Generate or load graph data
     const graphData = await getTheologicalGraph();
     res.json(graphData);
   } catch (error) {
-    console.error('Error fetching theological concept graph:', error);
-    res.status(500).json({ error: 'Failed to load theological concept graph data' });
+    console.error('Error retrieving theological graph data:', error);
+    res.status(500).json({ error: 'Failed to retrieve theological graph data' });
   }
 });
 
@@ -45,26 +55,24 @@ router.get('/graph', async (req: Request, res: Response) => {
  * or a pre-computed file. For now, we're generating sample data.
  */
 async function getTheologicalGraph(): Promise<GraphData> {
-  // Read from the genesis metadata file to create authentic data
   try {
-    const genesisMetadataPath = path.join(process.cwd(), 'data', 'genesis', 'genesis_metadata.json');
-    const genesisRAGIndexPath = path.join(process.cwd(), 'data', 'genesis', 'genesis_rag_index.json');
+    // Try to load Genesis metadata from file
+    const metadataPath = path.join(process.cwd(), 'data', 'genesis', 'genesis_metadata.json');
+    const ragIndexPath = path.join(process.cwd(), 'data', 'genesis', 'rag_index.json');
     
-    if (fs.existsSync(genesisMetadataPath) && fs.existsSync(genesisRAGIndexPath)) {
-      const metadataContent = fs.readFileSync(genesisMetadataPath, 'utf8');
-      const ragIndexContent = fs.readFileSync(genesisRAGIndexPath, 'utf8');
-      
-      const metadata = JSON.parse(metadataContent);
-      const ragIndex = JSON.parse(ragIndexContent);
-      
+    if (fs.existsSync(metadataPath) && fs.existsSync(ragIndexPath)) {
+      const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
+      const ragIndex = JSON.parse(fs.readFileSync(ragIndexPath, 'utf8'));
       return generateGraphFromMetadata(metadata, ragIndex);
+    } else {
+      // Fallback to sample data if files don't exist
+      return generateSampleGraphData();
     }
   } catch (error) {
-    console.error('Error reading Genesis metadata for graph:', error);
+    console.error('Error generating theological graph:', error);
+    // Fallback to sample data in case of any errors
+    return generateSampleGraphData();
   }
-  
-  // Fallback to sample data if we can't read the actual metadata
-  return generateSampleGraphData();
 }
 
 /**
@@ -73,155 +81,130 @@ async function getTheologicalGraph(): Promise<GraphData> {
 function generateGraphFromMetadata(metadata: any, ragIndex: any): GraphData {
   const nodes: Node[] = [];
   const links: Link[] = [];
-  const nodeMap = new Map<string, number>(); // Map to track node indices
   
-  // Process themes
-  if (ragIndex.themes) {
-    Object.keys(ragIndex.themes).forEach((theme, index) => {
-      const nodeId = `theme-${theme.replace(/\s+/g, '-').toLowerCase()}`;
-      nodes.push({
-        id: nodeId,
-        name: theme,
-        val: 10,
-        color: '#2c4c3b',
-        group: 'theme',
-        description: `A key theological theme found throughout Genesis.`,
-        references: ragIndex.themes[theme].map((ref: string) => `Genesis ${ref}`)
+  // Tracking sets to prevent duplicates
+  const themeNodes = new Set();
+  const personNodes = new Set();
+  const placeNodes = new Set();
+  
+  // Process each chapter in the metadata
+  Object.entries(metadata.chapters).forEach(([chapterNum, chapterData]: [string, any]) => {
+    const chapterId = `Genesis ${chapterNum}`;
+    
+    // Add themes from this chapter
+    chapterData.themes.forEach((theme: string) => {
+      if (!themeNodes.has(theme)) {
+        themeNodes.add(theme);
+        nodes.push({
+          id: `theme-${theme.toLowerCase().replace(/\s+/g, '-')}`,
+          name: theme,
+          val: 15, // Size of node
+          color: '#5c8d76', // Army green shade
+          group: 'theme',
+          description: `Theological theme: ${theme}`
+        });
+      }
+      
+      // Link this theme to the chapter
+      links.push({
+        source: `theme-${theme.toLowerCase().replace(/\s+/g, '-')}`,
+        target: chapterId,
+        value: 2
       });
-      nodeMap.set(nodeId, nodes.length - 1);
     });
-  }
-  
-  // Process people
-  if (ragIndex.people) {
-    Object.keys(ragIndex.people).forEach((person, index) => {
-      const nodeId = `person-${person.replace(/\s+/g, '-').toLowerCase()}`;
-      nodes.push({
-        id: nodeId,
-        name: person,
-        val: 8,
-        color: '#8b4513',
-        group: 'person',
-        description: `Biblical figure mentioned in Genesis.`,
-        references: ragIndex.people[person].map((ref: string) => `Genesis ${ref}`)
+    
+    // Add people from this chapter
+    chapterData.people.forEach((person: string) => {
+      if (!personNodes.has(person)) {
+        personNodes.add(person);
+        nodes.push({
+          id: `person-${person.toLowerCase().replace(/\s+/g, '-')}`,
+          name: person,
+          val: 12,
+          color: '#8b6f4e', // Brown shade for people
+          group: 'person',
+          description: `Biblical figure: ${person}`
+        });
+      }
+      
+      // Link this person to the chapter
+      links.push({
+        source: `person-${person.toLowerCase().replace(/\s+/g, '-')}`,
+        target: chapterId,
+        value: 2
       });
-      nodeMap.set(nodeId, nodes.length - 1);
     });
-  }
-  
-  // Process places
-  if (ragIndex.places) {
-    Object.keys(ragIndex.places).forEach((place, index) => {
-      const nodeId = `place-${place.replace(/\s+/g, '-').toLowerCase()}`;
-      nodes.push({
-        id: nodeId,
-        name: place,
-        val: 6,
-        color: '#1e3a8a',
-        group: 'place',
-        description: `Location mentioned in Genesis.`,
-        references: ragIndex.places[place].map((ref: string) => `Genesis ${ref}`)
+    
+    // Add places from this chapter
+    chapterData.places.forEach((place: string) => {
+      if (!placeNodes.has(place)) {
+        placeNodes.add(place);
+        nodes.push({
+          id: `place-${place.toLowerCase().replace(/\s+/g, '-')}`,
+          name: place,
+          val: 10,
+          color: '#5e7e9b', // Blue-gray shade for places
+          group: 'place',
+          description: `Biblical location: ${place}`
+        });
+      }
+      
+      // Link this place to the chapter
+      links.push({
+        source: `place-${place.toLowerCase().replace(/\s+/g, '-')}`,
+        target: chapterId,
+        value: 1
       });
-      nodeMap.set(nodeId, nodes.length - 1);
     });
-  }
-  
-  // Add theological concepts (combining relevant themes)
-  const theologicalConcepts = [
-    { name: 'Creation', relatedThemes: ['Creation', 'Divine order'], description: 'God\'s act of bringing the universe into existence' },
-    { name: 'Covenant', relatedThemes: ['Promise', 'Covenant', 'Faithfulness'], description: 'Sacred agreement between God and humanity' },
-    { name: 'Fall of Humanity', relatedThemes: ['Sin', 'Consequence', 'Temptation'], description: 'Humanity\'s first disobedience against God' },
-    { name: 'Redemption', relatedThemes: ['Forgiveness', 'Mercy', 'Grace'], description: 'God\'s plan to save humanity from sin' },
-    { name: 'Divine Calling', relatedThemes: ['Calling', 'Purpose', 'Obedience'], description: 'God\'s specific assignments to individuals' }
-  ];
-  
-  theologicalConcepts.forEach((concept, index) => {
-    const nodeId = `concept-${concept.name.replace(/\s+/g, '-').toLowerCase()}`;
+    
+    // Add chapter as a node
     nodes.push({
-      id: nodeId,
-      name: concept.name,
-      val: 12,
-      color: '#9333ea',
-      group: 'concept',
-      description: concept.description
-    });
-    nodeMap.set(nodeId, nodes.length - 1);
-    
-    // Connect concepts to related themes
-    concept.relatedThemes.forEach(theme => {
-      const themeNodeId = `theme-${theme.replace(/\s+/g, '-').toLowerCase()}`;
-      if (nodeMap.has(themeNodeId)) {
-        links.push({
-          source: nodeId,
-          target: themeNodeId,
-          value: 3,
-          label: 'relates to'
-        });
-      }
+      id: chapterId,
+      name: `Genesis ${chapterNum}: ${chapterData.title || 'Untitled'}`,
+      val: 18,
+      color: '#2c4c3b', // Darker army green
+      group: 'verse',
+      description: chapterData.summary || 'Genesis chapter'
     });
   });
   
-  // Add connections between themes and people/places
-  Object.keys(ragIndex.themes || {}).forEach(theme => {
-    const themeId = `theme-${theme.replace(/\s+/g, '-').toLowerCase()}`;
-    const themeRefs = new Set(ragIndex.themes[theme]);
-    
-    // Connect to people mentioned in the same verses
-    Object.keys(ragIndex.people || {}).forEach(person => {
-      const personId = `person-${person.replace(/\s+/g, '-').toLowerCase()}`;
-      const personRefs = new Set(ragIndex.people[person]);
-      
-      // Check for intersection between theme refs and person refs
-      const intersection = [...themeRefs].filter(ref => personRefs.has(ref));
-      if (intersection.length > 0) {
-        links.push({
-          source: themeId,
-          target: personId,
-          value: Math.min(intersection.length, 5), // Normalize value
-          label: 'associated with'
-        });
+  // Connect related themes based on co-occurrence in chapters
+  for (const theme1 of themeNodes) {
+    for (const theme2 of themeNodes) {
+      if (theme1 !== theme2) {
+        // Check if themes co-occur in the same chapters
+        const coOccurrenceCount = Object.values(metadata.chapters).filter((chapterData: any) => 
+          chapterData.themes.includes(theme1) && chapterData.themes.includes(theme2)
+        ).length;
+        
+        if (coOccurrenceCount > 0) {
+          links.push({
+            source: `theme-${theme1.toLowerCase().replace(/\s+/g, '-')}`,
+            target: `theme-${theme2.toLowerCase().replace(/\s+/g, '-')}`,
+            value: coOccurrenceCount * 0.5 // Scale down to not overwhelm the graph
+          });
+        }
       }
-    });
-    
-    // Connect to places mentioned in the same verses
-    Object.keys(ragIndex.places || {}).forEach(place => {
-      const placeId = `place-${place.replace(/\s+/g, '-').toLowerCase()}`;
-      const placeRefs = new Set(ragIndex.places[place]);
-      
-      // Check for intersection between theme refs and place refs
-      const intersection = [...themeRefs].filter(ref => placeRefs.has(ref));
-      if (intersection.length > 0) {
-        links.push({
-          source: themeId,
-          target: placeId,
-          value: Math.min(intersection.length, 5), // Normalize value
-          label: 'occurred at'
-        });
-      }
-    });
-  });
+    }
+  }
   
-  // Connect people to places
-  Object.keys(ragIndex.people || {}).forEach(person => {
-    const personId = `person-${person.replace(/\s+/g, '-').toLowerCase()}`;
-    const personRefs = new Set(ragIndex.people[person]);
-    
-    Object.keys(ragIndex.places || {}).forEach(place => {
-      const placeId = `place-${place.replace(/\s+/g, '-').toLowerCase()}`;
-      const placeRefs = new Set(ragIndex.places[place]);
+  // Connect people to related places
+  for (const person of personNodes) {
+    for (const place of placeNodes) {
+      // Check if person and place co-occur in chapters
+      const coOccurrenceCount = Object.values(metadata.chapters).filter((chapterData: any) => 
+        chapterData.people.includes(person) && chapterData.places.includes(place)
+      ).length;
       
-      // Check for intersection between person refs and place refs
-      const intersection = [...personRefs].filter(ref => placeRefs.has(ref));
-      if (intersection.length > 0) {
+      if (coOccurrenceCount > 0) {
         links.push({
-          source: personId,
-          target: placeId,
-          value: Math.min(intersection.length, 4), // Normalize value
-          label: 'present at'
+          source: `person-${person.toLowerCase().replace(/\s+/g, '-')}`,
+          target: `place-${place.toLowerCase().replace(/\s+/g, '-')}`,
+          value: coOccurrenceCount * 0.3
         });
       }
-    });
-  });
+    }
+  }
   
   return { nodes, links };
 }
@@ -231,169 +214,148 @@ function generateGraphFromMetadata(metadata: any, ragIndex: any): GraphData {
  * This is a fallback if we can't read from real data
  */
 function generateSampleGraphData(): GraphData {
-  const nodes: Node[] = [
-    // Core theological concepts
-    { 
-      id: 'concept-creation', 
-      name: 'Creation', 
-      val: 15, 
-      color: '#9333ea', 
-      group: 'concept',
-      description: 'God\'s act of bringing the universe into existence'
-    },
-    { 
-      id: 'concept-covenant', 
-      name: 'Covenant', 
-      val: 15, 
-      color: '#9333ea', 
-      group: 'concept',
-      description: 'Sacred agreement between God and humanity'
-    },
-    { 
-      id: 'concept-redemption', 
-      name: 'Redemption', 
-      val: 15, 
-      color: '#9333ea', 
-      group: 'concept',
-      description: 'God\'s plan to save humanity from sin'
-    },
-    
-    // Themes
-    { 
-      id: 'theme-divine-order', 
-      name: 'Divine Order', 
-      val: 10, 
-      color: '#2c4c3b', 
-      group: 'theme',
-      description: 'God\'s intentional arrangement of creation',
-      references: ['Genesis 1:1-3', 'Genesis 2:1-3']
-    },
-    { 
-      id: 'theme-stewardship', 
-      name: 'Stewardship', 
-      val: 10, 
-      color: '#2c4c3b', 
-      group: 'theme',
-      description: 'Humanity\'s responsibility to care for creation',
-      references: ['Genesis 1:28-30', 'Genesis 2:15']
-    },
-    { 
-      id: 'theme-disobedience', 
-      name: 'Disobedience', 
-      val: 10, 
-      color: '#2c4c3b', 
-      group: 'theme',
-      description: 'Humanity\'s rebellion against God\'s commands',
-      references: ['Genesis 3:6-7', 'Genesis 3:11']
-    },
-    { 
-      id: 'theme-promise', 
-      name: 'Promise', 
-      val: 10, 
-      color: '#2c4c3b', 
-      group: 'theme',
-      description: 'God\'s commitments to His people',
-      references: ['Genesis 9:11', 'Genesis 12:2-3', 'Genesis 15:5']
-    },
-    
-    // People
-    { 
-      id: 'person-adam', 
-      name: 'Adam', 
-      val: 8, 
-      color: '#8b4513', 
-      group: 'person',
-      description: 'The first man created by God',
-      references: ['Genesis 1:27', 'Genesis 2:7', 'Genesis 3:17-19']
-    },
-    { 
-      id: 'person-eve', 
-      name: 'Eve', 
-      val: 8, 
-      color: '#8b4513', 
-      group: 'person',
-      description: 'The first woman, created from Adam\'s rib',
-      references: ['Genesis 2:22', 'Genesis 3:16', 'Genesis 3:20']
-    },
-    { 
-      id: 'person-noah', 
-      name: 'Noah', 
-      val: 8, 
-      color: '#8b4513', 
-      group: 'person',
-      description: 'Built the ark to preserve life during the flood',
-      references: ['Genesis 6:9', 'Genesis 7:1', 'Genesis 9:1']
-    },
-    { 
-      id: 'person-abraham', 
-      name: 'Abraham', 
-      val: 8, 
-      color: '#8b4513', 
-      group: 'person',
-      description: 'Patriarch who received God\'s covenant promise',
-      references: ['Genesis 12:1-3', 'Genesis 15:6', 'Genesis 22:1-18']
-    },
-    
-    // Places
-    { 
-      id: 'place-eden', 
-      name: 'Garden of Eden', 
-      val: 7, 
-      color: '#1e3a8a', 
-      group: 'place',
-      description: 'Paradise where Adam and Eve first lived',
-      references: ['Genesis 2:8-15', 'Genesis 3:23-24']
-    },
-    { 
-      id: 'place-ararat', 
-      name: 'Mount Ararat', 
-      val: 7, 
-      color: '#1e3a8a', 
-      group: 'place',
-      description: 'Where Noah\'s ark came to rest after the flood',
-      references: ['Genesis 8:4']
-    },
-    { 
-      id: 'place-canaan', 
-      name: 'Canaan', 
-      val: 7, 
-      color: '#1e3a8a', 
-      group: 'place',
-      description: 'The promised land given to Abraham',
-      references: ['Genesis 12:5-7', 'Genesis 17:8']
-    }
+  const nodes: Node[] = [];
+  const links: Link[] = [];
+  
+  // Core theological themes
+  const themes = [
+    { id: 'creation', name: 'Creation', description: 'The divine act of bringing the universe into existence' },
+    { id: 'fall', name: 'The Fall', description: 'Humanity\'s descent into sin and separation from God' },
+    { id: 'covenant', name: 'Covenant', description: 'Sacred agreements between God and humanity' },
+    { id: 'redemption', name: 'Redemption', description: 'The process of being saved from sin and its consequences' },
+    { id: 'providence', name: 'Providence', description: 'God\'s sovereignty and care over creation' }
   ];
   
-  const links: Link[] = [
-    // Connect concepts with themes
-    { source: 'concept-creation', target: 'theme-divine-order', value: 5, label: 'includes' },
-    { source: 'concept-creation', target: 'theme-stewardship', value: 4, label: 'establishes' },
-    { source: 'concept-covenant', target: 'theme-promise', value: 5, label: 'expressed through' },
-    { source: 'concept-redemption', target: 'theme-disobedience', value: 3, label: 'responds to' },
-    
-    // Connect themes with people
-    { source: 'theme-divine-order', target: 'person-adam', value: 3, label: 'involves' },
-    { source: 'theme-divine-order', target: 'person-eve', value: 3, label: 'involves' },
-    { source: 'theme-stewardship', target: 'person-adam', value: 4, label: 'given to' },
-    { source: 'theme-stewardship', target: 'person-noah', value: 3, label: 'exemplified by' },
-    { source: 'theme-disobedience', target: 'person-adam', value: 4, label: 'committed by' },
-    { source: 'theme-disobedience', target: 'person-eve', value: 4, label: 'initiated by' },
-    { source: 'theme-promise', target: 'person-noah', value: 3, label: 'received by' },
-    { source: 'theme-promise', target: 'person-abraham', value: 5, label: 'made to' },
-    
-    // Connect people with places
-    { source: 'person-adam', target: 'place-eden', value: 5, label: 'lived in' },
-    { source: 'person-eve', target: 'place-eden', value: 5, label: 'lived in' },
-    { source: 'person-noah', target: 'place-ararat', value: 4, label: 'landed at' },
-    { source: 'person-abraham', target: 'place-canaan', value: 4, label: 'journeyed to' },
-    
-    // Connect people with people
-    { source: 'person-adam', target: 'person-eve', value: 5, label: 'husband of' },
-    
-    // Connect concepts with places
-    { source: 'concept-creation', target: 'place-eden', value: 3, label: 'includes' },
-    { source: 'concept-covenant', target: 'place-canaan', value: 4, label: 'promises' }
+  // Key biblical figures
+  const people = [
+    { id: 'adam', name: 'Adam', description: 'The first human created by God' },
+    { id: 'eve', name: 'Eve', description: 'The first woman created by God' },
+    { id: 'abraham', name: 'Abraham', description: 'Patriarch and father of faith' },
+    { id: 'moses', name: 'Moses', description: 'Prophet who led the Exodus from Egypt' },
+    { id: 'david', name: 'David', description: 'King of Israel and ancestor of Jesus' }
   ];
+  
+  // Important places
+  const places = [
+    { id: 'eden', name: 'Garden of Eden', description: 'Paradise created by God for humanity' },
+    { id: 'babel', name: 'Tower of Babel', description: 'Site of human pride and confusion of languages' },
+    { id: 'canaan', name: 'Canaan', description: 'The Promised Land' },
+    { id: 'egypt', name: 'Egypt', description: 'Place of bondage and exodus' },
+    { id: 'jerusalem', name: 'Jerusalem', description: 'Holy city and spiritual center' }
+  ];
+  
+  // Key verses
+  const verses = [
+    { id: 'genesis-1-1', name: 'Genesis 1:1', description: 'In the beginning God created the heavens and the earth.' },
+    { id: 'genesis-3-15', name: 'Genesis 3:15', description: 'First messianic prophecy' },
+    { id: 'genesis-12-3', name: 'Genesis 12:3', description: 'Abrahamic covenant and blessing to all nations' },
+    { id: 'exodus-20-2', name: 'Exodus 20:2', description: 'Beginning of the Ten Commandments' },
+    { id: 'isaiah-53-5', name: 'Isaiah 53:5', description: 'Prophecy of the suffering servant' }
+  ];
+  
+  // Add all nodes with appropriate styling
+  themes.forEach(theme => {
+    nodes.push({
+      id: `theme-${theme.id}`,
+      name: theme.name,
+      val: 15,
+      color: '#5c8d76', // Army green shade
+      group: 'theme',
+      description: theme.description
+    });
+  });
+  
+  people.forEach(person => {
+    nodes.push({
+      id: `person-${person.id}`,
+      name: person.name,
+      val: 12,
+      color: '#8b6f4e', // Brown shade for people
+      group: 'person',
+      description: person.description
+    });
+  });
+  
+  places.forEach(place => {
+    nodes.push({
+      id: `place-${place.id}`,
+      name: place.name,
+      val: 10,
+      color: '#5e7e9b', // Blue-gray shade for places
+      group: 'place',
+      description: place.description
+    });
+  });
+  
+  verses.forEach(verse => {
+    nodes.push({
+      id: `verse-${verse.id}`,
+      name: verse.name,
+      val: 8,
+      color: '#2c4c3b', // Darker army green
+      group: 'verse',
+      description: verse.description
+    });
+  });
+  
+  // Define relationships between concepts
+  
+  // Creation theme connections
+  links.push(
+    { source: 'theme-creation', target: 'verse-genesis-1-1', value: 5 },
+    { source: 'theme-creation', target: 'person-adam', value: 4 },
+    { source: 'theme-creation', target: 'person-eve', value: 4 },
+    { source: 'theme-creation', target: 'place-eden', value: 4 }
+  );
+  
+  // Fall theme connections
+  links.push(
+    { source: 'theme-fall', target: 'verse-genesis-3-15', value: 5 },
+    { source: 'theme-fall', target: 'person-adam', value: 4 },
+    { source: 'theme-fall', target: 'person-eve', value: 4 },
+    { source: 'theme-fall', target: 'place-eden', value: 3 }
+  );
+  
+  // Covenant theme connections
+  links.push(
+    { source: 'theme-covenant', target: 'verse-genesis-12-3', value: 5 },
+    { source: 'theme-covenant', target: 'person-abraham', value: 5 },
+    { source: 'theme-covenant', target: 'person-moses', value: 4 },
+    { source: 'theme-covenant', target: 'place-canaan', value: 3 }
+  );
+  
+  // Redemption theme connections
+  links.push(
+    { source: 'theme-redemption', target: 'verse-isaiah-53-5', value: 5 },
+    { source: 'theme-redemption', target: 'verse-genesis-3-15', value: 3 },
+    { source: 'theme-redemption', target: 'person-moses', value: 3 },
+    { source: 'theme-redemption', target: 'place-egypt', value: 3 }
+  );
+  
+  // Providence theme connections
+  links.push(
+    { source: 'theme-providence', target: 'person-abraham', value: 4 },
+    { source: 'theme-providence', target: 'person-david', value: 4 },
+    { source: 'theme-providence', target: 'place-jerusalem', value: 3 }
+  );
+  
+  // Connect people to places
+  links.push(
+    { source: 'person-adam', target: 'place-eden', value: 5 },
+    { source: 'person-eve', target: 'place-eden', value: 5 },
+    { source: 'person-abraham', target: 'place-canaan', value: 4 },
+    { source: 'person-moses', target: 'place-egypt', value: 4 },
+    { source: 'person-david', target: 'place-jerusalem', value: 4 }
+  );
+  
+  // Interconnect themes to show theological relationships
+  links.push(
+    { source: 'theme-creation', target: 'theme-fall', value: 3 },
+    { source: 'theme-fall', target: 'theme-redemption', value: 3 },
+    { source: 'theme-covenant', target: 'theme-redemption', value: 3 },
+    { source: 'theme-providence', target: 'theme-covenant', value: 2 },
+    { source: 'theme-creation', target: 'theme-providence', value: 2 }
+  );
   
   return { nodes, links };
 }
