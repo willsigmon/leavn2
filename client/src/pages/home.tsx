@@ -50,9 +50,10 @@ export default function Home() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 pt-4 md:pt-6">
                 {isAuthenticated ? (
-                  <Button size="lg" onClick={() => navigate('/reader')} className="w-full sm:w-auto bg-[#2c4c3b] hover:bg-[#223c2e] dark:bg-[#2c4c3b] dark:hover:bg-[#223c2e] text-white border-0 rounded-lg">
+                  <Button size="lg" onClick={() => navigate('/new-reader')} className="w-full sm:w-auto bg-[#2c4c3b] hover:bg-[#223c2e] dark:bg-[#2c4c3b] dark:hover:bg-[#223c2e] text-white border-0 rounded-lg relative group">
                     <BookOpen className="mr-2 h-5 w-5" />
-                    Open Bible Reader
+                    Open Aurora Reader
+                    <span className="absolute -top-2 -right-2 bg-amber-500 text-white text-xs px-2 py-0.5 rounded-full">NEW</span>
                   </Button>
                 ) : (
                   <Button size="lg" onClick={() => login()} className="w-full sm:w-auto bg-[#2c4c3b] hover:bg-[#223c2e] dark:bg-[#2c4c3b] dark:hover:bg-[#223c2e] text-white border-0 rounded-lg">
@@ -63,6 +64,10 @@ export default function Home() {
                 <Button size="lg" variant="outline" onClick={() => navigate('/reading-plans')} className="w-full sm:w-auto border-[#a5c2a5] dark:border-[#3a6349] text-[#2c4c3b] dark:text-[#a5c2a5] hover:bg-[#f0f4ed] dark:hover:bg-[#2c4c3b]/30 rounded-lg">
                   <Calendar className="mr-2 h-5 w-5" />
                   View Reading Plans
+                </Button>
+                <Button size="lg" variant="outline" onClick={() => navigate('/reader')} className="w-full sm:w-auto border-[#a5c2a5] dark:border-[#3a6349] text-[#2c4c3b] dark:text-[#a5c2a5] hover:bg-[#f0f4ed] dark:hover:bg-[#2c4c3b]/30 rounded-lg">
+                  <BookOpen className="mr-2 h-5 w-5" />
+                  Classic Reader
                 </Button>
               </div>
               
