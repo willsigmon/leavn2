@@ -1,0 +1,110 @@
+Copy-paste the block below into Replit’s “AI → Generate code” box. It gives the agent a clear, component-level blueprint that matches the sketch you uploaded and plugs straight into the Universal Reader work we’ve already specced.
+
+✦ OBJECTIVE
+Build the <BibleReaderLayout> exactly as sketched:
+
+── Top navigation bar
+── Two-column body (≈ ⅔ reader · ⅓ context sidebar)
+── Tag bar under the reader
+── Responsive collapse of the sidebar on small screens
+
+Use React 18, Tailwind, shadcn/ui. No business logic here—just the structural JSX, Tailwind classes, and empty callback props.
+
+────────────────────────────────────────
+1 · FILE TREE
+src/
+  components/
+    AppShell.tsx
+    TopNav.tsx
+    ReaderPane/
+      ReaderHeader.tsx
+      VerseCanvas.tsx
+      TagBar.tsx
+    ContextSidebar/
+      ContextBox.tsx
+      LensButtons.tsx
+      MapPane.tsx
+  pages/
+    BibleReader.tsx        // assembles layout
+  index.tsx
+  tailwind.config.ts
+
+────────────────────────────────────────
+2 · LAYOUT SPEC
+
+⚑ Grid
+```html
+<main class="grid md:grid-cols-[2fr_1fr] h-[calc(100vh-56px)]">
+  <ReaderPane />   <!--2/3-->
+  <ContextSidebar /> <!--1/3-->
+</main>
+
+• 56 px is the fixed TopNav height
+• Below md breakpoint, sidebar becomes a bottom sheet (fixed bottom-0 inset-x-0 h-1/2 bg-canvas).
+
+⚑ TopNav (56 px tall, sticky)
+
+┏━━menu━━┓ Leavn | Bible Reader | [Search box] ⌕ | (user avatar)
+
+– Left: hamburger → slide-in drawer
+– Center: page title
+– Right: search input (autosuggest later) + user avatar button.
+
+⚑ ReaderPane
+
+┌──────── ReaderHeader (48 px) ────────┐
+← | Genesis ▾ | 1 ▾ | Verse ▾   [A A] [☾]  (icons)
+└──────────────────────────────────────┘
+┌──────── VerseCanvas (scroll-y) ──────┐
+  <h1>Genesis 1</h1>
+  <p><span data-ref="GEN-1:1">1 In the beginning…</span></p>
+  ...
+└──────────────────────────────────────┘
+TagBar (40 px)  ➜  “Tags: [pill] [pill] [pill]”
+
+– Verse spans receive tabIndex=0 and data-ref for selection logic.
+– [A A] opens typography modal, [☾] toggles theme.
+
+⚑ ContextSidebar
+
+┌─ContextBox────────────┐
+│ Search 🔍             │  ← future inter-verse search
+│ Translation ▾         │
+├─LensButtons───────────┤
+│ Protestant | Catholic │
+│ Orthodox   | More…    │
+│ Gen Z      | Novelize │
+│ Original   | Kids     │
+├─MapPane (200-240 px)──┤
+│  + Leaflet container  │
+│  Ancient vs Modern    │
+└───────────────────────┘
+
+– LensButtons is a 3×3 grid of <Button variant="outline">.
+– MapPane hosts Leaflet; placeholder div for now.
+
+────────────────────────────────────────
+3 · COMPONENT NOTES
+
+• AppShell
+Wraps <TopNav> + <Slot>; applies class="bg-canvas text-ink".
+
+• VerseCanvas
+Accepts onSelect(refs: string[]) prop (single or Shift-multi handled later).
+
+• ContextSidebar
+Uses class="border-l border-ink-soft px-4 py-6 overflow-y-auto"; hidden on mobile until summoned.
+
+• Accessibility
+– Aria-label all buttons (“Next chapter”, “Toggle dark mode”, etc.).
+– Verse spans: role="link" aria-label="Genesis 1 verse 3".
+
+────────────────────────────────────────
+4 · DELIVERABLES (for this task only)
+	•	JSX + Tailwind classes implementing the static layout.
+	•	No API calls, no Zustand yet—leave TODO comments for logic.
+	•	Ensure npm run dev shows the exact 2-column layout with Lorem verses and a gray map box.
+
+BEGIN CODING NOW.
+
+This is **language Replit’s AI understands**: a concise file plan, precise Tailwind grid syntax, component boundaries, and clear “no-logic-yet” scope. Paste it in, run “Generate,” and the agent will scaffold the reader exactly like your sketch.
