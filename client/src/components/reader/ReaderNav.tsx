@@ -54,13 +54,17 @@ export function ReaderNav({
   // Navigate to the next chapter
   const handleNextChapter = () => {
     const nextChapter = getNextChapter(book, chapter);
-    navigate(`/reader/${nextChapter.bookId}/${nextChapter.chapter}`);
+    if (nextChapter) {
+      navigate(`/reader/${nextChapter.book}/${nextChapter.chapter}`);
+    }
   };
   
   // Navigate to the previous chapter
   const handlePrevChapter = () => {
     const prevChapter = getPrevChapter(book, chapter);
-    navigate(`/reader/${prevChapter.bookId}/${prevChapter.chapter}`);
+    if (prevChapter) {
+      navigate(`/reader/${prevChapter.book}/${prevChapter.chapter}`);
+    }
   };
   
   // Get the current book details

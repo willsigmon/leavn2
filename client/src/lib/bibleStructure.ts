@@ -918,4 +918,54 @@ export function getReference(bookId: string, chapter: number, verse?: number): s
   return `${book.name} ${chapter}`;
 }
 
+/**
+ * Navigate to the previous chapter
+ */
+export function getPrevChapter(bookId: string, chapter: number): { book: string; chapter: number } | null {
+  const book = getBookById(bookId);
+  if (!book) return null;
+  
+  // If we're not at the first chapter, simply go to the previous chapter
+  if (chapter > 1) {
+    return { book: bookId, chapter: chapter - 1 };
+  }
+  
+  // If we're at the first chapter, go to the previous book
+  const allBooks = getAllBooks();
+  const currentIndex = allBooks.findIndex(b => b.id === bookId);
+  
+  if (currentIndex <= 0) {
+    // We're at the first book, there is no previous chapter
+    return null;
+  }
+  
+  const prevBook = allBooks[currentIndex - 1];
+  return { book: prevBook.id, chapter: prevBook.chapters };
+}
+
+/**
+ * Navigate to the next chapter
+ */
+export function getNextChapter(bookId: string, chapter: number): { book: string; chapter: number } | null {
+  const book = getBookById(bookId);
+  if (!book) return null;
+  
+  // If we're not at the last chapter, simply go to the next chapter
+  if (chapter < book.chapters) {
+    return { book: bookId, chapter: chapter + 1 };
+  }
+  
+  // If we're at the last chapter, go to the next book
+  const allBooks = getAllBooks();
+  const currentIndex = allBooks.findIndex(b => b.id === bookId);
+  
+  if (currentIndex >= allBooks.length - 1) {
+    // We're at the last book, there is no next chapter
+    return null;
+  }
+  
+  const nextBook = allBooks[currentIndex + 1];
+  return { book: nextBook.id, chapter: 1 };
+}
+
 export default bibleStructure;

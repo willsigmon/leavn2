@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/accordion';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
-import { bibleStructure } from '@/lib/bibleStructure';
+import { bibleStructure, BibleSection, BibleBook } from '@/lib/bibleStructure';
 import { ChevronRight, BookOpen, ScrollText, Book } from 'lucide-react';
 
 interface TableOfContentsProps {
@@ -31,19 +31,9 @@ export function TableOfContents({
   ]);
   
   // Function to determine which testament a book belongs to
-  function getTestamentForBook(bookName: string): string {
-    const lowercaseBook = bookName.toLowerCase();
-    
-    // Check if book is in New Testament
-    const newTestamentBooks = bibleStructure.find(section => 
-      section.id === 'new-testament'
-    )?.books || [];
-    
-    const isNewTestament = newTestamentBooks.some(book => 
-      book.id.toLowerCase() === lowercaseBook
-    );
-    
-    return isNewTestament ? 'new-testament' : 'old-testament';
+  function getTestamentForBook(bookId: string): string {
+    const book = bibleStructure.books[bookId.toLowerCase()];
+    return book?.testament === 'new' ? 'new-testament' : 'old-testament';
   }
 
   // Handle book click
@@ -68,13 +58,13 @@ export function TableOfContents({
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between mb-4 p-4 pb-2 border-b">
-        <h2 className="text-xl font-semibold flex items-center">
-          <BookOpen className="mr-2 h-5 w-5" />
+      <div className="flex items-center justify-between mb-4 p-4 pb-2 border-b border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900">
+        <h2 className="text-xl font-semibold flex items-center text-stone-800 dark:text-stone-100">
+          <BookOpen className="mr-2 h-5 w-5 text-amber-700 dark:text-amber-500" />
           Table of Contents
         </h2>
         {onClose && (
-          <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0">
+          <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0 text-stone-600 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100">
             <ChevronRight className="h-4 w-4" />
           </Button>
         )}
@@ -87,32 +77,42 @@ export function TableOfContents({
           onValueChange={setExpandedSections}
           className="w-full"
         >
-          {bibleStructure.map((section) => (
+          {bibleStructure.sections.map((section: BibleSection) => (
             <AccordionItem 
               key={section.id} 
               value={section.id}
-              className="border-b"
+              className="border-b border-stone-200 dark:border-stone-700"
             >
               <AccordionTrigger className="hover:no-underline py-2">
                 <div className="flex items-center text-left font-medium">
-                  <Book className="h-4 w-4 mr-2 opacity-70" />
-                  <span>{section.name}</span>
+                  <Book className="h-4 w-4 mr-2 text-stone-600 dark:text-stone-400" />
+                  <span className="text-stone-800 dark:text-stone-200">{section.name}</span>
+                  {section.description && (
+                    <span className="ml-2 text-xs text-stone-500 dark:text-stone-400 hidden md:inline">
+                      ({section.books.length} books)
+                    </span>
+                  )}
                 </div>
               </AccordionTrigger>
               <AccordionContent>
                 <div className="grid grid-cols-1 gap-1 pb-2">
-                  {section.books.map((book) => (
+                  {section.books.map((book: BibleBook) => (
                     <div key={book.id} className="mb-2">
                       <button
                         onClick={() => handleBookClick(book.id)}
-                        className={`w-full text-left py-1.5 px-2 rounded-md flex items-center hover:bg-primary/10 ${
+                        className={`w-full text-left py-1.5 px-2 rounded-md flex items-center hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors ${
                           currentBook?.toLowerCase() === book.id.toLowerCase()
-                            ? 'bg-primary/15 font-medium'
-                            : ''
+                            ? 'bg-stone-200 dark:bg-stone-700 font-medium text-stone-900 dark:text-stone-100'
+                            : 'text-stone-700 dark:text-stone-300'
                         }`}
                       >
-                        <ScrollText className="h-3.5 w-3.5 mr-2 opacity-60" />
-                        {book.name}
+                        <ScrollText className="h-3.5 w-3.5 mr-2 text-stone-500 dark:text-stone-400" />
+                        <span>{book.name}</span>
+                        {book.shortName && book.shortName !== book.name && (
+                          <span className="ml-1 text-xs text-stone-500 dark:text-stone-400">
+                            ({book.shortName})
+                          </span>
+                        )}
                       </button>
                       
                       {/* Show chapters when the book is selected */}
@@ -122,10 +122,10 @@ export function TableOfContents({
                             <button
                               key={chapter}
                               onClick={() => handleChapterClick(book.id, chapter)}
-                              className={`text-center py-1 px-1.5 text-sm rounded-md hover:bg-primary/10 ${
+                              className={`text-center py-1 px-1.5 text-sm rounded-md transition-colors ${
                                 currentChapter === chapter.toString()
-                                  ? 'bg-primary text-primary-foreground font-medium'
-                                  : ''
+                                  ? 'bg-amber-700 text-amber-50 font-medium dark:bg-amber-800 dark:text-amber-50'
+                                  : 'hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300'
                               }`}
                             >
                               {chapter}
