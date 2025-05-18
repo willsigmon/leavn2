@@ -401,13 +401,17 @@ export default function Reader() {
           
           {/* Bible content */}
           <div className={`p-4 md:p-6 lg:p-8 max-w-4xl mx-auto ${paperTexture ? 'paper-texture' : ''}`}>
-            <BibleContent
-              book={book}
-              bookName={book}
-              chapter={chapter}
-              viewMode={viewMode}
-              onNavigateToVerse={handleNavigateToVerse}
-            />
+            {book.toLowerCase() === 'genesis' ? (
+              <GenesisReader chapter={chapter} />
+            ) : (
+              <BibleContent
+                book={book}
+                bookName={book}
+                chapter={chapter}
+                viewMode={viewMode}
+                onNavigateToVerse={handleNavigateToVerse}
+              />
+            )}
           </div>
         </main>
       </div>

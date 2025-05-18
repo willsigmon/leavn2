@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ChevronRight, BookOpen, Info } from 'lucide-react';
-import { useDarkMode } from '@/hooks/useDarkMode';
 import {
   Tooltip,
   TooltipContent,
@@ -49,7 +48,13 @@ interface GenesisChapterData {
 export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
   const [selectedTranslation, setSelectedTranslation] = useState<'web' | 'kjv'>('web');
   const [showThematicTags, setShowThematicTags] = useState(true);
-  const { isDarkMode } = useDarkMode();
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  
+  // Check system preference for dark mode
+  useEffect(() => {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setIsDarkMode(prefersDark || document.documentElement.classList.contains('dark'));
+  }, []);
   
   // Fetch Genesis chapter data
   const { data: chapterData, isLoading, error } = useQuery<GenesisChapterData>({
