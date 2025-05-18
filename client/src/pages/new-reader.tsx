@@ -213,8 +213,9 @@ export default function NewReader() {
       // If already reading, pause or stop
       speechSynthesis.pause();
     } else {
-      // If not reading, start reading
-      speechSynthesis.speak(chapterText);
+      // If not reading, start reading with selected voice
+      const voiceCategory = selectedVoice || 'default';
+      speechSynthesis.speak(chapterText, voiceCategory);
     }
     
     // Toggle state
@@ -392,6 +393,8 @@ export default function NewReader() {
               onChapterChange={handleChapterChange}
               onTextModeChange={handleTextModeChange}
               onToggleTheme={handleToggleTheme}
+              onToggleReadAloud={handleToggleReadAloud}
+              isReading={isReading}
               typographyControl={
                 <TypographyDialog
                   preferences={typographySettings}
@@ -439,15 +442,39 @@ export default function NewReader() {
               ref={mainContentRef}
               className="flex-1 overflow-hidden flex flex-col"
             >
-              <VerseCanvas
-                book={book}
-                chapter={chapter}
-                verses={verses}
-                onSelect={handleVerseSelect}
-                className="flex-1"
-                textMode={narrativeMode ? 'novelize' : (textMode as 'original' | 'genz' | 'novelize' | 'kids')}
-                typography={typographySettings}
-              />
+              <div className="flex flex-col flex-1">
+                <VerseCanvas
+                  book={book}
+                  chapter={chapter}
+                  verses={verses}
+                  onSelect={handleVerseSelect}
+                  className="flex-1"
+                  textMode={narrativeMode ? 'novelize' : (textMode as 'original' | 'genz' | 'novelize' | 'kids')}
+                  typography={typographySettings}
+                />
+                
+                {/* Audio controls panel for read-aloud feature */}
+                {isReading && (
+                  <div className="p-4 bg-stone-100 dark:bg-stone-800 border-t border-stone-200 dark:border-stone-700">
+                    <AudioControls 
+                      text={verses.map(v => v.text).join(' ')}
+                      onHighlight={(index) => {
+                        // Find which verse contains the current word
+                        let accumulatedLength = 0;
+                        for (let i = 0; i < verses.length; i++) {
+                          accumulatedLength += verses[i].text.length + 1; // +1 for space
+                          if (index < accumulatedLength) {
+                            // Set the active verse
+                            setSelectedVerse(verses[i].verse);
+                            break;
+                          }
+                        }
+                      }}
+                      onPlayStateChange={handleReadingStateChange}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
             
             <TagBar onTagClick={handleTagClick} />
