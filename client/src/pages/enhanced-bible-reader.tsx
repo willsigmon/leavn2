@@ -7,7 +7,8 @@ import { UniversalReader } from '@/components/reader/UniversalReader';
 import { ReaderCanvas } from '@/components/reader/ReaderCanvas';
 import { TypographyControls } from '@/components/reader/FixedTypographyControls';
 import { Button } from '@/components/ui/button';
-import { Loader2, BookOpen, Bookmark, ChevronLeft, ChevronRight, Info, MessageSquare, History, X } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Loader2, BookOpen, Bookmark, ChevronLeft, ChevronRight, Info, MessageSquare, History, Search, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import {
   Sheet,
