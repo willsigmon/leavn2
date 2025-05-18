@@ -2,7 +2,7 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ForceGraph2D from 'react-force-graph-2d';
 import { useToast } from '@/hooks/use-toast';
-import { Spinner } from '@/components/ui/spinner';
+import Spinner from '../../components/ui/spinner';
 import {
   Card,
   CardContent,
