@@ -453,7 +453,7 @@ export default function Home() {
               </Button>
             )}
             
-            <Button size="lg" onClick={() => navigate('/reading-plans')} className="border-2 border-white text-white font-medium hover:bg-white/20 rounded-lg shadow-lg">
+            <Button size="lg" onClick={() => navigate('/reading-plans')} className="bg-white/25 border-2 border-white text-white font-bold hover:bg-white/40 rounded-lg shadow-lg">
               <Calendar className="mr-2 h-5 w-5" />
               Explore Reading Plans
             </Button>
