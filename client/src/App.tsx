@@ -1,26 +1,24 @@
-import { Switch, Route } from "wouter";
-import { queryClient } from "./lib/queryClient";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/not-found";
-import Home from "@/pages/home";
-import Reader from "@/pages/new-reader";
-import ReadingPlans from "@/pages/reading-plans";
-import ReadingPlanDetail from "@/pages/reading-plan-detail";
-import Login from "@/pages/login";
-import Profile from "@/pages/profile";
-import Settings from "@/pages/settings";
-import { ThemeProvider } from "next-themes";
-import { AuthProvider } from "./hooks/useAuth";
-import { NavBar } from "./components/NavBar";
-import Footer from "./components/layout/Footer";
-import { lazy, Suspense } from "react";
 
-// Lazily load legal and resource pages
-const BibleTranslationsPage = lazy(() => import("./pages/resources/bible-translations"));
-const PrivacyPolicyPage = lazy(() => import("./pages/legal/privacy-policy"));
-const TermsOfServicePage = lazy(() => import("./pages/legal/terms-of-service"));
+import React, { Suspense } from 'react';
+import { Switch, Route } from 'wouter';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from './lib/queryClient';
+import { ThemeProvider } from './lib/theme';
+import { Toaster } from '@/components/ui/toaster';
+import Home from './pages/home';
+import BibleReader from './pages/bible-reader';
+import ReadingPlans from './pages/reading-plans';
+import ReadingPlanDetail from './pages/reading-plan-detail';
+import Login from './pages/login';
+import Profile from './pages/profile';
+import Settings from './pages/settings';
+import NotFound from './pages/not-found';
+import NavBar from './components/NavBar';
+
+// Lazy-loaded components
+const BibleTranslationsPage = React.lazy(() => import('./pages/resources/bible-translations'));
+const PrivacyPolicyPage = React.lazy(() => import('./pages/legal/privacy-policy'));
+const TermsOfServicePage = React.lazy(() => import('./pages/legal/terms-of-service'));
 
 function Router() {
   return (
@@ -29,9 +27,9 @@ function Router() {
       <main className="flex-1">
         <Switch>
           <Route path="/" component={Home} />
-          <Route path="/reader" component={Reader} />
-          <Route path="/reader/:book" component={Reader} />
-          <Route path="/reader/:book/:chapter" component={Reader} />
+          <Route path="/reader" component={BibleReader} />
+          <Route path="/reader/:book" component={BibleReader} />
+          <Route path="/reader/:book/:chapter" component={BibleReader} />
           <Route path="/reading-plans" component={ReadingPlans} />
           <Route path="/reading-plan/:id" component={ReadingPlanDetail} />
           <Route path="/login" component={Login} />
@@ -61,22 +59,17 @@ function Router() {
           <Route component={NotFound} />
         </Switch>
       </main>
-      <Footer />
     </div>
   );
 }
 
-function App() {
+export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider attribute="class">
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
+      <ThemeProvider>
+        <Router />
+        <Toaster />
       </ThemeProvider>
     </QueryClientProvider>
   );
 }
-
-export default App;

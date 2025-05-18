@@ -13,6 +13,137 @@ import {
 } from "./rag-bible";
 import { getSuggestedTags } from "./tag-suggest";
 import { db } from "./db";
+import { Router } from 'express';
+import { getChapter, getVerse, getVerses } from './bible-cache';
+import * as rag from './rag-bible';
+import { registerBibleTransformRoutes } from './routes/bible-transform';
+
+export const router = Router();
+
+// Auth routes
+router.get('/auth/user', (req, res) => {
+  if (req.user) {
+    return res.json(req.user);
+  }
+  return res.status(401).json({ message: 'Unauthorized' });
+});
+
+router.get('/login', (req, res) => {
+  // Simple auth for development
+  (req.session as any).user = {
+    id: '6e83c239-a5f0-4cf3-a2dc-d40240edc0d1',
+    name: 'Demo User',
+    email: 'demo@example.com',
+    roles: ['user']
+  };
+  return res.redirect('/');
+});
+
+router.get('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) console.error('Error destroying session:', err);
+    res.redirect('/');
+  });
+});
+
+// Bible routes
+router.get('/bible/:book/:chapter', async (req, res) => {
+  try {
+    const { book, chapter } = req.params;
+    const chapterNum = parseInt(chapter, 10);
+
+    if (isNaN(chapterNum)) {
+      return res.status(400).json({ message: 'Invalid chapter number' });
+    }
+
+    // Get full chapter data without limiting verses
+    const chapterData = await getChapter(book, chapterNum);
+
+    if (!chapterData) {
+      return res.status(404).json({ message: 'Chapter not found' });
+    }
+
+    return res.json(chapterData);
+  } catch (error) {
+    console.error('Error fetching chapter:', error);
+    return res.status(500).json({ 
+      message: 'Error fetching chapter',
+      error: error.message 
+    });
+  }
+});
+
+router.get('/bible/:book/:chapter/:verse', async (req, res) => {
+  try {
+    const { book, chapter, verse } = req.params;
+    const chapterNum = parseInt(chapter, 10);
+    const verseNum = parseInt(verse, 10);
+
+    if (isNaN(chapterNum) || isNaN(verseNum)) {
+      return res.status(400).json({ message: 'Invalid chapter or verse number' });
+    }
+
+    const verseData = await getVerse(book, chapterNum, verseNum);
+
+    if (!verseData) {
+      return res.status(404).json({ message: 'Verse not found' });
+    }
+
+    return res.json(verseData);
+  } catch (error) {
+    console.error('Error fetching verse:', error);
+    return res.status(500).json({ 
+      message: 'Error fetching verse',
+      error: error.message 
+    });
+  }
+});
+
+// RAG routes
+router.get('/bible/rag/search', async (req, res) => {
+  try {
+    const { query, limit = 5 } = req.query;
+
+    if (!query || typeof query !== 'string') {
+      return res.status(400).json({ message: 'Search query is required' });
+    }
+
+    const results = await rag.semanticSearch(query, parseInt(limit as string, 10) || 5);
+    return res.json(results);
+  } catch (error) {
+    console.error('Error during semantic search:', error);
+    return res.status(500).json({ 
+      message: 'Error during semantic search',
+      error: error.message 
+    });
+  }
+});
+
+// Register Bible transformation routes
+registerBibleTransformRoutes(router);
+
+// Notes routes (protected)
+router.post('/notes', isAuthenticated, (req, res) => {
+  // TODO: Implement note creation
+  res.status(201).json({ id: 'note-1', content: req.body.content });
+});
+
+router.get('/notes/:book/:chapter', isAuthenticated, (req, res) => {
+  // TODO: Implement fetching notes
+  res.json([]);
+});
+
+// Reading history (protected)
+router.post('/history', isAuthenticated, (req, res) => {
+  // TODO: Implement reading history tracking
+  res.status(201).json({ success: true });
+});
+
+// Reading plans (protected)
+router.get('/reading-plans', isAuthenticated, (req, res) => {
+  // TODO: Implement reading plans
+  res.json([]);
+});
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up session middleware
@@ -840,6 +971,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(500).json({ message: "Failed to fetch reading plan" });
     }
   });
+
+  // Consolidate all routes under /reader
+  app.use('/reader', router);
 
   const httpServer = createServer(app);
   return httpServer;
