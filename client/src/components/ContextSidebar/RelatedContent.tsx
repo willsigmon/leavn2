@@ -50,7 +50,7 @@ export function RelatedContent({ verseReference, bookChapter }: RelatedContentPr
     );
   }
   
-  const relatedVerses = relatedContent?.results || [];
+  const relatedVerses = relatedContent && 'results' in relatedContent ? relatedContent.results : [];
   
   if (!relatedVerses.length) {
     return null;
