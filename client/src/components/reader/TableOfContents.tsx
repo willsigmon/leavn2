@@ -100,14 +100,19 @@ export function TableOfContents({
                     <div key={book.id} className="mb-2">
                       <button
                         onClick={() => handleBookClick(book.id)}
-                        className={`w-full text-left py-1.5 px-2 rounded-md flex items-center hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors ${
+                        className={`w-full text-left py-1.5 px-2 rounded-md flex items-center transition-all duration-200 relative overflow-hidden group ${
                           currentBook?.toLowerCase() === book.id.toLowerCase()
-                            ? 'bg-stone-200 dark:bg-stone-700 font-medium text-stone-900 dark:text-stone-100'
-                            : 'text-stone-700 dark:text-stone-300'
+                            ? 'bg-stone-200 dark:bg-stone-700 font-medium text-stone-900 dark:text-stone-100 shadow-sm'
+                            : 'text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 hover:translate-x-0.5'
                         }`}
                       >
-                        <ScrollText className="h-3.5 w-3.5 mr-2 text-stone-500 dark:text-stone-400" />
-                        <span>{book.name}</span>
+                        <div className="absolute inset-0 bg-amber-600/5 dark:bg-amber-400/5 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 rounded-md"></div>
+                        <ScrollText className={`h-3.5 w-3.5 mr-2 transition-transform duration-200 ${
+                          currentBook?.toLowerCase() === book.id.toLowerCase()
+                            ? 'text-amber-700 dark:text-amber-400'
+                            : 'text-stone-500 dark:text-stone-400 group-hover:text-amber-600 dark:group-hover:text-amber-300 group-hover:scale-110'
+                        }`} />
+                        <span className="relative z-10">{book.name}</span>
                         {book.shortName && book.shortName !== book.name && (
                           <span className="ml-1 text-xs text-stone-500 dark:text-stone-400">
                             ({book.shortName})
@@ -122,13 +127,16 @@ export function TableOfContents({
                             <button
                               key={chapter}
                               onClick={() => handleChapterClick(book.id, chapter)}
-                              className={`text-center py-1 px-1.5 text-sm rounded-md transition-colors ${
+                              className={`text-center py-1 px-1.5 text-sm rounded-md relative overflow-hidden transition-all duration-200 ${
                                 currentChapter === chapter.toString()
-                                  ? 'bg-amber-700 text-amber-50 font-medium dark:bg-amber-800 dark:text-amber-50'
-                                  : 'hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300'
+                                  ? 'bg-amber-700 text-amber-50 font-medium dark:bg-amber-800 dark:text-amber-50 shadow-sm transform scale-105'
+                                  : 'hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 hover:scale-110 active:scale-95'
                               }`}
                             >
-                              {chapter}
+                              <span className="relative z-10">{chapter}</span>
+                              <span className={`absolute inset-0 bg-amber-500/10 transform scale-0 rounded-full transition-transform duration-300 ${
+                                currentChapter !== chapter.toString() ? 'hover:scale-100' : ''
+                              }`}></span>
                             </button>
                           ))}
                         </div>

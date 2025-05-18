@@ -177,14 +177,15 @@ export function ReaderNav({
           variant="ghost"
           size="sm"
           onClick={handlePrevChapter}
-          className="h-9 text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-stone-100"
+          className="h-9 text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-stone-100 transition-all duration-200 ease-in-out transform hover:-translate-x-0.5 active:scale-95 relative overflow-hidden group"
           aria-label="Previous chapter"
         >
-          <ChevronLeft className="h-4 w-4 mr-1" />
-          Prev
+          <div className="absolute inset-0 bg-amber-600/10 dark:bg-amber-400/10 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 rounded-md"></div>
+          <ChevronLeft className="h-4 w-4 mr-1 group-hover:animate-pulse-short" />
+          <span className="relative z-10">Prev</span>
         </Button>
         
-        <div className="mx-2 font-semibold text-sm px-3 py-1.5 bg-stone-100 dark:bg-stone-800 rounded-md text-stone-800 dark:text-stone-200 border border-stone-200 dark:border-stone-700">
+        <div className="mx-2 font-semibold text-sm px-3 py-1.5 bg-stone-100 dark:bg-stone-800 rounded-md text-stone-800 dark:text-stone-200 border border-stone-200 dark:border-stone-700 transition-all duration-300 hover:shadow-md">
           {currentBook?.name || book} {chapter}
         </div>
         
@@ -192,11 +193,12 @@ export function ReaderNav({
           variant="ghost"
           size="sm"
           onClick={handleNextChapter}
-          className="h-9 text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-stone-100"
+          className="h-9 text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-stone-100 transition-all duration-200 ease-in-out transform hover:translate-x-0.5 active:scale-95 relative overflow-hidden group"
           aria-label="Next chapter"
         >
-          Next
-          <ChevronRight className="h-4 w-4 ml-1" />
+          <div className="absolute inset-0 bg-amber-600/10 dark:bg-amber-400/10 transform translate-x-full group-hover:translate-x-0 transition-transform duration-300 rounded-md"></div>
+          <span className="relative z-10">Next</span>
+          <ChevronRight className="h-4 w-4 ml-1 group-hover:animate-pulse-short" />
         </Button>
       </div>
       
