@@ -65,10 +65,6 @@ export default function Home() {
                   <Calendar className="mr-2 h-5 w-5" />
                   View Reading Plans
                 </Button>
-                <Button size="lg" variant="outline" onClick={() => navigate('/reader')} className="w-full sm:w-auto border-[#a5c2a5] dark:border-[#3a6349] text-[#2c4c3b] dark:text-[#a5c2a5] hover:bg-[#f0f4ed] dark:hover:bg-[#2c4c3b]/30 rounded-lg">
-                  <BookOpen className="mr-2 h-5 w-5" />
-                  Classic Reader
-                </Button>
               </div>
               
               {/* Feature badges */}

@@ -5,11 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
-import BibleReader from "@/pages/bible-reader";
-import UniversalBibleReader from "@/pages/universal-bible-reader";
-import EnhancedBibleReader from "@/pages/enhanced-bible-reader";
-import NewBibleReader from "@/pages/BibleReader";
-import NewReader from "@/pages/new-reader";
+import Reader from "@/pages/new-reader";
 import ReadingPlans from "@/pages/reading-plans";
 import ReadingPlanDetail from "@/pages/reading-plan-detail";
 import Login from "@/pages/login";
@@ -33,14 +29,8 @@ function Router() {
       <main className="flex-1">
         <Switch>
           <Route path="/" component={Home} />
-          <Route path="/reader/:book/:chapter" component={BibleReader} />
-          <Route path="/reader" component={BibleReader} />
-          <Route path="/universal-reader/:book/:chapter" component={UniversalBibleReader} />
-          <Route path="/universal-reader" component={UniversalBibleReader} />
-          <Route path="/enhanced-reader/:book/:chapter" component={EnhancedBibleReader} />
-          <Route path="/enhanced-reader" component={EnhancedBibleReader} />
-          <Route path="/new-reader/:book/:chapter" component={NewReader} />
-          <Route path="/new-reader" component={NewReader} />
+          <Route path="/reader/:book/:chapter" component={Reader} />
+          <Route path="/reader" component={Reader} />
           <Route path="/reading-plans" component={ReadingPlans} />
           <Route path="/reading-plan/:id" component={ReadingPlanDetail} />
           <Route path="/login" component={Login} />
