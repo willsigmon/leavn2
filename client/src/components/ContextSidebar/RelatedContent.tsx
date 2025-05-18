@@ -78,7 +78,7 @@ export function RelatedContent({ verseReference, bookChapter }: RelatedContentPr
             <Card key={item.reference} className="bg-stone-50 dark:bg-stone-800 border-stone-200 dark:border-stone-700">
               <CardHeader className="py-2 px-3">
                 <CardTitle className="text-xs font-medium text-[#2c4c3b] dark:text-[#8baa96]">
-                  <Link href={`/new-reader/${item.reference.split(' ')[0]}/${item.reference.split(' ')[1].split(':')[0]}`}>
+                  <Link href={`/reader/${item.reference.split(' ')[0]}/${item.reference.split(' ')[1].split(':')[0]}`}>
                     {item.reference}
                   </Link>
                 </CardTitle>

@@ -50,10 +50,9 @@ export default function Home() {
               </p>
               <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4 pt-4 md:pt-6">
                 {isAuthenticated ? (
-                  <Button size="lg" onClick={() => navigate('/new-reader')} className="w-full sm:w-auto bg-[#2c4c3b] hover:bg-[#223c2e] dark:bg-[#2c4c3b] dark:hover:bg-[#223c2e] text-white border-0 rounded-lg relative group">
+                  <Button size="lg" onClick={() => navigate('/reader')} className="w-full sm:w-auto bg-[#2c4c3b] hover:bg-[#223c2e] dark:bg-[#2c4c3b] dark:hover:bg-[#223c2e] text-white border-0 rounded-lg">
                     <BookOpen className="mr-2 h-5 w-5" />
-                    Open Aurora Reader
-                    <span className="absolute -top-2 -right-2 bg-amber-500 text-white text-xs px-2 py-0.5 rounded-full">NEW</span>
+                    Open Bible Reader
                   </Button>
                 ) : (
                   <Button size="lg" onClick={() => login()} className="w-full sm:w-auto bg-[#2c4c3b] hover:bg-[#223c2e] dark:bg-[#2c4c3b] dark:hover:bg-[#223c2e] text-white border-0 rounded-lg">

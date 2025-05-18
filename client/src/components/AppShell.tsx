@@ -24,7 +24,7 @@ export function AppShell({ children }: AppShellProps) {
         
         <div className="ml-auto flex items-center gap-2">
           <Button variant="ghost" size="sm" asChild>
-            <Link href="/new-reader">
+            <Link href="/reader">
               <Book className="h-4 w-4 mr-1" />
               Read
             </Link>
