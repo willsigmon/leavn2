@@ -207,30 +207,30 @@ export function Reader({
       />
       
       <div className="flex flex-1 overflow-hidden">
-        {/* View mode selector sidebar */}
-        <div className="hidden md:block border-r">
-          <div className="p-4 h-full">
-            <div className="flex items-center mb-4">
-              <BookOpen className="mr-2 h-5 w-5" />
-              <h3 className="font-medium">Reading Modes</h3>
-            </div>
-            <ViewModeSelector 
-              currentMode={viewMode}
-              onModeChange={setViewMode}
-              isLoading={isLoadingTranslation}
-            />
-          </div>
-        </div>
-        
-        {/* Main content area */}
+        {/* Main content area (2/3 width on desktop) */}
         <div 
           ref={contentRef}
-          className="flex-1 overflow-y-auto"
+          className="flex-1 overflow-y-auto bg-stone-50 dark:bg-stone-900"
           onScroll={handleScroll}
+          style={{
+            flex: '2',
+            backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' viewBox=\'0 0 100 100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z\' fill=\'%23d6cdc3\' fill-opacity=\'0.08\' fill-rule=\'evenodd\'/%3E%3C/svg%3E")',
+            backgroundAttachment: 'fixed',
+          }}
         >
-          <div className="max-w-4xl mx-auto p-4 sm:p-6 md:p-8">
+          <div className="max-w-3xl mx-auto p-4 sm:p-6 md:p-8 bg-stone-50/90 dark:bg-stone-900/90 backdrop-blur-sm shadow-sm">
+            {/* View mode selector - Mobile only horizontal tabs */}
+            <div className="md:hidden mb-6 pb-4 border-b border-stone-200 dark:border-stone-700">
+              <ViewModeSelector 
+                currentMode={viewMode}
+                onModeChange={setViewMode}
+                isLoading={isLoadingTranslation}
+                layout="horizontal"
+              />
+            </div>
+            
             {/* Chapter title */}
-            <h1 className="text-3xl font-serif font-semibold mb-6">
+            <h1 className="text-3xl font-serif font-semibold mb-6 text-stone-800 dark:text-stone-100">
               {chapterData?.bookName || book} {chapter}
             </h1>
             
@@ -241,7 +241,48 @@ export function Reader({
               verses={transformedVerses}
               onVerseSelect={handleVerseSelect}
               translation={translation}
+              selectedVerse={selectedVerse}
+              animateSelection={true}
             />
+          </div>
+        </div>
+        
+        {/* Right sidebar (1/3 width on desktop) */}
+        <div className="hidden lg:flex flex-col border-l border-stone-200 dark:border-stone-700 bg-stone-100 dark:bg-stone-800" style={{ flex: '1' }}>
+          <div className="p-4 border-b border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900">
+            <div className="flex items-center mb-4">
+              <BookOpen className="mr-2 h-5 w-5 text-amber-700 dark:text-amber-500" />
+              <h3 className="font-medium text-stone-800 dark:text-stone-100">Insights & Context</h3>
+            </div>
+            
+            {/* Theological lens selector (horizontal tabs) */}
+            <ViewModeSelector 
+              currentMode={viewMode}
+              onModeChange={setViewMode}
+              isLoading={isLoadingTranslation}
+              layout="horizontal"
+            />
+          </div>
+          
+          {/* Sidebar content - context dependent on selected verse */}
+          <div className="flex-1 overflow-y-auto p-4">
+            {selectedVerse ? (
+              <div className="animate-in fade-in slide-in-from-right-2 duration-300">
+                <ContextSidebar 
+                  book={book}
+                  chapter={chapter}
+                  verse={selectedVerse}
+                  viewMode={viewMode}
+                />
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full text-center text-stone-500 dark:text-stone-400 p-4">
+                <div className="rounded-full bg-stone-200 dark:bg-stone-700 p-3 mb-4">
+                  <BookOpen className="h-6 w-6 text-stone-500 dark:text-stone-400" />
+                </div>
+                <p className="text-sm">Select a verse to see insights, notes, and context</p>
+              </div>
+            )}
           </div>
         </div>
       </div>

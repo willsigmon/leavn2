@@ -1,0 +1,46 @@
+You're updating the UI at the `/reader` route for the Leavn Bible Study web app. Apply the following changes based on modern 2025 UI best practices and specific critiques from the current Aurora Reader layout:
+
+📖 Core Layout Adjustments:
+- Maintain two-column layout:
+  - Left ⅔: Bible reading pane (text, notes, navigation).
+  - Right ⅓: Dynamic sidebar (translations, insights, maps, tagging).
+- Add **animated verse selection feedback**: highlight selected verse(s), trigger animated ripple or glow, and immediately refresh the sidebar content without extra clicks.
+
+🎨 Visual Design Improvements:
+- Use a soft, **earth-toned background** for emotional warmth (not sterile white).
+- Revise the top bar to feel less corporate:
+  - Replace flat beta badge with a small, rounded “beta” pill in a muted secondary color.
+  - Add spiritual iconography to the Leavn logo area (e.g., a subtle leaf or candle).
+- Enhance spacing and padding throughout for clarity and touch-friendliness.
+
+🧩 Sidebar Enhancements:
+- Show **scrollable horizontal map preview** with a “full map” expand button (Leaflet map integration).
+- Replace theological insight dropdown with icon tabs (e.g., Protestant, Catholic, Jewish, Gen Z).
+- Convert “Did You Know?” facts into **card-based layout** with icons and subtle elevation/motion.
+- All sidebar modules should animate in when updated (e.g., fade or slide transition).
+
+✨ Interactivity & Microinteractions:
+- Add hover effects to tags, buttons, and verses.
+- When a verse is clicked:
+  - Animate the tag bar to highlight relevant topics.
+  - Auto-scroll “Did You Know?” to entries for that verse.
+- Add subtle tooltip or info icon next to features like “Narrative Mode” and “Add Notes.”
+
+🧠 Smart Discovery:
+- Add a **bottom carousel section** (like Spotify/Netflix) labeled “You Might Also Like,” based on:
+  - Previous reading
+  - Favorited tags
+  - Commonly highlighted verses
+- These suggestions should appear after 5+ verses read or if the user stays >30s on a chapter.
+
+👋 Onboarding Enhancements:
+- First-time users see a short **onboarding coachmark sequence**:
+  - “Tap a verse to explore more.”
+  - “Try switching theological lenses here.”
+  - “Add a note or bookmark to return later.”
+- Include a dismissible checklist in the sidebar with onboarding goals (e.g., read 1 chapter, explore 1 insight, add 1 note).
+
+🔄 Tag System & RAG Logic:
+- Dynamically update tags based on verse selection.
+- Tags should be clickable filters that highlight related verses across the chapter.
+- Use these 5 core tag categories:

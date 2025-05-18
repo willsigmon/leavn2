@@ -16,6 +16,8 @@ interface VerseHighlighterProps {
   }[];
   onVerseSelect?: (verse: number) => void;
   translation?: string;
+  selectedVerse?: number | null;
+  animateSelection?: boolean;
 }
 
 export function VerseHighlighter({ 
@@ -23,11 +25,26 @@ export function VerseHighlighter({
   chapter, 
   verses, 
   onVerseSelect,
-  translation = 'kjv'
+  translation = 'kjv',
+  selectedVerse: externalSelectedVerse = null,
+  animateSelection = false
 }: VerseHighlighterProps) {
-  const [selectedVerse, setSelectedVerse] = useState<number | null>(null);
+  const [selectedVerse, setSelectedVerse] = useState<number | null>(externalSelectedVerse);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
   const [showMenu, setShowMenu] = useState(false);
+  const [animating, setAnimating] = useState<number | null>(null);
+  
+  // Effect to handle external selected verse changes
+  useEffect(() => {
+    if (externalSelectedVerse !== null && externalSelectedVerse !== selectedVerse) {
+      setSelectedVerse(externalSelectedVerse);
+      
+      if (animateSelection) {
+        setAnimating(externalSelectedVerse);
+        setTimeout(() => setAnimating(null), 1000); // Reset animation after 1 second
+      }
+    }
+  }, [externalSelectedVerse, animateSelection, selectedVerse]);
   const contentRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
   const { isAuthenticated } = useAuth();
@@ -171,13 +188,20 @@ export function VerseHighlighter({
     >
       {verses.map((verse) => (
         <div
+          id={`verse-${verse.number}`}
           key={verse.number}
-          className={`group relative mb-4 pl-8 pr-4 py-2 rounded-md transition-colors ${
+          className={`group relative mb-4 pl-8 pr-4 py-2 rounded-md transition-all ${
             verse.highlightColor ? `highlight-${verse.highlightColor}` : ''
-          } hover:bg-primary/5`}
+          } ${selectedVerse === verse.number ? 'bg-amber-50/70 dark:bg-amber-950/20' : ''}
+          ${animating === verse.number ? 'animate-pulse ring-2 ring-amber-500 dark:ring-amber-500/70' : ''}
+          hover:bg-stone-100 dark:hover:bg-stone-800`}
         >
           <span 
-            className="absolute left-2 top-2 font-bold text-sm text-muted-foreground"
+            className={`absolute left-2 top-2 font-semibold text-sm ${
+              selectedVerse === verse.number 
+                ? 'text-amber-700 dark:text-amber-400' 
+                : 'text-stone-500 dark:text-stone-400'
+            }`}
             aria-label={`Verse ${verse.number}`}
           >
             {verse.number}
@@ -185,28 +209,37 @@ export function VerseHighlighter({
           
           {/* Verse text */}
           <span 
-            className="text-foreground cursor-pointer"
+            className={`cursor-pointer ${
+              selectedVerse === verse.number 
+                ? 'text-stone-900 dark:text-stone-50' 
+                : 'text-stone-800 dark:text-stone-200'
+            }`}
             onClick={(e) => handleVerseClick(verse.number, e)}
           >
             {verse.text}
           </span>
           
           {/* Indicators */}
-          <div className="absolute right-2 top-2 flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="absolute right-2 top-2 flex items-center space-x-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
             {verse.hasNote && (
               <MessageSquareText 
-                className="h-3.5 w-3.5 text-primary" 
+                className="h-4 w-4 text-amber-600 dark:text-amber-400" 
                 aria-label="This verse has a note"
               />
             )}
             {verse.isBookmarked && (
               <Bookmark 
-                className="h-3.5 w-3.5 text-primary" 
+                className="h-4 w-4 text-amber-600 dark:text-amber-400" 
                 fill="currentColor"
                 aria-label="This verse is bookmarked"
               />
             )}
           </div>
+          
+          {/* Active verse indicator */}
+          {selectedVerse === verse.number && (
+            <div className="absolute left-0 top-0 bottom-0 w-1 bg-amber-500 dark:bg-amber-600 rounded-full" />
+          )}
         </div>
       ))}
       
