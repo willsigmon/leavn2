@@ -68,21 +68,21 @@ export default function Home() {
               
               {/* Feature badges */}
               <div className="flex flex-wrap gap-3 md:gap-4 pt-6 justify-center sm:justify-start">
-                <div className="flex items-center text-sm text-stone-600">
-                  <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-emerald-100 flex items-center justify-center mr-2">
-                    <span className="text-emerald-700 text-xs">✓</span>
+                <div className="flex items-center text-sm text-stone-600 dark:text-stone-300">
+                  <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-emerald-100 dark:bg-emerald-900/60 flex items-center justify-center mr-2">
+                    <span className="text-emerald-700 dark:text-emerald-400 text-xs">✓</span>
                   </div>
                   <span className="whitespace-nowrap">Free to use</span>
                 </div>
-                <div className="flex items-center text-sm text-stone-600">
-                  <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-emerald-100 flex items-center justify-center mr-2">
-                    <span className="text-emerald-700 text-xs">✓</span>
+                <div className="flex items-center text-sm text-stone-600 dark:text-stone-300">
+                  <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-emerald-100 dark:bg-emerald-900/60 flex items-center justify-center mr-2">
+                    <span className="text-emerald-700 dark:text-emerald-400 text-xs">✓</span>
                   </div>
                   <span className="whitespace-nowrap">Multiple translations</span>
                 </div>
-                <div className="flex items-center text-sm text-stone-600">
-                  <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-emerald-100 flex items-center justify-center mr-2">
-                    <span className="text-emerald-700 text-xs">✓</span>
+                <div className="flex items-center text-sm text-stone-600 dark:text-stone-300">
+                  <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-emerald-100 dark:bg-emerald-900/60 flex items-center justify-center mr-2">
+                    <span className="text-emerald-700 dark:text-emerald-400 text-xs">✓</span>
                   </div>
                   <span className="whitespace-nowrap">AI-powered insights</span>
                 </div>
@@ -453,7 +453,7 @@ export default function Home() {
               </Button>
             )}
             
-            <Button size="lg" variant="outline" onClick={() => navigate('/reading-plans')} className="border-white/50 text-white hover:bg-white/10 rounded-lg">
+            <Button size="lg" variant="outline" onClick={() => navigate('/reading-plans')} className="border-white/50 text-white hover:bg-white/10 dark:border-white/50 dark:text-white dark:hover:bg-white/10 rounded-lg">
               <Calendar className="mr-2 h-5 w-5" />
               Explore Reading Plans
             </Button>

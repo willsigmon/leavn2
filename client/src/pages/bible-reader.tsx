@@ -397,7 +397,7 @@ export default function BibleReader() {
                   {/* Book-like page with closer text layout */}
                   <div className="relative bg-white rounded-md shadow-md p-8 md:p-10 max-w-3xl mx-auto">
                     {/* Paper texture background */}
-                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/paper.png')] opacity-50 rounded-md"></div>
+                    <div className="absolute inset-0 bg-stone-50 dark:bg-gray-900 opacity-50 rounded-md"></div>
                     
                     {/* Theological lens selector toolbar */}
                     <div className="relative mb-8 flex flex-col items-center justify-center">
