@@ -93,13 +93,13 @@ export default function NewReader() {
   // Handle chapter navigation
   const navigateToChapter = (newChapter: number) => {
     if (newChapter > 0 && data && newChapter <= data.totalChapters) {
-      navigate(`/new-reader/${book}/${newChapter}`);
+      navigate(`/reader/${book}/${newChapter}`);
     }
   };
   
   // Handle book selection
   const handleBookChange = (newBook: string) => {
-    navigate(`/new-reader/${newBook}/1`);
+    navigate(`/reader/${newBook}/1`);
   };
   
   // Handle chapter selection

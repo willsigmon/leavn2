@@ -29,7 +29,9 @@ function Router() {
       <main className="flex-1">
         <Switch>
           <Route path="/" component={Home} />
-          <Route path="/reader/:book?/:chapter?" component={Reader} />
+          <Route path="/reader" component={Reader} />
+          <Route path="/reader/:book" component={Reader} />
+          <Route path="/reader/:book/:chapter" component={Reader} />
           <Route path="/reading-plans" component={ReadingPlans} />
           <Route path="/reading-plan/:id" component={ReadingPlanDetail} />
           <Route path="/login" component={Login} />
