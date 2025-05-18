@@ -1,226 +1,292 @@
-import React, { useState, useEffect } from 'react';
-import { Play, Pause, StopCircle, Volume2, Volume, VolumeX } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import speechSynthesis from '@/lib/speechSynthesis';
+import { 
+  Play, 
+  Pause, 
+  Volume2, 
+  VolumeX,
+  SkipForward, 
+  SkipBack,
+  Repeat
+} from 'lucide-react';
 
 interface AudioControlsProps {
-  text: string;
-  onHighlight?: (index: number) => void;
-  onPlayStateChange?: (isPlaying: boolean) => void;
-  className?: string;
+  verseTexts: string[];
+  currentVerseIndex?: number;
+  onVerseChange?: (index: number) => void;
 }
 
-export function AudioControls({ text, onHighlight, onPlayStateChange, className }: AudioControlsProps) {
+export function AudioControls({ 
+  verseTexts, 
+  currentVerseIndex = 0,
+  onVerseChange 
+}: AudioControlsProps) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const [rate, setRate] = useState<number>(1);
-  const [volume, setVolume] = useState<number>(80);
-  const [selectedVoice, setSelectedVoice] = useState('default');
+  const [rate, setRate] = useState(1);
+  const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
-  const voiceCategories = speechSynthesis.getAvailableVoiceCategories();
-  
-  // Reset play state when text changes
+  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [selectedVoice, setSelectedVoice] = useState<SpeechSynthesisVoice | null>(null);
+  const [currentVerse, setCurrentVerse] = useState(currentVerseIndex);
+  const speechSynthRef = useRef<SpeechSynthesis | null>(null);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+
+  // Initialize speech synthesis
   useEffect(() => {
-    handleStop();
-  }, [text]);
-  
-  // Set up callbacks for word highlighting
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      speechSynthRef.current = window.speechSynthesis;
+      
+      // Get available voices
+      const voicesChanged = () => {
+        const voices = speechSynthRef.current?.getVoices() || [];
+        setAvailableVoices(voices);
+        
+        // Default to an English voice if available
+        const englishVoice = voices.find(voice => voice.lang.includes('en'));
+        if (englishVoice) {
+          setSelectedVoice(englishVoice);
+        } else if (voices.length > 0) {
+          setSelectedVoice(voices[0]);
+        }
+      };
+      
+      // Chrome loads voices asynchronously
+      speechSynthRef.current.onvoiceschanged = voicesChanged;
+      voicesChanged();
+      
+      // Clean up
+      return () => {
+        if (speechSynthRef.current?.speaking) {
+          speechSynthRef.current.cancel();
+        }
+      };
+    }
+  }, []);
+
+  // Update current verse when prop changes
   useEffect(() => {
-    speechSynthesis.setOnBoundaryCallback((index) => {
-      if (onHighlight) {
-        onHighlight(index);
-      }
-    });
+    if (currentVerseIndex !== currentVerse) {
+      setCurrentVerse(currentVerseIndex);
+    }
+  }, [currentVerseIndex]);
+
+  // Handle speech synthesis end event
+  useEffect(() => {
+    if (utteranceRef.current) {
+      utteranceRef.current.onend = () => {
+        setIsPlaying(false);
+        
+        // Move to next verse if available
+        if (currentVerse < verseTexts.length - 1) {
+          const nextVerse = currentVerse + 1;
+          setCurrentVerse(nextVerse);
+          if (onVerseChange) {
+            onVerseChange(nextVerse);
+          }
+          
+          // Continue playing if the previous verse was playing
+          if (isPlaying) {
+            setTimeout(() => playCurrentVerse(), 500);
+          }
+        }
+      };
+      
+      utteranceRef.current.onerror = (event) => {
+        console.error('Speech synthesis error:', event);
+        setIsPlaying(false);
+      };
+    }
+  }, [currentVerse, verseTexts.length, isPlaying, onVerseChange]);
+
+  // Play current verse
+  const playCurrentVerse = () => {
+    if (!speechSynthRef.current || currentVerse >= verseTexts.length) return;
     
-    speechSynthesis.setOnEndCallback(() => {
+    // Cancel any ongoing speech
+    if (speechSynthRef.current.speaking) {
+      speechSynthRef.current.cancel();
+    }
+    
+    // Create new utterance
+    const utterance = new SpeechSynthesisUtterance(verseTexts[currentVerse]);
+    
+    // Set properties
+    if (selectedVoice) {
+      utterance.voice = selectedVoice;
+    }
+    utterance.rate = rate;
+    utterance.volume = isMuted ? 0 : volume;
+    
+    // Store reference and speak
+    utteranceRef.current = utterance;
+    speechSynthRef.current.speak(utterance);
+    setIsPlaying(true);
+  };
+
+  // Pause/resume playback
+  const togglePlayback = () => {
+    if (!speechSynthRef.current) return;
+    
+    if (isPlaying) {
+      speechSynthRef.current.pause();
       setIsPlaying(false);
-      setIsPaused(false);
-      if (onPlayStateChange) {
-        onPlayStateChange(false);
+    } else {
+      if (speechSynthRef.current.paused) {
+        speechSynthRef.current.resume();
+      } else {
+        playCurrentVerse();
       }
-    });
-  }, [onHighlight, onPlayStateChange]);
-  
-  const handlePlayPause = () => {
-    const isNowPlaying = speechSynthesis.togglePlayPause(text, selectedVoice);
-    setIsPlaying(isNowPlaying);
-    setIsPaused(!isNowPlaying && speechSynthesis.isCurrentlyPaused());
-    
-    if (onPlayStateChange) {
-      onPlayStateChange(isNowPlaying);
+      setIsPlaying(true);
     }
   };
-  
-  const handleStop = () => {
-    speechSynthesis.stop();
+
+  // Stop playback
+  const stopPlayback = () => {
+    if (!speechSynthRef.current) return;
+    
+    speechSynthRef.current.cancel();
     setIsPlaying(false);
-    setIsPaused(false);
-    
-    if (onPlayStateChange) {
-      onPlayStateChange(false);
-    }
   };
-  
-  const handleRateChange = (value: number[]) => {
-    setRate(value[0]);
-    // If currently playing, restart with new rate
-    if (isPlaying) {
-      speechSynthesis.stop();
-      speechSynthesis.speak(text, selectedVoice, value[0]);
-    }
-  };
-  
-  const handleVolumeChange = (value: number[]) => {
-    setVolume(value[0]);
-    setIsMuted(value[0] === 0);
-    // If currently playing, update the volume (not supported in all browsers)
-    if (isPlaying && speechSynthesis['utterance']) {
-      try {
-        // @ts-ignore - Not all browsers support this property
-        speechSynthesis['utterance'].volume = value[0] / 100;
-      } catch (e) {
-        // Ignore if not supported
+
+  // Go to previous verse
+  const goToPrevVerse = () => {
+    if (currentVerse > 0) {
+      stopPlayback();
+      const prevVerse = currentVerse - 1;
+      setCurrentVerse(prevVerse);
+      if (onVerseChange) {
+        onVerseChange(prevVerse);
+      }
+      if (isPlaying) {
+        setTimeout(() => playCurrentVerse(), 100);
       }
     }
   };
-  
-  const handleVoiceChange = (value: string) => {
-    setSelectedVoice(value);
-    // If currently playing, restart with new voice
-    if (isPlaying) {
-      speechSynthesis.stop();
-      speechSynthesis.speak(text, value, rate);
+
+  // Go to next verse
+  const goToNextVerse = () => {
+    if (currentVerse < verseTexts.length - 1) {
+      stopPlayback();
+      const nextVerse = currentVerse + 1;
+      setCurrentVerse(nextVerse);
+      if (onVerseChange) {
+        onVerseChange(nextVerse);
+      }
+      if (isPlaying) {
+        setTimeout(() => playCurrentVerse(), 100);
+      }
     }
   };
-  
+
+  // Toggle mute
   const toggleMute = () => {
     setIsMuted(!isMuted);
-    // If currently playing, update the volume
-    if (isPlaying && speechSynthesis['utterance']) {
-      try {
-        // @ts-ignore - Not all browsers support this property
-        speechSynthesis['utterance'].volume = !isMuted ? 0 : volume / 100;
-      } catch (e) {
-        // Ignore if not supported
-      }
+    
+    if (utteranceRef.current && speechSynthRef.current?.speaking) {
+      // Cancel and restart with new volume
+      stopPlayback();
+      setTimeout(() => playCurrentVerse(), 100);
     }
   };
-  
+
   return (
-    <div className={`flex flex-col space-y-3 ${className}`}>
-      <div className="flex items-center justify-between">
-        <div className="text-sm font-medium text-stone-800 dark:text-stone-200">
-          Audio Controls
-        </div>
-        
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            onClick={handlePlayPause}
-            title={isPlaying && !isPaused ? "Pause" : "Play"}
+    <div className="bg-card border rounded-md p-3 shadow-sm">
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="text-sm font-medium">Read Aloud</h3>
+        <div className="flex items-center space-x-1">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="h-7 w-7 p-0" 
+            onClick={toggleMute} 
+            aria-label={isMuted ? "Unmute" : "Mute"}
           >
-            {isPlaying && !isPaused ? (
-              <Pause className="h-4 w-4" />
-            ) : (
-              <Play className="h-4 w-4" />
-            )}
-          </Button>
-          
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            onClick={handleStop}
-            disabled={!isPlaying && !isPaused}
-            title="Stop"
-          >
-            <StopCircle className="h-4 w-4" />
-          </Button>
-          
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            onClick={toggleMute}
-            title={isMuted ? "Unmute" : "Mute"}
-          >
-            {isMuted ? (
-              <VolumeX className="h-4 w-4" />
-            ) : volume < 50 ? (
-              <Volume className="h-4 w-4" />
-            ) : (
-              <Volume2 className="h-4 w-4" />
-            )}
+            {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
           </Button>
         </div>
       </div>
       
-      <div className="space-y-4">
-        <div className="space-y-1">
-          <div className="flex items-center justify-between">
-            <label className="text-xs text-stone-600 dark:text-stone-400">
-              Voice
-            </label>
-          </div>
-          <Select
-            value={selectedVoice}
-            onValueChange={handleVoiceChange}
-          >
-            <SelectTrigger className="h-8">
-              <SelectValue placeholder="Select voice" />
-            </SelectTrigger>
-            <SelectContent>
-              {voiceCategories.map((voice) => (
-                <SelectItem key={voice.id} value={voice.id}>
-                  {voice.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+      {/* Playback controls */}
+      <div className="flex justify-between items-center mb-3">
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-8 w-8 p-0"
+          onClick={goToPrevVerse}
+          disabled={currentVerse <= 0}
+          aria-label="Previous verse"
+        >
+          <SkipBack className="h-4 w-4" />
+        </Button>
         
-        <div className="space-y-1">
-          <div className="flex items-center justify-between">
-            <label className="text-xs text-stone-600 dark:text-stone-400">
-              Speed
-            </label>
-            <span className="text-xs text-stone-500 dark:text-stone-500">
-              {rate.toFixed(1)}x
-            </span>
-          </div>
-          <Slider
-            value={[rate]}
-            min={0.5}
-            max={2}
-            step={0.1}
-            onValueChange={handleRateChange}
-          />
-        </div>
+        <Button
+          variant={isPlaying ? "default" : "outline"}
+          size="sm"
+          className="h-10 w-10 p-0 rounded-full"
+          onClick={togglePlayback}
+          aria-label={isPlaying ? "Pause" : "Play"}
+        >
+          {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+        </Button>
         
-        <div className="space-y-1">
-          <div className="flex items-center justify-between">
-            <label className="text-xs text-stone-600 dark:text-stone-400">
-              Volume
-            </label>
-            <span className="text-xs text-stone-500 dark:text-stone-500">
-              {volume}%
-            </span>
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-8 w-8 p-0"
+          onClick={goToNextVerse}
+          disabled={currentVerse >= verseTexts.length - 1}
+          aria-label="Next verse"
+        >
+          <SkipForward className="h-4 w-4" />
+        </Button>
+      </div>
+      
+      {/* Speed control */}
+      <div className="mb-3">
+        <div className="flex justify-between items-center mb-1">
+          <span className="text-xs text-muted-foreground">Speed</span>
+          <span className="text-xs font-medium">{rate.toFixed(1)}x</span>
+        </div>
+        <Slider
+          value={[rate]}
+          min={0.5}
+          max={2}
+          step={0.1}
+          onValueChange={([newRate]) => {
+            setRate(newRate);
+            if (utteranceRef.current && speechSynthRef.current?.speaking) {
+              // Cancel and restart with new rate
+              stopPlayback();
+              setTimeout(() => playCurrentVerse(), 100);
+            }
+          }}
+        />
+      </div>
+      
+      {/* Volume control */}
+      {!isMuted && (
+        <div>
+          <div className="flex justify-between items-center mb-1">
+            <span className="text-xs text-muted-foreground">Volume</span>
+            <span className="text-xs font-medium">{Math.round(volume * 100)}%</span>
           </div>
           <Slider
             value={[volume]}
             min={0}
-            max={100}
-            step={5}
-            onValueChange={handleVolumeChange}
+            max={1}
+            step={0.01}
+            onValueChange={([newVolume]) => {
+              setVolume(newVolume);
+              if (utteranceRef.current && speechSynthRef.current?.speaking) {
+                // Cancel and restart with new volume
+                stopPlayback();
+                setTimeout(() => playCurrentVerse(), 100);
+              }
+            }}
           />
         </div>
-      </div>
+      )}
     </div>
   );
 }
-
-export default AudioControls;

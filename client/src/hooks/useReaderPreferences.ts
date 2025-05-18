@@ -1,34 +1,15 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useAuth } from './useAuth';
-import type { UserPreferences } from '@shared/schema';
-import { apiRequest } from '@/lib/queryClient';
-
-// Define types for reader preferences
-export interface ReaderPreferences {
-  fontSize: string;
-  fontFamily: string;
-  lineSpacing: string;
-  theme: string;
-  isOpenDyslexicEnabled: boolean;
-  readingPosition?: any;
-}
-
-// Default preferences if user has none saved
-const defaultPreferences: ReaderPreferences = {
-  fontSize: 'medium',
-  fontFamily: 'serif',
-  lineSpacing: 'normal',
-  theme: 'light',
-  isOpenDyslexicEnabled: false,
-  readingPosition: {}
-};
+import { useState, useEffect } from 'react';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { queryClient } from '@/lib/queryClient';
+import { ReaderPreferences, defaultPreferences } from '@/components/reader/ReaderSettings';
+import { useAuth } from '@/hooks/useAuth';
 
 export function useReaderPreferences() {
-  const { user, isAuthenticated } = useAuth();
-  const queryClient = useQueryClient();
+  const { isAuthenticated } = useAuth();
+  const [hasAppliedDefaultPreferences, setHasAppliedDefaultPreferences] = useState(false);
 
-  // Fetch user preferences
-  const { data: preferences, isLoading } = useQuery({
+  // Get preferences from API
+  const { data: preferences } = useQuery({
     queryKey: ['/api/preferences'],
     enabled: isAuthenticated,
   });
@@ -56,21 +37,22 @@ export function useReaderPreferences() {
   const getFontSizeInPixels = (): number => {
     const prefs = getPreferences();
     switch (prefs.fontSize) {
-      case 'small': return 16;
+      case 'small': return 14;
       case 'medium': return 18;
-      case 'large': return 20;
-      case 'x-large': return 22;
+      case 'large': return 22;
+      case 'x-large': return 26;
       default: return 18;
     }
   };
 
-  // Convert lineSpacing string value to actual line height value
+  // Convert lineSpacing string value to CSS line-height
   const getLineHeightValue = (): string => {
     const prefs = getPreferences();
     switch (prefs.lineSpacing) {
       case 'tight': return '1.3';
       case 'normal': return '1.6';
-      case 'relaxed': return '2';
+      case 'relaxed': return '1.8';
+      case 'loose': return '2.2';
       default: return '1.6';
     }
   };
@@ -94,31 +76,97 @@ export function useReaderPreferences() {
   const saveReadingPosition = async (book: string, chapter: number, scrollPosition: number) => {
     if (!isAuthenticated) return;
     
-    const currentReadingPosition = getPreferences().readingPosition || {};
-    const position = {
-      readingPosition: {
-        ...currentReadingPosition,
-        [`${book.toLowerCase()}_${chapter}`]: scrollPosition
-      }
+    const currentPrefs = getPreferences();
+    const newReadingPosition = {
+      ...currentPrefs.readingPosition,
+      [`${book}-${chapter}`]: scrollPosition
     };
     
-    return savePreferencesMutation.mutate(position);
+    await savePreferencesMutation.mutateAsync({
+      readingPosition: newReadingPosition
+    });
   };
 
-  // Get saved reading position for book and chapter
+  // Get reading position for current book and chapter
   const getReadingPosition = (book: string, chapter: number): number => {
     const prefs = getPreferences();
-    const position = prefs.readingPosition?.[`${book.toLowerCase()}_${chapter}`];
-    return position || 0;
+    return prefs.readingPosition[`${book}-${chapter}`] || 0;
   };
+
+  // Update preferences
+  const updatePreferences = async (newPreferences: Partial<ReaderPreferences>) => {
+    // If not authenticated, just store in localStorage
+    if (!isAuthenticated) {
+      const currentPrefs = getPreferences();
+      const updatedPrefs = { ...currentPrefs, ...newPreferences };
+      localStorage.setItem('readerPreferences', JSON.stringify(updatedPrefs));
+      return;
+    }
+
+    // Otherwise save to database
+    await savePreferencesMutation.mutateAsync(newPreferences);
+  };
+
+  // Apply CSS variables based on preferences
+  const applyPreferences = (prefs: ReaderPreferences) => {
+    // Set font size
+    document.documentElement.style.setProperty(
+      '--reader-font-size', 
+      `${getFontSizeInPixels()}px`
+    );
+    
+    // Set font family
+    let fontFamily = prefs.fontFamily;
+    if (prefs.isOpenDyslexicEnabled) {
+      fontFamily = 'OpenDyslexic, sans-serif';
+    } else if (prefs.fontFamily === 'serif') {
+      fontFamily = '"Palatino Linotype", Georgia, serif';
+    } else if (prefs.fontFamily === 'sans-serif') {
+      fontFamily = 'Inter, system-ui, sans-serif';
+    } else if (prefs.fontFamily === 'monospace') {
+      fontFamily = 'monospace';
+    }
+    document.documentElement.style.setProperty('--reader-font-family', fontFamily);
+    
+    // Set line height
+    document.documentElement.style.setProperty('--reader-line-height', getLineHeightValue());
+    
+    // Set theme
+    const rootElement = document.documentElement;
+    rootElement.classList.remove('theme-light', 'theme-dark', 'theme-sepia', 'theme-comfort-light');
+    rootElement.classList.add(`theme-${prefs.theme}`);
+  };
+
+  // Apply preferences whenever they change
+  useEffect(() => {
+    // Try to load preferences from localStorage if not authenticated
+    if (!isAuthenticated && !hasAppliedDefaultPreferences) {
+      try {
+        const storedPrefs = localStorage.getItem('readerPreferences');
+        if (storedPrefs) {
+          const parsedPrefs = JSON.parse(storedPrefs);
+          applyPreferences({ ...defaultPreferences, ...parsedPrefs });
+        } else {
+          applyPreferences(defaultPreferences);
+        }
+      } catch (error) {
+        console.error('Error loading preferences from localStorage:', error);
+        applyPreferences(defaultPreferences);
+      }
+      setHasAppliedDefaultPreferences(true);
+    }
+    
+    // If authenticated and preferences are loaded, apply them
+    if (preferences) {
+      applyPreferences(getPreferences());
+    }
+  }, [preferences, isAuthenticated, hasAppliedDefaultPreferences]);
 
   return {
     preferences: getPreferences(),
-    isLoading,
-    savePreferences: (prefs: Partial<ReaderPreferences>) => savePreferencesMutation.mutate(prefs),
+    updatePreferences,
     saveReadingPosition,
     getReadingPosition,
-    getFontSizeInPixels,
-    getLineHeightValue
+    isLoading: !hasAppliedDefaultPreferences && !preferences,
   };
 }

@@ -19,6 +19,11 @@
   --warm-light: 0;
   --hue-rotate: 0deg;
   --sepia-amount: 0%;
+  
+  /* Reader preferences */
+  --reader-font-size: 18px;
+  --reader-font-family: "Palatino Linotype", Georgia, serif;
+  --reader-line-height: 1.6;
 
   --primary: 140 30% 28%;  /* Army/evergreen */
   --primary-foreground: 140 15% 96%;
@@ -75,7 +80,7 @@
 }
 
 /* Sepia theme - warm paper-like appearance */
-.sepia {
+.sepia, .theme-sepia {
   --background: 35 38% 95%;
   --foreground: 35 35% 15%;
   --muted: 35 20% 90%;
@@ -128,6 +133,37 @@
   --ring: var(--border);
 }
 
+/* ComfortLight theme - easier on the eyes */
+.theme-comfort-light {
+  --background: 40 30% 98%;
+  --foreground: 25 25% 15%;
+  --muted: 40 20% 92%;
+  --muted-foreground: 25 20% 35%;
+  --popover: 40 30% 98%;
+  --popover-foreground: 25 25% 15%;
+  --card: 40 25% 99%;
+  --card-foreground: 25 25% 15%;
+  --border: 40 20% 85%;
+  --input: 40 20% 85%;
+
+  --primary: 35 30% 35%;
+  --primary-foreground: 35 10% 98%;
+  --secondary: 30 25% 45%;
+  --secondary-foreground: 30 10% 98%;
+
+  --accent: 25 30% 45%;
+  --accent-foreground: 25 10% 98%;
+
+  --destructive: 0 70% 45%;
+  --destructive-foreground: 0 0% 98%;
+
+  --ring: var(--border);
+  
+  /* ComfortLight specific settings */
+  --sepia-amount: 15%;
+  --hue-rotate: 20deg;
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -137,11 +173,75 @@
     @apply font-sans antialiased bg-background text-foreground;
   }
   
+  /* Reader font styling */
+  .reader-content {
+    font-size: var(--reader-font-size);
+    font-family: var(--reader-font-family);
+    line-height: var(--reader-line-height);
+  }
+  
+  /* OpenDyslexic font support */
+  @font-face {
+    font-family: 'OpenDyslexic';
+    src: url('https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/open-dyslexic-regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'OpenDyslexic';
+    src: url('https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/open-dyslexic-bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+  }
+  
   /* Book-like paper texture for the reader */
   .reader-paper {
     background-color: hsl(var(--background));
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.02'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     filter: sepia(var(--sepia-amount)) hue-rotate(var(--hue-rotate));
+  }
+  
+  /* Highlight colors */
+  .highlight-yellow {
+    background-color: rgba(255, 242, 155, 0.5);
+  }
+  
+  .highlight-green {
+    background-color: rgba(187, 247, 208, 0.5);
+  }
+  
+  .highlight-blue {
+    background-color: rgba(186, 230, 253, 0.5);
+  }
+  
+  .highlight-purple {
+    background-color: rgba(216, 180, 254, 0.5);
+  }
+  
+  .highlight-pink {
+    background-color: rgba(251, 182, 206, 0.5);
+  }
+  
+  /* Dark mode highlight colors */
+  .dark .highlight-yellow {
+    background-color: rgba(161, 140, 34, 0.5);
+  }
+  
+  .dark .highlight-green {
+    background-color: rgba(74, 160, 86, 0.5);
+  }
+  
+  .dark .highlight-blue {
+    background-color: rgba(59, 130, 165, 0.5);
+  }
+  
+  .dark .highlight-purple {
+    background-color: rgba(124, 88, 163, 0.5);
+  }
+  
+  .dark .highlight-pink {
+    background-color: rgba(157, 87, 110, 0.5);
   }
   
   /* Sepia paper texture */
