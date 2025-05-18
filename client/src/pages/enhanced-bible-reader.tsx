@@ -232,7 +232,12 @@ export default function EnhancedBibleReader() {
   }
   
   // Format data for the Reader
-  const verses = data && data.verses ? data.verses.map((verse: any) => ({
+  const verses = data && data.verses ? data.verses.map((verse: {
+    verseNumber: number;
+    text?: { web: string; kjv: string };
+    textWeb?: string;
+    textKjv?: string;
+  }) => ({
     id: `${book}-${chapter}-${verse.verseNumber}`,
     verseNumber: verse.verseNumber,
     text: verse.text ? verse.text.web : verse.textWeb,
@@ -443,7 +448,9 @@ export default function EnhancedBibleReader() {
                     chapter={chapter}
                     translation={activeTranslation}
                     onVerseClick={handleVerseClick}
-                    onVerseLongPress={handleContextAction.bind(null, 'context')}
+                    onVerseLongPress={(verseId, verseNumber, text, event) => {
+                      handleContextAction('context', verseId, text);
+                    }}
                   />
                 </div>
               </div>

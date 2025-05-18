@@ -65,16 +65,10 @@ export function NavBar() {
             {/* Desktop navigation */}
             <nav className="hidden md:flex items-center space-x-6">
               <div 
-                onClick={() => navigate('/reader')}
+                onClick={() => navigate('/enhanced-reader')}
                 className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer text-sm font-medium"
               >
                 Bible Reader
-              </div>
-              <div 
-                onClick={() => navigate('/universal-reader')}
-                className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer text-sm font-medium"
-              >
-                Universal Reader
               </div>
               <div 
                 onClick={() => navigate('/reading-plans')}
