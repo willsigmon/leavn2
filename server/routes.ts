@@ -17,7 +17,7 @@ import bibleReaderRouter from "./routes/bible-reader";
 import crossReferencesRouter from "./routes/cross-references";
 import ragExplorerRouter from "./routes/rag-explorer";
 import genesisReaderRouter from "./routes/genesis-reader";
-import explorerRouter from "./routes/explorer";
+import { explorerRouter } from "./routes/explorer";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up session middleware
