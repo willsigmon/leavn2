@@ -29,6 +29,23 @@ interface BibleChapter {
   verses: BibleVerse[];
 }
 
+// Define Note interface for split-screen notes feature
+interface Note {
+  id: string;
+  verseId: string;
+  content: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Define DidYouKnow fact interface
+interface DidYouKnowFact {
+  id: string;
+  verseRef: string;
+  content: string;
+  tags: string[];
+}
+
 export default function NewReader() {
   const params = useParams();
   const [, navigate] = useLocation();
@@ -46,6 +63,11 @@ export default function NewReader() {
   const [selectedVerse, setSelectedVerse] = useState<string | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [bookmarks, setBookmarks] = useState<string[]>([]);
+  const [splitScreenActive, setSplitScreenActive] = useState(false);
+  const [currentNote, setCurrentNote] = useState<string>('');
+  const [savedNotes, setSavedNotes] = useState<Note[]>([]);
+  const [warmLightValue, setWarmLightValue] = useState<number>(0); // For Kobo ComfortLight mimic
+  const [narrativeMode, setNarrativeMode] = useState(false);
   const [typographySettings, setTypographySettings] = useState<TypographyPreferences>({
     fontFamily: 'serif',
     fontSize: 'base',
@@ -177,6 +199,73 @@ export default function NewReader() {
       });
     }
   };
+
+  // Create a new note for the currently selected verse
+  const createNote = () => {
+    if (!selectedVerse || !currentNote.trim()) return;
+    
+    const newNote: Note = {
+      id: uuidv4(),
+      verseId: selectedVerse,
+      content: currentNote,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    
+    setSavedNotes(prev => [...prev, newNote]);
+    setCurrentNote('');
+  };
+
+  // Toggle narrative mode
+  const toggleNarrativeMode = () => {
+    setNarrativeMode(prev => !prev);
+    // In a real implementation, we would fetch the narrative version of the chapter
+  };
+
+  // Toggle split-screen notes
+  const toggleSplitScreen = () => {
+    setSplitScreenActive(prev => !prev);
+  };
+
+  // Handle keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ctrl+N to toggle split-screen notes
+      if (e.ctrlKey && e.key === 'n') {
+        e.preventDefault();
+        toggleSplitScreen();
+      }
+      
+      // Ctrl+T to toggle narrative mode
+      if (e.ctrlKey && e.key === 't') {
+        e.preventDefault();
+        toggleNarrativeMode();
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown as any);
+    return () => window.removeEventListener('keydown', handleKeyDown as any);
+  }, []);
+
+  // Load saved notes from localStorage
+  useEffect(() => {
+    const savedNotesString = localStorage.getItem(`aurora-notes-${book}-${chapter}`);
+    if (savedNotesString) {
+      try {
+        const parsed = JSON.parse(savedNotesString);
+        setSavedNotes(parsed);
+      } catch (e) {
+        console.error('Failed to parse saved notes:', e);
+      }
+    }
+  }, [book, chapter]);
+
+  // Save notes to localStorage when they change
+  useEffect(() => {
+    if (savedNotes.length > 0) {
+      localStorage.setItem(`aurora-notes-${book}-${chapter}`, JSON.stringify(savedNotes));
+    }
+  }, [savedNotes, book, chapter]);
   
   // Initialize theme based on user preferences
   useEffect(() => {
@@ -232,8 +321,8 @@ export default function NewReader() {
   if (!isMobile) {
     return (
       <AppShell>
-        <main className="grid md:grid-cols-[2fr_1fr] h-[calc(100vh-56px)]">
-          {/* Reader Pane (2/3 width on desktop) */}
+        <main className={`grid ${splitScreenActive ? 'md:grid-cols-[2fr_1fr_1fr]' : 'md:grid-cols-[2fr_1fr]'} h-[calc(100vh-56px)]`}>
+          {/* Reader Pane (2/3 width on desktop, or less if split-screen is active) */}
           <div className="flex flex-col overflow-hidden">
             <ReaderHeader
               book={book}
@@ -251,6 +340,39 @@ export default function NewReader() {
               }
             />
             
+            <div className="flex justify-between items-center px-4 py-2 bg-white dark:bg-stone-800 border-b border-stone-200 dark:border-stone-700">
+              <div className="flex space-x-2">
+                <Button 
+                  size="sm"
+                  variant="outline"
+                  className={narrativeMode ? "bg-[#2c4c3b] text-white border-[#2c4c3b]" : ""}
+                  onClick={toggleNarrativeMode}
+                >
+                  <BookOpen className="h-4 w-4 mr-1" />
+                  {narrativeMode ? "Normal Mode" : "Narrative Mode"}
+                </Button>
+                
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    if (selectedVerse) {
+                      setSplitScreenActive(true);
+                    } else {
+                      alert("Please select a verse first to add notes");
+                    }
+                  }}
+                >
+                  <FileText className="h-4 w-4 mr-1" />
+                  Add Notes
+                </Button>
+              </div>
+              
+              <div className="text-sm text-stone-600 dark:text-stone-400">
+                <span className="italic">Tip: Press Ctrl+N for split-screen notes, Ctrl+T for narrative mode</span>
+              </div>
+            </div>
+            
             <div 
               ref={mainContentRef}
               className="flex-1 overflow-hidden flex flex-col"
@@ -261,7 +383,7 @@ export default function NewReader() {
                 verses={verses}
                 onSelect={handleVerseSelect}
                 className="flex-1"
-                textMode={textMode as 'original' | 'genz' | 'novelize' | 'kids'}
+                textMode={narrativeMode ? 'novelize' : (textMode as 'original' | 'genz' | 'novelize' | 'kids')}
                 typography={typographySettings}
               />
             </div>
@@ -269,6 +391,69 @@ export default function NewReader() {
             <TagBar onTagClick={handleTagClick} />
           </div>
           
+          {/* Notes panel when split screen is active */}
+          {splitScreenActive && (
+            <div className="border-l border-stone-200 dark:border-stone-800 overflow-y-auto bg-[#fafaf8] dark:bg-stone-900">
+              <div className="p-4 space-y-4">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-semibold text-stone-800 dark:text-stone-200">
+                    Notes {selectedVerse && `for ${selectedVerse}`}
+                  </h3>
+                  <Button 
+                    size="icon" 
+                    variant="ghost" 
+                    onClick={() => setSplitScreenActive(false)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+                
+                <Textarea 
+                  placeholder="Type your notes here... (Ctrl+N to toggle split-screen)"
+                  className="min-h-[200px] border-stone-200 dark:border-stone-700 reader-paper"
+                  value={currentNote}
+                  onChange={(e) => setCurrentNote(e.target.value)}
+                />
+                
+                <div className="flex justify-end">
+                  <Button 
+                    size="sm"
+                    className="bg-[#2c4c3b] hover:bg-[#223c2e]"
+                    onClick={createNote}
+                    disabled={!selectedVerse || !currentNote.trim()}
+                  >
+                    Save Note
+                  </Button>
+                </div>
+                
+                {savedNotes.length > 0 && (
+                  <div className="mt-4">
+                    <h4 className="text-sm font-medium mb-2 text-stone-700 dark:text-stone-300">
+                      Saved Notes
+                    </h4>
+                    <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
+                      {savedNotes.map(note => (
+                        <div 
+                          key={note.id}
+                          className="p-3 bg-white dark:bg-stone-800 rounded-md border border-stone-200 dark:border-stone-700"
+                        >
+                          <div className="flex justify-between items-start mb-1">
+                            <p className="text-xs text-stone-500 dark:text-stone-400">
+                              {note.verseId} • {new Date(note.createdAt).toLocaleDateString()}
+                            </p>
+                          </div>
+                          <p className="text-sm text-stone-700 dark:text-stone-300 whitespace-pre-wrap">
+                            {note.content}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Context Sidebar (1/3 width on desktop) */}
           <div className="border-l border-stone-200 dark:border-stone-800 overflow-y-auto bg-white dark:bg-stone-900">
             <ContextBox 
@@ -374,6 +559,20 @@ export default function NewReader() {
           }
         />
         
+        <div className="flex justify-between items-center px-4 py-2 bg-white dark:bg-stone-800 border-b border-stone-200 dark:border-stone-700">
+          <div className="flex space-x-2">
+            <Button 
+              size="sm"
+              variant="outline"
+              className={narrativeMode ? "bg-[#2c4c3b] text-white border-[#2c4c3b]" : ""}
+              onClick={toggleNarrativeMode}
+            >
+              <BookOpen className="h-4 w-4 mr-1" />
+              {narrativeMode ? "Normal" : "Narrative"}
+            </Button>
+          </div>
+        </div>
+        
         <div 
           ref={mainContentRef}
           className="flex-1 overflow-hidden"
@@ -383,7 +582,7 @@ export default function NewReader() {
             chapter={chapter}
             verses={verses}
             onSelect={handleVerseSelect}
-            textMode={textMode as 'original' | 'genz' | 'novelize' | 'kids'}
+            textMode={narrativeMode ? 'novelize' : (textMode as 'original' | 'genz' | 'novelize' | 'kids')}
             typography={typographySettings}
           />
         </div>
@@ -421,8 +620,74 @@ export default function NewReader() {
                 <Button size="icon" variant="outline" onClick={handleShare}>
                   <Share2 className="h-4 w-4" />
                 </Button>
+                <Button 
+                  size="icon" 
+                  variant="outline" 
+                  className={`${splitScreenActive ? 'bg-[#2c4c3b] text-white' : ''}`}
+                  onClick={() => {
+                    if (selectedVerse) {
+                      setSplitScreenActive(!splitScreenActive);
+                    } else {
+                      alert("Please select a verse first to add notes");
+                    }
+                  }}
+                >
+                  <FileText className="h-4 w-4" />
+                </Button>
               </div>
             </div>
+            
+            {/* Notes section for mobile */}
+            {splitScreenActive && (
+              <div className="mb-6 space-y-4">
+                <h4 className="text-sm font-medium text-stone-800 dark:text-stone-200">
+                  Notes {selectedVerse && `for ${selectedVerse}`}
+                </h4>
+                
+                <Textarea 
+                  placeholder="Type your notes here..."
+                  className="min-h-[150px] border-stone-200 dark:border-stone-700 reader-paper"
+                  value={currentNote}
+                  onChange={(e) => setCurrentNote(e.target.value)}
+                />
+                
+                <div className="flex justify-end">
+                  <Button 
+                    size="sm"
+                    className="bg-[#2c4c3b] hover:bg-[#223c2e]"
+                    onClick={createNote}
+                    disabled={!selectedVerse || !currentNote.trim()}
+                  >
+                    Save Note
+                  </Button>
+                </div>
+                
+                {savedNotes.length > 0 && (
+                  <div className="mt-4">
+                    <h4 className="text-sm font-medium mb-2 text-stone-700 dark:text-stone-300">
+                      Saved Notes
+                    </h4>
+                    <div className="space-y-3 max-h-[150px] overflow-y-auto pr-2">
+                      {savedNotes.map(note => (
+                        <div 
+                          key={note.id}
+                          className="p-3 bg-white dark:bg-stone-800 rounded-md border border-stone-200 dark:border-stone-700"
+                        >
+                          <div className="flex justify-between items-start mb-1">
+                            <p className="text-xs text-stone-500 dark:text-stone-400">
+                              {note.verseId} • {new Date(note.createdAt).toLocaleDateString()}
+                            </p>
+                          </div>
+                          <p className="text-sm text-stone-700 dark:text-stone-300 whitespace-pre-wrap">
+                            {note.content}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
             
             {/* Tabbed content for mobile */}
             <div className="space-y-6">
