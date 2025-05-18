@@ -13,6 +13,7 @@ import {
 } from "./rag-bible";
 import { getSuggestedTags } from "./tag-suggest";
 import { db } from "./db";
+import bibleReaderRouter from "./routes/bible-reader";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up session middleware
@@ -22,6 +23,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/login", handleLogin);
   app.get("/api/logout", handleLogout);
   app.get("/api/auth/user", getUserData);
+  
+  // Register the enhanced Bible reader routes
+  app.use("/api/reader", bibleReaderRouter);
   
   // User preferences endpoints
   app.get("/api/preferences", isAuthenticated, async (req: Request, res: Response) => {
