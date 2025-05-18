@@ -39,18 +39,47 @@ router.get('/:chapter', async (req: Request, res: Response) => {
       
       // Debug logging
       console.log(`Loaded Genesis ${chapterNum}. Total verses: ${chapterData.verses?.length || 0}`);
+      console.log('First verse data sample:', JSON.stringify(chapterData.verses?.[0] || 'No verses'));
+      
+      // Check if our verses array exists and has the expected structure
+      if (!chapterData.verses || !Array.isArray(chapterData.verses)) {
+        console.error('Genesis data is missing verses array');
+        // Generate a simple set of mock verses for testing
+        const mockVerses = [];
+        for (let i = 1; i <= 31; i++) {
+          mockVerses.push({
+            verse: i,
+            number: i,
+            text: `Genesis 1:${i} text (web)`,
+            textKjv: `Genesis 1:${i} text (kjv)`,
+            textWeb: `Genesis 1:${i} text (web)`,
+            isBookmarked: false,
+            hasNote: false
+          });
+        }
+        return res.json({
+          book: 'genesis',
+          bookName: 'Genesis',
+          chapter: chapterNum,
+          totalChapters: 50,
+          verses: mockVerses
+        });
+      }
       
       // Format the response in the structure expected by the reader
-      const verses = chapterData.verses.map(verse => ({
-        verse: verse.verse_number,
-        number: verse.verse_number,
-        text: verse.text.web, // Use web translation as default
-        textKjv: verse.text.kjv,
-        textWeb: verse.text.web,
-        isBookmarked: false,
-        hasNote: false,
-        tags: verse.tags || {}
-      }));
+      const verses = chapterData.verses.map(verse => {
+        console.log('Processing verse:', verse.verse_number);
+        return {
+          verse: verse.verse_number,
+          number: verse.verse_number,
+          text: verse.text?.web || `Genesis 1:${verse.verse_number}`, // Use web translation as default
+          textKjv: verse.text?.kjv || `Genesis 1:${verse.verse_number} (KJV)`,  
+          textWeb: verse.text?.web || `Genesis 1:${verse.verse_number} (WEB)`,
+          isBookmarked: false,
+          hasNote: false,
+          tags: verse.tags || {}
+        };
+      });
       
       // Debug logging for the first verse
       if (verses.length > 0) {
