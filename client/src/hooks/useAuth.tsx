@@ -7,6 +7,7 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   error: string | null;
+  isAuthenticated?: boolean;
 }
 
 // Create the context with default values

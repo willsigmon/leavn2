@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/lib/auth';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Book, Globe, Search, User, ChevronRight } from 'lucide-react';
