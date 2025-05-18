@@ -82,6 +82,44 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
   
+  async getUserPreferences(userId: string): Promise<UserPreferences | undefined> {
+    const [preferences] = await db
+      .select()
+      .from(schema.userPreferences)
+      .where(eq(schema.userPreferences.userId, userId));
+    return preferences;
+  }
+
+  async saveUserPreferences(userId: string, preferences: Partial<UserPreferences>): Promise<UserPreferences> {
+    // Check if preferences already exist for this user
+    const existingPrefs = await this.getUserPreferences(userId);
+    
+    if (existingPrefs) {
+      // Update existing preferences
+      const [updated] = await db
+        .update(schema.userPreferences)
+        .set({
+          ...preferences,
+          updatedAt: new Date()
+        })
+        .where(eq(schema.userPreferences.userId, userId))
+        .returning();
+      return updated;
+    } else {
+      // Insert new preferences
+      const [inserted] = await db
+        .insert(schema.userPreferences)
+        .values({
+          id: uuidv4(),
+          userId,
+          ...preferences,
+          updatedAt: new Date()
+        })
+        .returning();
+      return inserted;
+    }
+  }
+  
   async getVerse(book: string, chapter: number, verse: number): Promise<schema.Verse | undefined> {
     const [result] = await db
       .select()
@@ -268,6 +306,7 @@ export class MemStorage implements IStorage {
   private verseTags = new Map<string, string[]>();
   private authors = new Map<string, Author>();
   private didYouKnow = new Map<string, DidYouKnow>();
+  private userPreferences = new Map<string, UserPreferences>();
   
   constructor() {
     // Initialize with sample data
