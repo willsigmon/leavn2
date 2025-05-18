@@ -37,29 +37,40 @@ router.get('/:chapter', async (req: Request, res: Response) => {
       const fileData = fs.readFileSync(chapterPath, 'utf8');
       const chapterData = JSON.parse(fileData);
       
+      // Debug logging
+      console.log(`Loaded Genesis ${chapterNum}. Total verses: ${chapterData.verses?.length || 0}`);
+      
       // Format the response in the structure expected by the reader
+      const verses = chapterData.verses.map(verse => ({
+        verse: verse.verse_number,
+        number: verse.verse_number,
+        text: verse.text.web, // Use web translation as default
+        textKjv: verse.text.kjv,
+        textWeb: verse.text.web,
+        isBookmarked: false,
+        hasNote: false,
+        tags: verse.tags || {}
+      }));
+      
+      // Debug logging for the first verse
+      if (verses.length > 0) {
+        console.log('First verse data:', JSON.stringify(verses[0]));
+      }
+      
       const response = {
         book: 'genesis',
         bookName: 'Genesis',
         chapter: chapterNum,
         totalChapters: 50,
-        title: chapterData.title,
-        summary: chapterData.summary,
-        themes: chapterData.themes,
-        people: chapterData.people,
-        places: chapterData.places,
-        symbols: chapterData.symbols,
-        timeframe: chapterData.timeframe,
-        narrative: chapterData.narrative,
-        verses: chapterData.verses.map(verse => ({
-          verse: verse.verse_number,
-          text: verse.text.web, // Use web translation as default
-          textKjv: verse.text.kjv,
-          textWeb: verse.text.web,
-          isBookmarked: false,
-          hasNote: false,
-          tags: verse.tags || {}
-        }))
+        title: chapterData.title || '',
+        summary: chapterData.summary || '',
+        themes: chapterData.themes || [],
+        people: chapterData.people || [],
+        places: chapterData.places || [],
+        symbols: chapterData.symbols || [],
+        timeframe: chapterData.timeframe || '',
+        narrative: chapterData.narrative || '',
+        verses
       };
       
       return res.json(response);
