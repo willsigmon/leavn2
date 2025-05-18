@@ -10,7 +10,7 @@ interface ReaderHeaderProps {
   onChapterChange?: (chapter: number) => void;
   onTextModeChange?: (mode: string) => void;
   onToggleTheme?: () => void;
-  onOpenTypography?: () => void;
+  typographyControl?: React.ReactNode;
 }
 
 export function ReaderHeader({
@@ -21,7 +21,7 @@ export function ReaderHeader({
   onChapterChange,
   onTextModeChange,
   onToggleTheme,
-  onOpenTypography
+  typographyControl
 }: ReaderHeaderProps) {
   return (
     <header className="border-b border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 flex flex-col">
@@ -49,15 +49,16 @@ export function ReaderHeader({
         </div>
         
         <div className="flex items-center space-x-1">
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="h-8 w-8" 
-            aria-label="Typography settings"
-            onClick={onOpenTypography}
-          >
-            <Type className="h-4 w-4" />
-          </Button>
+          {typographyControl || (
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-8 w-8" 
+              aria-label="Typography settings"
+            >
+              <Type className="h-4 w-4" />
+            </Button>
+          )}
           
           <Button 
             variant="ghost" 

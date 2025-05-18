@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'wouter';
 import { AppShell } from '@/components/AppShell';
@@ -7,6 +7,7 @@ import { VerseCanvas } from '@/components/ReaderPane/VerseCanvas';
 import { TagBar } from '@/components/ReaderPane/TagBar';
 import { ContextBox } from '@/components/ContextSidebar/ContextBox';
 import { MapPane } from '@/components/ContextSidebar/MapPane';
+import { TypographyDialog } from '@/components/reader/TypographyDialog';
 
 export default function BibleReader() {
   const params = useParams();
@@ -20,6 +21,14 @@ export default function BibleReader() {
   const [activeLens, setActiveLens] = useState('protestant');
   const [textMode, setTextMode] = useState('original');
   const [selectedVerse, setSelectedVerse] = useState<string | null>(null);
+  const [typographySettings, setTypographySettings] = useState({
+    fontFamily: 'serif',
+    fontSize: 'base',
+    lineSpacing: 'normal',
+    textAlign: 'left',
+    margins: 'md',
+    theme: 'light'
+  });
   
   // Fetch Bible content (placeholder, will use API in real implementation)
   const { data, isLoading } = useQuery({
@@ -57,9 +66,12 @@ export default function BibleReader() {
   };
   
   // Handle typography settings
-  const handleOpenTypography = () => {
-    // TODO: Implement typography settings modal
-    console.log('Typography settings clicked');
+  const handleTypographyChange = (settings: any) => {
+    setTypographySettings(prev => ({ ...prev, ...settings }));
+    console.log('Typography settings updated:', settings);
+    
+    // In a real implementation, we would save these preferences to user settings
+    // and apply them to the reader component
   };
   
   return (
@@ -73,7 +85,12 @@ export default function BibleReader() {
             textMode={textMode}
             onTextModeChange={handleTextModeChange}
             onToggleTheme={handleToggleTheme}
-            onOpenTypography={handleOpenTypography}
+            typographyControl={
+              <TypographyDialog
+                preferences={typographySettings}
+                onChange={handleTypographyChange}
+              />
+            }
           />
           
           <VerseCanvas

@@ -16,11 +16,9 @@ export function AppShell({ children }: AppShellProps) {
       {/* Top Nav */}
       <header className="h-14 border-b border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 flex items-center px-4">
         <div className="flex items-center">
-          <Link href="/">
-            <a className="font-bold text-xl text-[#2c4c3b] dark:text-[#94b49f] flex items-center gap-2">
-              <Book className="h-5 w-5" />
-              <span>Leavn</span>
-            </a>
+          <Link href="/" className="font-bold text-xl text-[#2c4c3b] dark:text-[#94b49f] flex items-center gap-2">
+            <Book className="h-5 w-5" />
+            <span>Aurora Reader</span>
           </Link>
         </div>
         

@@ -1,0 +1,56 @@
+# PROJECT: Aurora Reader — Next-Edge Edition
+# GOAL
+Ship a production-grade e-reader PWA that unifies the top UX patterns of Kindle, Kobo, BOOX, VitalSource, and Apple Books, then layers Retrieval-Augmented-Generation (RAG) tagging, AI context cards, and serendipity surfacing.
+
+## 1  Tech Stack
+- Frontend & Routing : Next.js 14 (App Router) + React 18 + TypeScript
+- Styling            : Tailwind CSS (v3) with @tailwindcss/typography
+- State              : Zustand (global) + React-Query (server sync)
+- Auth & DB          : Supabase (email + Google/Apple/MS/GitHub)  
+                      — pgvector extension for embeddings
+- AI Layer           : OpenAI o3 mini (chat) + text-embedding-3-small
+- Storage            : Supabase Storage (EPUBs, user exports)
+- Edge Functions     : Next.js Route Handlers (RSC) + Supabase Edge
+- CI/CD              : GitHub Actions → Vercel Preview → Netlify Prod
+- Testing            : Vitest + Playwright
+- Perf               : Next Image Optimization + SW (cache-first)
+
+## 2  Core Features (MVP-7 days)
+1. **Immersive Canvas (66 / 33 split)**  
+   - Reader pane with tap / swipe / vertical scroll + optional “page-curl”.  
+   - Collapsible sidebar live-renders: highlights, AI context, maps, “Did You Know?” bubbles, RAG tag suggestions.
+2. **Typography & Theme Engine**  
+   - Presets: Day, Night, Warm, Solarized; blue-light slider.  
+   - Controls: font (inc. OpenDyslexic), size, weight, line-height, margins, justification.
+3. **Annotation Suite**  
+   - Highlight, underline, sticky-note; color picker; per-note tags.  
+   - Stylus ink (SVG layer) + handwriting OCR → searchable.
+4. **Sync & Offline**  
+   - SW caches books + user JSON; Supabase realtime for cross-device restoration.
+5. **Accessibility**  
+   - WebSpeech read-aloud (word sync), reading ruler, ARIA landmarks.
+6. **Discovery**  
+   - RAG tag ingest pipeline (see §3) → “Serendipity Chips” & flashcards.
+
+## 3  RAG Tag Ingest
+- Route `POST /api/ingest?bookId=`  
+  1. Parse EPUB → chunk by verse/para.  
+  2. For each chunk:  
+     `tags = JSON.parse(o3mini(chat, sysPrompt, chunk))`  
+     `embed = embedding(chunk)`  
+     Upsert `{text,tags,embedding}` into `chunks`.  
+  3. Broadcast via Supabase Channel `"new_chunks"`.
+- SQL helper (pgvector) `match_chunks(query_embedding, k)` returns nearest neighbours.
+
+## 4  Milestones
+| # | Deliverable | Owner | Done when |
+|---|-------------|-------|-----------|
+| 1 | Next.js scaffold + Tailwind | FE | `npm run dev` shows landing |
+| 2 | EPUB parser & reader pane  | FE | Gutenberg demo book renders |
+| 3 | Typography controls        | FE | UI toggles persist local |
+| 4 | Supabase auth + sync       | BE | Login + last-page restore |
+| 5 | RAG ingest + sidebar chips | BE | Highlight triggers related |
+| 6 | PWA & offline              | FE | Airplane-mode smoke pass |
+| 7 | Playwright smoke suite     | QA | CI green |
+
+## 5  Env Vars
