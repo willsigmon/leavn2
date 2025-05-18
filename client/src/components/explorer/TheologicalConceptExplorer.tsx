@@ -213,7 +213,7 @@ export function TheologicalConceptExplorer() {
             nodeLabel="name"
             width={dimensions.width}
             height={dimensions.height - 60} // Subtract header height
-            nodeRelSize={6}
+            nodeRelSize={8}
             linkWidth={link => (highlightLinks.has(link) ? 2 : 1)}
             nodeCanvasObject={nodePaint}
             linkCanvasObject={linkPaint}
@@ -226,6 +226,8 @@ export function TheologicalConceptExplorer() {
             backgroundColor="#f8fafc"
             d3AlphaDecay={0.02}
             d3VelocityDecay={0.3}
+            // Stabilize the graph faster
+            warmupTicks={100}
           />
         </div>
         
