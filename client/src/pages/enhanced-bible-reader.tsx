@@ -528,22 +528,34 @@ export default function EnhancedBibleReader() {
         <div className={cn(
           "companion-sidebar bg-white dark:bg-stone-900 border-l border-stone-200 dark:border-stone-800 overflow-hidden",
           "md:block", // Always visible on desktop with grid layout
-          "hidden absolute inset-x-0 bottom-0 top-auto z-10 h-[50vh] md:static md:h-auto", // Hidden on mobile unless activated
-          !sidebarOpen && "md:hidden" // Toggle for both mobile and desktop
+          "hidden absolute inset-x-0 bottom-0 top-auto z-10 h-[50vh] md:static md:h-auto" // Hidden on mobile unless activated
         )}>
           <div className="h-full flex flex-col">
-            <div className="p-4 border-b border-stone-200 dark:border-stone-800 flex justify-between items-center">
-              <h3 className="font-medium text-stone-800 dark:text-stone-200">
-                {activeLens.charAt(0).toUpperCase() + activeLens.slice(1)} Insights
-              </h3>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-8 w-8 md:hidden"
-                onClick={() => setSidebarOpen(false)}
-              >
-                <X className="h-4 w-4" />
-              </Button>
+            {/* Sidebar header and search */}
+            <div className="p-4 border-b border-stone-200 dark:border-stone-800">
+              <div className="flex justify-between items-center mb-3">
+                <h3 className="font-medium text-stone-800 dark:text-stone-200">
+                  {activeLens.charAt(0).toUpperCase() + activeLens.slice(1)} Insights
+                </h3>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-8 w-8 md:hidden"
+                  onClick={() => setSidebarOpen(false)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+              
+              {/* Search bar */}
+              <div className="relative">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-stone-500 dark:text-stone-400" />
+                <Input
+                  type="search"
+                  placeholder="Search verses, topics..."
+                  className="w-full pl-9 bg-white dark:bg-stone-800 border-stone-200 dark:border-stone-700 h-9 text-sm"
+                />
+              </div>
             </div>
             
             <Tabs defaultValue="commentary" className="flex-1">
