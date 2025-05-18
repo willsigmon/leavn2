@@ -33,7 +33,7 @@ const normalizeBookName = (book: string): string => {
 };
 
 // Get Bible chapter data in the format expected by the client
-router.get('/:book/:chapter', isAuthenticated, async (req: Request, res: Response) => {
+router.get('/:book/:chapter', async (req: Request, res: Response) => {
   try {
     const { book, chapter } = req.params;
     const chapterNum = parseInt(chapter);
@@ -101,7 +101,7 @@ router.get('/:book/:chapter', isAuthenticated, async (req: Request, res: Respons
 });
 
 // Get alternative text versions for a verse
-router.get('/:book/:chapter/:verse/versions', isAuthenticated, async (req: Request, res: Response) => {
+router.get('/:book/:chapter/:verse/versions', async (req: Request, res: Response) => {
   try {
     const { book, chapter, verse } = req.params;
     const chapterNum = parseInt(chapter);

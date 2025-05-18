@@ -67,7 +67,7 @@ const tags: Record<string, string[]> = {
 };
 
 // Get cross-references for a specific verse
-router.get('/:book/:chapter/:verse', isAuthenticated, async (req: Request, res: Response) => {
+router.get('/:book/:chapter/:verse', async (req: Request, res: Response) => {
   try {
     const { book, chapter, verse } = req.params;
     const chapterNum = parseInt(chapter);
