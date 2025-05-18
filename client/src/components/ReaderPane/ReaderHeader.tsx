@@ -38,17 +38,32 @@ export function ReaderHeader({
             Back
           </Button>
           
-          <div className="flex items-center space-x-1">
-            <Button variant="ghost" size="sm" className="font-medium" onClick={() => onBookChange?.(book)}>
-              {book} <ChevronDown className="h-4 w-4 ml-1" />
+          <div className="flex items-center space-x-2">
+            <Button 
+              variant="default" 
+              size="sm" 
+              className="bg-amber-600 text-white hover:bg-amber-700 shadow-md"
+              onClick={() => onChapterChange?.(chapter > 1 ? chapter - 1 : 1)}
+            >
+              Prev
             </Button>
             
-            <Button variant="ghost" size="sm" onClick={() => onChapterChange?.(chapter)}>
-              {chapter} <ChevronDown className="h-4 w-4 ml-1" />
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="font-medium bg-amber-100 dark:bg-amber-900 border-amber-300 dark:border-amber-700 shadow-md"
+              onClick={() => onBookChange?.(book)}
+            >
+              {book} {chapter}
             </Button>
             
-            <Button variant="ghost" size="sm">
-              Verse <ChevronDown className="h-4 w-4 ml-1" />
+            <Button 
+              variant="default" 
+              size="sm" 
+              className="bg-amber-600 text-white hover:bg-amber-700 shadow-md"
+              onClick={() => onChapterChange?.(chapter + 1)}
+            >
+              Next
             </Button>
           </div>
         </div>
