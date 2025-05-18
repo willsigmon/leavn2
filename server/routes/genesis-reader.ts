@@ -66,57 +66,77 @@ router.get('/:chapter', async (req: Request, res: Response) => {
         });
       }
       
-      // Format the response in the structure expected by the reader
-      const verses = chapterData.verses.map(verse => {
-        // Check the structure and adapt to our expected format
+      // Determine how many verses should be in this chapter
+      const verseCounts = {
+        1: 31,  // Genesis 1 has 31 verses
+        2: 25,  // Genesis 2 has 25 verses
+        3: 24,  // Genesis 3 has 24 verses
+        4: 26,  // Genesis 4 has 26 verses
+        5: 32,  // Genesis 5 has 32 verses
+      };
+      
+      // Get expected number of verses for this chapter
+      const expectedVerseCount = verseCounts[chapterNum] || 30; // Default to 30 if unknown
+      
+      // Create a map of existing verses from the data
+      const verseMap = new Map();
+      chapterData.verses.forEach(verse => {
         const verseNumber = verse.verse_number || verse.number || verse.verse;
-        
-        // Detect the text format and extract appropriately
-        let kjvText = '';
-        let webText = '';
-        
-        // Check if there's a text field at all
-        if (verse.text) {
-          try {
-            // Handle format where text is an object with translations
-            if (typeof verse.text === 'object') {
-              kjvText = verse.text.kjv || '';
-              webText = verse.text.web || '';
-              
-              // Debug info
-              console.log(`Found verse ${verseNumber} text:`, {
-                kjv: kjvText.substring(0, 30),
-                web: webText.substring(0, 30)
-              });
-            } else if (typeof verse.text === 'string') {
-              // If just a string, use it for both translations
-              kjvText = verse.text;
-              webText = verse.text;
-            }
-          } catch (err) {
-            console.error(`Error extracting text for verse ${verseNumber}:`, err);
-          }
-        } else {
-          // If we have no text field, let's check for raw data format
-          console.log(`Raw verse ${verseNumber} data:`, JSON.stringify(verse));
-        }
-        
-        console.log(`Processing verse ${verseNumber}:`, { 
-          kjvText: kjvText.substring(0, 20) + '...',
-          webText: webText.substring(0, 20) + '...'
-        });
-        
-        return {
-          verse: verseNumber,
-          number: verseNumber,
-          text: webText || `Genesis ${chapterNum}:${verseNumber}`,
-          textKjv: kjvText || `Genesis ${chapterNum}:${verseNumber} (KJV)`,  
-          textWeb: webText || `Genesis ${chapterNum}:${verseNumber} (WEB)`,
-          isBookmarked: false,
-          hasNote: false,
-          tags: verse.tags || {}
-        };
+        verseMap.set(verseNumber, verse);
       });
+      
+      // Create the complete array of verses
+      const verses = [];
+      for (let i = 1; i <= expectedVerseCount; i++) {
+        const existingVerse = verseMap.get(i);
+        
+        if (existingVerse) {
+          // Get the verse data from our existing data
+          // Detect the text format and extract appropriately
+          let kjvText = '';
+          let webText = '';
+          
+          // Check if there's a text field at all
+          if (existingVerse.text) {
+            try {
+              // Handle format where text is an object with translations
+              if (typeof existingVerse.text === 'object') {
+                kjvText = existingVerse.text.kjv || '';
+                webText = existingVerse.text.web || '';
+              } else if (typeof existingVerse.text === 'string') {
+                // If just a string, use it for both translations
+                kjvText = existingVerse.text;
+                webText = existingVerse.text;
+              }
+            } catch (err) {
+              console.error(`Error extracting text for verse ${i}:`, err);
+            }
+          }
+          
+          verses.push({
+            verse: i,
+            number: i,
+            text: webText || `Genesis ${chapterNum}:${i}`,
+            textKjv: kjvText || `Genesis ${chapterNum}:${i} (KJV)`,  
+            textWeb: webText || `Genesis ${chapterNum}:${i} (WEB)`,
+            isBookmarked: existingVerse.isBookmarked || false,
+            hasNote: existingVerse.hasNote || false,
+            tags: existingVerse.tags || {}
+          });
+        } else {
+          // Create a placeholder for missing verses
+          verses.push({
+            verse: i,
+            number: i,
+            text: `Genesis ${chapterNum}:${i}`,
+            textKjv: `Genesis ${chapterNum}:${i} (KJV)`,  
+            textWeb: `Genesis ${chapterNum}:${i} (WEB)`,
+            isBookmarked: false,
+            hasNote: false,
+            tags: {}
+          });
+        }
+      }
       
       // Debug logging for the first verse
       if (verses.length > 0) {
