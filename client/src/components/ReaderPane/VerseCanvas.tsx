@@ -21,16 +21,122 @@ interface VerseCanvasProps {
   onSelect?: (refs: string[]) => void;
   className?: string;
   textMode?: 'original' | 'genz' | 'novelize' | 'kids';
+  typography?: {
+    fontFamily?: string;
+    fontSize?: string;
+    lineSpacing?: string;
+    textAlign?: string;
+    margins?: string;
+  };
+}
+
+interface VerseWithTypographyProps extends VerseProps {
+  typography?: {
+    fontFamily?: string;
+    fontSize?: string;
+    lineSpacing?: string;
+    textAlign?: string;
+    margins?: string;
+  };
 }
 
 // Individual verse component
-function Verse({ book, chapter, verse, text, isSelected, onClick }: VerseProps) {
+function Verse({ 
+  book, 
+  chapter, 
+  verse, 
+  text, 
+  isSelected, 
+  onClick, 
+  typography 
+}: VerseWithTypographyProps) {
+  
+  // Apply typography settings to verse text
+  const getTypographyClasses = () => {
+    const classes = ["text-stone-800 dark:text-stone-200"];
+    
+    // Font family
+    if (typography?.fontFamily === 'serif') {
+      classes.push("font-serif");
+    } else if (typography?.fontFamily === 'sans') {
+      classes.push("font-sans");
+    } else if (typography?.fontFamily === 'mono') {
+      classes.push("font-mono");
+    } else if (typography?.fontFamily === 'dyslexic') {
+      classes.push("font-sans"); // Fallback to sans, would use OpenDyslexic if available
+    }
+    
+    // Font size
+    if (typography?.fontSize === 'xs') {
+      classes.push("text-xs");
+    } else if (typography?.fontSize === 'sm') {
+      classes.push("text-sm");
+    } else if (typography?.fontSize === 'base') {
+      classes.push("text-base");
+    } else if (typography?.fontSize === 'lg') {
+      classes.push("text-lg");
+    } else if (typography?.fontSize === 'xl') {
+      classes.push("text-xl");
+    } else if (typography?.fontSize === '2xl') {
+      classes.push("text-2xl");
+    } else {
+      classes.push("text-base"); // Default
+    }
+    
+    // Line spacing
+    if (typography?.lineSpacing === 'tight') {
+      classes.push("leading-tight");
+    } else if (typography?.lineSpacing === 'normal') {
+      classes.push("leading-normal");
+    } else if (typography?.lineSpacing === 'relaxed') {
+      classes.push("leading-relaxed");
+    } else if (typography?.lineSpacing === 'loose') {
+      classes.push("leading-loose");
+    } else {
+      classes.push("leading-relaxed"); // Default
+    }
+    
+    // Text alignment
+    if (typography?.textAlign === 'left') {
+      classes.push("text-left");
+    } else if (typography?.textAlign === 'center') {
+      classes.push("text-center");
+    } else if (typography?.textAlign === 'justify') {
+      classes.push("text-justify");
+    } else {
+      classes.push("text-left"); // Default
+    }
+    
+    return classes.join(" ");
+  };
+  
+  // Apply margins
+  const getMarginClasses = () => {
+    const classes = ["group flex mb-4"];
+    
+    if (isSelected) {
+      classes.push("bg-[#e8efe5] dark:bg-[#2c4c3b]/20 -mx-4 px-4 py-2 rounded-md");
+    }
+    
+    // Add margin settings
+    if (typography?.margins === 'none') {
+      classes.push("mx-0");
+    } else if (typography?.margins === 'sm') {
+      classes.push("mx-2");
+    } else if (typography?.margins === 'md') {
+      classes.push("mx-4");
+    } else if (typography?.margins === 'lg') {
+      classes.push("mx-8");
+    } else if (typography?.margins === 'xl') {
+      classes.push("mx-12");
+    }
+    
+    return classes.join(" ");
+  };
+  
   return (
     <div 
-      className={cn(
-        "group flex mb-4", 
-        isSelected && "bg-[#e8efe5] dark:bg-[#2c4c3b]/20 -mx-4 px-4 py-2 rounded-md"
-      )}
+      className={getMarginClasses()}
       onClick={onClick}
     >
       <div className="w-8 flex-shrink-0 text-right mr-3">
@@ -39,7 +145,7 @@ function Verse({ book, chapter, verse, text, isSelected, onClick }: VerseProps) 
         </span>
       </div>
       <div className="flex-1">
-        <p className="text-stone-800 dark:text-stone-200 leading-relaxed">
+        <p className={getTypographyClasses()}>
           {text}
         </p>
       </div>
@@ -55,7 +161,8 @@ export function VerseCanvas({
   selectedVerses = [],
   onSelect,
   className,
-  textMode = 'original'
+  textMode = 'original',
+  typography
 }: VerseCanvasProps) {
   // Sample data for different text modes (in a real app, this would come from the API)
   const sampleGenZTexts = [
@@ -116,6 +223,7 @@ export function VerseCanvas({
           text={getVerseText(index, verse.text)}
           isSelected={selectedVerses.includes(verse.verse)}
           onClick={() => handleVerseClick(verse.verse)}
+          typography={typography}
         />
       ))}
     </div>

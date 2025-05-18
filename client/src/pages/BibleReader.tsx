@@ -8,6 +8,7 @@ import { TagBar } from '@/components/ReaderPane/TagBar';
 import { ContextBox } from '@/components/ContextSidebar/ContextBox';
 import { MapPane } from '@/components/ContextSidebar/MapPane';
 import { TypographyDialog } from '@/components/reader/TypographyDialog';
+import type { TypographyPreferences } from '@/components/reader/TypographyDialog';
 
 export default function BibleReader() {
   const params = useParams();
@@ -21,7 +22,7 @@ export default function BibleReader() {
   const [activeLens, setActiveLens] = useState('protestant');
   const [textMode, setTextMode] = useState('original');
   const [selectedVerse, setSelectedVerse] = useState<string | null>(null);
-  const [typographySettings, setTypographySettings] = useState({
+  const [typographySettings, setTypographySettings] = useState<TypographyPreferences>({
     fontFamily: 'serif',
     fontSize: 'base',
     lineSpacing: 'normal',
@@ -100,6 +101,7 @@ export default function BibleReader() {
             onSelect={handleVerseSelect}
             className="flex-1"
             textMode={textMode as 'original' | 'genz' | 'novelize' | 'kids'}
+            typography={typographySettings}
           />
           
           <TagBar onTagClick={handleTagClick} />

@@ -7,13 +7,13 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Type, AlignLeft, AlignCenter, AlignJustify } from 'lucide-react';
 
-type FontFamily = 'serif' | 'sans' | 'mono' | 'dyslexic';
-type FontSize = 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl';
-type LineSpacing = 'tight' | 'normal' | 'relaxed' | 'loose';
-type TextAlignment = 'left' | 'center' | 'justify';
-type MarginSize = 'none' | 'sm' | 'md' | 'lg' | 'xl';
+export type FontFamily = 'serif' | 'sans' | 'mono' | 'dyslexic';
+export type FontSize = 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl';
+export type LineSpacing = 'tight' | 'normal' | 'relaxed' | 'loose';
+export type TextAlignment = 'left' | 'center' | 'justify';
+export type MarginSize = 'none' | 'sm' | 'md' | 'lg' | 'xl';
 
-interface TypographyPreferences {
+export interface TypographyPreferences {
   fontFamily: FontFamily;
   fontSize: FontSize;
   lineSpacing: LineSpacing;
