@@ -48,7 +48,7 @@ export default function Home() {
                 Engage with Scripture through multiple theological lenses, immersive narratives, 
                 and AI-powered spiritual insights – all in one place.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 pt-4 md:pt-6">
+              <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4 pt-4 md:pt-6">
                 {isAuthenticated ? (
                   <Button size="lg" onClick={() => navigate('/new-reader')} className="w-full sm:w-auto bg-[#2c4c3b] hover:bg-[#223c2e] dark:bg-[#2c4c3b] dark:hover:bg-[#223c2e] text-white border-0 rounded-lg relative group">
                     <BookOpen className="mr-2 h-5 w-5" />
