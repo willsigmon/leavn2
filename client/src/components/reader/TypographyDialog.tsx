@@ -6,6 +6,7 @@ import { Slider } from '@/components/ui/slider';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Type, AlignLeft, AlignCenter, AlignJustify } from 'lucide-react';
+import { WarmLightSlider } from './WarmLightSlider';
 
 export type FontFamily = 'serif' | 'sans' | 'mono' | 'dyslexic';
 export type FontSize = 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl';
@@ -26,9 +27,11 @@ interface TypographyDialogProps {
   preferences: Partial<TypographyPreferences>;
   onChange: (prefs: Partial<TypographyPreferences>) => void;
   children?: React.ReactNode;
+  warmLightValue?: number;
+  onWarmLightChange?: (value: number) => void;
 }
 
-export function TypographyDialog({ preferences, onChange, children }: TypographyDialogProps) {
+export function TypographyDialog({ preferences, onChange, children, warmLightValue = 0, onWarmLightChange }: TypographyDialogProps) {
   const {
     fontFamily = 'serif',
     fontSize = 'base',
@@ -278,7 +281,7 @@ export function TypographyDialog({ preferences, onChange, children }: Typography
           </TabsContent>
           
           <TabsContent value="theme" className="space-y-4 pt-4">
-            <div className="space-y-2">
+            <div className="space-y-2 mb-6">
               <Label>Color Theme</Label>
               <RadioGroup
                 value={theme}
@@ -346,6 +349,16 @@ export function TypographyDialog({ preferences, onChange, children }: Typography
                 </div>
               </RadioGroup>
             </div>
+            
+            {/* ComfortLight control slider for warm light adjustment */}
+            {onWarmLightChange && (
+              <div className="border-t pt-4">
+                <WarmLightSlider 
+                  value={warmLightValue} 
+                  onChange={onWarmLightChange} 
+                />
+              </div>
+            )}
           </TabsContent>
         </Tabs>
       </DialogContent>

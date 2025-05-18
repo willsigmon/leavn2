@@ -353,6 +353,8 @@ export default function NewReader() {
                 <TypographyDialog
                   preferences={typographySettings}
                   onChange={handleTypographyChange}
+                  warmLightValue={warmLightValue}
+                  onWarmLightChange={handleWarmLightChange}
                 />
               }
             />
@@ -572,6 +574,8 @@ export default function NewReader() {
             <TypographyDialog
               preferences={typographySettings}
               onChange={handleTypographyChange}
+              warmLightValue={warmLightValue}
+              onWarmLightChange={handleWarmLightChange}
             />
           }
         />
