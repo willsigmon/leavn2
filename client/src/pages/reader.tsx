@@ -28,24 +28,10 @@ import { SimpleAudioControls } from '@/components/reader/SimpleAudioControls';
 import { TypographyDialog, type TypographyPreferences, type FontFamily, type FontSize, type LineSpacing, type TextAlignment, type MarginSize } from '@/components/reader/TypographyDialog';
 import { useTheme } from '@/components/ThemeProvider';
 import { bibleStructure, getNextChapter, getPrevChapter } from '@/lib/bibleStructure';
+import { getChapterData, loadBibleData, generateAlternativeText, type BibleChapter } from '@/lib/bibleData';
 import speechSynthesis from '@/lib/speechSynthesis';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { colors } from '@/lib/theme-utils';
-
-// Define Bible content interfaces
-interface BibleVerse {
-  verse: number;
-  text: string;
-  [key: string]: any;
-}
-
-interface BibleChapter {
-  book: string;
-  bookName: string;
-  chapter: number;
-  totalChapters: number;
-  verses: BibleVerse[];
-}
 
 export default function Reader() {
   const params = useParams();
@@ -75,13 +61,24 @@ export default function Reader() {
     theme: 'light'
   });
   
-  // Fetch Bible content from API
+  // Load Bible data on component mount
+  useEffect(() => {
+    loadBibleData().catch(console.error);
+  }, []);
+
+  // Fetch Bible content using a custom query function
   const { data, isLoading, isError } = useQuery<BibleChapter>({
-    queryKey: [`/api/bible/${book}/${chapter}`],
-    // This will use the default fetcher
+    queryKey: [`bible/${book}/${chapter}`],
+    queryFn: async () => {
+      const chapterData = await getChapterData(book, chapter);
+      if (!chapterData) {
+        throw new Error('Failed to load chapter data');
+      }
+      return chapterData;
+    }
   });
   
-  // Extract verses from the API response or provide empty array if not available
+  // Extract verses from the data or provide empty array if not available
   const verses = data?.verses || [];
   
   // Navigation handlers
@@ -157,17 +154,41 @@ export default function Reader() {
     localStorage.setItem('leavn-warm-light', value.toString());
   };
   
-  // Prepare verses for VerseHighlighter
+  // Prepare verses for VerseHighlighter with appropriate text version
   const getVerses = () => {
     if (!data || !data.verses) return [];
 
-    return data.verses.map(verse => ({
-      number: verse.verse,
-      text: verse.text || verse[viewMode === 'original' ? 'kjv' : viewMode] || '',
-      highlightColor: undefined, // This would come from user data
-      hasNote: false,           // This would come from user data
-      isBookmarked: false       // This would come from user data
-    }));
+    return data.verses.map(verse => {
+      // Select the appropriate text version based on the view mode
+      let text = verse.text || '';
+      
+      if (viewMode === 'original') {
+        text = verse.kjv || verse.web || verse.text || '';
+      } else if (viewMode === 'genz' && verse.genz) {
+        text = verse.genz;
+      } else if (viewMode === 'kids' && verse.kids) {
+        text = verse.kids;
+      } else if (viewMode === 'novelize' && verse.novelize) {
+        text = verse.novelize;
+      } else if (narrativeMode) {
+        // Generate narrative text if narrative mode is enabled and no preexisting narrative text
+        text = generateAlternativeText(verse.text || verse.kjv || verse.web || '', 'novelize');
+      } else if (viewMode === 'genz') {
+        // Generate Gen-Z version if not already available
+        text = generateAlternativeText(verse.text || verse.kjv || verse.web || '', 'genz');
+      } else if (viewMode === 'kids') {
+        // Generate Kids version if not already available
+        text = generateAlternativeText(verse.text || verse.kjv || verse.web || '', 'kids');
+      }
+      
+      return {
+        number: verse.verse,
+        text: text,
+        highlightColor: undefined, // This would come from user data
+        hasNote: false,           // This would come from user data
+        isBookmarked: false       // This would come from user data
+      };
+    });
   };
   
   // Load saved preferences
@@ -391,15 +412,9 @@ export default function Reader() {
                     <VerseHighlighter
                       book={book}
                       chapter={chapter}
-                      verses={verses.map(verse => ({
-                        number: verse.verse,
-                        text: verse.text || '',
-                        highlightColor: undefined,
-                        hasNote: false,
-                        isBookmarked: false
-                      }))}
+                      verses={getVerses()}
                       onVerseSelect={handleVerseSelect}
-                      translation="kjv"
+                      translation={viewMode === 'original' ? 'kjv' : viewMode}
                     />
                   </div>
                 </div>
