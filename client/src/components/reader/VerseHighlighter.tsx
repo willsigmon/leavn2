@@ -221,8 +221,9 @@ export function VerseHighlighter({
               className={`absolute left-2 top-2 font-semibold text-sm ${
                 selectedVerse === verse.number 
                   ? 'text-amber-700 dark:text-amber-400' 
-                  : themeColors ? `text-[${themeColors.text}]` : 'text-stone-500 dark:text-stone-400'
+                  : 'text-stone-500 dark:text-stone-400'
               }`}
+              style={themeColors ? { color: themeColors.text } : undefined}
               aria-label={`Verse ${verse.number}`}
             >
               {verse.number}
@@ -240,8 +241,8 @@ export function VerseHighlighter({
               {verse.text}
             </span>
             
-            {/* Theme Badge - show if verse has a theme and isn't selected */}
-            {themeCategory && !selectedVerse && showThemes && (
+            {/* Theme Badge - show if verse has a theme and this verse isn't selected */}
+            {themeCategory && selectedVerse !== verse.number && showThemes && (
               <span 
                 className="inline-flex items-center ml-2 px-1.5 py-0.5 rounded text-xs font-medium opacity-70"
                 style={{

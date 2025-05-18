@@ -136,9 +136,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         totalChapters = bibleBooks[book.toLowerCase()] || 31;
         
+        // Sample theme data for Genesis 1 for testing the theme coloring feature
+        const sampleThemes = {
+          1: ['creation', 'historical'],
+          2: ['creation', 'covenant'],
+          3: ['creation', 'wisdom'],
+          4: ['creation', 'historical'],
+          5: ['creation', 'commandment'],
+          6: ['creation', 'historical'],
+          7: ['creation', 'historical'],
+          8: ['creation', 'historical'],
+          9: ['creation', 'covenant'],
+          10: ['creation', 'faith'],
+          11: ['creation', 'wisdom'],
+          12: ['creation', 'praise'],
+          13: ['creation', 'historical'],
+          14: ['creation', 'historical'],
+          15: ['creation', 'covenant'],
+          16: ['creation', 'commandment'],
+          17: ['creation', 'historical'],
+          18: ['creation', 'historical'],
+          19: ['creation', 'historical'],
+          20: ['creation', 'praise'],
+          21: ['creation', 'historical'],
+          22: ['creation', 'covenant'],
+          23: ['creation', 'historical'],
+          24: ['creation', 'historical'],
+          25: ['creation', 'historical'],
+          26: ['creation', 'covenant'],
+          27: ['creation', 'historical'],
+          28: ['creation', 'commandment'],
+          29: ['creation', 'covenant'],
+          30: ['creation', 'praise'],
+          31: ['creation', 'covenant']
+        };
+        
         // Enhance verses with highlight info and format for the frontend
         const enhancedVerses = verses.map(verse => {
           const note = notes.find(n => n.verse === verse.verseNumber);
+          const verseNum = verse.verseNumber;
+          
+          // Include theme data for testing the theme coloring feature
+          // In production, this would come from the database
+          const themes = book.toLowerCase() === 'genesis' && chapterNum === 1 
+            ? sampleThemes[verseNum] || []
+            : [];
           
           return {
             verse: verse.verseNumber,
@@ -147,7 +189,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             web: verse.textWeb || verse.web || "Verse text unavailable",
             highlightColor: note?.highlightColor || null,
             hasNote: !!note?.content,
-            isBookmarked: false // To be implemented with real bookmark data
+            isBookmarked: false, // To be implemented with real bookmark data
+            themes: themes // Add themes array to verse data
           };
         });
         
