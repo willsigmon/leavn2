@@ -372,16 +372,10 @@ export default function EnhancedBibleReader() {
               >
                 <TabsList className="bg-stone-200/70 dark:bg-stone-800">
                   <TabsTrigger 
-                    value="default" 
+                    value="protestant" 
                     className="text-xs sm:text-sm data-[state=active]:bg-[#e8efe5] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#2c4c3b] dark:data-[state=active]:text-white"
                   >
-                    Default
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="evangelical"
-                    className="text-xs sm:text-sm data-[state=active]:bg-[#e8efe5] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#2c4c3b] dark:data-[state=active]:text-white"
-                  >
-                    Evangelical
+                    Protestant
                   </TabsTrigger>
                   <TabsTrigger 
                     value="catholic"
@@ -390,12 +384,55 @@ export default function EnhancedBibleReader() {
                     Catholic
                   </TabsTrigger>
                   <TabsTrigger 
+                    value="orthodox"
+                    className="text-xs sm:text-sm data-[state=active]:bg-[#e8efe5] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#2c4c3b] dark:data-[state=active]:text-white"
+                  >
+                    Orthodox
+                  </TabsTrigger>
+                  <TabsTrigger 
                     value="jewish"
                     className="text-xs sm:text-sm data-[state=active]:bg-[#e8efe5] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#2c4c3b] dark:data-[state=active]:text-white"
                   >
                     Jewish
                   </TabsTrigger>
                 </TabsList>
+                
+                {/* Secondary lens options */}
+                <div className="flex gap-1 mt-1 px-1">
+                  <Button 
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setActiveLens('genz')}
+                    className={cn(
+                      "h-7 text-xs rounded-md border-stone-200 dark:border-stone-700",
+                      activeLens === 'genz' && "bg-purple-100 border-purple-200 text-purple-800 dark:bg-purple-900/30 dark:border-purple-900 dark:text-purple-300"
+                    )}
+                  >
+                    GenZ
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setActiveLens('kids')}
+                    className={cn(
+                      "h-7 text-xs rounded-md border-stone-200 dark:border-stone-700",
+                      activeLens === 'kids' && "bg-pink-100 border-pink-200 text-pink-800 dark:bg-pink-900/30 dark:border-pink-900 dark:text-pink-300"
+                    )}
+                  >
+                    Kids
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setActiveLens('atheist')}
+                    className={cn(
+                      "h-7 text-xs rounded-md border-stone-200 dark:border-stone-700",
+                      activeLens === 'atheist' && "bg-slate-100 border-slate-200 text-slate-800 dark:bg-slate-900/30 dark:border-slate-900 dark:text-slate-300"
+                    )}
+                  >
+                    Academic
+                  </Button>
+                </div>
               </Tabs>
             </div>
           </div>
