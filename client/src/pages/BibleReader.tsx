@@ -10,6 +10,19 @@ import { MapPane } from '@/components/ContextSidebar/MapPane';
 import { TypographyDialog } from '@/components/reader/TypographyDialog';
 import type { TypographyPreferences } from '@/components/reader/TypographyDialog';
 
+// Define Bible content interfaces
+interface BibleVerse {
+  verse: number;
+  text: string;
+}
+
+interface BibleChapter {
+  book: string;
+  chapter: number;
+  totalChapters: number;
+  verses: BibleVerse[];
+}
+
 export default function BibleReader() {
   const params = useParams();
   
@@ -31,11 +44,14 @@ export default function BibleReader() {
     theme: 'light'
   });
   
-  // Fetch Bible content (placeholder, will use API in real implementation)
-  const { data, isLoading } = useQuery({
+  // Fetch Bible content from API
+  const { data, isLoading } = useQuery<BibleChapter>({
     queryKey: [`/api/bible/${book}/${chapter}`],
-    // This will use the default fetcher, real implementation would process the response
+    // This will use the default fetcher
   });
+  
+  // Extract verses from the API response or provide empty array if not available
+  const verses = data?.verses || [];
   
   // Handle text mode change
   const handleTextModeChange = (mode: string) => {
@@ -67,12 +83,26 @@ export default function BibleReader() {
   };
   
   // Handle typography settings
-  const handleTypographyChange = (settings: any) => {
+  const handleTypographyChange = (settings: Partial<TypographyPreferences>) => {
     setTypographySettings(prev => ({ ...prev, ...settings }));
     console.log('Typography settings updated:', settings);
     
+    // Apply theme changes immediately
+    if (settings.theme) {
+      document.documentElement.classList.toggle('dark', settings.theme === 'dark');
+      
+      if (settings.theme === 'sepia') {
+        document.documentElement.classList.add('sepia');
+        document.documentElement.classList.remove('solarized');
+      } else if (settings.theme === 'solarized') {
+        document.documentElement.classList.add('solarized');
+        document.documentElement.classList.remove('sepia');
+      } else {
+        document.documentElement.classList.remove('sepia', 'solarized');
+      }
+    }
+    
     // In a real implementation, we would save these preferences to user settings
-    // and apply them to the reader component
   };
   
   return (
@@ -97,7 +127,7 @@ export default function BibleReader() {
           <VerseCanvas
             book={book}
             chapter={chapter}
-            verses={data?.verses || []}
+            verses={verses}
             onSelect={handleVerseSelect}
             className="flex-1"
             textMode={textMode as 'original' | 'genz' | 'novelize' | 'kids'}
