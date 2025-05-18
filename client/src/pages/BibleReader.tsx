@@ -18,6 +18,7 @@ export default function BibleReader() {
   // State for the reader
   const [translation, setTranslation] = useState('web');
   const [activeLens, setActiveLens] = useState('protestant');
+  const [textMode, setTextMode] = useState('original');
   const [selectedVerse, setSelectedVerse] = useState<string | null>(null);
   
   // Fetch Bible content (placeholder, will use API in real implementation)
@@ -26,6 +27,12 @@ export default function BibleReader() {
     // This will use the default fetcher, real implementation would process the response
   });
   
+  // Handle text mode change
+  const handleTextModeChange = (mode: string) => {
+    setTextMode(mode);
+    console.log(`Text mode changed to ${mode}`);
+  };
+
   // Handle verse selection
   const handleVerseSelect = (refs: string[]) => {
     if (refs.length > 0) {
@@ -60,6 +67,8 @@ export default function BibleReader() {
           <ReaderHeader
             book={book}
             chapter={chapter}
+            textMode={textMode}
+            onTextModeChange={handleTextModeChange}
             onToggleTheme={handleToggleTheme}
             onOpenTypography={handleOpenTypography}
           />
@@ -70,6 +79,7 @@ export default function BibleReader() {
             verses={data?.verses || []}
             onSelect={handleVerseSelect}
             className="flex-1"
+            textMode={textMode as 'original' | 'genz' | 'novelize' | 'kids'}
           />
           
           <TagBar onTagClick={handleTagClick} />
