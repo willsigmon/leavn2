@@ -59,7 +59,9 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
   // Fetch Genesis chapter data
   const { data: chapterData, isLoading, error } = useQuery<GenesisChapterData>({
     queryKey: [`/api/reader/genesis/${chapter}`],
-    retry: 1,
+    retry: 2,
+    refetchOnWindowFocus: false,
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
   });
 
   // Handle tags display for a verse
@@ -87,25 +89,34 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
     );
   };
 
-  // Generate mock verses if we don't have real data yet
-  if (!chapterData?.verses || chapterData.verses.length === 0) {
-    const mockVerses: Verse[] = [];
-    for (let i = 1; i <= 31; i++) {
-      mockVerses.push({
-        verse: i,
-        number: i,
-        text: `Genesis ${chapter}:${i} text. And God saw that it was good.`,
-        textKjv: `Genesis ${chapter}:${i} text (KJV). And God saw that it was good.`,
-        textWeb: `Genesis ${chapter}:${i} text (WEB). And God saw that it was good.`,
-        isBookmarked: false,
-        hasNote: false
-      });
+  // Add some console debug to check the data structure
+  useEffect(() => {
+    if (chapterData) {
+      console.log('Genesis chapter data received:', chapterData);
+      console.log('Verses in chapter data:', chapterData.verses);
+    }
+  }, [chapterData]);
+
+  // Create a safe version of the verse data for rendering
+  const getFormattedVerses = (): Verse[] => {
+    if (!chapterData?.verses || chapterData.verses.length === 0) {
+      return [];
     }
     
-    if (chapterData && !chapterData.verses.length) {
-      chapterData.verses = mockVerses;
-    }
-  }
+    return chapterData.verses.map(verse => {
+      // Ensure we have the right properties
+      return {
+        verse: verse.verse || verse.number,
+        number: verse.number || verse.verse,
+        text: verse.text || (verse.textWeb || verse.textKjv || `Genesis ${chapter}:${verse.verse || verse.number}`),
+        textKjv: verse.textKjv || (typeof verse.text === 'object' ? verse.text.kjv : undefined) || `KJV text for Genesis ${chapter}:${verse.verse || verse.number}`,
+        textWeb: verse.textWeb || (typeof verse.text === 'object' ? verse.text.web : undefined) || `WEB text for Genesis ${chapter}:${verse.verse || verse.number}`,
+        isBookmarked: verse.isBookmarked || false,
+        hasNote: verse.hasNote || false,
+        tags: verse.tags || {}
+      };
+    });
+  };
 
   if (isLoading) {
     return (
@@ -133,7 +144,8 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
     );
   }
 
-  const renderedVerses = chapterData?.verses || [];
+  // Use the formatted verses for rendering
+  const renderedVerses = chapterData ? getFormattedVerses() : [];
   
   return (
     <div className={`p-4 max-w-3xl mx-auto ${isDarkMode ? 'text-gray-100' : 'text-gray-800'}`}>
