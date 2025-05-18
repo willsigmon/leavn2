@@ -11,7 +11,7 @@ import ReadingPlanDetail from "@/pages/reading-plan-detail";
 import Login from "@/pages/login";
 import Profile from "@/pages/profile";
 import Settings from "@/pages/settings";
-import { ThemeProvider } from "next-themes";
+import { ThemeProvider } from "./components/ThemeProvider";
 import { AuthProvider } from "./hooks/useAuth";
 import { NavBar } from "./components/NavBar";
 import Footer from "./components/layout/Footer";
@@ -69,11 +69,13 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider attribute="class">
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Router />
+          </TooltipProvider>
+        </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );

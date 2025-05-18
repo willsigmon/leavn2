@@ -1,0 +1,124 @@
+# 1 Create/overwrite the project scaffolding
+write_file package.json <<'JSON'
+{
+  "name": "leavn-client",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev":   "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5",
+    "clsx": "^2",
+    "react": "^18",
+    "react-dom": "^18",
+    "wouter": "^3"
+  },
+  "devDependencies": {
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@vitejs/plugin-react": "^4",
+    "autoprefixer": "^10",
+    "postcss": "^8",
+    "tailwindcss": "^3",
+    "typescript": "^5",
+    "vite": "^5"
+  }
+}
+JSON
+
+write_file tsconfig.json <<'JSON'
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "jsx": "react-jsx",
+    "strict": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src"]
+}
+JSON
+
+write_file vite.config.ts <<'TS'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "node:path";
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "src")
+    }
+  },
+  css: { postcss: "./postcss.config.cjs" },
+  server: { port: 5000, strictPort: true }
+});
+TS
+
+write_file postcss.config.cjs <<'CJS'
+export default {
+  plugins: { tailwindcss: {}, autoprefixer: {} }
+};
+CJS
+
+write_file tailwind.config.cjs <<'CJS'
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ["./index.html", "./src/**/*.{ts,tsx}"],
+  darkMode: ["class"],
+  theme: { extend: {} },
+  plugins: [require("@tailwindcss/typography")]
+};
+CJS
+
+# 2 Remove Mac-OS “._*” files and stray __MACOSX directories
+find . -name '.__*' -o -name '__MACOSX' | xargs rm -rf
+
+# 3 Patch the client code ­— swap the Next.js ThemeProvider for a local one
+perl -0777 -i -pe '
+  s/import\s+\{\s*ThemeProvider\s*\}\s+from\s+"next-themes";/import { ThemeProvider } from "..\/components\/ThemeProvider";/;
+' src/App.tsx
+
+# 4 Create a minimal ThemeProvider the rest of the app can use
+mkdir -p src/components
+write_file src/components/ThemeProvider.tsx <<'TSX'
+import React, { createContext, useContext, useEffect, useState } from "react";
+
+type Theme = "light" | "dark";
+interface ThemeCtx { theme: Theme; toggle: () => void; }
+const Ctx = createContext<ThemeCtx | null>(null);
+
+export const ThemeProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const preferred = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  const [theme, setTheme] = useState<Theme>(() => (localStorage.theme as Theme) || preferred);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+    localStorage.theme = theme;
+  }, [theme]);
+
+  return <Ctx.Provider value={{ theme, toggle: () => setTheme(t => (t === "dark" ? "light" : "light")) }}>{children}</Ctx.Provider>;
+};
+
+export const useTheme = () => {
+  const ctx = useContext(Ctx);
+  if (!ctx) throw new Error("useTheme must be inside ThemeProvider");
+  return ctx;
+};
+TSX
+
+# 5 Install deps & launch
+npm i
+npm run dev
