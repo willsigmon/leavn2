@@ -97,13 +97,74 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
     }
   }, [chapterData]);
 
+  // Import and use the verse count data from our shared module
+  const getVerseCount = (book: string, chapterNum: number): number => {
+    // Genesis chapter verse counts
+    const genesisVerseCount = {
+      1: 31,  // Genesis 1 has 31 verses
+      2: 25,  // Genesis 2 has 25 verses
+      3: 24,  // Genesis 3 has 24 verses 
+      4: 26,  // Genesis 4 has 26 verses
+      5: 32,  // Genesis 5 has 32 verses
+      6: 22,  // Genesis 6 has 22 verses
+      7: 24,  // Genesis 7 has 24 verses
+      8: 22,  // Genesis 8 has 22 verses
+      9: 29,  // Genesis 9 has 29 verses
+      10: 32, // Genesis 10 has 32 verses
+      11: 32, // Genesis 11 has 32 verses
+      12: 20, // Genesis 12 has 20 verses
+      13: 18, // Genesis 13 has 18 verses
+      14: 24, // Genesis 14 has 24 verses
+      15: 21, // Genesis 15 has 21 verses
+      16: 16, // Genesis 16 has 16 verses
+      17: 27, // Genesis 17 has 27 verses
+      18: 33, // Genesis 18 has 33 verses
+      19: 38, // Genesis 19 has 38 verses
+      20: 18, // Genesis 20 has 18 verses
+      21: 34, // Genesis 21 has 34 verses
+      22: 24, // Genesis 22 has 24 verses
+      23: 20, // Genesis 23 has 20 verses
+      24: 67, // Genesis 24 has 67 verses
+      25: 34, // Genesis 25 has 34 verses
+      26: 35, // Genesis 26 has 35 verses
+      27: 46, // Genesis 27 has 46 verses
+      28: 22, // Genesis 28 has 22 verses
+      29: 35, // Genesis 29 has 35 verses
+      30: 43, // Genesis 30 has 43 verses
+      31: 55, // Genesis 31 has 55 verses
+      32: 32, // Genesis 32 has 32 verses 
+      33: 20, // Genesis 33 has 20 verses
+      34: 31, // Genesis 34 has 31 verses
+      35: 29, // Genesis 35 has 29 verses
+      36: 43, // Genesis 36 has 43 verses
+      37: 36, // Genesis 37 has 36 verses
+      38: 30, // Genesis 38 has 30 verses
+      39: 23, // Genesis 39 has 23 verses
+      40: 23, // Genesis 40 has 23 verses
+      41: 57, // Genesis 41 has 57 verses
+      42: 38, // Genesis 42 has 38 verses
+      43: 34, // Genesis 43 has 34 verses
+      44: 34, // Genesis 44 has 34 verses
+      45: 28, // Genesis 45 has 28 verses
+      46: 34, // Genesis 46 has 34 verses
+      47: 31, // Genesis 47 has 31 verses
+      48: 22, // Genesis 48 has 22 verses
+      49: 33, // Genesis 49 has 33 verses
+      50: 26  // Genesis 50 has 26 verses
+    };
+    
+    return genesisVerseCount[chapterNum] || 30; // Default to 30 if not found
+  };
+
   // Create a safe version of the verse data for rendering
   const getFormattedVerses = (): Verse[] => {
     if (!chapterData?.verses || chapterData.verses.length === 0) {
       console.log('No verses found in chapter data');
       
-      // Create placeholder verses if none are found (helps with debugging)
-      const totalVerses = chapter === 1 ? 31 : (chapter === 2 ? 25 : 20); // Default verse counts for Genesis chapters
+      // Get the expected number of verses for this chapter
+      const totalVerses = getVerseCount('genesis', chapter);
+      
+      // Create placeholder verses for all expected verses
       return Array.from({ length: totalVerses }, (_, idx) => {
         const verseNumber = idx + 1;
         return {
@@ -127,15 +188,8 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
       existingVerses.set(verseNumber, verse);
     });
     
-    // Determine the total number of verses in this chapter
-    // Genesis 1 has 31 verses, Genesis 2 has 25 verses, etc.
-    let totalVerses;
-    if (chapter === 1) totalVerses = 31;
-    else if (chapter === 2) totalVerses = 25;
-    else if (chapter === 3) totalVerses = 24;
-    else if (chapter === 4) totalVerses = 26;
-    else if (chapter === 5) totalVerses = 32;
-    else totalVerses = 30; // Default value for other chapters
+    // Get the expected number of verses for this chapter from our reference data
+    const totalVerses = getVerseCount('genesis', chapter);
     
     // Create an array with all verse numbers
     return Array.from({ length: totalVerses }, (_, idx) => {

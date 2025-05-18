@@ -19,8 +19,9 @@ import {
 import { useAuth } from '@/hooks/useAuth';
 import { loadBibleData } from '@/lib/bibleData';
 import { bibleStructure } from '@/lib/bibleStructure';
-import { BibleContent } from '@/components/reader/BibleContent';
+// Using the existing GenesisReader while we fix the BibleReader component
 import { GenesisReader } from '@/components/reader/GenesisReader';
+import { BibleContent } from '@/components/reader/BibleContent';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
