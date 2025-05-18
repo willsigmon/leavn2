@@ -17,6 +17,7 @@ import bibleReaderRouter from "./routes/bible-reader";
 import crossReferencesRouter from "./routes/cross-references";
 import ragExplorerRouter from "./routes/rag-explorer";
 import genesisReaderRouter from "./routes/genesis-reader";
+import explorerRouter from "./routes/explorer";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up session middleware
@@ -38,6 +39,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Register special Genesis reader routes with rich content
   app.use("/api/reader/genesis", genesisReaderRouter);
+  
+  // Register theological concept explorer routes
+  app.use("/api/explorer", explorerRouter);
   
   // User preferences endpoints
   app.get("/api/preferences", isAuthenticated, async (req: Request, res: Response) => {
