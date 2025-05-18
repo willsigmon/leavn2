@@ -284,11 +284,19 @@ export default function NewReader() {
     }
   }, [savedNotes, book, chapter]);
   
-  // Initialize theme based on user preferences
+  // Initialize theme and warm light based on user preferences
   useEffect(() => {
+    // Check for dark mode preference
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     if (prefersDark && typographySettings.theme === 'light') {
       handleTypographyChange({ theme: 'dark' });
+    }
+    
+    // Load saved warm light value
+    const savedWarmLight = localStorage.getItem('aurora-warm-light');
+    if (savedWarmLight) {
+      const value = parseInt(savedWarmLight, 10);
+      handleWarmLightChange(value);
     }
   }, []);
   
