@@ -14,6 +14,7 @@ import {
 import { getSuggestedTags } from "./tag-suggest";
 import { db } from "./db";
 import bibleReaderRouter from "./routes/bible-reader";
+import crossReferencesRouter from "./routes/cross-references";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up session middleware
@@ -26,6 +27,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Register the enhanced Bible reader routes
   app.use("/api/reader", bibleReaderRouter);
+  
+  // Register cross-references routes
+  app.use("/api/reader/cross-references", crossReferencesRouter);
   
   // User preferences endpoints
   app.get("/api/preferences", isAuthenticated, async (req: Request, res: Response) => {

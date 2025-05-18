@@ -161,6 +161,26 @@ export const bookmarks = pgTable("bookmarks", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+// Cross-references between verses
+export const crossReferences = pgTable("cross_references", {
+  id: text("id").primaryKey(),
+  fromRef: text("from_ref").notNull().references(() => verses.id, { onDelete: "cascade" }),
+  toRef: text("to_ref").notNull().references(() => verses.id, { onDelete: "cascade" }),
+  connectionType: text("connection_type").notNull(), // e.g., "thematic", "quotation", "fulfillment", etc.
+  relevance: integer("relevance").notNull(), // 0-100 score
+  explanation: text("explanation"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Tags for cross-references
+export const crossRefTags = pgTable("cross_ref_tags", {
+  id: text("id").primaryKey(),
+  crossRefId: text("cross_ref_id").notNull().references(() => crossReferences.id, { onDelete: "cascade" }),
+  tag: text("tag").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 // Insert schemas
 export const insertVerseSchema = createInsertSchema(verses).omit({ id: true });
 export const insertBibleChunkSchema = createInsertSchema(bibleChunks).omit({ id: true, createdAt: true });
@@ -175,6 +195,8 @@ export const insertUserProgressSchema = createInsertSchema(userProgress).omit({ 
 export const insertUserPreferencesSchema = createInsertSchema(userPreferences).omit({ id: true, updatedAt: true });
 export const insertDidYouKnowSchema = createInsertSchema(didYouKnow).omit({ id: true });
 export const insertBookmarkSchema = createInsertSchema(bookmarks).omit({ id: true, createdAt: true });
+export const insertCrossReferenceSchema = createInsertSchema(crossReferences).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertCrossRefTagSchema = createInsertSchema(crossRefTags).omit({ id: true, createdAt: true });
 
 // Types
 export type UpsertUser = typeof users.$inferInsert;
@@ -226,3 +248,9 @@ export type UserPreferences = typeof userPreferences.$inferSelect;
 
 export type InsertBookmark = z.infer<typeof insertBookmarkSchema>;
 export type Bookmark = typeof bookmarks.$inferSelect;
+
+export type InsertCrossReference = z.infer<typeof insertCrossReferenceSchema>;
+export type CrossReference = typeof crossReferences.$inferSelect;
+
+export type InsertCrossRefTag = z.infer<typeof insertCrossRefTagSchema>;
+export type CrossRefTag = typeof crossRefTags.$inferSelect;

@@ -30,9 +30,15 @@ interface VerseTags {
 }
 
 // Path for cached Bible data
-const CACHE_DIR = path.join(__dirname, '../data');
-const BIBLE_CACHE_PATH = path.join(CACHE_DIR, 'bible_cache.json');
-const TAGS_CACHE_PATH = path.join(CACHE_DIR, 'tags_cache.json');
+// In ESM modules, we need to create our own path resolution
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const CACHE_DIR = join(__dirname, '../data');
+const BIBLE_CACHE_PATH = join(CACHE_DIR, 'bible_cache.json');
+const TAGS_CACHE_PATH = join(CACHE_DIR, 'tags_cache.json');
 
 // Ensure cache directory exists
 if (!fs.existsSync(CACHE_DIR)) {
