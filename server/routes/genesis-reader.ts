@@ -68,13 +68,17 @@ router.get('/:chapter', async (req: Request, res: Response) => {
       
       // Format the response in the structure expected by the reader
       const verses = chapterData.verses.map(verse => {
-        console.log('Processing verse:', verse.verse_number);
+        // Check the structure and adapt to our expected format
+        const verseNumber = verse.verse_number || verse.number || verse.verse;
+        
+        console.log('Processing verse:', verseNumber);
+        
         return {
-          verse: verse.verse_number,
-          number: verse.verse_number,
-          text: verse.text?.web || `Genesis 1:${verse.verse_number}`, // Use web translation as default
-          textKjv: verse.text?.kjv || `Genesis 1:${verse.verse_number} (KJV)`,  
-          textWeb: verse.text?.web || `Genesis 1:${verse.verse_number} (WEB)`,
+          verse: verseNumber,
+          number: verseNumber,
+          text: verse.text?.web || (typeof verse.text === 'object' ? verse.text.web : verse.text) || `Genesis ${chapterNum}:${verseNumber}`,
+          textKjv: verse.text?.kjv || (typeof verse.text === 'object' ? verse.text.kjv : null) || `Genesis ${chapterNum}:${verseNumber} (KJV)`,  
+          textWeb: verse.text?.web || (typeof verse.text === 'object' ? verse.text.web : null) || `Genesis ${chapterNum}:${verseNumber} (WEB)`,
           isBookmarked: false,
           hasNote: false,
           tags: verse.tags || {}
