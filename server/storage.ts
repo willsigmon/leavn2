@@ -15,6 +15,10 @@ export interface IStorage {
   createUser(user: UpsertUser): Promise<User>;
   upsertUser(user: UpsertUser): Promise<User>;
   
+  // User Preferences
+  getUserPreferences(userId: string): Promise<UserPreferences | undefined>;
+  saveUserPreferences(userId: string, preferences: Partial<UserPreferences>): Promise<UserPreferences>;
+  
   // Bible
   getVerse(book: string, chapter: number, verse: number): Promise<schema.Verse | undefined>;
   getVerses(book: string, chapter: number): Promise<schema.Verse[]>;
