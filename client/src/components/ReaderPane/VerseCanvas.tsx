@@ -216,12 +216,12 @@ export function VerseCanvas({
     <div className={cn("overflow-y-auto p-4 reader-paper shadow-inner", className)}>
       {versesToRender.map((verse, index) => (
         <Verse
-          key={`${book}-${chapter}-${verse.verse}`}
+          key={`${book}-${chapter}-${verse.verse || index}`}
           book={book}
           chapter={chapter}
           verse={verse.verse}
           text={getVerseText(index, verse.text)}
-          isSelected={selectedVerses.includes(verse.verse)}
+          isSelected={selectedVerses?.includes(verse.verse)}
           onClick={() => handleVerseClick(verse.verse)}
           typography={typography}
         />

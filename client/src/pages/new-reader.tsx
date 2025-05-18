@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, KeyboardEvent } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useParams, useLocation } from 'wouter';
 import { AppShell } from '@/components/AppShell';
@@ -11,8 +11,10 @@ import { TypographyDialog } from '@/components/reader/TypographyDialog';
 import type { TypographyPreferences } from '@/components/reader/TypographyDialog';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
-import { ChevronUp, Menu, BookOpen, Brush, Bookmark, Share2 } from 'lucide-react';
+import { ChevronUp, Menu, BookOpen, Brush, Bookmark, Share2, FileText, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { v4 as uuidv4 } from 'uuid';
 
 // Define Bible content interfaces
 interface BibleVerse {

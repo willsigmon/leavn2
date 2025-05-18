@@ -1,0 +1,42 @@
+# PROJECT: Aurora Reader — Svelte-Offline Edition
+# VISION
+Craft a zero-friction e-reader that feels like Kindle’s hardware fluidity but adds BOOX-style split-view notes and VitalSource-grade study aids. Must work 100 % offline after first visit, sync gracefully, and surface AI insights à la Apple Books “Reading Goals”.
+
+## 1  Stack Choices
+- App Framework   : SvelteKit 2 (islands, progressive enhancement)
+- Styling         : UnoCSS + Preflight + readable-prose plugin
+- DB & Auth       : Cloudflare D1 (SQL) + Cloudflare Access (JWT)  
+                    — pgvector polyfill `d1-vector` for embeddings
+- Object Storage  : Cloudflare R2 (books, assets)
+- AI Services     : OpenAI o3 mini + text-embedding-3-small  
+                    optional local gguf fallback via WebGPU
+- Search          : Typesense Cloud (free tier) for library/global
+- Offline Magic   : Workbox v7 (Precaching, Background Sync, Stale-While-Revalidate)
+- Dev Env         : Replit Nix + Bun runtime
+- CI/CD           : Wrangler Pages → Cloudflare Global Edge
+
+## 2  Killer Features
+1. **Triple-Mode Navigation**  
+   - Tap zones, swipe, or smooth vertical scroll (toggle).  
+   - Physical button shim via WebHID (for Page Up/Down).
+2. **Adaptive Theme Engine**  
+   - Auto Night, Warm Tint slider (Kobo ComfortLight mimic), system color-scheme detection, per-book overrides.
+3. **Unified Notebook**  
+   - Grid of highlights; filter by tag/figure/location; export Markdown/Anki; flashcard generator (VitalSource-style) in-browser only—no round-trip latency.
+4. **Split-Screen Notes (BOOX-inspired)**  
+   - `Ctrl+N` opens markdown pad beside text; changes auto-save to D1; backlinks to chunk-id.
+5. **RAG Tag System**  
+   - Rust WASM worker parses EPUB in-browser, chunks text, calls OpenAI for tags & embeddings, stores in D1.  
+   - Similarity queries run locally first (vector.js); cloud fallback if not cached.
+6. **Serendipity Layer**  
+   - Idle callback surfaces 3 smart “Did You Know?” pills based on cosine sim ≥ 0.9 with last 5 highlights.  
+   - Click = smooth-scroll to target + animated breadcrumb trail.
+
+## 3  Data Schema (D1 SQL)
+```sql
+CREATE TABLE books(id TEXT PRIMARY KEY, title TEXT, author TEXT);
+CREATE TABLE chunks(id TEXT PRIMARY KEY, book_id TEXT, pos INT,
+                    text TEXT, tags JSON, embed BLOB);
+CREATE TABLE notes(id TEXT PRIMARY KEY, chunk_id TEXT,
+                   user_id TEXT, body TEXT, created DATETIME);
+CREATE INDEX vec_chunks ON chunks(embed) VECTOR;
