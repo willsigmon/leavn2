@@ -384,38 +384,62 @@ export default function Reader() {
                 className="flex-1 flex overflow-hidden m-0 border-0"
               >
                 {/* Main Reading Area */}
-                <div className="flex-1 overflow-auto" ref={contentRef}>
+                <div className="flex-1 overflow-auto warm-light-filter" ref={contentRef}>
                   <div className="max-w-4xl mx-auto p-4 sm:p-6 md:p-8">
                     {/* Reading Mode Toggle */}
                     <div className="flex justify-between items-center mb-6">
                       <h1 className="text-3xl font-serif font-semibold text-stone-800 dark:text-stone-100 flex items-center">
-                        <span className="text-amber-700 dark:text-amber-500 mr-2">
+                        <span className="forest-green mr-2">
                           {data?.bookName || currentBook?.name || book}
                         </span> 
                         <span>Chapter {chapter}</span>
                       </h1>
-                      <Button 
-                        size="sm"
-                        variant={narrativeMode ? "default" : "outline"}
-                        className={narrativeMode 
-                          ? "bg-[#2c4c3b] hover:bg-[#253f31] text-white border-[#2c4c3b]" 
-                          : "text-stone-700 dark:text-stone-300"
-                        }
-                        onClick={toggleNarrativeMode}
-                      >
-                        <BookOpen className="h-4 w-4 mr-1" />
-                        {narrativeMode ? "Exit Narrative" : "Narrative Mode"}
-                      </Button>
+                      <div className="flex items-center gap-2">
+                        <div className={`lens-badge ${activeLens === 'protestant' ? 'lens-protestant' : 
+                                             activeLens === 'catholic' ? 'lens-catholic' :
+                                             activeLens === 'orthodox' ? 'lens-orthodox' :
+                                             activeLens === 'jewish' ? 'lens-jewish' : 'lens-academic'}`}>
+                          <Sparkles className="h-3 w-3 mr-1" />
+                          {activeLens.charAt(0).toUpperCase() + activeLens.slice(1)}
+                        </div>
+                        <Button 
+                          size="sm"
+                          variant={narrativeMode ? "default" : "outline"}
+                          className={narrativeMode 
+                            ? "bg-[#2c4c3b] hover:bg-[#253f31] text-white border-[#2c4c3b]" 
+                            : "text-stone-700 dark:text-stone-300"
+                          }
+                          onClick={toggleNarrativeMode}
+                        >
+                          <BookOpen className="h-4 w-4 mr-1" />
+                          {narrativeMode ? "Exit Narrative" : "Narrative Mode"}
+                        </Button>
+                      </div>
                     </div>
                     
-                    {/* Load verses */}
-                    <VerseHighlighter
-                      book={book}
-                      chapter={chapter}
-                      verses={getVerses()}
-                      onVerseSelect={handleVerseSelect}
-                      translation={viewMode === 'original' ? 'kjv' : viewMode}
-                    />
+                    {/* Content display mode indicator */}
+                    {viewMode !== 'original' && (
+                      <div className="mb-4 p-2 bg-amber-50 dark:bg-amber-900/20 rounded text-sm text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800/30">
+                        <p className="flex items-center">
+                          <Sparkles className="h-4 w-4 mr-2" />
+                          You're reading the <span className="font-medium mx-1">{viewMode === 'genz' ? 'Gen-Z' : 
+                                           viewMode === 'kids' ? 'Kids' : 
+                                           viewMode === 'novelize' ? 'Narrative' : 'Original'}</span> 
+                          version of this text.
+                        </p>
+                      </div>
+                    )}
+                    
+                    {/* Load verses with appropriate styling */}
+                    <div className={`reader-paper reader-content font-${typographySettings.fontFamily} text-${typographySettings.fontSize} leading-${typographySettings.lineSpacing} text-${typographySettings.textAlign}`}>
+                      <VerseHighlighter
+                        book={book}
+                        chapter={chapter}
+                        verses={getVerses()}
+                        onVerseSelect={handleVerseSelect}
+                        translation={viewMode === 'original' ? 'kjv' : viewMode}
+                      />
+                    </div>
                   </div>
                 </div>
                 

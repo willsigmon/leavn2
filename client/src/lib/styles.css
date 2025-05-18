@@ -1,0 +1,274 @@
+/**
+ * Custom reader styles for the Bible application
+ */
+
+/* Reader paper style with subtle texture */
+.reader-paper {
+  background-color: #fffcf7;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23f0ebdf' fill-opacity='0.4' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border-radius: 0.25rem;
+  padding: 1.5rem;
+}
+
+.dark .reader-paper {
+  background-color: #1a1714;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%232a2520' fill-opacity='0.4' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Verse Highlight Colors */
+.highlight-yellow {
+  background-color: rgba(250, 204, 21, 0.2);
+  border-left: 3px solid rgba(250, 204, 21, 0.8);
+}
+
+.highlight-green {
+  background-color: rgba(44, 76, 59, 0.15);
+  border-left: 3px solid rgba(44, 76, 59, 0.8);
+}
+
+.highlight-blue {
+  background-color: rgba(96, 165, 250, 0.15);
+  border-left: 3px solid rgba(96, 165, 250, 0.8);
+}
+
+.highlight-pink {
+  background-color: rgba(244, 114, 182, 0.15);
+  border-left: 3px solid rgba(244, 114, 182, 0.8);
+}
+
+/* Dark mode highlight adjustments */
+.dark .highlight-yellow {
+  background-color: rgba(250, 204, 21, 0.1);
+  border-left: 3px solid rgba(250, 204, 21, 0.6);
+}
+
+.dark .highlight-green {
+  background-color: rgba(44, 76, 59, 0.1);
+  border-left: 3px solid rgba(44, 76, 59, 0.6);
+}
+
+.dark .highlight-blue {
+  background-color: rgba(96, 165, 250, 0.1);
+  border-left: 3px solid rgba(96, 165, 250, 0.6);
+}
+
+.dark .highlight-pink {
+  background-color: rgba(244, 114, 182, 0.1);
+  border-left: 3px solid rgba(244, 114, 182, 0.6);
+}
+
+/* Warm light filter effect */
+:root {
+  --warm-light: 0;
+  --hue-rotate: 0deg;
+  --sepia-amount: 0%;
+}
+
+.warm-light-filter {
+  filter: sepia(var(--sepia-amount)) hue-rotate(var(--hue-rotate));
+  transition: filter 0.3s ease;
+}
+
+/* Typography adjustments */
+.reader-content {
+  font-family: var(--font-family, Georgia, serif);
+  font-size: var(--font-size, 1rem);
+  line-height: var(--line-height, 1.75);
+  text-align: var(--text-align, left);
+  letter-spacing: 0.01em;
+}
+
+/* Font families */
+.font-serif {
+  font-family: Georgia, Cambria, "Times New Roman", Times, serif !important;
+}
+
+.font-sans {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+.font-dyslexic {
+  font-family: "OpenDyslexic", serif !important;
+}
+
+/* Verse numbers */
+.verse-number {
+  color: #2c4c3b;
+  font-size: 0.8em;
+  font-weight: 600;
+  margin-right: 0.5em;
+  user-select: none;
+}
+
+.dark .verse-number {
+  color: #5b8b76;
+}
+
+/* Verse text in different modes */
+.verse-text-original {
+  /* Default styling */
+}
+
+.verse-text-genz {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #374151;
+}
+
+.verse-text-kids {
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+  font-size: 1.05em;
+  color: #374151;
+}
+
+.verse-text-novelize {
+  font-style: italic;
+  color: #374151;
+}
+
+.dark .verse-text-genz,
+.dark .verse-text-kids,
+.dark .verse-text-novelize {
+  color: #d1d5db;
+}
+
+/* Theme styles */
+.sepia {
+  --bg-primary: #f9f5eb;
+  --bg-secondary: #f5f1e4;
+  --text-primary: #442c2e;
+  --text-secondary: #6b4f51;
+  --accent-primary: #9c6b4e;
+  --accent-secondary: #7a513c;
+}
+
+.sepia body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.solarized {
+  --bg-primary: #fdf6e3;
+  --bg-secondary: #eee8d5;
+  --text-primary: #657b83;
+  --text-secondary: #586e75;
+  --accent-primary: #268bd2;
+  --accent-secondary: #2aa198;
+}
+
+.solarized body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* Sidebar styling */
+.sidebar-tabs {
+  background-color: #f8f7f4;
+  border-right: 1px solid #e5e1d8;
+}
+
+.dark .sidebar-tabs {
+  background-color: #1f1d1b;
+  border-right: 1px solid #2c2a27;
+}
+
+.tab-icon {
+  color: #2c4c3b;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.tab-icon:hover {
+  opacity: 1;
+}
+
+.dark .tab-icon {
+  color: #5b8b76;
+}
+
+/* Forest green theme accents */
+.forest-green {
+  color: #2c4c3b;
+}
+
+.bg-forest-green {
+  background-color: #2c4c3b;
+}
+
+.border-forest-green {
+  border-color: #2c4c3b;
+}
+
+.dark .forest-green {
+  color: #5b8b76;
+}
+
+.dark .bg-forest-green {
+  background-color: #3a604c;
+}
+
+.dark .border-forest-green {
+  border-color: #3a604c;
+}
+
+/* Theological lens pill badges */
+.lens-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+}
+
+.lens-protestant {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.lens-catholic {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.lens-orthodox {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.lens-jewish {
+  background-color: #e0e7ff;
+  color: #4338ca;
+}
+
+.lens-academic {
+  background-color: #f3e8ff;
+  color: #6d28d9;
+}
+
+.dark .lens-protestant {
+  background-color: rgba(219, 234, 254, 0.2);
+  color: #93c5fd;
+}
+
+.dark .lens-catholic {
+  background-color: rgba(254, 243, 199, 0.2);
+  color: #fcd34d;
+}
+
+.dark .lens-orthodox {
+  background-color: rgba(209, 250, 229, 0.2);
+  color: #6ee7b7;
+}
+
+.dark .lens-jewish {
+  background-color: rgba(224, 231, 255, 0.2);
+  color: #a5b4fc;
+}
+
+.dark .lens-academic {
+  background-color: rgba(243, 232, 255, 0.2);
+  color: #c4b5fd;
+}

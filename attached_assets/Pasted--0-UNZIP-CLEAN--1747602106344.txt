@@ -1,0 +1,56 @@
+######################################################################
+# 0.  UNZIP + CLEAN
+######################################################################
+unzip -o data.zip -d .   # expands to ./data/…
+# strip __MACOSX directories and “._” metadata files
+find data -name "__MACOSX" -o -name "._*" | xargs rm -rf
+
+######################################################################
+# 1.  NORMALISE bible_full.json  (flat → hierarchical)
+######################################################################
+node - <<'JS'
+import { readFileSync, writeFileSync } from 'node:fs';
+
+const RAW = JSON.parse(readFileSync('data/bible_full.json', 'utf8'));
+if (!Array.isArray(RAW)) {
+  console.log('bible_full.json already hierarchical – skipping');
+  process.exit(0);
+}
+
+const out = {};
+for (const v of RAW) {
+  if (!out[v.book]) out[v.book] = { name: v.book, chapters: [] };
+  const book = out[v.book].chapters;
+  while (book.length < v.chapter) book.push({ verses: [] });
+  book[v.chapter - 1].verses[v.verse - 1] = {
+    kjv: v.text.kjv,
+    web: v.text.web
+  };
+}
+writeFileSync('data/bible_full.json', JSON.stringify(out, null, 2));
+console.log('✔  bible_full.json normalised →', Object.keys(out).length, 'books');
+JS
+
+######################################################################
+# 2.  NUKE EMPTY PLACEHOLDERS – let initBibleRAG() rebuild them
+######################################################################
+rm -f data/bible_chunks_*.json data/bible_embeddings_*.json
+
+######################################################################
+# 3.  KEEP THEM OUT OF GIT
+######################################################################
+grep -qxF '/data/bible_chunks_*.json' .gitignore || cat >> .gitignore <<'EOF'
+
+# generated at runtime – ignore
+/data/bible_chunks_*.json
+/data/bible_embeddings_*.json
+EOF
+
+######################################################################
+# 4.  SMOKE-TEST (should print 31 for Genesis 1)
+######################################################################
+node - <<'JS'
+import { readFileSync } from 'node:fs';
+const b = JSON.parse(readFileSync('data/bible_full.json', 'utf8'));
+console.log('Genesis 1 verse count:', b?.Genesis?.chapters[0]?.verses.length);
+JS

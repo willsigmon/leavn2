@@ -1,3 +1,6 @@
+/* Import our custom styles for the Bible reader */
+@import './lib/styles.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
