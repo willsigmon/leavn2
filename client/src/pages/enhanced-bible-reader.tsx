@@ -288,11 +288,10 @@ export default function EnhancedBibleReader() {
   
   return (
     <div className="min-h-screen max-h-screen flex flex-col">
-      <div className="flex-1 overflow-hidden flex relative">
-        {/* Main reading area */}
+      <div className="flex-1 overflow-hidden md:grid md:grid-cols-[2fr_1fr] relative">
+        {/* Main reading area - Bible Canvas (⅔ width on desktop) */}
         <div className={cn(
-          "flex-1 flex flex-col overflow-hidden transition-all duration-300",
-          sidebarOpen ? "lg:w-[calc(100%-300px)]" : "w-full"
+          "flex-1 flex flex-col overflow-hidden transition-all duration-300"
         )}>
           {/* Top toolbar */}
           {showToolbar && (
@@ -488,108 +487,200 @@ export default function EnhancedBibleReader() {
           </div>
         </div>
         
-        {/* Sidebar */}
+        {/* Companion Sidebar - AI Lens Insights (⅓ width on desktop) */}
         <div className={cn(
-          "h-full bg-white dark:bg-stone-900 border-l border-stone-200 dark:border-stone-800 overflow-hidden transition-all duration-300",
-          sidebarOpen ? "w-[300px]" : "w-0"
+          "companion-sidebar bg-white dark:bg-stone-900 border-l border-stone-200 dark:border-stone-800 overflow-hidden",
+          "md:block", // Always visible on desktop with grid layout
+          "hidden absolute inset-x-0 bottom-0 top-auto z-10 h-[50vh] md:static md:h-auto", // Hidden on mobile unless activated
+          !sidebarOpen && "md:hidden" // Toggle for both mobile and desktop
         )}>
-          {sidebarOpen && (
-            <div className="h-full flex flex-col">
-              <div className="p-4 border-b border-stone-200 dark:border-stone-800">
-                <h3 className="font-medium text-stone-800 dark:text-stone-200">
-                  Bible Navigation
-                </h3>
-              </div>
+          <div className="h-full flex flex-col">
+            <div className="p-4 border-b border-stone-200 dark:border-stone-800 flex justify-between items-center">
+              <h3 className="font-medium text-stone-800 dark:text-stone-200">
+                {activeLens.charAt(0).toUpperCase() + activeLens.slice(1)} Insights
+              </h3>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-8 w-8 md:hidden"
+                onClick={() => setSidebarOpen(false)}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+            
+            <Tabs defaultValue="commentary" className="flex-1">
+              <TabsList className="w-full grid grid-cols-3">
+                <TabsTrigger value="commentary">Commentary</TabsTrigger>
+                <TabsTrigger value="map">Map</TabsTrigger>
+                <TabsTrigger value="sources">Sources</TabsTrigger>
+              </TabsList>
               
-              <Tabs defaultValue="chapters" className="flex-1">
-                <TabsList className="w-full grid grid-cols-3">
-                  <TabsTrigger value="chapters">Chapters</TabsTrigger>
-                  <TabsTrigger value="bookmarks">Bookmarks</TabsTrigger>
-                  <TabsTrigger value="history">History</TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="chapters" className="flex-1 p-0 m-0">
-                  <ScrollArea className="h-[calc(100vh-180px)]">
-                    <div className="p-4 grid grid-cols-5 gap-2">
-                      {Array.from({ length: 50 }, (_, i) => i + 1).map(chapterNum => (
-                        <Button
-                          key={chapterNum}
-                          variant={chapter === chapterNum ? "default" : "outline"}
-                          size="sm"
-                          className={cn(
-                            "h-10 w-10 p-0",
-                            chapter === chapterNum ? "bg-[#2c4c3b] hover:bg-[#1b3028]" : ""
-                          )}
-                          onClick={() => navigate(`/enhanced-reader/${book}/${chapterNum}`)}
-                        >
-                          {chapterNum}
-                        </Button>
-                      ))}
-                    </div>
-                  </ScrollArea>
-                </TabsContent>
-                
-                <TabsContent value="bookmarks" className="flex-1 p-0 m-0">
-                  <ScrollArea className="h-[calc(100vh-180px)]">
-                    <div className="p-4 space-y-2">
-                      {bookmarks.length === 0 ? (
-                        <p className="text-sm text-stone-500 dark:text-stone-400 text-center py-4">
-                          No bookmarks yet. Add one by clicking the bookmark icon.
-                        </p>
-                      ) : (
-                        bookmarks.map(bookmark => (
-                          <div 
-                            key={bookmark.id}
-                            className="flex items-center justify-between p-3 bg-stone-50 dark:bg-stone-800 rounded-md hover:bg-stone-100 dark:hover:bg-stone-700 cursor-pointer"
-                            onClick={() => navigate(`/enhanced-reader/${bookmark.book}/${bookmark.chapter}`)}
-                          >
-                            <div>
-                              <p className="font-medium text-stone-800 dark:text-stone-200">
-                                {bookmark.book} {bookmark.chapter}
-                              </p>
-                              <p className="text-xs text-stone-500 dark:text-stone-400">
-                                Verse {bookmark.verse}
-                              </p>
-                            </div>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-8 w-8"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                removeBookmark(bookmark.id);
-                              }}
-                            >
-                              <Bookmark className="h-4 w-4 fill-current" />
-                            </Button>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  </ScrollArea>
-                </TabsContent>
-                
-                <TabsContent value="history" className="flex-1 p-0 m-0">
-                  <ScrollArea className="h-[calc(100vh-180px)]">
-                    <div className="p-4 space-y-2">
-                      <div className="flex items-center p-3 bg-stone-50 dark:bg-stone-800 rounded-md">
-                        <History className="h-4 w-4 mr-3 text-stone-500 dark:text-stone-400" />
-                        <div>
-                          <p className="font-medium text-stone-800 dark:text-stone-200">
-                            {book} {chapter}
+              {/* Commentary Tab */}
+              <TabsContent value="commentary" className="flex-1 p-4">
+                <ScrollArea className="h-[calc(100vh-180px)] md:h-[calc(100vh-200px)]">
+                  <div className="space-y-6">
+                    {contextVerse && getContextVerse() ? (
+                      <>
+                        <div className="bg-stone-50 dark:bg-stone-900 p-4 rounded-md border border-stone-200 dark:border-stone-700">
+                          <p className="text-sm font-medium text-stone-800 dark:text-stone-200 mb-1">
+                            Verse {getContextVerse()?.verseNumber}
                           </p>
-                          <p className="text-xs text-stone-500 dark:text-stone-400">
-                            Just now
+                          <p className="text-stone-600 dark:text-stone-400">
+                            {getContextVerse()?.text}
                           </p>
                         </div>
+                        
+                        <div className="space-y-4">
+                          <div className="bg-white dark:bg-stone-800 p-4 rounded-md border border-stone-200 dark:border-stone-700">
+                            <div className={cn(
+                              "inline-block px-2 py-0.5 rounded-full text-xs font-medium mb-3",
+                              {
+                                "bg-[#e8efe5] text-[#2c4c3b]": activeLens === "evangelical" || activeLens === "protestant",
+                                "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300": activeLens === "catholic",
+                                "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300": activeLens === "jewish" || activeLens === "orthodox",
+                                "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300": activeLens === "genz",
+                                "bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-300": activeLens === "kids",
+                                "bg-slate-100 text-slate-800 dark:bg-slate-900/30 dark:text-slate-300": activeLens === "atheist",
+                              }
+                            )}>
+                              {activeLens.charAt(0).toUpperCase() + activeLens.slice(1)} Perspective
+                            </div>
+                            <div className="prose prose-stone dark:prose-invert max-w-none prose-sm">
+                              <p>
+                                {getLensInsight(getContextVerse()?.verseNumber as number, activeLens)}
+                              </p>
+                              
+                              {/* Cross references section */}
+                              <h4 className="text-sm font-medium mt-4">Cross References</h4>
+                              <ul className="mt-1 space-y-1">
+                                <li className="text-xs">
+                                  <a href="#" className="text-[#2c4c3b] dark:text-[#94b49f] hover:underline">
+                                    John 1:1-3
+                                  </a>
+                                  {' '}- Connection to Christ as creator
+                                </li>
+                                <li className="text-xs">
+                                  <a href="#" className="text-[#2c4c3b] dark:text-[#94b49f] hover:underline">
+                                    Psalm 33:6-9
+                                  </a>
+                                  {' '}- Creation by God's word
+                                </li>
+                                <li className="text-xs">
+                                  <a href="#" className="text-[#2c4c3b] dark:text-[#94b49f] hover:underline">
+                                    Hebrews 11:3
+                                  </a>
+                                  {' '}- Creation by faith
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          
+                          {/* Additional commentary cards could be added here */}
+                          <div className="bg-white dark:bg-stone-800 p-4 rounded-md border border-stone-200 dark:border-stone-700">
+                            <h4 className="text-sm font-medium mb-2">Historical Context</h4>
+                            <p className="text-sm text-stone-600 dark:text-stone-400">
+                              Genesis was written approximately 1446-1406 BC. The creation account established God's relationship with the world and sets the foundation for the rest of the Biblical narrative.
+                            </p>
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center py-12">
+                        <MessageSquare className="h-12 w-12 text-stone-300 dark:text-stone-700 mb-4" />
+                        <p className="text-stone-600 dark:text-stone-400 text-center">
+                          Select a verse to see AI-powered commentary through the <strong>{activeLens}</strong> lens
+                        </p>
+                        <p className="text-xs text-stone-500 dark:text-stone-500 text-center mt-2">
+                          Click on any verse to analyze it in detail
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </ScrollArea>
+              </TabsContent>
+              
+              {/* Map Tab */}
+              <TabsContent value="map" className="flex-1 p-0 m-0">
+                <div className="h-[calc(100vh-180px)] md:h-[calc(100vh-200px)] bg-stone-100 dark:bg-stone-800 p-4 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-full h-64 bg-stone-200 dark:bg-stone-700 rounded-md mb-4 overflow-hidden relative">
+                      {/* Placeholder for map - would be replaced with Leaflet implementation */}
+                      <div className="absolute inset-0 bg-[url('https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/1720_Chatelain_Map_of_Israel%2C_Palestine%2C_or_the_Holy_Land_-_Geographicus_-_Tabula-chatelain-1720.jpg/1920px-1720_Chatelain_Map_of_Israel%2C_Palestine%2C_or_the_Holy_Land_-_Geographicus_-_Tabula-chatelain-1720.jpg')] bg-center bg-cover opacity-70"></div>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <p className="bg-white dark:bg-stone-900 px-3 py-1 rounded-md text-sm font-medium">
+                          Historical Map View
+                        </p>
                       </div>
                     </div>
-                  </ScrollArea>
-                </TabsContent>
-              </Tabs>
-            </div>
-          )}
+                    <p className="text-sm text-stone-600 dark:text-stone-400">
+                      Geographic context for {book} {chapter}
+                    </p>
+                    <p className="text-xs text-stone-500 dark:text-stone-500 mt-1">
+                      Select a verse to see more specific locations
+                    </p>
+                  </div>
+                </div>
+              </TabsContent>
+              
+              {/* Sources Tab */}
+              <TabsContent value="sources" className="flex-1 p-0 m-0">
+                <ScrollArea className="h-[calc(100vh-180px)] md:h-[calc(100vh-200px)]">
+                  <div className="p-4 space-y-4">
+                    <div className="bg-white dark:bg-stone-800 p-4 rounded-md border border-stone-200 dark:border-stone-700">
+                      <h4 className="text-sm font-medium mb-2">Scholarly References</h4>
+                      <ul className="space-y-3">
+                        <li className="text-xs text-stone-600 dark:text-stone-400">
+                          <p className="font-medium">New Bible Commentary, 21st Century Edition</p>
+                          <p>InterVarsity Press, 1994</p>
+                        </li>
+                        <li className="text-xs text-stone-600 dark:text-stone-400">
+                          <p className="font-medium">The IVP Bible Background Commentary: Old Testament</p>
+                          <p>InterVarsity Press, 2000</p>
+                        </li>
+                        <li className="text-xs text-stone-600 dark:text-stone-400">
+                          <p className="font-medium">Theological Wordbook of the Old Testament</p>
+                          <p>Moody Publishers, 1980</p>
+                        </li>
+                      </ul>
+                    </div>
+                    
+                    <div className="bg-white dark:bg-stone-800 p-4 rounded-md border border-stone-200 dark:border-stone-700">
+                      <h4 className="text-sm font-medium mb-2">Translation Notes</h4>
+                      <p className="text-xs text-stone-600 dark:text-stone-400">
+                        The World English Bible (WEB) is a Public Domain translation based on the American Standard Version of 1901 and the Biblia Hebraica Stutgartensa critical text.
+                      </p>
+                    </div>
+                    
+                    <div className="bg-white dark:bg-stone-800 p-4 rounded-md border border-stone-200 dark:border-stone-700">
+                      <h4 className="text-sm font-medium mb-2">AI Analysis Details</h4>
+                      <p className="text-xs text-stone-600 dark:text-stone-400">
+                        Commentary generated using contextual analysis of Scripture, historical data, and theological frameworks. View from the {activeLens.charAt(0).toUpperCase() + activeLens.slice(1)} lens was generated: just now.
+                      </p>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="mt-2 text-xs h-7 w-full"
+                      >
+                        Refresh AI Analysis
+                      </Button>
+                    </div>
+                  </div>
+                </ScrollArea>
+              </TabsContent>
+            </Tabs>
+          </div>
         </div>
+        
+        {/* Mobile sidebar toggle button (fixed at bottom center on mobile) */}
+        <Button
+          variant="secondary"
+          size="sm"
+          className="md:hidden fixed bottom-4 left-1/2 transform -translate-x-1/2 z-30 shadow-lg bg-[#2c4c3b] text-white hover:bg-[#1b3028]"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+        >
+          {sidebarOpen ? "Close Insights" : "Show Insights"}
+        </Button>
         
         {/* Insights panel */}
         <Sheet open={insightsPanelOpen} onOpenChange={setInsightsPanelOpen}>
