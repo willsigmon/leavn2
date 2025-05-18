@@ -59,15 +59,15 @@ export function VerseCanvas({
 }: VerseCanvasProps) {
   // Sample data for different text modes (in a real app, this would come from the API)
   const sampleGenZTexts = [
-    "So God was like, \"Let there be light,\" and boom—there was light!",
-    "God saw the light was fire, so he separated the light from the darkness.",
-    "God called the light \"day\" and the darkness \"night.\" Evening and morning—that's day one, done!"
+    "So God was like, \"Let there be light,\" and boom—there was light! No cap, just vibes!",
+    "God saw the light was straight fire, so he separated the light from the darkness. Major glow-up moment.",
+    "God called the light \"day\" and the darkness \"night.\" Evening and morning—that's day one, done! First W secured."
   ];
   
   const sampleNarrativeTexts = [
-    "In the beginning, the Creator spoke into the empty void. The divine voice echoed across the nothingness with a simple command: \"Let there be light.\" And in that moment, brilliance flooded what had been void.",
-    "The Creator beheld this first light—a pure, radiant energy unlike anything that would come after. Seeing its perfect goodness, the divine mind conceived a separation: light from darkness, creating the first duality of existence.",
-    "And so it was that the Creator named these first elements: the light was called \"Day,\" and the darkness was called \"Night.\" As the first evening descended and the first morning arose, the initial day of creation was complete."
+    "Darkness. Complete and total darkness. Then, a voice breaks through. \"Let there be light.\" The voice is gentle yet powerful, resonating with authority. Suddenly, brilliance floods what was once void, as if the Creator's words themselves have substance. The light reveals nothing yet illuminates everything.",
+    "The Creator stands at the edge of creation, His eyes reflecting the light He just called into being. With deliberate movements, His hands separate the light from darkness, creating rhythm and order from chaos. He steps back, observing with satisfaction as the two forces find their boundaries.",
+    "\"The light will be called 'Day,'\" the Creator proclaims, His voice carrying through the cosmos, \"and the darkness 'Night.'\" He pauses, allowing the significance of these first names to settle into the fabric of creation. As the first evening's glow gives way to morning's fresh brilliance, the Creator's expression reveals the pleasure of a day's work well done."
   ];
   
   const sampleKidsTexts = [
@@ -112,9 +112,27 @@ export function VerseCanvas({
       ) : (
         // Loading state and sample verses for preview
         <>
-          <Verse book={book} chapter={chapter} verse={1} text={getVerseText(0, "In the beginning, God created the heavens and the earth.")} />
-          <Verse book={book} chapter={chapter} verse={2} text={getVerseText(1, "The earth was without form and void, and darkness was over the face of the deep. And the Spirit of God was hovering over the face of the waters.")} />
-          <Verse book={book} chapter={chapter} verse={3} text={getVerseText(2, "And God said, \"Let there be light,\" and there was light.")} />
+          <Verse 
+            key={`${book}-${chapter}-1`} 
+            book={book} 
+            chapter={chapter} 
+            verse={1} 
+            text={getVerseText(0, "In the beginning, God created the heavens and the earth.")} 
+          />
+          <Verse 
+            key={`${book}-${chapter}-2`} 
+            book={book} 
+            chapter={chapter} 
+            verse={2} 
+            text={getVerseText(1, "The earth was without form and void, and darkness was over the face of the deep. And the Spirit of God was hovering over the face of the waters.")} 
+          />
+          <Verse 
+            key={`${book}-${chapter}-3`} 
+            book={book} 
+            chapter={chapter} 
+            verse={3} 
+            text={getVerseText(2, "And God said, \"Let there be light,\" and there was light.")} 
+          />
         </>
       )}
     </div>
