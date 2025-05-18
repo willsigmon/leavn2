@@ -166,7 +166,24 @@ export default function NewReader() {
       }
     }
     
-    // In a real implementation, we would save these preferences to user settings
+    // Save to localStorage
+    localStorage.setItem('aurora-typography-settings', JSON.stringify({
+      ...typographySettings,
+      ...settings
+    }));
+  };
+  
+  // Handle warm light adjustment (Kobo ComfortLight mimic)
+  const handleWarmLightChange = (value: number) => {
+    setWarmLightValue(value);
+    
+    // Apply warm light filter using CSS variables and hue-rotate
+    document.documentElement.style.setProperty('--warm-light', `${value}`);
+    document.documentElement.style.setProperty('--hue-rotate', `${value * 30}deg`); // 0 to 30 degrees
+    document.documentElement.style.setProperty('--sepia-amount', `${value * 20}%`);  // 0 to 20%
+    
+    // Save to localStorage
+    localStorage.setItem('aurora-warm-light', value.toString());
   };
   
   // Auto-scroll handler for "Did You Know" section
