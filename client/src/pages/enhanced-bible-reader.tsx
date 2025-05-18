@@ -342,101 +342,7 @@ export default function EnhancedBibleReader() {
             </div>
           )}
           
-          {/* Translation and lens tabs */}
-          <div className="bg-stone-50 dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 py-1 px-4">
-            <div className="flex flex-col md:flex-row gap-2">
-              <Tabs 
-                defaultValue={activeTranslation} 
-                onValueChange={setActiveTranslation}
-                className="w-full md:w-auto"
-              >
-                <TabsList className="bg-stone-200/70 dark:bg-stone-800">
-                  <TabsTrigger 
-                    value="web" 
-                    className="data-[state=active]:bg-[#e8efe5] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#2c4c3b] dark:data-[state=active]:text-white"
-                  >
-                    WEB
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="kjv"
-                    className="data-[state=active]:bg-[#e8efe5] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#2c4c3b] dark:data-[state=active]:text-white"
-                  >
-                    KJV
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-              
-              <Tabs 
-                defaultValue={activeLens} 
-                onValueChange={setActiveLens}
-                className="w-full md:w-auto md:ml-auto"
-              >
-                <TabsList className="bg-stone-200/70 dark:bg-stone-800">
-                  <TabsTrigger 
-                    value="protestant" 
-                    className="text-xs sm:text-sm data-[state=active]:bg-[#e8efe5] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#2c4c3b] dark:data-[state=active]:text-white"
-                  >
-                    Protestant
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="catholic"
-                    className="text-xs sm:text-sm data-[state=active]:bg-[#e8efe5] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#2c4c3b] dark:data-[state=active]:text-white"
-                  >
-                    Catholic
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="orthodox"
-                    className="text-xs sm:text-sm data-[state=active]:bg-[#e8efe5] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#2c4c3b] dark:data-[state=active]:text-white"
-                  >
-                    Orthodox
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="jewish"
-                    className="text-xs sm:text-sm data-[state=active]:bg-[#e8efe5] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#2c4c3b] dark:data-[state=active]:text-white"
-                  >
-                    Jewish
-                  </TabsTrigger>
-                </TabsList>
-                
-                {/* Secondary lens options */}
-                <div className="flex gap-1 mt-1 px-1">
-                  <Button 
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setActiveLens('genz')}
-                    className={cn(
-                      "h-7 text-xs rounded-md border-stone-200 dark:border-stone-700",
-                      activeLens === 'genz' && "bg-purple-100 border-purple-200 text-purple-800 dark:bg-purple-900/30 dark:border-purple-900 dark:text-purple-300"
-                    )}
-                  >
-                    GenZ
-                  </Button>
-                  <Button 
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setActiveLens('kids')}
-                    className={cn(
-                      "h-7 text-xs rounded-md border-stone-200 dark:border-stone-700",
-                      activeLens === 'kids' && "bg-pink-100 border-pink-200 text-pink-800 dark:bg-pink-900/30 dark:border-pink-900 dark:text-pink-300"
-                    )}
-                  >
-                    Kids
-                  </Button>
-                  <Button 
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setActiveLens('atheist')}
-                    className={cn(
-                      "h-7 text-xs rounded-md border-stone-200 dark:border-stone-700",
-                      activeLens === 'atheist' && "bg-slate-100 border-slate-200 text-slate-800 dark:bg-slate-900/30 dark:border-slate-900 dark:text-slate-300"
-                    )}
-                  >
-                    Academic
-                  </Button>
-                </div>
-              </Tabs>
-            </div>
-          </div>
+          {/* No translation and lens tabs here - moved to sidebar */}
           
           {/* Bible content */}
           <div 
@@ -537,7 +443,7 @@ export default function EnhancedBibleReader() {
             <div className="p-4 border-b border-stone-200 dark:border-stone-800">
               <div className="flex justify-between items-center mb-3">
                 <h3 className="font-medium text-stone-800 dark:text-stone-200">
-                  {activeLens.charAt(0).toUpperCase() + activeLens.slice(1)} Insights
+                  Bible Study
                 </h3>
                 <Button 
                   variant="ghost" 
@@ -550,13 +456,119 @@ export default function EnhancedBibleReader() {
               </div>
               
               {/* Search bar */}
-              <div className="relative">
+              <div className="relative mb-4">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-stone-500 dark:text-stone-400" />
                 <Input
                   type="search"
                   placeholder="Search verses, topics..."
                   className="w-full pl-9 bg-white dark:bg-stone-800 border-stone-200 dark:border-stone-700 h-9 text-sm"
                 />
+              </div>
+              
+              {/* Translation selector moved to sidebar */}
+              <div className="mb-4">
+                <p className="text-xs font-medium text-stone-500 dark:text-stone-400 mb-2">Translation</p>
+                <Tabs 
+                  defaultValue={activeTranslation} 
+                  onValueChange={setActiveTranslation}
+                  className="w-full"
+                >
+                  <TabsList className="w-full bg-stone-200/70 dark:bg-stone-800">
+                    <TabsTrigger 
+                      value="web" 
+                      className="flex-1 data-[state=active]:bg-[#e8efe5] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#2c4c3b] dark:data-[state=active]:text-white"
+                    >
+                      WEB
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="kjv"
+                      className="flex-1 data-[state=active]:bg-[#e8efe5] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#2c4c3b] dark:data-[state=active]:text-white"
+                    >
+                      KJV
+                    </TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              </div>
+              
+              {/* Theological lens selector moved to sidebar */}
+              <div className="mb-3">
+                <p className="text-xs font-medium text-stone-500 dark:text-stone-400 mb-2">Theological Lens</p>
+                <Tabs 
+                  defaultValue={activeLens} 
+                  onValueChange={setActiveLens}
+                  className="w-full"
+                >
+                  <TabsList className="w-full grid grid-cols-2 bg-stone-200/70 dark:bg-stone-800">
+                    <TabsTrigger 
+                      value="protestant" 
+                      className="text-xs data-[state=active]:bg-[#e8efe5] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#2c4c3b] dark:data-[state=active]:text-white"
+                    >
+                      Protestant
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="catholic"
+                      className="text-xs data-[state=active]:bg-[#e8efe5] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#2c4c3b] dark:data-[state=active]:text-white"
+                    >
+                      Catholic
+                    </TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsList className="w-full grid grid-cols-2 mt-1 bg-stone-200/70 dark:bg-stone-800">
+                    <TabsTrigger 
+                      value="orthodox"
+                      className="text-xs data-[state=active]:bg-[#e8efe5] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#2c4c3b] dark:data-[state=active]:text-white"
+                    >
+                      Orthodox
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="jewish"
+                      className="text-xs data-[state=active]:bg-[#e8efe5] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#2c4c3b] dark:data-[state=active]:text-white"
+                    >
+                      Jewish
+                    </TabsTrigger>
+                  </TabsList>
+                </Tabs>
+                
+                {/* Secondary lens options */}
+                <div className="flex gap-1 mt-1">
+                  <Button 
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setActiveLens('genz')}
+                    className={cn(
+                      "flex-1 h-7 text-xs rounded-md border-stone-200 dark:border-stone-700",
+                      activeLens === 'genz' && "bg-purple-100 border-purple-200 text-purple-800 dark:bg-purple-900/30 dark:border-purple-900 dark:text-purple-300"
+                    )}
+                  >
+                    GenZ
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setActiveLens('kids')}
+                    className={cn(
+                      "flex-1 h-7 text-xs rounded-md border-stone-200 dark:border-stone-700",
+                      activeLens === 'kids' && "bg-pink-100 border-pink-200 text-pink-800 dark:bg-pink-900/30 dark:border-pink-900 dark:text-pink-300"
+                    )}
+                  >
+                    Kids
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setActiveLens('atheist')}
+                    className={cn(
+                      "flex-1 h-7 text-xs rounded-md border-stone-200 dark:border-stone-700",
+                      activeLens === 'atheist' && "bg-slate-100 border-slate-200 text-slate-800 dark:bg-slate-900/30 dark:border-slate-900 dark:text-slate-300"
+                    )}
+                  >
+                    Academic
+                  </Button>
+                </div>
+              </div>
+              
+              <div className="text-center text-xs text-stone-500 dark:text-stone-400 font-medium mb-3">
+                Current view: <span className="text-[#2c4c3b] dark:text-[#94b49f]">{book} {chapter}</span> through {activeLens} lens
               </div>
             </div>
             
