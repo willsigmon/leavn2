@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,11 +9,21 @@ interface RelatedContentProps {
   bookChapter?: string;
 }
 
+interface RelatedVerse {
+  reference: string;
+  text: string;
+  score?: number;
+}
+
+interface RelatedContentResponse {
+  results: RelatedVerse[];
+}
+
 export function RelatedContent({ verseReference, bookChapter }: RelatedContentProps) {
   const [showRelated, setShowRelated] = useState<boolean>(true);
   
   // Query for retrieving related verses/chunks
-  const { data: relatedContent, isLoading } = useQuery({
+  const { data: relatedContent, isLoading } = useQuery<RelatedContentResponse>({
     queryKey: [`/api/bible/rag/search?ref=${verseReference || bookChapter || ''}`],
     enabled: !!verseReference || !!bookChapter,
   });
@@ -50,7 +60,7 @@ export function RelatedContent({ verseReference, bookChapter }: RelatedContentPr
     );
   }
   
-  const relatedVerses = relatedContent && 'results' in relatedContent ? relatedContent.results : [];
+  const relatedVerses = relatedContent?.results || [];
   
   if (!relatedVerses.length) {
     return null;
