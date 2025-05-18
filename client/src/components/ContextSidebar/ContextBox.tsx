@@ -106,7 +106,7 @@ export function ContextBox({ onTranslationChange, onLensChange, onAudioOptionCha
       {(currentVerseRef || currentBookChapter) && (
         <div className="mt-6 border-t border-stone-200 dark:border-stone-700 pt-4">
           <RelatedContent 
-            verseReference={currentVerseRef} 
+            verseReference={currentVerseRef ? currentVerseRef : undefined} 
             bookChapter={currentBookChapter} 
           />
         </div>

@@ -1,15 +1,18 @@
-import { ChevronDown, MoonStar, Type, Book, Sparkles, Palette } from 'lucide-react';
+import { ChevronDown, MoonStar, Type, Book, Sparkles, Palette, Volume2, Play, Pause } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface ReaderHeaderProps {
   book: string;
   chapter: number;
   textMode?: string;
+  isReading?: boolean;
   onBookChange?: (book: string) => void;
   onChapterChange?: (chapter: number) => void;
   onTextModeChange?: (mode: string) => void;
   onToggleTheme?: () => void;
+  onToggleReadAloud?: () => void;
   typographyControl?: React.ReactNode;
 }
 
@@ -17,10 +20,12 @@ export function ReaderHeader({
   book = 'Genesis',
   chapter = 1,
   textMode = 'original',
+  isReading = false,
   onBookChange,
   onChapterChange,
   onTextModeChange,
   onToggleTheme,
+  onToggleReadAloud,
   typographyControl
 }: ReaderHeaderProps) {
   return (
@@ -69,6 +74,30 @@ export function ReaderHeader({
           >
             <MoonStar className="h-4 w-4" />
           </Button>
+          
+          {/* Read aloud button */}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-8 w-8" 
+                  aria-label={isReading ? "Pause reading" : "Read aloud"}
+                  onClick={onToggleReadAloud}
+                >
+                  {isReading ? (
+                    <Pause className="h-4 w-4 text-[#2c4c3b] dark:text-[#8baa96]" />
+                  ) : (
+                    <Volume2 className="h-4 w-4" />
+                  )}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>{isReading ? "Pause reading" : "Read aloud"}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
       
