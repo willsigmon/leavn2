@@ -95,14 +95,14 @@ export default function Home() {
               {/* Bible Reader Preview Card */}
               <div className="relative rounded-xl overflow-hidden shadow-xl border-2 md:border-4 border-white dark:border-gray-800 bg-white dark:bg-gray-900 h-80 lg:h-96">
                 {/* Reader Header */}
-                <div className="bg-emerald-100 dark:bg-emerald-800/50 p-3 border-b border-emerald-200 dark:border-emerald-700/50 flex items-center justify-between">
+                <div className="bg-[#e8efe5] dark:bg-[#284233]/50 p-3 border-b border-[#d8e5d2] dark:border-[#2c4c3b]/50 flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <BookOpen className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-                    <span className="font-medium text-emerald-700 dark:text-emerald-300">Genesis 1</span>
+                    <BookOpen className="h-5 w-5 text-[#2c4c3b] dark:text-[#a5c2a5]" />
+                    <span className="font-medium text-[#2c4c3b] dark:text-[#a5c2a5]">Genesis 1</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className="h-5 w-5 rounded-full bg-emerald-200 dark:bg-emerald-700 animate-pulse"></div>
-                    <div className="h-5 w-5 rounded-full bg-teal-200 dark:bg-teal-700"></div>
+                    <div className="h-5 w-5 rounded-full bg-[#d8e5d2] dark:bg-[#345841] animate-pulse"></div>
+                    <div className="h-5 w-5 rounded-full bg-[#c5d5bc] dark:bg-[#3b5045]"></div>
                   </div>
                 </div>
                 
@@ -111,23 +111,23 @@ export default function Home() {
                   {/* Biblical Text */}
                   <div className="animate-subtle-scroll">
                     <p className="font-serif text-lg text-stone-800 dark:text-stone-200 mb-3">
-                      <span className="text-emerald-600 dark:text-emerald-400 font-semibold">1</span> In the beginning God created the heavens and the earth.
+                      <span className="text-[#2c4c3b] dark:text-[#a5c2a5] font-semibold">1</span> In the beginning God created the heavens and the earth.
                     </p>
                     <p className="font-serif text-lg text-stone-800 dark:text-stone-200 mb-3">
-                      <span className="text-emerald-600 dark:text-emerald-400 font-semibold">2</span> Now the earth was formless and empty, darkness was over the surface of the deep, and the Spirit of God was hovering over the waters.
+                      <span className="text-[#2c4c3b] dark:text-[#a5c2a5] font-semibold">2</span> Now the earth was formless and empty, darkness was over the surface of the deep, and the Spirit of God was hovering over the waters.
                     </p>
                     
                     {/* Highlighted Verse with Commentary Animation */}
-                    <div className="my-2 p-3 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg border-l-4 border-emerald-400 dark:border-emerald-600 animate-pulse-slow">
+                    <div className="my-2 p-3 bg-[#f0f4ed] dark:bg-[#2c4c3b]/30 rounded-lg border-l-4 border-[#3a6349] dark:border-[#3a6349] animate-pulse-slow">
                       <p className="font-serif text-lg text-stone-800 dark:text-stone-200">
-                        <span className="text-emerald-600 dark:text-emerald-400 font-semibold">3</span> And God said, "<span className="relative inline-block">Let there be light<span className="absolute bottom-0 left-0 right-0 border-b border-dotted border-emerald-400 dark:border-emerald-500"></span></span>," and there was light.
+                        <span className="text-[#2c4c3b] dark:text-[#a5c2a5] font-semibold">3</span> And God said, "<span className="relative inline-block">Let there be light<span className="absolute bottom-0 left-0 right-0 border-b border-dotted border-[#3a6349] dark:border-[#3a6349]"></span></span>," and there was light.
                       </p>
                       
                       {/* Commentary Popup - Animated */}
-                      <div className="mt-3 p-3 bg-white dark:bg-gray-800 rounded shadow-md border border-emerald-100 dark:border-emerald-800 animate-fade-in">
+                      <div className="mt-3 p-3 bg-white dark:bg-gray-800 rounded shadow-md border border-[#d8e5d2] dark:border-[#2c4c3b] animate-fade-in">
                         <div className="flex items-center mb-2">
-                          <div className="h-4 w-4 rounded-full bg-emerald-400 dark:bg-emerald-600 mr-2"></div>
-                          <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">Evangelical Perspective</span>
+                          <div className="h-4 w-4 rounded-full bg-[#3a6349] dark:bg-[#3a6349] mr-2"></div>
+                          <span className="text-sm font-medium text-[#2c4c3b] dark:text-[#a5c2a5]">Evangelical Perspective</span>
                         </div>
                         <p className="text-sm text-stone-600 dark:text-stone-300">
                           This powerful declaration demonstrates God's creative power through His spoken word, establishing His authority over creation.
@@ -136,16 +136,16 @@ export default function Home() {
                     </div>
                     
                     <p className="font-serif text-lg text-stone-800 dark:text-stone-200 mb-3">
-                      <span className="text-emerald-600 dark:text-emerald-400 font-semibold">4</span> God saw that the light was good, and he separated the light from the darkness.
+                      <span className="text-[#2c4c3b] dark:text-[#a5c2a5] font-semibold">4</span> God saw that the light was good, and he separated the light from the darkness.
                     </p>
                     <p className="font-serif text-lg text-stone-800 dark:text-stone-200">
-                      <span className="text-emerald-600 dark:text-emerald-400 font-semibold">5</span> God called the light "day," and the darkness he called "night." And there was evening, and there was morning—the first day.
+                      <span className="text-[#2c4c3b] dark:text-[#a5c2a5] font-semibold">5</span> God called the light "day," and the darkness he called "night." And there was evening, and there was morning—the first day.
                     </p>
                   </div>
                   
                   {/* Subtle Lens Switcher Animation */}
                   <div className="absolute bottom-4 right-4 flex bg-white dark:bg-gray-800 rounded-full p-1 shadow-md animate-bounce-subtle">
-                    <div className="h-7 w-7 rounded-full bg-emerald-100 dark:bg-emerald-800 text-xs flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-medium">E</div>
+                    <div className="h-7 w-7 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b] text-xs flex items-center justify-center text-[#2c4c3b] dark:text-[#a5c2a5] font-medium">E</div>
                     <div className="h-7 w-7 rounded-full bg-gray-100 dark:bg-gray-700 text-xs flex items-center justify-center text-gray-500 dark:text-gray-400 font-medium ml-1">C</div>
                     <div className="h-7 w-7 rounded-full bg-gray-100 dark:bg-gray-700 text-xs flex items-center justify-center text-gray-500 dark:text-gray-400 font-medium ml-1">J</div>
                   </div>
@@ -160,10 +160,10 @@ export default function Home() {
       <section className="py-20 px-4 md:px-0 bg-white dark:bg-background">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-16">
-            <div className="inline-block px-4 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 text-sm font-semibold mb-4">
+            <div className="inline-block px-4 py-1 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b]/60 text-[#2c4c3b] dark:text-[#a5c2a5] text-sm font-semibold mb-4">
               Powerful Features
             </div>
-            <h2 className="text-3xl font-bold mb-4 text-stone-800 dark:text-stone-100">Bible Study designed for <span className="text-emerald-600 dark:text-emerald-400">deeper understanding</span></h2>
+            <h2 className="text-3xl font-bold mb-4 text-stone-800 dark:text-stone-100">Bible Study designed for <span className="text-[#2c4c3b] dark:text-[#a5c2a5]">deeper understanding</span></h2>
             <p className="text-stone-600 dark:text-stone-300 max-w-2xl mx-auto">
               Everything you need to explore Scripture more deeply and meaningfully with features that enhance your understanding
               and bring the text to life.
@@ -277,10 +277,10 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 px-4 md:px-0 bg-emerald-50 dark:bg-emerald-950/30">
+      <section className="py-20 px-4 md:px-0 bg-[#f2f6ef] dark:bg-[#2c4c3b]/30">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-12">
-            <div className="inline-block px-4 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 text-sm font-semibold mb-4">
+            <div className="inline-block px-4 py-1 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b]/50 text-[#2c4c3b] dark:text-[#a5c2a5] text-sm font-semibold mb-4">
               Testimonials
             </div>
             <h2 className="text-3xl font-bold mb-4 text-stone-800 dark:text-stone-100">What Users Are Saying</h2>
@@ -291,24 +291,24 @@ export default function Home() {
 
           <Tabs defaultValue="pastors" className="w-full">
             <div className="flex justify-center mb-8">
-              <TabsList className="bg-emerald-100/50 dark:bg-emerald-900/30">
-                <TabsTrigger value="pastors" className="data-[state=active]:bg-emerald-200 data-[state=active]:text-emerald-700 dark:data-[state=active]:bg-emerald-800 dark:data-[state=active]:text-emerald-300">Pastors</TabsTrigger>
-                <TabsTrigger value="students" className="data-[state=active]:bg-emerald-200 data-[state=active]:text-emerald-700 dark:data-[state=active]:bg-emerald-800 dark:data-[state=active]:text-emerald-300">Students</TabsTrigger>
-                <TabsTrigger value="families" className="data-[state=active]:bg-emerald-200 data-[state=active]:text-emerald-700 dark:data-[state=active]:bg-emerald-800 dark:data-[state=active]:text-emerald-300">Families</TabsTrigger>
+              <TabsList className="bg-[#e8efe5]/50 dark:bg-[#2c4c3b]/30">
+                <TabsTrigger value="pastors" className="data-[state=active]:bg-[#d8e5d2] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#3a6349] dark:data-[state=active]:text-[#a5c2a5]">Pastors</TabsTrigger>
+                <TabsTrigger value="students" className="data-[state=active]:bg-[#d8e5d2] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#3a6349] dark:data-[state=active]:text-[#a5c2a5]">Students</TabsTrigger>
+                <TabsTrigger value="families" className="data-[state=active]:bg-[#d8e5d2] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#3a6349] dark:data-[state=active]:text-[#a5c2a5]">Families</TabsTrigger>
               </TabsList>
             </div>
             
             <TabsContent value="pastors">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                 <div className="bg-card rounded-lg p-6 shadow-md border border-border">
-                  <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900 mb-4 flex items-center justify-center">
-                    <span className="text-emerald-600 dark:text-emerald-400">❝</span>
+                  <div className="w-10 h-10 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b] mb-4 flex items-center justify-center">
+                    <span className="text-[#2c4c3b] dark:text-[#a5c2a5]">❝</span>
                   </div>
                   <p className="italic mb-4 text-foreground">
                     "Leavn has transformed my sermon preparation process. The multiple theological lenses help me consider viewpoints I might have overlooked, and the contextual information is incredibly valuable."
                   </p>
                   <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center text-emerald-700 dark:text-emerald-400 font-bold">
+                    <div className="w-10 h-10 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b] flex items-center justify-center text-[#2c4c3b] dark:text-[#a5c2a5] font-bold">
                       JM
                     </div>
                     <div className="ml-3">
@@ -319,14 +319,14 @@ export default function Home() {
                 </div>
                 
                 <div className="bg-card rounded-lg p-6 shadow-md border border-border">
-                  <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900 mb-4 flex items-center justify-center">
-                    <span className="text-emerald-600 dark:text-emerald-400">❝</span>
+                  <div className="w-10 h-10 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b] mb-4 flex items-center justify-center">
+                    <span className="text-[#2c4c3b] dark:text-[#a5c2a5]">❝</span>
                   </div>
                   <p className="italic mb-4 text-foreground">
                     "The ability to instantly access different commentaries and perspectives saves me hours of research time, and the narrative mode helps bring passages to life for my congregation."
                   </p>
                   <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center text-emerald-700 dark:text-emerald-400 font-bold">
+                    <div className="w-10 h-10 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b] flex items-center justify-center text-[#2c4c3b] dark:text-[#a5c2a5] font-bold">
                       SR
                     </div>
                     <div className="ml-3">
