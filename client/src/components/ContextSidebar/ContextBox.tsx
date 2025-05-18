@@ -7,11 +7,12 @@ import { RelatedContent } from './RelatedContent';
 interface ContextBoxProps {
   onTranslationChange?: (translation: string) => void;
   onLensChange?: (lens: string) => void;
+  onAudioOptionChange?: (voiceType: string) => void;
   currentVerseRef?: string;
   currentBookChapter?: string;
 }
 
-export function ContextBox({ onTranslationChange, onLensChange, currentVerseRef, currentBookChapter }: ContextBoxProps) {
+export function ContextBox({ onTranslationChange, onLensChange, onAudioOptionChange, currentVerseRef, currentBookChapter }: ContextBoxProps) {
   const [activeTab, setActiveTab] = useState('translations');
   const [selectedLens, setSelectedLens] = useState('protestant');
   const [selectedTranslation, setSelectedTranslation] = useState('web');
@@ -65,18 +66,20 @@ export function ContextBox({ onTranslationChange, onLensChange, currentVerseRef,
               <label className="text-xs font-medium text-stone-600 dark:text-stone-400">
                 Audio Options
               </label>
-              <Select disabled defaultValue="default">
+              <Select defaultValue="default" onValueChange={value => onAudioOptionChange?.(value)}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Audio options" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="default">Default narrator</SelectItem>
-                  <SelectItem value="male">Male voice</SelectItem>
-                  <SelectItem value="female">Female voice</SelectItem>
+                  <SelectItem value="male-us">Male voice (US)</SelectItem>
+                  <SelectItem value="female-us">Female voice (US)</SelectItem>
+                  <SelectItem value="male-uk">Male voice (UK)</SelectItem>
+                  <SelectItem value="female-uk">Female voice (UK)</SelectItem>
                 </SelectContent>
               </Select>
-              <p className="text-[0.65rem] text-stone-500 dark:text-stone-500 italic">
-                Audio features coming soon
+              <p className="text-[0.65rem] text-stone-500 dark:text-stone-500">
+                Use the audio controls below to listen to scripture
               </p>
             </div>
           </TabsContent>

@@ -84,7 +84,7 @@ class SpeechSynthesisService {
     return selectedVoice;
   }
 
-  public speak(text: string, voiceCategoryId: string = 'default', rate: number = 1, pitch: number = 1): void {
+  public speak(text: string, voiceCategoryId: string = 'default', rate: number = 1): void {
     this.stop();
     
     const selectedVoice = this.selectVoiceForCategory(voiceCategoryId);
@@ -96,7 +96,7 @@ class SpeechSynthesisService {
     }
     
     this.utterance.rate = rate; // 0.1 to 10
-    this.utterance.pitch = pitch; // 0 to 2
+    this.utterance.pitch = 1; // Default pitch
     
     // Set up boundary event for word highlighting
     this.utterance.onboundary = (event) => {

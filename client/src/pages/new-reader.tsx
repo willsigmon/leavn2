@@ -68,6 +68,8 @@ export default function NewReader() {
   const [savedNotes, setSavedNotes] = useState<Note[]>([]);
   const [warmLightValue, setWarmLightValue] = useState<number>(0); // For Kobo ComfortLight mimic
   const [narrativeMode, setNarrativeMode] = useState(false);
+  const [selectedVoice, setSelectedVoice] = useState('default'); // For read-aloud feature
+  const [isReading, setIsReading] = useState(false);
   const [typographySettings, setTypographySettings] = useState<TypographyPreferences>({
     fontFamily: 'serif',
     fontSize: 'base',

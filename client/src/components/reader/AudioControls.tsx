@@ -44,7 +44,7 @@ export function AudioControls({ text, onHighlight, onPlayStateChange, className 
   }, [onHighlight, onPlayStateChange]);
   
   const handlePlayPause = () => {
-    const isNowPlaying = speechSynthesis.togglePlayPause(text, selectedVoice, rate, isMuted ? 0 : volume/100);
+    const isNowPlaying = speechSynthesis.togglePlayPause(text, selectedVoice);
     setIsPlaying(isNowPlaying);
     setIsPaused(!isNowPlaying && speechSynthesis.isCurrentlyPaused());
     
@@ -68,7 +68,7 @@ export function AudioControls({ text, onHighlight, onPlayStateChange, className 
     // If currently playing, restart with new rate
     if (isPlaying) {
       speechSynthesis.stop();
-      speechSynthesis.speak(text, selectedVoice, value[0], isMuted ? 0 : volume/100);
+      speechSynthesis.speak(text, selectedVoice, value[0]);
     }
   };
   
@@ -91,7 +91,7 @@ export function AudioControls({ text, onHighlight, onPlayStateChange, className 
     // If currently playing, restart with new voice
     if (isPlaying) {
       speechSynthesis.stop();
-      speechSynthesis.speak(text, value, rate, isMuted ? 0 : volume/100);
+      speechSynthesis.speak(text, value, rate);
     }
   };
   
