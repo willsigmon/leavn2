@@ -1,0 +1,152 @@
+##############################################################################
+# 0.  FAST GLOBALS  — install pnpm & core tools if missing
+##############################################################################
+command -v pnpm >/dev/null 2>&1 || npm i -g pnpm
+command -v concurrently >/dev/null 2>&1 || npm i -g concurrently
+command -v eslint       >/dev/null 2>&1 || npm i -g eslint prettier
+
+##############################################################################
+# 1.  PURGE MAC-JUNK & DUPES (just in case)
+##############################################################################
+find . -name "__MACOSX" -o -name "._*" | xargs -r rm -rf
+rm -f data/sampleGenesis.json
+rm -f client/src/components/{ReaderView.tsx,ResponsiveBibleReader.tsx}
+rm -rf client/.next  client/out
+
+##############################################################################
+# 2.  ROOT WORKSPACE & SCRIPTS
+##############################################################################
+write_file package.json <<'JSON'
+{
+  "name": "leavn",
+  "private": true,
+  "packageManager": "pnpm@9",
+  "workspaces": ["client", "server"],
+  "scripts": {
+    "dev":   "concurrently -n server,client -c green,cyan \"pnpm --filter server dev\" \"pnpm --filter client dev\"",
+    "build": "pnpm -r run build",
+    "lint":  "pnpm -r run lint",
+    "guard": "node scripts/dup-check.js && pnpm -r run lint"
+  },
+  "devDependencies": {
+    "concurrently": "^8",
+    "husky": "^9",
+    "lint-staged": "^15",
+    "typescript": "^5",
+    "eslint": "^9",
+    "prettier": "^3"
+  }
+}
+JSON
+
+##############################################################################
+# 3.  DUPLICATION GUARD  — fails CI if multiple Reader* files appear
+##############################################################################
+mkdir -p scripts
+write_file scripts/dup-check.js <<'JS'
+import { readdirSync } from 'node:fs';
+import { join } from 'node:path';
+const comps = readdirSync(join('client','src','components'));
+const readers = comps.filter(f => /^Reader.*\.tsx?$/.test(f));
+if (readers.length > 1) {
+  console.error(`❌  Duplicate readers detected: ${readers.join(', ')}`);
+  process.exit(1);
+}
+console.log('✔  Dup-check passed – single Reader component in repo.');
+JS
+chmod +x scripts/dup-check.js
+
+##############################################################################
+# 4.  HUSKY + LINT-STAGED  (auto-run guards before every commit)
+##############################################################################
+npx husky install
+npx husky set .husky/pre-commit "pnpm guard && pnpm -r run build --if-present"
+write_file .lintstagedrc.json <<'JSON'
+{ "*.{ts,tsx,js,json,css,md}": ["prettier --write"] }
+JSON
+
+##############################################################################
+# 5.  SERVER  — hardened Express (unchanged if already present)
+##############################################################################
+mkdir -p server
+write_file server/.env.example <<'ENV'
+# Copy to .env and fill the blanks
+OPENAI_API_KEY=
+PORT=5000
+ENV
+# (server tsconfig / package / src/… from previous response left intact)
+
+##############################################################################
+# 6.  CLIENT  — single Reader, strict port & path alias (left intact)
+##############################################################################
+# (client package, tsconfig, vite config, Reader.tsx etc. from previous response)
+
+##############################################################################
+# 7.  DATA NORMALISER & VECTOR CLEANER
+##############################################################################
+node - <<'JS'
+import { readFileSync, writeFileSync, existsSync, rmSync } from 'node:fs';
+const p='data/bible_full.json'; if(!existsSync(p))process.exit(0);
+const j=JSON.parse(readFileSync(p,'utf8'));
+if(Array.isArray(j)){const o={};for(const v of j){o[v.book]??={name:v.book,chapters:[]};
+const c=o[v.book].chapters;while(c.length<v.chapter)c.push({verses:[]});
+c[v.chapter-1].verses[v.verse-1]={kjv:v.text.kjv,web:v.text.web};}
+writeFileSync(p,JSON.stringify(o,null,2));console.log('✔ bible_full.json normalised');}
+rmSync('data',{recursive:false,force:false});
+JS
+rm -f data/bible_chunks_*.json data/bible_embeddings_*.json
+
+##############################################################################
+# 8.  CI SKELETON  — GitHub Actions (runs guard + tests in Node 20)
+##############################################################################
+mkdir -p .github/workflows
+write_file .github/workflows/ci.yml <<'YML'
+name: CI
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with: { version: 9 }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm guard
+      - run: pnpm build
+YML
+
+##############################################################################
+# 9.  CODEOWNERS  — require review before adding new “Reader*” files
+##############################################################################
+write_file .github/CODEOWNERS <<'TXT'
+# Any new Reader component needs approval
+*Reader*.tsx @your-github-handle
+TXT
+
+##############################################################################
+# 10.  DOCS & CONTRIBUTING STUB
+##############################################################################
+write_file CONTRIBUTING.md <<'MD'
+## Contributing to **Leavn**
+
+1. **One Reader rule** – All Bible rendering logic lives in `client/src/components/Reader.tsx`.  
+   Creating another `Reader*.tsx` will fail CI (see `scripts/dup-check.js`).
+
+2. **Run `pnpm dev`** – It spins up both API (`localhost:5000`) and UI (`localhost:5173`).
+
+3. **Add env vars** – Copy `server/.env.example` to `server/.env`.
+
+4. **Pre-commit hooks** run `pnpm guard + lint`.  Fix issues before pushing.
+
+5. **Pull requests** trigger GitHub Actions; they must pass before merge.
+MD
+
+##############################################################################
+# 11.  INSTALL EVERYTHING & VERIFY IN 30s
+##############################################################################
+pnpm install --silent
+pnpm guard
+pnpm --filter server run build && node server/dist/index.js &
+S=$!; sleep 3; curl -s http://localhost:5000/bible/Genesis/1 | jq '.verses | length'; kill $S
+
+echo "🎉  Clean-up, optimisation, and guard-rails installed.  Run \`pnpm dev\`."
