@@ -1,6 +1,5 @@
-
 import React, { Suspense } from 'react';
-import { Switch, Route } from 'wouter';
+import { Switch, Route, Redirect } from 'wouter';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './lib/queryClient';
 import { ThemeProvider } from './lib/theme';
@@ -27,34 +26,60 @@ function Router() {
       <main className="flex-1">
         <Switch>
           <Route path="/" component={Home} />
-          <Route path="/reader" component={BibleReader} />
-          <Route path="/reader/:book" component={BibleReader} />
-          <Route path="/reader/:book/:chapter" component={BibleReader} />
+          {/* Bible Reader Routes - All consolidated under /reader */}
+          <Route path="/reader/:book?/:chapter?/:verse?" component={BibleReader} />
+
+          {/* Legacy routes that redirect to the main reader */}
+          <Route path="/bible/:book?/:chapter?/:verse?">
+            {(params) => {
+              const { book = 'Genesis', chapter = '1', verse } = params;
+              const path = verse ? `/reader/${book}/${chapter}/${verse}` : `/reader/${book}/${chapter}`;
+              return <Redirect to={path} />;
+            }}
+          </Route>
+          <Route path="/enhanced-reader/:book?/:chapter?">
+            {(params) => {
+              const { book = 'Genesis', chapter = '1' } = params;
+              return <Redirect to={`/reader/${book}/${chapter}`} />;
+            }}
+          </Route>
+          <Route path="/new-reader/:book?/:chapter?">
+            {(params) => {
+              const { book = 'Genesis', chapter = '1' } = params;
+              return <Redirect to={`/reader/${book}/${chapter}`} />;
+            }}
+          </Route>
+          <Route path="/universal-reader/:book?/:chapter?">
+            {(params) => {
+              const { book = 'Genesis', chapter = '1' } = params;
+              return <Redirect to={`/reader/${book}/${chapter}`} />;
+            }}
+          </Route>
           <Route path="/reading-plans" component={ReadingPlans} />
           <Route path="/reading-plan/:id" component={ReadingPlanDetail} />
           <Route path="/login" component={Login} />
           <Route path="/profile" component={Profile} />
           <Route path="/settings" component={Settings} />
-          
+
           {/* Lazily loaded pages */}
           <Route path="/resources/bible-translations">
             <Suspense fallback={<div className="p-12 text-center">Loading...</div>}>
               <BibleTranslationsPage />
             </Suspense>
           </Route>
-          
+
           <Route path="/legal/privacy-policy">
             <Suspense fallback={<div className="p-12 text-center">Loading...</div>}>
               <PrivacyPolicyPage />
             </Suspense>
           </Route>
-          
+
           <Route path="/legal/terms-of-service">
             <Suspense fallback={<div className="p-12 text-center">Loading...</div>}>
               <TermsOfServicePage />
             </Suspense>
           </Route>
-          
+
           {/* Fallback to 404 */}
           <Route component={NotFound} />
         </Switch>

@@ -422,3 +422,170 @@ export function ContextSidebar({ book, chapter, verse, viewMode }: ContextSideba
     </div>
   );
 }
+import React from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { Skeleton } from '@/components/ui/skeleton';
+import { BookOpen, MapPin, ScrollText, Tag, Users } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
+interface ContextSidebarProps {
+  book: string;
+  chapter: number;
+  verse: number;
+  viewMode: string;
+}
+
+export function ContextSidebar({ book, chapter, verse, viewMode }: ContextSidebarProps) {
+  // Fetch verse-specific contextual data
+  const { data: commentaryData, isLoading: isLoadingCommentary } = useQuery({
+    queryKey: [`/api/ai/commentary/${book}/${chapter}/${verse}`, viewMode],
+    enabled: !!verse,
+  });
+  
+  // Fetch geographical info if available
+  const { data: geoData, isLoading: isLoadingGeo } = useQuery({
+    queryKey: [`/api/bible/geography/${book}/${chapter}/${verse}`],
+    enabled: !!verse,
+  });
+  
+  // Fetch cultural/historical context
+  const { data: historyData, isLoading: isLoadingHistory } = useQuery({
+    queryKey: [`/api/bible/history/${book}/${chapter}/${verse}`],
+    enabled: !!verse,
+  });
+  
+  // Fetch verse tags
+  const { data: tagsData, isLoading: isLoadingTags } = useQuery({
+    queryKey: [`/api/tags/${book}/${chapter}/${verse}`],
+    enabled: !!verse,
+  });
+  
+  // Fetch related verses
+  const { data: relatedData, isLoading: isLoadingRelated } = useQuery({
+    queryKey: [`/api/bible/related/${book}/${chapter}/${verse}`],
+    enabled: !!verse,
+  });
+  
+  // Loading state
+  if (isLoadingCommentary || isLoadingGeo || isLoadingHistory || isLoadingTags || isLoadingRelated) {
+    return (
+      <div className="space-y-4 p-4">
+        <Skeleton className="h-8 w-3/4 mb-6" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-3/4" />
+        <Skeleton className="h-20 w-full mt-6" />
+      </div>
+    );
+  }
+  
+  return (
+    <Tabs defaultValue="commentary" className="w-full">
+      <TabsList className="w-full mb-4">
+        <TabsTrigger value="commentary" className="flex-1">
+          <ScrollText className="w-4 h-4 mr-2" />
+          <span className="hidden sm:inline">Commentary</span>
+        </TabsTrigger>
+        <TabsTrigger value="geography" className="flex-1">
+          <MapPin className="w-4 h-4 mr-2" />
+          <span className="hidden sm:inline">Places</span>
+        </TabsTrigger>
+        <TabsTrigger value="cultural" className="flex-1">
+          <Users className="w-4 h-4 mr-2" />
+          <span className="hidden sm:inline">Cultural</span>
+        </TabsTrigger>
+        <TabsTrigger value="themes" className="flex-1">
+          <Tag className="w-4 h-4 mr-2" />
+          <span className="hidden sm:inline">Themes</span>
+        </TabsTrigger>
+      </TabsList>
+      
+      <TabsContent value="commentary" className="space-y-4">
+        <h3 className="text-lg font-semibold">
+          {book} {chapter}:{verse}
+        </h3>
+        <div className="prose dark:prose-invert prose-stone max-w-none text-sm">
+          {commentaryData ? (
+            <div dangerouslySetInnerHTML={{ __html: commentaryData.content }} />
+          ) : (
+            <p className="text-stone-600 dark:text-stone-400 italic">
+              Commentary for {book} {chapter}:{verse} through {viewMode} lens.
+            </p>
+          )}
+        </div>
+      </TabsContent>
+      
+      <TabsContent value="geography" className="space-y-4">
+        <h3 className="text-lg font-semibold">Geography & Places</h3>
+        {geoData ? (
+          <div className="prose dark:prose-invert prose-stone max-w-none text-sm">
+            <div dangerouslySetInnerHTML={{ __html: geoData.content }} />
+            {geoData.mapCoordinates && (
+              <div className="mt-4 bg-stone-100 dark:bg-stone-800 rounded-md p-4 h-48 flex items-center justify-center">
+                <p className="text-center text-stone-500 dark:text-stone-400">
+                  Map visualization would appear here
+                </p>
+              </div>
+            )}
+          </div>
+        ) : (
+          <p className="text-stone-600 dark:text-stone-400 italic">
+            No geographical information available for this verse.
+          </p>
+        )}
+      </TabsContent>
+      
+      <TabsContent value="cultural" className="space-y-4">
+        <h3 className="text-lg font-semibold">Cultural & Historical Context</h3>
+        {historyData ? (
+          <div className="prose dark:prose-invert prose-stone max-w-none text-sm">
+            <div dangerouslySetInnerHTML={{ __html: historyData.content }} />
+          </div>
+        ) : (
+          <p className="text-stone-600 dark:text-stone-400 italic">
+            No cultural or historical context available for this verse.
+          </p>
+        )}
+      </TabsContent>
+      
+      <TabsContent value="themes" className="space-y-4">
+        <h3 className="text-lg font-semibold">Theological Themes</h3>
+        {tagsData && tagsData.length > 0 ? (
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-2">
+              {tagsData.map(tag => (
+                <span key={tag.id} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-stone-100 text-stone-800 dark:bg-stone-800 dark:text-stone-200">
+                  {tag.name}
+                </span>
+              ))}
+            </div>
+            
+            <div className="bg-stone-100 dark:bg-stone-800 rounded-md p-4">
+              <h4 className="font-medium text-sm mb-2">Related Verses</h4>
+              {relatedData && relatedData.length > 0 ? (
+                <ul className="space-y-2 text-sm">
+                  {relatedData.map(ref => (
+                    <li key={ref.id} className="flex items-start gap-2">
+                      <div className="flex-shrink-0 text-xs font-medium bg-stone-200 dark:bg-stone-700 px-1.5 py-0.5 rounded mt-0.5">
+                        {ref.book} {ref.chapter}:{ref.verse}
+                      </div>
+                      <p className="text-stone-700 dark:text-stone-300">{ref.text}</p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-stone-600 dark:text-stone-400 italic text-sm">
+                  No related verses found.
+                </p>
+              )}
+            </div>
+          </div>
+        ) : (
+          <p className="text-stone-600 dark:text-stone-400 italic">
+            No themes identified for this verse.
+          </p>
+        )}
+      </TabsContent>
+    </Tabs>
+  );
+}

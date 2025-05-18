@@ -198,40 +198,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       try {
-        // Get verses from storage
-        let verses = await storage.getVerses(book, chapterNum);
+        // Get chapter data using bible-cache.ts which provides full chapter data
+        const chapterData = await getChapter(book, chapterNum);
         
-        // If no verses found, provide sample data for testing
-        if (!verses || verses.length === 0) {
-          // Generate sample verses for Genesis chapter 1
-          if (book.toLowerCase() === 'genesis' && chapterNum === 1) {
-            verses = [];
-            const genesisText = [
-              "In the beginning God created the heavens and the earth.",
-              "Now the earth was formless and empty, darkness was over the surface of the deep, and the Spirit of God was hovering over the waters.",
-              "And God said, \"Let there be light,\" and there was light.",
-              "God saw that the light was good, and he separated the light from the darkness.",
-              "God called the light \"day,\" and the darkness he called \"night.\" And there was evening, and there was morning—the first day.",
-              "And God said, \"Let there be a vault between the waters to separate water from water.\"",
-              "So God made the vault and separated the water under the vault from the water above it. And it was so.",
-              "God called the vault \"sky.\" And there was evening, and there was morning—the second day.",
-              "And God said, \"Let the water under the sky be gathered to one place, and let dry ground appear.\" And it was so.",
-              "God called the dry ground \"land,\" and the gathered waters he called \"seas.\" And God saw that it was good."
-            ];
-            
-            for (let i = 0; i < genesisText.length; i++) {
-              verses.push({
-                id: `genesis-1-${i+1}`,
-                book: "Genesis",
-                chapter: 1,
-                verseNumber: i + 1,
-                kjv: genesisText[i],
-                web: genesisText[i],
-                textKjv: genesisText[i],
-                textWeb: genesisText[i]
-              });
-            }
-          }
+        if (!chapterData) {
+          return res.status(404).json({ message: "Chapter not found" });
         }
         
         // Get notes and highlights if user is authenticated
@@ -244,28 +215,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         } catch (err) {
           console.log("User not authenticated for notes/highlights");
         }
-        
-        // Determine correct total chapters for each book
-        let totalChapters = 31; // Default
-        const bibleBooks = {
-          "genesis": 50, "exodus": 40, "leviticus": 27, "numbers": 36, "deuteronomy": 34,
-          "joshua": 24, "judges": 21, "ruth": 4, "1 samuel": 31, "2 samuel": 24,
-          "1 kings": 22, "2 kings": 25, "1 chronicles": 29, "2 chronicles": 36,
-          "ezra": 10, "nehemiah": 13, "esther": 10, "job": 42, "psalms": 150,
-          "proverbs": 31, "ecclesiastes": 12, "song of solomon": 8, "isaiah": 66,
-          "jeremiah": 52, "lamentations": 5, "ezekiel": 48, "daniel": 12,
-          "hosea": 14, "joel": 3, "amos": 9, "obadiah": 1, "jonah": 4,
-          "micah": 7, "nahum": 3, "habakkuk": 3, "zephaniah": 3, "haggai": 2,
-          "zechariah": 14, "malachi": 4, "matthew": 28, "mark": 16,
-          "luke": 24, "john": 21, "acts": 28, "romans": 16, "1 corinthians": 16,
-          "2 corinthians": 13, "galatians": 6, "ephesians": 6, "philippians": 4,
-          "colossians": 4, "1 thessalonians": 5, "2 thessalonians": 3, "1 timothy": 6,
-          "2 timothy": 4, "titus": 3, "philemon": 1, "hebrews": 13, "james": 5,
-          "1 peter": 5, "2 peter": 3, "1 john": 5, "2 john": 1, "3 john": 1,
-          "jude": 1, "revelation": 22
-        };
-        
-        totalChapters = bibleBooks[book.toLowerCase()] || 31;
         
         // Sample theme data for Genesis 1 for testing the theme coloring feature
         const sampleThemes = {
@@ -303,9 +252,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         };
         
         // Enhance verses with highlight info and format for the frontend
-        const enhancedVerses = verses.map(verse => {
-          const note = notes.find(n => n.verse === verse.verseNumber);
-          const verseNum = verse.verseNumber;
+        const enhancedVerses = chapterData.verses.map(verse => {
+          const note = notes.find(n => n.verse === verse.verse);
+          const verseNum = verse.verse;
           
           // Include theme data for testing the theme coloring feature
           // In production, this would come from the database
@@ -314,10 +263,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
             : [];
           
           return {
-            verse: verse.verseNumber,
-            text: verse.textKjv || verse.kjv || "Verse text unavailable",
-            kjv: verse.textKjv || verse.kjv || "Verse text unavailable",
-            web: verse.textWeb || verse.web || "Verse text unavailable",
+            verse: verse.verse,
+            text: verse.text.web || "Verse text unavailable",
+            kjv: verse.text.kjv || "Verse text unavailable",
+            web: verse.text.web || "Verse text unavailable",
             highlightColor: note?.highlightColor || null,
             hasNote: !!note?.content,
             isBookmarked: false, // To be implemented with real bookmark data
@@ -325,19 +274,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           };
         });
         
-        // Create a formatted book name with proper capitalization
-        const formatBookName = (name) => {
-          return name.split(' ')
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-            .join(' ');
-        };
-        
         return res.json({
-          book,
-          bookName: formatBookName(book),
-          chapter: chapterNum,
-          totalChapters: totalChapters,
-          translation: "KJV",
+          book: chapterData.book,
+          bookName: chapterData.bookName,
+          chapter: chapterData.chapter,
+          totalChapters: chapterData.totalChapters,
+          translation: "web",
           verses: enhancedVerses
         });
       } catch (verseError) {
