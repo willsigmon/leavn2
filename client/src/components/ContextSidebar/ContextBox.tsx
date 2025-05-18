@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LensButtons } from './LensButtons';
+import { RelatedContent } from './RelatedContent';
 
 interface ContextBoxProps {
   onTranslationChange?: (translation: string) => void;
   onLensChange?: (lens: string) => void;
+  currentVerseRef?: string;
+  currentBookChapter?: string;
 }
 
-export function ContextBox({ onTranslationChange, onLensChange }: ContextBoxProps) {
+export function ContextBox({ onTranslationChange, onLensChange, currentVerseRef, currentBookChapter }: ContextBoxProps) {
   const [activeTab, setActiveTab] = useState('translations');
   const [selectedLens, setSelectedLens] = useState('protestant');
   const [selectedTranslation, setSelectedTranslation] = useState('web');
@@ -88,6 +91,16 @@ export function ContextBox({ onTranslationChange, onLensChange }: ContextBoxProp
           </TabsContent>
         </Tabs>
       </div>
+      
+      {/* Add the related content section below the tabs */}
+      {(currentVerseRef || currentBookChapter) && (
+        <div className="mt-6 border-t border-stone-200 dark:border-stone-700 pt-4">
+          <RelatedContent 
+            verseReference={currentVerseRef} 
+            bookChapter={currentBookChapter} 
+          />
+        </div>
+      )}
     </div>
   );
 }
