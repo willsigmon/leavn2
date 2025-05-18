@@ -100,17 +100,46 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
   // Create a safe version of the verse data for rendering
   const getFormattedVerses = (): Verse[] => {
     if (!chapterData?.verses || chapterData.verses.length === 0) {
+      console.log('No verses found in chapter data');
       return [];
     }
     
     return chapterData.verses.map(verse => {
-      // Ensure we have the right properties
+      // Extract verse number
+      const verseNumber = verse.verse || verse.number;
+      
+      // Extract translations
+      let textKjv = '';
+      let textWeb = '';
+      
+      if (verse.textKjv) {
+        textKjv = verse.textKjv;
+      } else if (verse.text) {
+        textKjv = verse.text;
+      } else {
+        textKjv = `KJV text for Genesis ${chapter}:${verseNumber}`;
+      }
+      
+      if (verse.textWeb) {
+        textWeb = verse.textWeb;
+      } else if (verse.text) {
+        textWeb = verse.text;
+      } else {
+        textWeb = `WEB text for Genesis ${chapter}:${verseNumber}`;
+      }
+      
+      console.log(`Formatted verse ${verseNumber}:`, {
+        kjv: textKjv.substring(0, 30) + '...',
+        web: textWeb.substring(0, 30) + '...'
+      });
+      
+      // Return a properly formatted verse object
       return {
-        verse: verse.verse || verse.number,
-        number: verse.number || verse.verse,
-        text: verse.text || (verse.textWeb || verse.textKjv || `Genesis ${chapter}:${verse.verse || verse.number}`),
-        textKjv: verse.textKjv || (typeof verse.text === 'object' ? verse.text.kjv : undefined) || `KJV text for Genesis ${chapter}:${verse.verse || verse.number}`,
-        textWeb: verse.textWeb || (typeof verse.text === 'object' ? verse.text.web : undefined) || `WEB text for Genesis ${chapter}:${verse.verse || verse.number}`,
+        verse: verseNumber,
+        number: verseNumber,
+        text: textWeb, // Default to WEB for the main text
+        textKjv: textKjv,
+        textWeb: textWeb,
         isBookmarked: verse.isBookmarked || false,
         hasNote: verse.hasNote || false,
         tags: verse.tags || {}

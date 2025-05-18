@@ -75,16 +75,30 @@ router.get('/:chapter', async (req: Request, res: Response) => {
         let kjvText = '';
         let webText = '';
         
+        // Check if there's a text field at all
         if (verse.text) {
-          if (typeof verse.text === 'object') {
+          try {
             // Handle format where text is an object with translations
-            kjvText = verse.text.kjv || '';
-            webText = verse.text.web || '';
-          } else if (typeof verse.text === 'string') {
-            // If just a string, use it for both translations
-            kjvText = verse.text;
-            webText = verse.text;
+            if (typeof verse.text === 'object') {
+              kjvText = verse.text.kjv || '';
+              webText = verse.text.web || '';
+              
+              // Debug info
+              console.log(`Found verse ${verseNumber} text:`, {
+                kjv: kjvText.substring(0, 30),
+                web: webText.substring(0, 30)
+              });
+            } else if (typeof verse.text === 'string') {
+              // If just a string, use it for both translations
+              kjvText = verse.text;
+              webText = verse.text;
+            }
+          } catch (err) {
+            console.error(`Error extracting text for verse ${verseNumber}:`, err);
           }
+        } else {
+          // If we have no text field, let's check for raw data format
+          console.log(`Raw verse ${verseNumber} data:`, JSON.stringify(verse));
         }
         
         console.log(`Processing verse ${verseNumber}:`, { 
