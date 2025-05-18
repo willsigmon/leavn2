@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'wouter';
 import { 
   Accordion, 
@@ -9,7 +9,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { bibleStructure, BibleSection, BibleBook } from '@/lib/bibleStructure';
-import { ChevronRight, BookOpen, ScrollText, Book } from 'lucide-react';
+import { ChevronRight, BookOpen, ScrollText, Book, BookText } from 'lucide-react';
 
 interface TableOfContentsProps {
   onClose?: () => void;
@@ -26,14 +26,27 @@ export function TableOfContents({
   const { book: currentBook, chapter: currentChapter } = useParams<{ book?: string; chapter?: string }>();
   
   // State for tracking expanded sections
-  const [expandedSections, setExpandedSections] = useState<string[]>([
-    currentBook ? getTestamentForBook(currentBook) : 'old-testament'
-  ]);
+  const [expandedSections, setExpandedSections] = useState<string[]>([]);
+  
+  // Auto-expand the testament section that contains the current book
+  useEffect(() => {
+    if (currentBook) {
+      const testament = getTestamentForBook(currentBook);
+      if (!expandedSections.includes(testament)) {
+        setExpandedSections(prev => [...prev, testament]);
+      }
+    } else {
+      // Default to showing Old Testament when no book is selected
+      if (!expandedSections.includes('old-testament')) {
+        setExpandedSections(prev => [...prev, 'old-testament']);
+      }
+    }
+  }, [currentBook, expandedSections]);
   
   // Function to determine which testament a book belongs to
   function getTestamentForBook(bookId: string): string {
     const book = bibleStructure.books[bookId.toLowerCase()];
-    return book?.testament === 'new' ? 'new-testament' : 'old-testament';
+    return book?.testament === 'nt' ? 'new-testament' : 'old-testament';
   }
 
   // Handle book click
@@ -60,7 +73,7 @@ export function TableOfContents({
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between mb-4 p-4 pb-2 border-b border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900">
         <h2 className="text-xl font-semibold flex items-center text-stone-800 dark:text-stone-100">
-          <BookOpen className="mr-2 h-5 w-5 text-amber-700 dark:text-amber-500" />
+          <BookOpen className="mr-2 h-5 w-5 text-[#2c4c3b] dark:text-[#3a6349]" />
           Table of Contents
         </h2>
         {onClose && (
@@ -83,13 +96,13 @@ export function TableOfContents({
               value={section.id}
               className="border-b border-stone-200 dark:border-stone-700"
             >
-              <AccordionTrigger className="hover:no-underline py-2">
+              <AccordionTrigger className="hover:no-underline py-2 text-[#2c4c3b] dark:text-[#3a6349]">
                 <div className="flex items-center text-left font-medium">
-                  <Book className="h-4 w-4 mr-2 text-stone-600 dark:text-stone-400" />
-                  <span className="text-stone-800 dark:text-stone-200">{section.name}</span>
+                  <BookText className="h-5 w-5 mr-2" />
+                  <span className="text-lg">{section.name}</span>
                   {section.description && (
                     <span className="ml-2 text-xs text-stone-500 dark:text-stone-400 hidden md:inline">
-                      ({section.books.length} books)
+                      ({section.description})
                     </span>
                   )}
                 </div>
@@ -124,7 +137,7 @@ export function TableOfContents({
                               onClick={() => handleChapterClick(book.id, chapter)}
                               className={`text-center py-1 px-1.5 text-sm rounded-md transition-colors ${
                                 currentChapter === chapter.toString()
-                                  ? 'bg-amber-700 text-amber-50 font-medium dark:bg-amber-800 dark:text-amber-50'
+                                  ? 'bg-[#2c4c3b] text-white font-medium dark:bg-[#3a6349] dark:text-white'
                                   : 'hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300'
                               }`}
                             >
