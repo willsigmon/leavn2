@@ -21,28 +21,28 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero section */}
-      <section className="py-20 px-4 md:px-0 bg-gradient-to-b from-emerald-50 to-teal-50 dark:from-emerald-950 dark:to-teal-950 relative overflow-hidden">
+      <section className="py-20 px-4 md:px-0 bg-gradient-to-b from-[#f0f4ed] to-[#e8efe8] dark:from-[#1a3328] dark:to-[#1f3c37] relative overflow-hidden">
         {/* Decorative elements with animations */}
-        <div className="absolute top-12 left-12 w-24 h-24 bg-teal-200 dark:bg-teal-900 rounded-lg opacity-20 rotate-12 animate-float"></div>
-        <div className="absolute bottom-20 right-20 w-32 h-32 bg-emerald-200 dark:bg-emerald-900 rounded-full opacity-30 animate-float animation-delay-2000"></div>
-        <div className="absolute top-1/4 right-10 w-16 h-16 bg-teal-100 dark:bg-teal-800 rounded-lg opacity-20 -rotate-12 animate-float animation-delay-1000"></div>
-        <div className="absolute bottom-32 left-20 w-20 h-20 bg-emerald-100 dark:bg-emerald-800 rounded-full opacity-30 animate-pulse animation-delay-3000"></div>
+        <div className="absolute top-12 left-12 w-24 h-24 bg-[#c5d5bc] dark:bg-[#2c4c3b] rounded-lg opacity-20 rotate-12 animate-float"></div>
+        <div className="absolute bottom-20 right-20 w-32 h-32 bg-[#d8e5d2] dark:bg-[#345841] rounded-full opacity-30 animate-float animation-delay-2000"></div>
+        <div className="absolute top-1/4 right-10 w-16 h-16 bg-[#e8efe5] dark:bg-[#3b5045] rounded-lg opacity-20 -rotate-12 animate-float animation-delay-1000"></div>
+        <div className="absolute bottom-32 left-20 w-20 h-20 bg-[#e8efe5] dark:bg-[#2c4c3b] rounded-full opacity-30 animate-pulse animation-delay-3000"></div>
         
         {/* Additional circles with different sizes, shapes and animations */}
-        <div className="absolute top-40 left-1/4 w-14 h-14 bg-teal-100 dark:bg-teal-900 rounded-full opacity-15 animate-float animation-delay-2500"></div>
-        <div className="absolute bottom-16 left-1/3 w-10 h-10 bg-emerald-300 dark:bg-emerald-700 rounded-full opacity-20 animate-pulse animation-delay-500"></div>
-        <div className="absolute top-1/3 right-1/4 w-16 h-16 bg-teal-200 dark:bg-teal-800 rounded-full opacity-25 animate-float animation-delay-3500"></div>
-        <div className="absolute bottom-40 right-1/3 w-12 h-12 bg-emerald-100 dark:bg-emerald-900 rounded-full opacity-20 animate-pulse animation-delay-1500"></div>
-        <div className="absolute top-16 right-1/2 w-8 h-8 bg-emerald-200 dark:bg-emerald-800 rounded-full opacity-15 animate-float animation-delay-4000"></div>
+        <div className="absolute top-40 left-1/4 w-14 h-14 bg-[#e8efe5] dark:bg-[#2c4c3b] rounded-full opacity-15 animate-float animation-delay-2500"></div>
+        <div className="absolute bottom-16 left-1/3 w-10 h-10 bg-[#a5c2a5] dark:bg-[#345841] rounded-full opacity-20 animate-pulse animation-delay-500"></div>
+        <div className="absolute top-1/3 right-1/4 w-16 h-16 bg-[#d8e5d2] dark:bg-[#3b5045] rounded-full opacity-25 animate-float animation-delay-3500"></div>
+        <div className="absolute bottom-40 right-1/3 w-12 h-12 bg-[#e8efe5] dark:bg-[#2c4c3b] rounded-full opacity-20 animate-pulse animation-delay-1500"></div>
+        <div className="absolute top-16 right-1/2 w-8 h-8 bg-[#d8e5d2] dark:bg-[#345841] rounded-full opacity-15 animate-float animation-delay-4000"></div>
         
         <div className="container mx-auto max-w-5xl relative z-10">
           <div className="flex flex-col lg:flex-row gap-8 md:gap-12 items-center">
             <div className="w-full lg:w-1/2 space-y-4 md:space-y-6">
-              <div className="inline-block px-4 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 text-sm font-semibold mb-2 md:mb-4">
+              <div className="inline-block px-4 py-1 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b]/60 text-[#2c4c3b] dark:text-[#a5c2a5] text-sm font-semibold mb-2 md:mb-4">
                 Spiritually Intelligent Bible Study
               </div>
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-stone-800 dark:text-stone-100">
-                Bible Study made <span className="bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-500 dark:to-teal-400 bg-clip-text text-transparent">simple.</span>
+                Bible Study made <span className="bg-gradient-to-r from-[#2c4c3b] to-[#3a6349] dark:from-[#3a6349] dark:to-[#4d7a5e] bg-clip-text text-transparent">simple.</span>
               </h1>
               <p className="text-lg md:text-xl text-stone-600 dark:text-stone-300">
                 Engage with Scripture through multiple theological lenses, immersive narratives, 
@@ -60,7 +60,7 @@ export default function Home() {
                     Get Started
                   </Button>
                 )}
-                <Button size="lg" variant="outline" onClick={() => navigate('/reading-plans')} className="w-full sm:w-auto border-emerald-300 dark:border-emerald-700 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded-lg">
+                <Button size="lg" variant="outline" onClick={() => navigate('/reading-plans')} className="w-full sm:w-auto border-[#a5c2a5] dark:border-[#3a6349] text-[#2c4c3b] dark:text-[#a5c2a5] hover:bg-[#f0f4ed] dark:hover:bg-[#2c4c3b]/30 rounded-lg">
                   <Calendar className="mr-2 h-5 w-5" />
                   View Reading Plans
                 </Button>
@@ -69,28 +69,28 @@ export default function Home() {
               {/* Feature badges */}
               <div className="flex flex-wrap gap-3 md:gap-4 pt-6 justify-center sm:justify-start">
                 <div className="flex items-center text-sm text-stone-600 dark:text-stone-300">
-                  <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-emerald-100 dark:bg-emerald-900/60 flex items-center justify-center mr-2">
-                    <span className="text-emerald-700 dark:text-emerald-400 text-xs">✓</span>
+                  <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b]/60 flex items-center justify-center mr-2">
+                    <span className="text-[#2c4c3b] dark:text-[#a5c2a5] text-xs">✓</span>
                   </div>
                   <span className="whitespace-nowrap">Free to use</span>
                 </div>
                 <div className="flex items-center text-sm text-stone-600 dark:text-stone-300">
-                  <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-emerald-100 dark:bg-emerald-900/60 flex items-center justify-center mr-2">
-                    <span className="text-emerald-700 dark:text-emerald-400 text-xs">✓</span>
+                  <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b]/60 flex items-center justify-center mr-2">
+                    <span className="text-[#2c4c3b] dark:text-[#a5c2a5] text-xs">✓</span>
                   </div>
                   <span className="whitespace-nowrap">Multiple translations</span>
                 </div>
                 <div className="flex items-center text-sm text-stone-600 dark:text-stone-300">
-                  <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-emerald-100 dark:bg-emerald-900/60 flex items-center justify-center mr-2">
-                    <span className="text-emerald-700 dark:text-emerald-400 text-xs">✓</span>
+                  <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b]/60 flex items-center justify-center mr-2">
+                    <span className="text-[#2c4c3b] dark:text-[#a5c2a5] text-xs">✓</span>
                   </div>
                   <span className="whitespace-nowrap">AI-powered insights</span>
                 </div>
               </div>
             </div>
             <div className="w-full mt-8 lg:mt-0 lg:w-1/2 relative">
-              <div className="hidden md:block absolute inset-0 -left-6 -top-6 bg-emerald-50 dark:bg-emerald-900/30 rounded-xl"></div>
-              <div className="hidden md:block absolute inset-0 -right-6 -bottom-6 bg-emerald-100 dark:bg-emerald-800/30 rounded-xl"></div>
+              <div className="hidden md:block absolute inset-0 -left-6 -top-6 bg-[#f0f4ed] dark:bg-[#2c4c3b]/30 rounded-xl"></div>
+              <div className="hidden md:block absolute inset-0 -right-6 -bottom-6 bg-[#e8efe5] dark:bg-[#345841]/30 rounded-xl"></div>
               
               {/* Bible Reader Preview Card */}
               <div className="relative rounded-xl overflow-hidden shadow-xl border-2 md:border-4 border-white dark:border-gray-800 bg-white dark:bg-gray-900 h-80 lg:h-96">
