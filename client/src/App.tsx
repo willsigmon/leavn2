@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
-import Reader from "@/pages/new-reader";
+import Reader from "@/pages/reader";
 import ReadingPlans from "@/pages/reading-plans";
 import ReadingPlanDetail from "@/pages/reading-plan-detail";
 import Login from "@/pages/login";
