@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import BibleReader from "@/pages/bible-reader";
+import UniversalBibleReader from "@/pages/universal-bible-reader";
 import ReadingPlans from "@/pages/reading-plans";
 import ReadingPlanDetail from "@/pages/reading-plan-detail";
 import Login from "@/pages/login";

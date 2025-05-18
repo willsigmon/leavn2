@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useReaderStore } from '@/lib/readerStore';
 import { cn } from '@/lib/utils';
 import { ReaderCanvas } from './ReaderCanvas';
-import { TypographyControls } from './TypographyControls';
+import { TypographyControls } from './FixedTypographyControls';
 import { 
   Bookmark, 
   Highlighter, 
@@ -29,7 +29,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Verse } from '@/shared/schema';
+// Define Verse type locally to avoid import issues
+interface VerseType {
+  id: string;
+  verseNumber: number;
+  text: string;
+}
 
 interface UniversalReaderProps {
   book: string;
