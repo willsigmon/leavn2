@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import { useReaderStore } from '@/lib/readerStore';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '../lib/auth';
 import { UniversalReader } from '@/components/reader/UniversalReader';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
@@ -118,7 +118,7 @@ export default function UniversalBibleReader() {
   };
   
   // If not authenticated, prompt login
-  if (!isAuthenticated) {
+  if (!user) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-4 text-center">
         <h2 className="text-2xl font-medium text-stone-800 dark:text-stone-200 mb-4">
@@ -168,11 +168,11 @@ export default function UniversalBibleReader() {
   }
   
   // Format data for the Universal Reader
-  const verses = data.verses.map((verse: any) => ({
+  const verses = data && data.verses ? data.verses.map((verse: any) => ({
     id: `${book}-${chapter}-${verse.verseNumber}`,
     verseNumber: verse.verseNumber,
-    text: verse.text.web,
-  }));
+    text: verse.text ? verse.text.web : verse.textWeb,
+  })) : [];
   
   return (
     <div className={`min-h-screen max-h-screen flex flex-col ${theme === 'dark' ? 'dark' : ''}`}>

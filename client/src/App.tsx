@@ -32,6 +32,8 @@ function Router() {
           <Route path="/" component={Home} />
           <Route path="/reader/:book/:chapter" component={BibleReader} />
           <Route path="/reader" component={BibleReader} />
+          <Route path="/universal-reader/:book/:chapter" component={UniversalBibleReader} />
+          <Route path="/universal-reader" component={UniversalBibleReader} />
           <Route path="/reading-plans" component={ReadingPlans} />
           <Route path="/reading-plan/:id" component={ReadingPlanDetail} />
           <Route path="/login" component={Login} />

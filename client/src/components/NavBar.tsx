@@ -71,6 +71,12 @@ export function NavBar() {
                 Bible Reader
               </div>
               <div 
+                onClick={() => navigate('/universal-reader')}
+                className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer text-sm font-medium"
+              >
+                Universal Reader
+              </div>
+              <div 
                 onClick={() => navigate('/reading-plans')}
                 className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer text-sm font-medium"
               >
