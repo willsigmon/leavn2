@@ -1,12 +1,23 @@
-import { readFileSync, writeFileSync, existsSync, rmSync } from 'node:fs';
+#!/usr/bin/env node
+
+import { readFileSync, writeFileSync, existsSync, readdirSync, statSync, rmSync } from 'node:fs';
+import { join } from 'node:path';
 
 /**
  * Normalizes Bible data into a consistent format
  * - Takes raw verse data and structures it by book and chapter
  * - Cleans up any redundant vector data
  */
-function normalizeBibleData() {
-  const path = 'data/bible_full.json';
+async function normalizeBibleData() {
+  const dataDir = join(process.cwd(), 'data');
+  const path = join(dataDir, 'bible_full.json');
+  
+  if (!existsSync(dataDir)) {
+    console.log('📂 Creating data directory');
+    const fs = await import('node:fs/promises');
+    await fs.mkdir(dataDir, { recursive: true });
+  }
+  
   if (!existsSync(path)) {
     console.log('❌ No bible_full.json found to normalize');
     return;
@@ -24,6 +35,11 @@ function normalizeBibleData() {
   const normalizedData = {};
   
   for (const verse of rawData) {
+    if (!verse.book || !verse.chapter || !verse.verse || !verse.text) {
+      console.log(`⚠️ Skipping invalid verse entry: ${JSON.stringify(verse)}`);
+      continue;
+    }
+    
     // Initialize book entry if not exists
     if (!normalizedData[verse.book]) {
       normalizedData[verse.book] = {
@@ -51,9 +67,18 @@ function normalizeBibleData() {
     
     // Store verse text
     chapter.verses[verseIndex] = {
-      kjv: verse.text.kjv,
-      web: verse.text.web
+      kjv: verse.text.kjv || "",
+      web: verse.text.web || ""
     };
+    
+    // Copy any additional metadata if present
+    if (verse.metadata) {
+      chapter.verses[verseIndex].metadata = verse.metadata;
+    }
+    
+    if (verse.tags) {
+      chapter.verses[verseIndex].tags = verse.tags;
+    }
   }
   
   // Write normalized data back to file
@@ -61,18 +86,28 @@ function normalizeBibleData() {
   console.log('✅ Normalized bible_full.json');
   
   // Clean up any vector data (which can be regenerated)
-  ['data/bible_chunks_kjv.json', 'data/bible_chunks_web.json', 
-   'data/bible_embeddings_kjv.json', 'data/bible_embeddings_web.json'].forEach(file => {
-    if (existsSync(file)) {
-      rmSync(file);
+  const vectorFiles = [
+    'bible_chunks_kjv.json', 
+    'bible_chunks_web.json', 
+    'bible_embeddings_kjv.json', 
+    'bible_embeddings_web.json'
+  ];
+  
+  vectorFiles.forEach(file => {
+    const filePath = join(dataDir, file);
+    if (existsSync(filePath)) {
+      rmSync(filePath);
       console.log(`✅ Removed ${file} (will be regenerated when needed)`);
     }
   });
 }
 
 // Execute if run directly
-if (process.argv[1] === new URL(import.meta.url).pathname) {
-  normalizeBibleData();
+if (process.argv[1] === import.meta.url.substring(7)) {
+  normalizeBibleData().catch(error => {
+    console.error('Error normalizing Bible data:', error);
+    process.exit(1);
+  });
 }
 
 export default normalizeBibleData;
