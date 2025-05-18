@@ -8,6 +8,7 @@ import Home from "@/pages/home";
 import BibleReader from "@/pages/bible-reader";
 import UniversalBibleReader from "@/pages/universal-bible-reader";
 import EnhancedBibleReader from "@/pages/enhanced-bible-reader";
+import NewBibleReader from "@/pages/BibleReader";
 import ReadingPlans from "@/pages/reading-plans";
 import ReadingPlanDetail from "@/pages/reading-plan-detail";
 import Login from "@/pages/login";
@@ -37,6 +38,8 @@ function Router() {
           <Route path="/universal-reader" component={UniversalBibleReader} />
           <Route path="/enhanced-reader/:book/:chapter" component={EnhancedBibleReader} />
           <Route path="/enhanced-reader" component={EnhancedBibleReader} />
+          <Route path="/new-reader/:book/:chapter" component={NewBibleReader} />
+          <Route path="/new-reader" component={NewBibleReader} />
           <Route path="/reading-plans" component={ReadingPlans} />
           <Route path="/reading-plan/:id" component={ReadingPlanDetail} />
           <Route path="/login" component={Login} />
