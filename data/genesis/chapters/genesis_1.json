@@ -1,0 +1,107 @@
+{
+  "chapter_number": 1,
+  "title": "Creation",
+  "summary": "God creates the universe, earth, plants, animals, and humans in six days and rests on the seventh.",
+  "themes": [
+    "Creation",
+    "Divine order",
+    "Human dignity",
+    "Stewardship"
+  ],
+  "people": [
+    "God"
+  ],
+  "places": [
+    "Heaven",
+    "Earth",
+    "Seas",
+    "Sky"
+  ],
+  "timeframe": "Beginning of creation",
+  "symbols": [
+    "Light",
+    "Darkness",
+    "Water",
+    "Land",
+    "Animals",
+    "Humanity"
+  ],
+  "narrative": "In majestic, rhythmic language, Genesis 1 portrays God as the sovereign creator who brings order from chaos through his spoken word. With each divine declaration, new aspects of creation emerge in a purposeful sequence, culminating in humanity who bears God's image and is given responsibility to care for creation. The repeated refrain 'and it was good' affirms the inherent value of the created world, while God's rest on the seventh day establishes a pattern for human living.",
+  "connections": [
+    {
+      "id": "John 1:1-3",
+      "type": "parallel",
+      "theme": "Creation through the Word",
+      "explanation": "John uses similar 'in the beginning' language to connect Jesus as the Word to Genesis creation."
+    },
+    {
+      "id": "Psalm 33:6",
+      "type": "thematic",
+      "theme": "Creation by God's word",
+      "explanation": "The Psalm references creation by God's word, echoing Genesis 1's repeated 'God said.'"
+    },
+    {
+      "id": "Colossians 1:16",
+      "type": "thematic",
+      "theme": "Christ as creator",
+      "explanation": "Paul identifies Christ as the one through whom all things were created."
+    }
+  ],
+  "verses": [
+    {
+      "verse_number": 1,
+      "text": {
+        "kjv": "In the beginning God created the heaven and the earth.",
+        "web": "In the beginning, God created the heavens and the earth."
+      },
+      "tags": {
+        "themes": [
+          "Creation",
+          "Divine order",
+          "Human dignity",
+          "Stewardship"
+        ],
+        "people": [
+          "God"
+        ],
+        "places": [
+          "Heaven",
+          "Earth",
+          "Seas",
+          "Sky"
+        ],
+        "symbols": [],
+        "emotions": [],
+        "timeframe": [
+          "Beginning of creation"
+        ],
+        "cross_refs": [
+          "John 1:1-3",
+          "Psalm 33:6",
+          "Colossians 1:16"
+        ]
+      },
+      "is_key_verse": true,
+      "cross_references": [
+        {
+          "id": "John 1:1-3",
+          "type": "parallel",
+          "theme": "Creation through the Word",
+          "explanation": "John uses similar 'in the beginning' language to connect Jesus as the Word to Genesis creation."
+        },
+        {
+          "id": "Psalm 33:6",
+          "type": "thematic",
+          "theme": "Creation by God's word",
+          "explanation": "The Psalm references creation by God's word, echoing Genesis 1's repeated 'God said.'"
+        },
+        {
+          "id": "Colossians 1:16",
+          "type": "thematic",
+          "theme": "Christ as creator",
+          "explanation": "Paul identifies Christ as the one through whom all things were created."
+        }
+      ]
+    }
+  ]
+}

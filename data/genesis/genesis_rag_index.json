@@ -1,0 +1,62 @@
+{
+  "book_info": {
+    "name": "Genesis",
+    "meaning": "Beginning",
+    "author": "Moses (traditional attribution)",
+    "date": "circa 1440-1400 BCE (traditional dating)",
+    "canonicity": "Canonical in Judaism, Christianity, and Islam",
+    "languages": [
+      "Hebrew",
+      "Aramaic"
+    ],
+    "majorThemes": [
+      "Creation",
+      "Fall",
+      "Flood",
+      "Covenant",
+      "Patriarchs"
+    ],
+    "structure": [
+      "Primeval History (1-11)",
+      "Patriarchal History (12-50)"
+    ]
+  },
+  "chapters": {
+    "1": {
+      "title": "Creation",
+      "summary": "God creates the universe, earth, plants, animals, and humans in six days and rests on the seventh.",
+      "key_verses": [
+        1
+      ]
+    }
+  },
+  "themes": [
+    "Creation",
+    "Divine order",
+    "Human dignity",
+    "Stewardship"
+  ],
+  "people": [
+    "God"
+  ],
+  "places": [
+    "Earth",
+    "Heaven",
+    "Seas",
+    "Sky"
+  ],
+  "symbols": [
+    "Animals",
+    "Darkness",
+    "Humanity",
+    "Land",
+    "Light",
+    "Water"
+  ],
+  "emotions": [],
+  "cross_references": [
+    "Colossians 1:16",
+    "John 1:1-3",
+    "Psalm 33:6"
+  ]
+}
