@@ -341,14 +341,14 @@ export default function Home() {
             <TabsContent value="students">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                 <div className="bg-card rounded-lg p-6 shadow-md border border-border">
-                  <div className="w-10 h-10 rounded-full bg-teal-100 dark:bg-teal-900 mb-4 flex items-center justify-center">
-                    <span className="text-teal-600 dark:text-teal-400">❝</span>
+                  <div className="w-10 h-10 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b] mb-4 flex items-center justify-center">
+                    <span className="text-[#2c4c3b] dark:text-[#a5c2a5]">❝</span>
                   </div>
                   <p className="italic mb-4 text-foreground">
                     "As a theology student, the multiple perspectives feature is invaluable. I can quickly compare different theological traditions' interpretations of the same passage."
                   </p>
                   <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center text-emerald-700 dark:text-emerald-400 font-bold">
+                    <div className="w-10 h-10 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b] flex items-center justify-center text-[#2c4c3b] dark:text-[#a5c2a5] font-bold">
                       DJ
                     </div>
                     <div className="ml-3">
@@ -359,14 +359,14 @@ export default function Home() {
                 </div>
                 
                 <div className="bg-card rounded-lg p-6 shadow-md border border-border">
-                  <div className="w-10 h-10 rounded-full bg-teal-100 dark:bg-teal-900 mb-4 flex items-center justify-center">
-                    <span className="text-teal-600 dark:text-teal-400">❝</span>
+                  <div className="w-10 h-10 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b] mb-4 flex items-center justify-center">
+                    <span className="text-[#2c4c3b] dark:text-[#a5c2a5]">❝</span>
                   </div>
                   <p className="italic mb-4 text-foreground">
                     "The 'Did You Know' facts and contextual questions help me understand cultural nuances I would have missed. It's like having a professor available 24/7."
                   </p>
                   <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center text-emerald-700 dark:text-emerald-400 font-bold">
+                    <div className="w-10 h-10 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b] flex items-center justify-center text-[#2c4c3b] dark:text-[#a5c2a5] font-bold">
                       AT
                     </div>
                     <div className="ml-3">
@@ -381,14 +381,14 @@ export default function Home() {
             <TabsContent value="families">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                 <div className="bg-card rounded-lg p-6 shadow-md border border-border">
-                  <div className="w-10 h-10 rounded-full bg-teal-100 dark:bg-teal-900 mb-4 flex items-center justify-center">
-                    <span className="text-teal-600 dark:text-teal-400">❝</span>
+                  <div className="w-10 h-10 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b] mb-4 flex items-center justify-center">
+                    <span className="text-[#2c4c3b] dark:text-[#a5c2a5]">❝</span>
                   </div>
                   <p className="italic mb-4 text-foreground">
                     "The kids' translation makes family devotions so much more engaging. Our children actually look forward to Bible time now!"
                   </p>
                   <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center text-emerald-700 dark:text-emerald-400 font-bold">
+                    <div className="w-10 h-10 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b] flex items-center justify-center text-[#2c4c3b] dark:text-[#a5c2a5] font-bold">
                       WF
                     </div>
                     <div className="ml-3">
@@ -399,14 +399,14 @@ export default function Home() {
                 </div>
                 
                 <div className="bg-card rounded-lg p-6 shadow-md border border-border">
-                  <div className="w-10 h-10 rounded-full bg-teal-100 dark:bg-teal-900 mb-4 flex items-center justify-center">
-                    <span className="text-teal-600 dark:text-teal-400">❝</span>
+                  <div className="w-10 h-10 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b] mb-4 flex items-center justify-center">
+                    <span className="text-[#2c4c3b] dark:text-[#a5c2a5]">❝</span>
                   </div>
                   <p className="italic mb-4 text-foreground">
                     "We use the reading plans to keep our family consistent with Bible study. The narrative mode helps our teenagers connect with stories in a fresh way."
                   </p>
                   <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center text-emerald-700 dark:text-emerald-400 font-bold">
+                    <div className="w-10 h-10 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b] flex items-center justify-center text-[#2c4c3b] dark:text-[#a5c2a5] font-bold">
                       LP
                     </div>
                     <div className="ml-3">
@@ -422,11 +422,11 @@ export default function Home() {
       </section>
 
       {/* Call to action */}
-      <section className="py-20 px-4 md:px-0 bg-gradient-to-b from-emerald-600 to-emerald-800 dark:from-emerald-800 dark:to-emerald-950 text-white relative overflow-hidden">
+      <section className="py-20 px-4 md:px-0 bg-gradient-to-b from-[#2c4c3b] to-[#1a3328] dark:from-[#2c4c3b] dark:to-[#1a3328] text-white relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute top-20 left-10 w-32 h-32 bg-white/10 rounded-full"></div>
         <div className="absolute bottom-10 right-10 w-24 h-24 bg-white/5 rounded-lg rotate-12"></div>
-        <div className="absolute top-1/2 right-1/3 w-16 h-16 bg-teal-300/10 rounded-full"></div>
+        <div className="absolute top-1/2 right-1/3 w-16 h-16 bg-[#a5c2a5]/10 rounded-full"></div>
         
         <div className="container mx-auto max-w-4xl relative z-10 text-center">
           <div className="inline-block px-4 py-1 rounded-full bg-white/20 text-white text-sm font-semibold mb-6">
@@ -442,12 +442,12 @@ export default function Home() {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {isAuthenticated ? (
-              <Button size="lg" onClick={() => navigate('/reader')} className="bg-white text-emerald-700 hover:bg-emerald-50 border-0 rounded-lg shadow-lg">
+              <Button size="lg" onClick={() => navigate('/reader')} className="bg-white text-[#2c4c3b] hover:bg-gray-100 border-0 rounded-lg shadow-lg">
                 <BookOpen className="mr-2 h-5 w-5" />
                 Open Bible Reader
               </Button>
             ) : (
-              <Button size="lg" onClick={() => login()} className="bg-white text-emerald-700 hover:bg-emerald-50 border-0 rounded-lg shadow-lg">
+              <Button size="lg" onClick={() => login()} className="bg-white text-[#2c4c3b] hover:bg-gray-100 border-0 rounded-lg shadow-lg">
                 <BookOpen className="mr-2 h-5 w-5" />
                 Get Started Free
               </Button>
