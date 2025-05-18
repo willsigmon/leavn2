@@ -22,11 +22,18 @@ export default function Home() {
     <div className="flex flex-col">
       {/* Hero section */}
       <section className="py-20 px-4 md:px-0 bg-gradient-to-b from-emerald-50 to-teal-50 dark:from-emerald-950 dark:to-teal-950 relative overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute top-12 left-12 w-24 h-24 bg-teal-200 dark:bg-teal-900 rounded-lg opacity-20 rotate-12"></div>
-        <div className="absolute bottom-20 right-20 w-32 h-32 bg-emerald-200 dark:bg-emerald-900 rounded-full opacity-30"></div>
-        <div className="absolute top-1/4 right-10 w-16 h-16 bg-teal-100 dark:bg-teal-800 rounded-lg opacity-20 -rotate-12"></div>
-        <div className="absolute bottom-32 left-20 w-20 h-20 bg-emerald-100 dark:bg-emerald-800 rounded-full opacity-30"></div>
+        {/* Decorative elements with animations */}
+        <div className="absolute top-12 left-12 w-24 h-24 bg-teal-200 dark:bg-teal-900 rounded-lg opacity-20 rotate-12 animate-float"></div>
+        <div className="absolute bottom-20 right-20 w-32 h-32 bg-emerald-200 dark:bg-emerald-900 rounded-full opacity-30 animate-float animation-delay-2000"></div>
+        <div className="absolute top-1/4 right-10 w-16 h-16 bg-teal-100 dark:bg-teal-800 rounded-lg opacity-20 -rotate-12 animate-float animation-delay-1000"></div>
+        <div className="absolute bottom-32 left-20 w-20 h-20 bg-emerald-100 dark:bg-emerald-800 rounded-full opacity-30 animate-pulse animation-delay-3000"></div>
+        
+        {/* Additional circles with different sizes, shapes and animations */}
+        <div className="absolute top-40 left-1/4 w-14 h-14 bg-teal-100 dark:bg-teal-900 rounded-full opacity-15 animate-float animation-delay-2500"></div>
+        <div className="absolute bottom-16 left-1/3 w-10 h-10 bg-emerald-300 dark:bg-emerald-700 rounded-full opacity-20 animate-pulse animation-delay-500"></div>
+        <div className="absolute top-1/3 right-1/4 w-16 h-16 bg-teal-200 dark:bg-teal-800 rounded-full opacity-25 animate-float animation-delay-3500"></div>
+        <div className="absolute bottom-40 right-1/3 w-12 h-12 bg-emerald-100 dark:bg-emerald-900 rounded-full opacity-20 animate-pulse animation-delay-1500"></div>
+        <div className="absolute top-16 right-1/2 w-8 h-8 bg-emerald-200 dark:bg-emerald-800 rounded-full opacity-15 animate-float animation-delay-4000"></div>
         
         <div className="container mx-auto max-w-5xl relative z-10">
           <div className="flex flex-col lg:flex-row gap-8 md:gap-12 items-center">
@@ -82,14 +89,67 @@ export default function Home() {
               </div>
             </div>
             <div className="w-full mt-8 lg:mt-0 lg:w-1/2 relative">
-              <div className="hidden md:block absolute inset-0 -left-6 -top-6 bg-emerald-50 rounded-xl"></div>
-              <div className="hidden md:block absolute inset-0 -right-6 -bottom-6 bg-emerald-100 rounded-xl"></div>
-              <div className="relative rounded-xl overflow-hidden shadow-xl border-2 md:border-4 border-white">
-                <img 
-                  src="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80" 
-                  alt="Bible study" 
-                  className="w-full h-64 md:h-80 lg:h-full object-cover"
-                />
+              <div className="hidden md:block absolute inset-0 -left-6 -top-6 bg-emerald-50 dark:bg-emerald-900/30 rounded-xl"></div>
+              <div className="hidden md:block absolute inset-0 -right-6 -bottom-6 bg-emerald-100 dark:bg-emerald-800/30 rounded-xl"></div>
+              
+              {/* Bible Reader Preview Card */}
+              <div className="relative rounded-xl overflow-hidden shadow-xl border-2 md:border-4 border-white dark:border-gray-800 bg-white dark:bg-gray-900 h-80 lg:h-96">
+                {/* Reader Header */}
+                <div className="bg-emerald-100 dark:bg-emerald-800/50 p-3 border-b border-emerald-200 dark:border-emerald-700/50 flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <BookOpen className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                    <span className="font-medium text-emerald-700 dark:text-emerald-300">Genesis 1</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="h-5 w-5 rounded-full bg-emerald-200 dark:bg-emerald-700 animate-pulse"></div>
+                    <div className="h-5 w-5 rounded-full bg-teal-200 dark:bg-teal-700"></div>
+                  </div>
+                </div>
+                
+                {/* Reader Content with Scrolling Animation */}
+                <div className="p-5 h-full overflow-hidden relative">
+                  {/* Biblical Text */}
+                  <div className="animate-subtle-scroll">
+                    <p className="font-serif text-lg text-stone-800 dark:text-stone-200 mb-3">
+                      <span className="text-emerald-600 dark:text-emerald-400 font-semibold">1</span> In the beginning God created the heavens and the earth.
+                    </p>
+                    <p className="font-serif text-lg text-stone-800 dark:text-stone-200 mb-3">
+                      <span className="text-emerald-600 dark:text-emerald-400 font-semibold">2</span> Now the earth was formless and empty, darkness was over the surface of the deep, and the Spirit of God was hovering over the waters.
+                    </p>
+                    
+                    {/* Highlighted Verse with Commentary Animation */}
+                    <div className="my-2 p-3 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg border-l-4 border-emerald-400 dark:border-emerald-600 animate-pulse-slow">
+                      <p className="font-serif text-lg text-stone-800 dark:text-stone-200">
+                        <span className="text-emerald-600 dark:text-emerald-400 font-semibold">3</span> And God said, "<span className="relative inline-block">Let there be light<span className="absolute bottom-0 left-0 right-0 border-b border-dotted border-emerald-400 dark:border-emerald-500"></span></span>," and there was light.
+                      </p>
+                      
+                      {/* Commentary Popup - Animated */}
+                      <div className="mt-3 p-3 bg-white dark:bg-gray-800 rounded shadow-md border border-emerald-100 dark:border-emerald-800 animate-fade-in">
+                        <div className="flex items-center mb-2">
+                          <div className="h-4 w-4 rounded-full bg-emerald-400 dark:bg-emerald-600 mr-2"></div>
+                          <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">Evangelical Perspective</span>
+                        </div>
+                        <p className="text-sm text-stone-600 dark:text-stone-300">
+                          This powerful declaration demonstrates God's creative power through His spoken word, establishing His authority over creation.
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <p className="font-serif text-lg text-stone-800 dark:text-stone-200 mb-3">
+                      <span className="text-emerald-600 dark:text-emerald-400 font-semibold">4</span> God saw that the light was good, and he separated the light from the darkness.
+                    </p>
+                    <p className="font-serif text-lg text-stone-800 dark:text-stone-200">
+                      <span className="text-emerald-600 dark:text-emerald-400 font-semibold">5</span> God called the light "day," and the darkness he called "night." And there was evening, and there was morning—the first day.
+                    </p>
+                  </div>
+                  
+                  {/* Subtle Lens Switcher Animation */}
+                  <div className="absolute bottom-4 right-4 flex bg-white dark:bg-gray-800 rounded-full p-1 shadow-md animate-bounce-subtle">
+                    <div className="h-7 w-7 rounded-full bg-emerald-100 dark:bg-emerald-800 text-xs flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-medium">E</div>
+                    <div className="h-7 w-7 rounded-full bg-gray-100 dark:bg-gray-700 text-xs flex items-center justify-center text-gray-500 dark:text-gray-400 font-medium ml-1">C</div>
+                    <div className="h-7 w-7 rounded-full bg-gray-100 dark:bg-gray-700 text-xs flex items-center justify-center text-gray-500 dark:text-gray-400 font-medium ml-1">J</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
