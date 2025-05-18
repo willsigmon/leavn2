@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { HighlightMenu } from './HighlightMenu';
-import { Bookmark, MessageSquareText } from 'lucide-react';
+import { Bookmark, MessageSquareText, Tag } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import { getVerseColors, getThemeForVerse, getThemeEmoji } from '@/lib/verseThemes';
 
 interface VerseHighlighterProps {
   book: string;
@@ -13,11 +14,13 @@ interface VerseHighlighterProps {
     highlightColor?: string;
     hasNote?: boolean;
     isBookmarked?: boolean;
+    themes?: string[]; // Added themes array for contextual coloring
   }[];
   onVerseSelect?: (verse: number) => void;
   translation?: string;
   selectedVerse?: number | null;
   animateSelection?: boolean;
+  showThemes?: boolean; // Toggle whether to show theme-based coloring
 }
 
 export function VerseHighlighter({ 
@@ -27,7 +30,8 @@ export function VerseHighlighter({
   onVerseSelect,
   translation = 'kjv',
   selectedVerse: externalSelectedVerse = null,
-  animateSelection = false
+  animateSelection = false,
+  showThemes = true
 }: VerseHighlighterProps) {
   const [selectedVerse, setSelectedVerse] = useState<number | null>(externalSelectedVerse);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
@@ -186,63 +190,107 @@ export function VerseHighlighter({
       className="relative py-2 reader-content reader-paper"
       ref={contentRef}
     >
-      {verses.map((verse) => (
-        <div
-          id={`verse-${verse.number}`}
-          key={verse.number}
-          className={`group relative mb-4 pl-8 pr-4 py-2 rounded-md transition-all ${
-            verse.highlightColor ? `highlight-${verse.highlightColor}` : ''
-          } ${selectedVerse === verse.number ? 'bg-amber-50/70 dark:bg-amber-950/20' : ''}
-          ${animating === verse.number ? 'animate-pulse ring-2 ring-amber-500 dark:ring-amber-500/70' : ''}
-          ${selectedVerse === verse.number ? 'relative before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-amber-300/10 before:to-transparent before:animate-shine-subtle' : ''}
-          hover:bg-stone-100 dark:hover:bg-stone-800`}
-        >
-          <span 
-            className={`absolute left-2 top-2 font-semibold text-sm ${
-              selectedVerse === verse.number 
-                ? 'text-amber-700 dark:text-amber-400' 
-                : 'text-stone-500 dark:text-stone-400'
-            }`}
-            aria-label={`Verse ${verse.number}`}
-          >
-            {verse.number}
-          </span>
+      {verses.map((verse) => {
+        // Get theme colors for this verse if available
+        const themeColors = showThemes && verse.themes && verse.themes.length > 0
+          ? getVerseColors(verse.themes)
+          : null;
+        
+        // Get theme category for displaying theme badge
+        const themeCategory = showThemes && verse.themes && verse.themes.length > 0
+          ? getThemeForVerse(verse.themes)
+          : null;
           
-          {/* Verse text */}
-          <span 
-            className={`cursor-pointer ${
-              selectedVerse === verse.number 
-                ? 'text-stone-900 dark:text-stone-50' 
-                : 'text-stone-800 dark:text-stone-200'
-            }`}
-            onClick={(e) => handleVerseClick(verse.number, e)}
+        return (
+          <div
+            id={`verse-${verse.number}`}
+            key={verse.number}
+            className={`group relative mb-4 pl-8 pr-4 py-2 rounded-md transition-all ${
+              verse.highlightColor ? `highlight-${verse.highlightColor}` : ''
+            } ${selectedVerse === verse.number ? 'bg-amber-50/70 dark:bg-amber-950/20' : ''}
+            ${animating === verse.number ? 'animate-pulse ring-2 ring-amber-500 dark:ring-amber-500/70' : ''}
+            ${selectedVerse === verse.number ? 'relative before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-amber-300/10 before:to-transparent before:animate-shine-subtle' : ''}
+            hover:bg-stone-100 dark:hover:bg-stone-800`}
+            style={themeColors ? {
+              backgroundColor: themeColors.background,
+              borderLeft: `3px solid ${themeColors.border}`,
+              boxShadow: `inset 0 0 0 1px ${themeColors.border}30`
+            } : undefined}
           >
-            {verse.text}
-          </span>
-          
-          {/* Indicators */}
-          <div className="absolute right-2 top-2 flex items-center space-x-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-            {verse.hasNote && (
-              <MessageSquareText 
-                className="h-4 w-4 text-amber-600 dark:text-amber-400" 
-                aria-label="This verse has a note"
-              />
+            <span 
+              className={`absolute left-2 top-2 font-semibold text-sm ${
+                selectedVerse === verse.number 
+                  ? 'text-amber-700 dark:text-amber-400' 
+                  : themeColors ? `text-[${themeColors.text}]` : 'text-stone-500 dark:text-stone-400'
+              }`}
+              aria-label={`Verse ${verse.number}`}
+            >
+              {verse.number}
+            </span>
+            
+            {/* Verse text */}
+            <span 
+              className={`cursor-pointer ${
+                selectedVerse === verse.number 
+                  ? 'text-stone-900 dark:text-stone-50' 
+                  : 'text-stone-800 dark:text-stone-200'
+              }`}
+              onClick={(e) => handleVerseClick(verse.number, e)}
+            >
+              {verse.text}
+            </span>
+            
+            {/* Theme Badge - show if verse has a theme and isn't selected */}
+            {themeCategory && !selectedVerse && showThemes && (
+              <span 
+                className="inline-flex items-center ml-2 px-1.5 py-0.5 rounded text-xs font-medium opacity-70"
+                style={{
+                  backgroundColor: `${themeColors?.border}30`, 
+                  color: themeColors?.text
+                }}
+                title={themeCategory.description}
+              >
+                {getThemeEmoji(themeCategory.name)} {themeCategory.name}
+              </span>
             )}
-            {verse.isBookmarked && (
-              <Bookmark 
-                className="h-4 w-4 text-amber-600 dark:text-amber-400" 
-                fill="currentColor"
-                aria-label="This verse is bookmarked"
+            
+            {/* Indicators */}
+            <div className="absolute right-2 top-2 flex items-center space-x-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+              {verse.hasNote && (
+                <MessageSquareText 
+                  className="h-4 w-4 text-amber-600 dark:text-amber-400" 
+                  aria-label="This verse has a note"
+                />
+              )}
+              {verse.isBookmarked && (
+                <Bookmark 
+                  className="h-4 w-4 text-amber-600 dark:text-amber-400" 
+                  fill="currentColor"
+                  aria-label="This verse is bookmarked"
+                />
+              )}
+              {/* Theme indicator */}
+              {themeCategory && (
+                <Tag 
+                  className="h-4 w-4"
+                  style={{ color: themeColors?.text || 'currentColor' }}
+                  aria-label={`Theme: ${themeCategory.name}`}
+                />
+              )}
+            </div>
+            
+            {/* Active verse indicator */}
+            {selectedVerse === verse.number && (
+              <div 
+                className="absolute left-0 top-0 bottom-0 w-1 rounded-full" 
+                style={{ 
+                  backgroundColor: themeColors ? themeColors.text : 'var(--amber-500)' 
+                }}
               />
             )}
           </div>
-          
-          {/* Active verse indicator */}
-          {selectedVerse === verse.number && (
-            <div className="absolute left-0 top-0 bottom-0 w-1 bg-amber-500 dark:bg-amber-600 rounded-full" />
-          )}
-        </div>
-      ))}
+        );
+      })}
       
       {showMenu && selectedVerse !== null && (
         <HighlightMenu

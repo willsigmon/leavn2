@@ -81,6 +81,16 @@ export const tags = pgTable("tags", {
   category: text("category").notNull(),
   title: text("title").notNull(),
   description: text("description").notNull(),
+  colorCode: text("color_code"),
+});
+
+// Verse theme categories for color-coding
+export const verseThemeCategories = pgTable("verse_theme_categories", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull().unique(),
+  description: text("description").notNull(),
+  colorHex: text("color_hex").notNull(),
+  priority: integer("priority").default(1),
 });
 
 // Junction table for verses and tags
@@ -175,6 +185,7 @@ export const insertUserProgressSchema = createInsertSchema(userProgress).omit({ 
 export const insertUserPreferencesSchema = createInsertSchema(userPreferences).omit({ id: true, updatedAt: true });
 export const insertDidYouKnowSchema = createInsertSchema(didYouKnow).omit({ id: true });
 export const insertBookmarkSchema = createInsertSchema(bookmarks).omit({ id: true, createdAt: true });
+export const insertVerseThemeCategorySchema = createInsertSchema(verseThemeCategories).omit({ id: true });
 
 // Types
 export type UpsertUser = typeof users.$inferInsert;
@@ -226,3 +237,6 @@ export type UserPreferences = typeof userPreferences.$inferSelect;
 
 export type InsertBookmark = z.infer<typeof insertBookmarkSchema>;
 export type Bookmark = typeof bookmarks.$inferSelect;
+
+export type InsertVerseThemeCategory = z.infer<typeof insertVerseThemeCategorySchema>;
+export type VerseThemeCategory = typeof verseThemeCategories.$inferSelect;
