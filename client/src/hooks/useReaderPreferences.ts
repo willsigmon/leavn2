@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from './useAuth';
-import { UserPreferences } from '@shared/schema';
+import type { UserPreferences } from '@shared/schema';
 import { apiRequest } from '@/lib/queryClient';
 
 // Define types for reader preferences
@@ -45,7 +45,7 @@ export function useReaderPreferences() {
       lineSpacing: preferences.lineSpacing || defaultPreferences.lineSpacing,
       theme: preferences.theme || defaultPreferences.theme,
       isOpenDyslexicEnabled: preferences.isOpenDyslexicEnabled || defaultPreferences.isOpenDyslexicEnabled,
-      readingPosition: preferences.readingPosition || defaultPreferences.readingPosition
+      readingPosition: preferences.readingPosition as Record<string, number> || defaultPreferences.readingPosition
     };
   };
 
@@ -75,7 +75,8 @@ export function useReaderPreferences() {
   // Save preferences mutation
   const savePreferencesMutation = useMutation({
     mutationFn: (newPreferences: Partial<ReaderPreferences>) => {
-      return apiRequest('/api/preferences', {
+      return apiRequest({
+        url: '/api/preferences',
         method: 'POST',
         data: newPreferences
       });
@@ -89,9 +90,10 @@ export function useReaderPreferences() {
   const saveReadingPosition = async (book: string, chapter: number, scrollPosition: number) => {
     if (!isAuthenticated) return;
     
+    const currentReadingPosition = getPreferences().readingPosition || {};
     const position = {
       readingPosition: {
-        ...getPreferences().readingPosition,
+        ...currentReadingPosition,
         [`${book.toLowerCase()}_${chapter}`]: scrollPosition
       }
     };

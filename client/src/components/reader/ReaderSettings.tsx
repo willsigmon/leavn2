@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useAuth } from '@/hooks/useAuth';
+import { useReaderPreferences, ReaderPreferences } from '@/hooks/useReaderPreferences';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -55,14 +54,7 @@ interface ReaderSettingsProps {
 }
 
 export function ReaderSettings({ onClose }: ReaderSettingsProps) {
-  const { user } = useAuth();
-  const queryClient = useQueryClient();
-
-  // Fetch user preferences
-  const { data: preferences, isLoading } = useQuery({
-    queryKey: ['/api/preferences'],
-    enabled: !!user?.id,
-  });
+  const { preferences, isLoading, savePreferences } = useReaderPreferences();
 
   // Local state for UI interaction
   const [fontSize, setFontSize] = useState<number>(fontSizeRange.default);
@@ -74,18 +66,16 @@ export function ReaderSettings({ onClose }: ReaderSettingsProps) {
 
   // Update local state when preferences are loaded
   useEffect(() => {
-    if (preferences) {
-      // Set font size (convert string values like 'small', 'medium' to actual numbers)
-      if (preferences.fontSize === 'small') setFontSize(fontSizeRange.min);
-      else if (preferences.fontSize === 'medium') setFontSize(fontSizeRange.default);
-      else if (preferences.fontSize === 'large') setFontSize(fontSizeRange.default + 3);
-      else if (preferences.fontSize === 'x-large') setFontSize(fontSizeRange.max);
+    // Set font size (convert string values like 'small', 'medium' to actual numbers)
+    if (preferences.fontSize === 'small') setFontSize(fontSizeRange.min);
+    else if (preferences.fontSize === 'medium') setFontSize(fontSizeRange.default);
+    else if (preferences.fontSize === 'large') setFontSize(fontSizeRange.default + 3);
+    else if (preferences.fontSize === 'x-large') setFontSize(fontSizeRange.max);
 
-      setFontFamily(preferences.fontFamily || 'serif');
-      setLineSpacing(preferences.lineSpacing || 'normal');
-      setTheme(preferences.theme || 'light');
-      setIsOpenDyslexicEnabled(preferences.isOpenDyslexicEnabled || false);
-    }
+    setFontFamily(preferences.fontFamily);
+    setLineSpacing(preferences.lineSpacing);
+    setTheme(preferences.theme);
+    setIsOpenDyslexicEnabled(preferences.isOpenDyslexicEnabled);
   }, [preferences]);
 
   // Apply settings to document body for preview
@@ -122,23 +112,8 @@ export function ReaderSettings({ onClose }: ReaderSettingsProps) {
     };
   }, [fontSize, fontFamily, lineSpacing, theme, isOpenDyslexicEnabled]);
 
-  // Save preferences mutation
-  const savePreferencesMutation = useMutation({
-    mutationFn: (newPreferences: any) => {
-      return apiRequest('/api/preferences', {
-        method: 'POST',
-        data: newPreferences
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/preferences'] });
-    }
-  });
-
   // Handle save preferences
   const handleSavePreferences = () => {
-    if (!user?.id) return;
-
     // Convert numeric font size to textual categories for storage
     let fontSizeCategory = 'medium';
     if (fontSize <= fontSizeRange.min + 1) fontSizeCategory = 'small';
@@ -146,7 +121,6 @@ export function ReaderSettings({ onClose }: ReaderSettingsProps) {
     else if (fontSize > fontSizeRange.default) fontSizeCategory = 'large';
 
     const newPreferences = {
-      userId: user.id,
       fontSize: fontSizeCategory,
       fontFamily,
       lineSpacing,
@@ -154,7 +128,7 @@ export function ReaderSettings({ onClose }: ReaderSettingsProps) {
       isOpenDyslexicEnabled
     };
 
-    savePreferencesMutation.mutate(newPreferences);
+    savePreferences(newPreferences);
     onClose();
   };
 
@@ -275,8 +249,8 @@ export function ReaderSettings({ onClose }: ReaderSettingsProps) {
         <Button variant="outline" onClick={onClose}>
           Cancel
         </Button>
-        <Button onClick={handleSavePreferences} disabled={savePreferencesMutation.isPending}>
-          {savePreferencesMutation.isPending ? "Saving..." : "Save Changes"}
+        <Button onClick={handleSavePreferences}>
+          Save Changes
         </Button>
       </div>
     </div>
