@@ -7,7 +7,7 @@ import { UniversalReader } from '@/components/reader/UniversalReader';
 import { ReaderCanvas } from '@/components/reader/ReaderCanvas';
 import { TypographyControls } from '@/components/reader/FixedTypographyControls';
 import { Button } from '@/components/ui/button';
-import { Loader2, BookOpen, Bookmark, ChevronLeft, ChevronRight, Info, MessageSquare, History } from 'lucide-react';
+import { Loader2, BookOpen, Bookmark, ChevronLeft, ChevronRight, Info, MessageSquare, History, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import {
   Sheet,
@@ -51,7 +51,7 @@ export default function EnhancedBibleReader() {
   
   // Local state
   const [activeTranslation, setActiveTranslation] = useState('web');
-  const [activeLens, setActiveLens] = useState('default'); // 'default', 'evangelical', 'catholic', 'jewish', 'genz', 'kids'
+  const [activeLens, setActiveLens] = useState('protestant'); // 'jewish', 'catholic', 'orthodox', 'protestant', 'kids', 'genz', 'atheist'
   const [insightsPanelOpen, setInsightsPanelOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showToolbar, setShowToolbar] = useState(true);
