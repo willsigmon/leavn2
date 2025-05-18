@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import LensButtons from './LensButtons';
 import { RelatedContent } from './RelatedContent';
-import AudioControls from '../reader/AudioControls';
+import { SimpleAudioControls } from '../reader/SimpleAudioControls';
 
 interface ContextBoxProps {
   onTranslationChange?: (translation: string) => void;
@@ -85,7 +85,7 @@ export function ContextBox({ onTranslationChange, onLensChange, onAudioOptionCha
             </div>
             
             <div className="pt-4">
-              <AudioControls 
+              <SimpleAudioControls 
                 text="This is a sample text to test the audio feature. The actual Bible text will be read when you select a passage."
               />
             </div>
