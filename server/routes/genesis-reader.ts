@@ -71,14 +71,33 @@ router.get('/:chapter', async (req: Request, res: Response) => {
         // Check the structure and adapt to our expected format
         const verseNumber = verse.verse_number || verse.number || verse.verse;
         
-        console.log('Processing verse:', verseNumber);
+        // Detect the text format and extract appropriately
+        let kjvText = '';
+        let webText = '';
+        
+        if (verse.text) {
+          if (typeof verse.text === 'object') {
+            // Handle format where text is an object with translations
+            kjvText = verse.text.kjv || '';
+            webText = verse.text.web || '';
+          } else if (typeof verse.text === 'string') {
+            // If just a string, use it for both translations
+            kjvText = verse.text;
+            webText = verse.text;
+          }
+        }
+        
+        console.log(`Processing verse ${verseNumber}:`, { 
+          kjvText: kjvText.substring(0, 20) + '...',
+          webText: webText.substring(0, 20) + '...'
+        });
         
         return {
           verse: verseNumber,
           number: verseNumber,
-          text: verse.text?.web || (typeof verse.text === 'object' ? verse.text.web : verse.text) || `Genesis ${chapterNum}:${verseNumber}`,
-          textKjv: verse.text?.kjv || (typeof verse.text === 'object' ? verse.text.kjv : null) || `Genesis ${chapterNum}:${verseNumber} (KJV)`,  
-          textWeb: verse.text?.web || (typeof verse.text === 'object' ? verse.text.web : null) || `Genesis ${chapterNum}:${verseNumber} (WEB)`,
+          text: webText || `Genesis ${chapterNum}:${verseNumber}`,
+          textKjv: kjvText || `Genesis ${chapterNum}:${verseNumber} (KJV)`,  
+          textWeb: webText || `Genesis ${chapterNum}:${verseNumber} (WEB)`,
           isBookmarked: false,
           hasNote: false,
           tags: verse.tags || {}
