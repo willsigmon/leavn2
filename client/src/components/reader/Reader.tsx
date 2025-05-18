@@ -206,11 +206,11 @@ export function Reader({
         isReading={isReading}
       />
       
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden max-w-[1600px] mx-auto px-4 md:px-8">
         {/* Main content area (2/3 width on desktop) */}
         <div 
           ref={contentRef}
-          className="flex-1 overflow-y-auto bg-stone-50 dark:bg-stone-900"
+          className="flex-1 overflow-y-auto bg-stone-50/95 dark:bg-stone-900/95 backdrop-blur-sm rounded-lg shadow-md"
           onScroll={handleScroll}
           style={{
             flex: '2',
@@ -248,8 +248,8 @@ export function Reader({
         </div>
         
         {/* Right sidebar (1/3 width on desktop) */}
-        <div className="hidden lg:flex flex-col border-l border-stone-200 dark:border-stone-700 bg-stone-100 dark:bg-stone-800" style={{ flex: '1' }}>
-          <div className="p-4 border-b border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900">
+        <div className="hidden lg:flex flex-col border-l border-stone-200/80 dark:border-stone-700/60 bg-stone-100/95 dark:bg-stone-800/95 backdrop-blur-sm rounded-lg shadow-md ml-3" style={{ flex: '1' }}>
+          <div className="p-4 border-b border-stone-200/80 dark:border-stone-700/60 bg-stone-50/80 dark:bg-stone-900/80 backdrop-blur-sm rounded-t-lg">
             <div className="flex items-center mb-4">
               <BookOpen className="mr-2 h-5 w-5 text-amber-700 dark:text-amber-500" />
               <h3 className="font-medium text-stone-800 dark:text-stone-100">Insights & Context</h3>
@@ -265,7 +265,7 @@ export function Reader({
           </div>
           
           {/* Sidebar content - context dependent on selected verse */}
-          <div className="flex-1 overflow-y-auto p-4">
+          <div className="flex-1 overflow-y-auto p-4 bg-gradient-to-b from-stone-50/50 to-stone-100/50 dark:from-stone-800/50 dark:to-stone-900/50">
             {selectedVerse ? (
               <div className="animate-in fade-in slide-in-from-right-2 duration-300">
                 <ContextSidebar 
