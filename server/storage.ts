@@ -582,6 +582,40 @@ export class MemStorage implements IStorage {
     return this.createUser(userData);
   }
   
+  async getUserPreferences(userId: string): Promise<UserPreferences | undefined> {
+    return this.userPreferences.get(userId);
+  }
+
+  async saveUserPreferences(userId: string, preferences: Partial<UserPreferences>): Promise<UserPreferences> {
+    const existingPrefs = this.userPreferences.get(userId);
+    
+    if (existingPrefs) {
+      // Update existing preferences
+      const updatedPrefs: UserPreferences = {
+        ...existingPrefs,
+        ...preferences,
+        updatedAt: new Date()
+      };
+      this.userPreferences.set(userId, updatedPrefs);
+      return updatedPrefs;
+    } else {
+      // Create new preferences
+      const newPrefs: UserPreferences = {
+        id: uuidv4(),
+        userId,
+        fontSize: preferences.fontSize || 'medium',
+        fontFamily: preferences.fontFamily || 'serif',
+        lineSpacing: preferences.lineSpacing || 'normal',
+        theme: preferences.theme || 'light',
+        isOpenDyslexicEnabled: preferences.isOpenDyslexicEnabled || false,
+        readingPosition: preferences.readingPosition || {},
+        updatedAt: new Date()
+      };
+      this.userPreferences.set(userId, newPrefs);
+      return newPrefs;
+    }
+  }
+  
   async getVerse(book: string, chapter: number, verse: number): Promise<schema.Verse | undefined> {
     return Array.from(this.verses.values()).find(
       v => v.book === book.toLowerCase() && v.chapter === chapter && v.verseNumber === verse
