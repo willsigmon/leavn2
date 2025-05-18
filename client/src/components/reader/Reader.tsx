@@ -238,28 +238,36 @@ export function Reader({
       
       <div className="flex flex-1 overflow-hidden">
         {/* Translation and Insights sidebar */}
-        <div className="hidden md:block border-r w-64 bg-stone-50 dark:bg-stone-900">
+        <div className="hidden md:block border-r w-72 bg-stone-50 dark:bg-stone-900 shadow-md">
           <div className="p-4 h-full flex flex-col">
             {/* Translation section */}
-            <div className="mb-6">
+            <div className="mb-8">
               <div className="flex items-center mb-4 border-b pb-2 border-stone-200 dark:border-stone-700">
                 <BookOpen className="mr-2 h-5 w-5 text-amber-700 dark:text-amber-500" />
-                <h3 className="font-medium text-stone-800 dark:text-stone-100">Translation</h3>
+                <h3 className="font-medium text-stone-800 dark:text-stone-100">Reading Modes</h3>
               </div>
-              <ViewModeSelector 
-                currentMode={viewMode}
-                onModeChange={setViewMode}
-                allowedModes={['original', 'genz', 'novelize', 'kids']}
-                isLoading={isLoadingTranslation}
-              />
+              <div className="mb-4">
+                <p className="text-sm text-stone-600 dark:text-stone-400 mb-3">
+                  Select how you want to experience the text
+                </p>
+                <ViewModeSelector 
+                  currentMode={viewMode}
+                  onModeChange={setViewMode}
+                  allowedModes={['original', 'genz', 'novelize', 'kids']}
+                  isLoading={isLoadingTranslation}
+                />
+              </div>
             </div>
             
             {/* Insights section */}
             <div>
               <div className="flex items-center mb-4 border-b pb-2 border-stone-200 dark:border-stone-700">
                 <Sparkles className="mr-2 h-5 w-5 text-amber-700 dark:text-amber-500" />
-                <h3 className="font-medium text-stone-800 dark:text-stone-100">Insights</h3>
+                <h3 className="font-medium text-stone-800 dark:text-stone-100">Scholarly Insights</h3>
               </div>
+              <p className="text-sm text-stone-600 dark:text-stone-400 mb-3">
+                Explore deeper theological context
+              </p>
               <ViewModeSelector 
                 currentMode={viewMode}
                 onModeChange={setViewMode}
@@ -278,8 +286,11 @@ export function Reader({
         >
           <div className="max-w-4xl mx-auto p-4 sm:p-6 md:p-8">
             {/* Chapter title */}
-            <h1 className="text-3xl font-serif font-semibold mb-6">
-              {chapterData?.bookName || book} {chapter}
+            <h1 className="text-3xl font-serif font-semibold mb-6 text-stone-800 dark:text-stone-100 flex items-center">
+              <span className="text-amber-700 dark:text-amber-500 mr-2">
+                {chapterData && 'bookName' in chapterData ? chapterData.bookName : book}
+              </span> 
+              <span>Chapter {chapter}</span>
             </h1>
             
             {/* Chapter content */}
