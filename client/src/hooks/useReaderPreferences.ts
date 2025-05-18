@@ -39,13 +39,16 @@ export function useReaderPreferences() {
       return defaultPreferences;
     }
     
+    // Cast preferences as any to avoid TypeScript property access errors
+    const prefs = preferences as any;
+    
     return {
-      fontSize: preferences.fontSize || defaultPreferences.fontSize,
-      fontFamily: preferences.fontFamily || defaultPreferences.fontFamily,
-      lineSpacing: preferences.lineSpacing || defaultPreferences.lineSpacing,
-      theme: preferences.theme || defaultPreferences.theme,
-      isOpenDyslexicEnabled: preferences.isOpenDyslexicEnabled || defaultPreferences.isOpenDyslexicEnabled,
-      readingPosition: preferences.readingPosition as Record<string, number> || defaultPreferences.readingPosition
+      fontSize: prefs.fontSize || defaultPreferences.fontSize,
+      fontFamily: prefs.fontFamily || defaultPreferences.fontFamily,
+      lineSpacing: prefs.lineSpacing || defaultPreferences.lineSpacing,
+      theme: prefs.theme || defaultPreferences.theme,
+      isOpenDyslexicEnabled: prefs.isOpenDyslexicEnabled || defaultPreferences.isOpenDyslexicEnabled,
+      readingPosition: prefs.readingPosition || defaultPreferences.readingPosition
     };
   };
 
@@ -75,10 +78,11 @@ export function useReaderPreferences() {
   // Save preferences mutation
   const savePreferencesMutation = useMutation({
     mutationFn: (newPreferences: Partial<ReaderPreferences>) => {
-      return apiRequest({
-        url: '/api/preferences',
+      return fetch('/api/preferences', {
         method: 'POST',
-        data: newPreferences
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newPreferences),
+        credentials: 'include'
       });
     },
     onSuccess: () => {

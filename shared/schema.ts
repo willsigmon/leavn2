@@ -60,6 +60,7 @@ export const notes = pgTable("notes", {
   verse: integer("verse").notNull(),
   content: text("content"),
   highlight: boolean("highlight").default(false),
+  highlightColor: text("highlight_color"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -149,6 +150,17 @@ export const didYouKnow = pgTable("did_you_know", {
   content: text("content").notNull(),
 });
 
+// Bookmarks
+export const bookmarks = pgTable("bookmarks", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  book: text("book").notNull(),
+  chapter: integer("chapter").notNull(),
+  verse: integer("verse").notNull(),
+  name: text("name"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 // Insert schemas
 export const insertVerseSchema = createInsertSchema(verses).omit({ id: true });
 export const insertBibleChunkSchema = createInsertSchema(bibleChunks).omit({ id: true, createdAt: true });
@@ -162,6 +174,7 @@ export const insertPlanEntrySchema = createInsertSchema(planEntries).omit({ id: 
 export const insertUserProgressSchema = createInsertSchema(userProgress).omit({ id: true, startedAt: true, completedAt: true });
 export const insertUserPreferencesSchema = createInsertSchema(userPreferences).omit({ id: true, updatedAt: true });
 export const insertDidYouKnowSchema = createInsertSchema(didYouKnow).omit({ id: true });
+export const insertBookmarkSchema = createInsertSchema(bookmarks).omit({ id: true, createdAt: true });
 
 // Types
 export type UpsertUser = typeof users.$inferInsert;
@@ -210,3 +223,6 @@ export type DidYouKnow = typeof didYouKnow.$inferSelect;
 
 export type InsertUserPreferences = z.infer<typeof insertUserPreferencesSchema>;
 export type UserPreferences = typeof userPreferences.$inferSelect;
+
+export type InsertBookmark = z.infer<typeof insertBookmarkSchema>;
+export type Bookmark = typeof bookmarks.$inferSelect;
