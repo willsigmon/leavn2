@@ -1,10 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { VerseWithConnections } from './VerseWithConnections';
 import { VerseLinkConnections } from './VerseLinkConnections';
 import { Skeleton } from '@/components/ui/skeleton';
 import { CrossReference } from './CrossReferences';
 import { motion } from 'framer-motion';
+import { TagFilter } from './TagFilter';
 
 interface BibleContentProps {
   book: string;
@@ -32,10 +33,13 @@ export function BibleContent({
   const [notedVerses, setNotedVerses] = useState<number[]>([]);
   const [currentTagFilter, setCurrentTagFilter] = useState<string | null>(null);
   
-  // Log when tag filter changes
-  React.useEffect(() => {
+  // Log when tag filter changes and scroll to top of filtered content
+  useEffect(() => {
     if (currentTagFilter) {
       console.log(`Now filtering by tag: ${currentTagFilter}`);
+      if (containerRef.current) {
+        containerRef.current.scrollTop = 0;
+      }
     }
   }, [currentTagFilter]);
   
@@ -221,6 +225,25 @@ export function BibleContent({
   
   return (
     <div className="relative">
+      {/* Tag filter indicator */}
+      {currentTagFilter && (
+        <div className="mb-4 p-3 rounded-lg bg-[#2c4c3b]/10 text-[#2c4c3b] dark:bg-[#2c4c3b]/20 dark:text-[#5b8b76] flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="font-medium">Showing verses about:</span>
+            <span className="px-2 py-1 rounded-full bg-[#2c4c3b]/20 font-semibold">{currentTagFilter}</span>
+          </div>
+          <button 
+            onClick={() => setCurrentTagFilter(null)}
+            className="p-1 rounded-full hover:bg-[#2c4c3b]/20 transition-colors"
+            aria-label="Clear filter"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      )}
+      
       <div 
         ref={containerRef} 
         className="chapter-content p-4 md:p-6 rounded-md bg-stone-50 dark:bg-stone-900 shadow-sm"
