@@ -207,8 +207,10 @@ export async function saveTagsToDatabase(reference: string, verseTags: VerseTags
           .select()
           .from(verseTags)
           .where(
-            eq(verseTags.verseId, verse.id),
-            eq(verseTags.tagId, existingTag.id)
+            and(
+              eq(verseTags.verseId, verse.id),
+              eq(verseTags.tagId, existingTag.id)
+            )
           );
 
         // If relationship doesn't exist, create it
