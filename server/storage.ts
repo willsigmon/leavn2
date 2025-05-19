@@ -9,6 +9,9 @@ import { eq, and, sql } from "drizzle-orm";
 import * as schema from "@shared/schema";
 import { v4 as uuidv4 } from 'uuid';
 
+// Default color used when a highlight is created without a specified color
+const DEFAULT_HIGHLIGHT_COLOR = 'yellow';
+
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
@@ -172,7 +175,11 @@ export class DatabaseStorage implements IStorage {
   async createNote(note: InsertNote): Promise<Note> {
     const [createdNote] = await db
       .insert(schema.notes)
-      .values({ ...note, id: uuidv4() })
+      .values({
+        ...note,
+        id: uuidv4(),
+        highlightColor: note.highlight ? (note.highlightColor || DEFAULT_HIGHLIGHT_COLOR) : null
+      })
       .returning();
     return createdNote;
   }
@@ -215,9 +222,12 @@ export class DatabaseStorage implements IStorage {
       // Update existing note
       await db
         .update(schema.notes)
-        .set({ 
-          highlight, 
-          updatedAt: new Date() 
+        .set({
+          highlight,
+          highlightColor: highlight
+            ? existingNote.highlightColor || DEFAULT_HIGHLIGHT_COLOR
+            : null,
+          updatedAt: new Date()
         })
         .where(eq(schema.notes.id, existingNote.id));
       return true;
@@ -232,6 +242,7 @@ export class DatabaseStorage implements IStorage {
           chapter,
           verse,
           highlight,
+          highlightColor: highlight ? DEFAULT_HIGHLIGHT_COLOR : null,
           content: null
         });
       return true;
@@ -455,16 +466,17 @@ export class MemStorage implements IStorage {
     
     // Sample notes
     const notes: Note[] = [
-      { 
-        id: "n1", 
-        userId: "user1", 
-        book: "proverbs", 
-        chapter: 3, 
-        verse: 5, 
-        content: "This is one of my favorite verses to remember during difficult times. When things don't make sense, trusting God completely is the answer.", 
-        highlight: true, 
-        createdAt: new Date("2023-06-12"), 
-        updatedAt: new Date("2023-06-12") 
+      {
+        id: "n1",
+        userId: "user1",
+        book: "proverbs",
+        chapter: 3,
+        verse: 5,
+        content: "This is one of my favorite verses to remember during difficult times. When things don't make sense, trusting God completely is the answer.",
+        highlight: true,
+        highlightColor: DEFAULT_HIGHLIGHT_COLOR,
+        createdAt: new Date("2023-06-12"),
+        updatedAt: new Date("2023-06-12")
       }
     ];
     
@@ -641,7 +653,13 @@ export class MemStorage implements IStorage {
   async createNote(note: InsertNote): Promise<Note> {
     const id = uuidv4();
     const now = new Date();
-    const newNote: Note = { ...note, id, createdAt: now, updatedAt: now };
+    const newNote: Note = {
+      ...note,
+      id,
+      createdAt: now,
+      updatedAt: now,
+      highlightColor: note.highlight ? (note.highlightColor || DEFAULT_HIGHLIGHT_COLOR) : null
+    };
     this.notes.set(id, newNote);
     return newNote;
   }
@@ -666,7 +684,12 @@ export class MemStorage implements IStorage {
     
     if (existingNote) {
       // Update existing note
-      const updatedNote: Note = { ...existingNote, highlight, updatedAt: new Date() };
+      const updatedNote: Note = {
+        ...existingNote,
+        highlight,
+        highlightColor: highlight ? existingNote.highlightColor || DEFAULT_HIGHLIGHT_COLOR : null,
+        updatedAt: new Date()
+      };
       this.notes.set(existingNote.id, updatedNote);
     } else {
       // Create new note with highlight
@@ -680,6 +703,7 @@ export class MemStorage implements IStorage {
         verse,
         content: null,
         highlight,
+        highlightColor: highlight ? DEFAULT_HIGHLIGHT_COLOR : null,
         createdAt: now,
         updatedAt: now
       };
