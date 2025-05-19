@@ -11,6 +11,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { globalBibleReader } from '@/lib/bibleHelper';
+import { getBookById, getTotalChapters, getBookPosition } from '@/lib/bibleStructure';
 
 interface Verse {
   verse: number;
@@ -628,12 +629,12 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
           Previous Chapter
         </Button>
         
-        <span className="text-sm font-medium">Chapter {currentChapter} of 50</span>
+        <span className="text-sm font-medium">Chapter {currentChapter} of {getTotalChapters('genesis')}</span>
         
         <Button 
           variant="outline" 
           onClick={goToNextChapter}
-          disabled={currentChapter >= 50}
+          disabled={currentChapter >= getTotalChapters('genesis')}
           className="text-[#2c4c3b] dark:text-green-400"
         >
           Next Chapter
