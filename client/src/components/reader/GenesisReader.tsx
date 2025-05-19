@@ -3,13 +3,14 @@ import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ChevronRight, BookOpen, Info } from 'lucide-react';
+import { ChevronRight, BookOpen, Info, ChevronLeft, ChevronUp, Settings } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { globalBibleReader } from '@/lib/bibleHelper';
 
 interface Verse {
   verse: number;
@@ -49,6 +50,16 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
   const [selectedTranslation, setSelectedTranslation] = useState<'web' | 'kjv'>('web');
   const [showThematicTags, setShowThematicTags] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [currentChapter, setCurrentChapter] = useState(chapter);
+  const [showSettings, setShowSettings] = useState(false);
+  const [fontSize, setFontSize] = useState(16);
+  const [lineSpacing, setLineSpacing] = useState(1.5);
+  
+  // Initialize Bible reader
+  useEffect(() => {
+    // Sync our chapter with the reader
+    globalBibleReader.navigate('genesis', currentChapter, 1);
+  }, [currentChapter]);
   
   // Check system preference for dark mode
   useEffect(() => {
@@ -58,17 +69,34 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
   
   // Fetch Genesis chapter data
   const { data: chapterData, isLoading, error } = useQuery<GenesisChapterData>({
-    queryKey: [`/api/reader/genesis/${chapter}`],
+    queryKey: [`/api/reader/genesis/${currentChapter}`],
     retry: 2,
     refetchOnWindowFocus: false,
     staleTime: 5 * 60 * 1000, // Cache for 5 minutes
   });
+  
+  // Navigation handlers
+  const goToNextChapter = () => {
+    if (currentChapter < 50) { // Genesis has 50 chapters
+      setCurrentChapter(prev => prev + 1);
+      globalBibleReader.nextChapter();
+      window.scrollTo(0, 0); // Scroll back to top
+    }
+  };
+  
+  const goToPreviousChapter = () => {
+    if (currentChapter > 1) {
+      setCurrentChapter(prev => prev - 1);
+      globalBibleReader.previousChapter();
+      window.scrollTo(0, 0); // Scroll back to top
+    }
+  };
 
   // Handle tags display for a verse
   const renderTags = (verse: Verse) => {
     if (!showThematicTags) return null;
     
-    // For demo purposes, add sample tags to Genesis 1:1-3
+    // For demo purposes, add sample tags to Genesis 1:1-10
     if (verse.verse === 1) {
       verse.tags = {
         themes: ['Creation', 'Beginning', 'God\'s Power'],
@@ -95,6 +123,69 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
         timeframe: ['First day'],
         symbols: ['Light'],
         emotions: ['Divine authority']
+      };
+    } else if (verse.verse === 4) {
+      verse.tags = {
+        themes: ['Evaluation', 'Separation', 'Order'],
+        people: ['God'],
+        places: [],
+        timeframe: ['First day'],
+        symbols: ['Light', 'Darkness', 'Division'],
+        emotions: ['Satisfaction']
+      };
+    } else if (verse.verse === 5) {
+      verse.tags = {
+        themes: ['Naming', 'Time', 'Cycles'],
+        people: ['God'],
+        places: [],
+        timeframe: ['First day'],
+        symbols: ['Day', 'Night', 'Evening', 'Morning'],
+        emotions: ['Completion']
+      };
+    } else if (verse.verse === 6) {
+      verse.tags = {
+        themes: ['Separation', 'Structure', 'Sky'],
+        people: ['God'],
+        places: [],
+        timeframe: ['Second day'],
+        symbols: ['Expanse', 'Waters'],
+        emotions: ['Authority']
+      };
+    } else if (verse.verse === 7) {
+      verse.tags = {
+        themes: ['Boundary', 'Division', 'Order'],
+        people: ['God'],
+        places: ['Sky', 'Waters above', 'Waters below'],
+        timeframe: ['Second day'],
+        symbols: ['Waters', 'Expanse'],
+        emotions: ['Obedience']
+      };
+    } else if (verse.verse === 8) {
+      verse.tags = {
+        themes: ['Naming', 'Time', 'Cycles'],
+        people: ['God'],
+        places: ['Sky'],
+        timeframe: ['Second day'],
+        symbols: ['Sky', 'Evening', 'Morning'],
+        emotions: ['Completion']
+      };
+    } else if (verse.verse === 9) {
+      verse.tags = {
+        themes: ['Gathering', 'Appearance', 'Land'],
+        people: ['God'],
+        places: ['Dry land', 'Waters'],
+        timeframe: ['Third day'],
+        symbols: ['Land', 'Sea'],
+        emotions: ['Command']
+      };
+    } else if (verse.verse === 10) {
+      verse.tags = {
+        themes: ['Naming', 'Evaluation', 'Satisfaction'],
+        people: ['God'],
+        places: ['Earth', 'Seas'],
+        timeframe: ['Third day'],
+        symbols: ['Land', 'Water'],
+        emotions: ['Approval', 'Satisfaction']
       };
     }
     
@@ -460,12 +551,88 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
   // Use the formatted verses for rendering
   const renderedVerses = chapterData ? getFormattedVerses() : [];
   
+  // Reader settings panel
+  const SettingsPanel = () => (
+    <div 
+      className={`bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 
+                 absolute right-0 top-full mt-2 z-50 w-64 transition-all duration-200 
+                 ${showSettings ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`}
+    >
+      <h3 className="text-lg font-semibold mb-3 text-[#2c4c3b] dark:text-green-400">Reader Settings</h3>
+      
+      <div className="space-y-4">
+        <div>
+          <label className="text-sm font-medium block mb-1">Font Size</label>
+          <div className="flex items-center">
+            <button 
+              onClick={() => setFontSize(Math.max(12, fontSize - 1))}
+              className="w-8 h-8 flex items-center justify-center rounded border border-gray-200 dark:border-gray-700"
+            >
+              -
+            </button>
+            <div className="mx-2 text-sm">{fontSize}px</div>
+            <button 
+              onClick={() => setFontSize(Math.min(24, fontSize + 1))}
+              className="w-8 h-8 flex items-center justify-center rounded border border-gray-200 dark:border-gray-700"
+            >
+              +
+            </button>
+          </div>
+        </div>
+        
+        <div>
+          <label className="text-sm font-medium block mb-1">Line Spacing</label>
+          <div className="flex items-center">
+            <button 
+              onClick={() => setLineSpacing(Math.max(1, lineSpacing - 0.1))}
+              className="w-8 h-8 flex items-center justify-center rounded border border-gray-200 dark:border-gray-700"
+            >
+              -
+            </button>
+            <div className="mx-2 text-sm">{lineSpacing.toFixed(1)}</div>
+            <button 
+              onClick={() => setLineSpacing(Math.min(3, lineSpacing + 0.1))}
+              className="w-8 h-8 flex items-center justify-center rounded border border-gray-200 dark:border-gray-700"
+            >
+              +
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className={`p-4 max-w-3xl mx-auto ${isDarkMode ? 'text-gray-100' : 'text-gray-800'}`}>
+      {/* Chapter navigation */}
+      <div className="flex justify-between items-center mb-4">
+        <Button 
+          variant="outline" 
+          onClick={goToPreviousChapter}
+          disabled={currentChapter <= 1}
+          className="text-[#2c4c3b] dark:text-green-400"
+        >
+          <ChevronLeft className="mr-1 h-4 w-4" />
+          Previous Chapter
+        </Button>
+        
+        <span className="text-sm font-medium">Chapter {currentChapter} of 50</span>
+        
+        <Button 
+          variant="outline" 
+          onClick={goToNextChapter}
+          disabled={currentChapter >= 50}
+          className="text-[#2c4c3b] dark:text-green-400"
+        >
+          Next Chapter
+          <ChevronRight className="ml-1 h-4 w-4" />
+        </Button>
+      </div>
+    
       {/* Chapter header */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold tracking-tight">
-          Genesis {chapter}: {chapterData?.title || 'Creation'}
+          Genesis {currentChapter}: {currentChapter === 1 ? 'Creation' : `Chapter ${currentChapter}`}
         </h1>
         
         {chapterData?.summary && (
@@ -474,8 +641,8 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
           </p>
         )}
 
-        {/* Translation selector */}
-        <div className="mt-4 flex gap-2">
+        {/* Translation selector and settings */}
+        <div className="mt-4 flex gap-2 relative">
           <Button 
             variant={selectedTranslation === 'web' ? 'default' : 'outline'} 
             size="sm"
@@ -502,6 +669,16 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
             <Info className="mr-2 h-4 w-4" />
             {showThematicTags ? 'Hide Tags' : 'Show Tags'}
           </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowSettings(!showSettings)}
+            className={showSettings ? 'bg-gray-200 dark:bg-gray-700' : ''}
+          >
+            <Settings className="mr-2 h-4 w-4" />
+            Settings
+          </Button>
+          <SettingsPanel />
         </div>
       </div>
 

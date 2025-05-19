@@ -1,0 +1,106 @@
+// helpers.js - Add this file or update existing
+export function getVerseRange(book, chapter, startVerse, endVerse) {
+  // Normalize book name to lowercase for consistent lookup
+  const normalizedBook = book.toLowerCase();
+  
+  // Validate book exists
+  if (!books[normalizedBook]) {
+    console.error(`Book not found: ${book}`);
+    return null;
+  }
+  
+  // Get the chapter array (adjusting for 0-index)
+  const chapterData = books[normalizedBook].chapters[chapter - 1];
+  if (!chapterData) {
+    console.error(`Chapter ${chapter} not found in ${book}`);
+    return null;
+  }
+  
+  // Extract the requested verses
+  const verses = [];
+  for (let i = startVerse; i <= endVerse; i++) {
+    if (i <= chapterData.length) {
+      verses.push({
+        number: i,
+        text: chapterData[i - 1]
+      });
+    }
+  }
+  
+  return {
+    book: normalizedBook,
+    displayName: books[normalizedBook].name,
+    chapter,
+    verses
+  };
+}
+
+// Reader class to prevent overwriting
+export class BibleReader {
+  constructor(id) {
+    this.id = id;
+    this.loadState();
+  }
+  
+  loadState() {
+    const saved = localStorage.getItem(`reader_${this.id}`);
+    if (saved) {
+      const state = JSON.parse(saved);
+      this.book = state.book;
+      this.chapter = state.chapter;
+      this.verse = state.verse;
+    } else {
+      // Default starting position
+      this.book = 'genesis';
+      this.chapter = 1;
+      this.verse = 1;
+    }
+  }
+  
+  saveState() {
+    localStorage.setItem(`reader_${this.id}`, JSON.stringify({
+      book: this.book,
+      chapter: this.chapter,
+      verse: this.verse
+    }));
+  }
+  
+  navigate(book, chapter, verse) {
+    this.book = book.toLowerCase();
+    this.chapter = parseInt(chapter);
+    this.verse = parseInt(verse);
+    this.saveState();
+    return this.getCurrentVerses();
+  }
+  
+  getCurrentVerses(verseCount = 1) {
+    return getVerseRange(this.book, this.chapter, this.verse, this.verse + verseCount - 1);
+  }
+  
+  nextVerse() {
+    const bookData = books[this.book];
+    const currentChapter = bookData.chapters[this.chapter - 1];
+    
+    if (this.verse < currentChapter.length) {
+      // Move to next verse
+      this.verse++;
+    } else if (this.chapter < bookData.chapters.length) {
+      // Move to next chapter
+      this.chapter++;
+      this.verse = 1;
+    } else {
+      // Move to next book
+      const bookKeys = Object.keys(books);
+      const currentIndex = bookKeys.indexOf(this.book);
+      
+      if (currentIndex < bookKeys.length - 1) {
+        this.book = bookKeys[currentIndex + 1];
+        this.chapter = 1;
+        this.verse = 1;
+      }
+    }
+    
+    this.saveState();
+    return this.getCurrentVerses();
+  }
+}
