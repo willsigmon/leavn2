@@ -5,18 +5,16 @@ import { v4 as uuidv4 } from 'uuid';
 // This is a temporary solution for testing purposes
 
 // Middleware to check if user is authenticated
-export const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
-  // For development, temporarily bypass authentication to focus on cross-references feature
-  return next();
-  
-  // Commented out actual authentication check for development
-  /*
+export const isAuthenticated = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   if (req.session && (req.session as any).userId) {
     return next();
   }
-  
+
   return res.status(401).json({ message: 'Unauthorized' });
-  */
 };
 
 // Simple login handler
