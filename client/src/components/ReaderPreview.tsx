@@ -61,36 +61,36 @@ export function ReaderPreview() {
       </div>
       
       {/* Reader Content */}
-      <div className="p-3 sm:p-4 overflow-hidden relative h-full">
-        <div className="relative">
-          <p className={`font-serif text-base sm:text-lg text-stone-800 dark:text-stone-200 mb-2 transition-all duration-300 ${activeVerse === 1 ? 'bg-[#f0f4ed]/50 dark:bg-[#2c4c3b]/20 -mx-2 px-2 py-1 rounded' : ''}`}>
-            <span className="text-[#2c4c3b] dark:text-[#a5c2a5] font-semibold mr-2">1</span>
+      <div className="p-2 md:p-3 overflow-hidden relative h-full">
+        <div className="relative max-h-[250px] overflow-y-auto custom-scrollbar pr-2">
+          <p className={`font-serif text-sm sm:text-base text-stone-800 dark:text-stone-200 mb-1.5 transition-all duration-300 ${activeVerse === 1 ? 'bg-[#f0f4ed]/50 dark:bg-[#2c4c3b]/20 -mx-2 px-2 py-1 rounded' : ''}`}>
+            <span className="text-[#2c4c3b] dark:text-[#a5c2a5] font-semibold mr-1.5">1</span>
             In the beginning God created the heavens and the earth.
           </p>
           
-          <p className={`font-serif text-base sm:text-lg text-stone-800 dark:text-stone-200 mb-2 transition-all duration-300 ${activeVerse === 2 ? 'bg-[#f0f4ed]/50 dark:bg-[#2c4c3b]/20 -mx-2 px-2 py-1 rounded' : ''}`}>
-            <span className="text-[#2c4c3b] dark:text-[#a5c2a5] font-semibold mr-2">2</span>
+          <p className={`font-serif text-sm sm:text-base text-stone-800 dark:text-stone-200 mb-1.5 transition-all duration-300 ${activeVerse === 2 ? 'bg-[#f0f4ed]/50 dark:bg-[#2c4c3b]/20 -mx-2 px-2 py-1 rounded' : ''}`}>
+            <span className="text-[#2c4c3b] dark:text-[#a5c2a5] font-semibold mr-1.5">2</span>
             Now the earth was formless and empty, darkness was over the surface of the deep, and the Spirit of God was hovering over the waters.
           </p>
           
           {/* Highlighted Verse with Commentary Animation */}
-          <div className={`my-2 p-3 transition-all duration-500 ${isHighlighted ? 'bg-[#f0f4ed] dark:bg-[#2c4c3b]/30 rounded-lg border-l-4 border-[#3a6349] dark:border-[#3a6349]' : ''}`}>
-            <p className="font-serif text-lg text-stone-800 dark:text-stone-200">
-              <span className="text-[#2c4c3b] dark:text-[#a5c2a5] font-semibold mr-2">3</span>
+          <div className={`my-1.5 p-2 transition-all duration-500 ${isHighlighted ? 'bg-[#f0f4ed] dark:bg-[#2c4c3b]/30 rounded-lg border-l-4 border-[#3a6349] dark:border-[#3a6349]' : ''}`}>
+            <p className="font-serif text-sm sm:text-base text-stone-800 dark:text-stone-200">
+              <span className="text-[#2c4c3b] dark:text-[#a5c2a5] font-semibold mr-1.5">3</span>
               And God said, "<span className={`relative inline-block ${isHighlighted ? 'text-[#3a6349] dark:text-[#a5c2a5] font-medium' : ''}`}>Let there be light</span>," and there was light.
             </p>
             
             {/* Commentary Popup - Animated */}
-            <div className={`mt-3 p-3 bg-white dark:bg-gray-800 rounded shadow-md border border-[#d8e5d2] dark:border-[#2c4c3b] transition-all duration-500 ${showCommentary ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3 pointer-events-none'}`}>
-              <div className="flex items-center mb-2">
-                <div className="h-4 w-4 rounded-full bg-[#3a6349] dark:bg-[#3a6349] mr-2"></div>
-                <span className="text-sm font-medium text-[#2c4c3b] dark:text-[#a5c2a5]">
+            <div className={`mt-2 p-2 bg-white dark:bg-gray-800 rounded shadow-md border border-[#d8e5d2] dark:border-[#2c4c3b] transition-all duration-500 ${showCommentary ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3 pointer-events-none'}`}>
+              <div className="flex items-center mb-1">
+                <div className="h-3 w-3 rounded-full bg-[#3a6349] dark:bg-[#3a6349] mr-1.5"></div>
+                <span className="text-xs font-medium text-[#2c4c3b] dark:text-[#a5c2a5]">
                   {activeLens === 'E' ? 'Evangelical Perspective' : 
                    activeLens === 'C' ? 'Catholic Perspective' : 
                    'Jewish Perspective'}
                 </span>
               </div>
-              <p className="text-sm text-stone-600 dark:text-stone-300">
+              <p className="text-xs text-stone-600 dark:text-stone-300 leading-relaxed">
                 {activeLens === 'E' 
                   ? "This powerful declaration demonstrates God's creative power through His spoken word, establishing His authority over creation."
                   : activeLens === 'C' 
@@ -100,13 +100,13 @@ export function ReaderPreview() {
             </div>
           </div>
           
-          <p className={`font-serif text-lg text-stone-800 dark:text-stone-200 mb-3 transition-all duration-300 ${activeVerse === 4 ? 'bg-[#f0f4ed]/50 dark:bg-[#2c4c3b]/20 -mx-2 px-2 py-1 rounded' : ''}`}>
-            <span className="text-[#2c4c3b] dark:text-[#a5c2a5] font-semibold mr-2">4</span>
+          <p className={`font-serif text-sm sm:text-base text-stone-800 dark:text-stone-200 mb-1.5 transition-all duration-300 ${activeVerse === 4 ? 'bg-[#f0f4ed]/50 dark:bg-[#2c4c3b]/20 -mx-2 px-2 py-1 rounded' : ''}`}>
+            <span className="text-[#2c4c3b] dark:text-[#a5c2a5] font-semibold mr-1.5">4</span>
             God saw that the light was good, and he separated the light from the darkness.
           </p>
           
-          <p className={`font-serif text-lg text-stone-800 dark:text-stone-200 mb-3 transition-all duration-300 ${activeVerse === 5 ? 'bg-[#f0f4ed]/50 dark:bg-[#2c4c3b]/20 -mx-2 px-2 py-1 rounded' : ''}`}>
-            <span className="text-[#2c4c3b] dark:text-[#a5c2a5] font-semibold mr-2">5</span>
+          <p className={`font-serif text-sm sm:text-base text-stone-800 dark:text-stone-200 mb-1.5 transition-all duration-300 ${activeVerse === 5 ? 'bg-[#f0f4ed]/50 dark:bg-[#2c4c3b]/20 -mx-2 px-2 py-1 rounded' : ''}`}>
+            <span className="text-[#2c4c3b] dark:text-[#a5c2a5] font-semibold mr-1.5">5</span>
             God called the light "day," and the darkness he called "night." And there was evening, and there was morning—the first day.
           </p>
         </div>
