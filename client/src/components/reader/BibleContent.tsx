@@ -12,6 +12,8 @@ interface BibleContentProps {
   chapter: number;
   viewMode: 'standard' | 'genz' | 'kids' | 'novelize';
   onNavigateToVerse: (reference: string) => void;
+  enableTagging?: boolean;
+  tagsClickable?: boolean;
 }
 
 export function BibleContent({
@@ -19,7 +21,9 @@ export function BibleContent({
   bookName,
   chapter,
   viewMode,
-  onNavigateToVerse
+  onNavigateToVerse,
+  enableTagging = false,
+  tagsClickable = false
 }: BibleContentProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [selectedVerse, setSelectedVerse] = useState<string | null>(null);

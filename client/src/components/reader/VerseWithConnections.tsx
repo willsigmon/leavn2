@@ -24,10 +24,13 @@ interface VerseWithConnectionsProps {
   isBookmarked?: boolean;
   hasNote?: boolean;
   highlightColor?: string;
+  tags?: string[];
+  tagsClickable?: boolean;
   onNavigateToVerse: (reference: string) => void;
   onHighlight?: (verseNumber: number, color: string) => void;
   onBookmark?: (verseNumber: number, isBookmarked: boolean) => void;
   onAddNote?: (verseNumber: number) => void;
+  onTagClick?: (tag: string) => void;
 }
 
 export function VerseWithConnections({
@@ -37,10 +40,13 @@ export function VerseWithConnections({
   isBookmarked = false,
   hasNote = false,
   highlightColor,
+  tags = [],
+  tagsClickable = false,
   onNavigateToVerse,
   onHighlight,
   onBookmark,
-  onAddNote
+  onAddNote,
+  onTagClick
 }: VerseWithConnectionsProps) {
   const [open, setOpen] = useState(false);
   const [selectedColor, setSelectedColor] = useState<string | undefined>(highlightColor);
@@ -91,7 +97,29 @@ export function VerseWithConnections({
             {verseNumber}
           </span>
           <div className="verse-text flex-1">
-            {verseText}
+            <span>{verseText}</span>
+            
+            {/* Tags for each verse */}
+            {tags && tags.length > 0 && (
+              <div className="inline-flex flex-wrap gap-1 ml-2 text-xs">
+                {tags.map((tag, i) => (
+                  <span 
+                    key={`tag-${verseNumber}-${i}`} 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (tagsClickable && onTagClick) onTagClick(tag);
+                    }}
+                    className={`inline-flex items-center px-2 py-0.5 rounded-full 
+                      bg-[#2c4c3b]/10 text-[#2c4c3b] dark:bg-[#2c4c3b]/20 dark:text-[#5b8b76]
+                      ${tagsClickable ? 'cursor-pointer hover:bg-[#2c4c3b]/20 hover:scale-105 transition-all' : ''}
+                    `}
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
+            
             <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild>
                 <button 

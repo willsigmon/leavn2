@@ -580,9 +580,9 @@ export default function Reader() {
             </div>
           </div>
           
-          {/* Bible content */}
-          <div className={`p-4 md:p-6 lg:p-8 w-full ${paperTexture ? 'paper-texture' : ''}`}>
-            <div className="glass rounded-3xl p-6 md:p-8 shadow-xl backdrop-blur-xl hover:backdrop-blur-2xl transition-all duration-300 animate-fade-in group">
+          {/* Bible content - expanded to take 20% more width */}
+          <div className={`p-4 md:p-6 lg:p-8 w-full mx-auto ${paperTexture ? 'paper-texture' : ''}`}>
+            <div className="glass rounded-3xl p-6 md:p-8 shadow-xl backdrop-blur-xl hover:backdrop-blur-2xl transition-all duration-300 animate-fade-in group max-w-[calc(100%+20%)] lg:max-w-none lg:w-[120%] lg:-ml-[10%]">
               <div className="relative">
                 <div className="absolute -inset-1 bg-gradient-to-r from-[#2c4c3b]/20 to-transparent rounded-3xl blur opacity-25 group-hover:opacity-40 transition-opacity duration-300"></div>
                 {book.toLowerCase() === 'genesis' ? (
@@ -594,6 +594,8 @@ export default function Reader() {
                     chapter={chapter}
                     viewMode={viewMode}
                     onNavigateToVerse={handleNavigateToVerse}
+                    enableTagging={true}
+                    tagsClickable={true}
                   />
                 )}
               </div>
