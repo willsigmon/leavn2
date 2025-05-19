@@ -48,6 +48,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { useReadingPlan } from '@/hooks/useReadingPlanContext';
 import DayCard from '@/components/ReadingPlans/DayCard';
+import DayDetail from '@/components/ReadingPlans/DayDetail';
 
 export default function ReadingPlanDetail() {
   const [match, params] = useRoute('/reading-plans/:id');
@@ -304,70 +305,12 @@ export default function ReadingPlanDetail() {
         <div className="md:col-span-2">
           {selectedDay ? (
             <div className="space-y-6">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <h2 className="text-xl font-bold">{selectedDay.title}</h2>
-                
-                {isAuthenticated && (
-                  <Button 
-                    onClick={handleMarkAsCompleted}
-                    disabled={isDayCompleted(selectedDay.id)}
-                    className={isDayCompleted(selectedDay.id) 
-                      ? "bg-[#e8efe5] text-[#2c4c3b] hover:bg-[#e8efe5]" 
-                      : "bg-[#2c4c3b] hover:bg-[#3a6349] text-white"
-                    }
-                  >
-                    {isDayCompleted(selectedDay.id) ? (
-                      <>
-                        <CheckCircle2 className="mr-2 h-4 w-4" />
-                        Completed
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircle2 className="mr-2 h-4 w-4" />
-                        Mark as Completed
-                      </>
-                    )}
-                  </Button>
-                )}
-              </div>
-
-              {/* Read passages section */}
-              <Card className="border-l-4 border-l-[#2c4c3b]">
-                <CardHeader className="pb-2">
-                  <div className="flex items-start">
-                    <BookOpen className="mt-1 mr-2 h-5 w-5 text-[#2c4c3b] dark:text-[#a5c2a5]" />
-                    <div>
-                      <CardTitle className="text-lg">Read These Passages</CardTitle>
-                      <p className="text-sm text-muted-foreground">Scripture readings for today</p>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {selectedDay.passages.map((passage, index) => (
-                      <Button 
-                        key={index}
-                        variant="outline" 
-                        className="w-full justify-between text-left hover:bg-[#f0f4ed] hover:text-[#2c4c3b] dark:hover:bg-[#2c4c3b]/20 dark:hover:text-[#a5c2a5] border"
-                        onClick={() => {
-                          if (passage.toLowerCase() !== 'this reading plan is under development') {
-                            // Extract book, chapter, verse from the passage
-                            const parts = passage.split(' ');
-                            const book = parts[0].toLowerCase();
-                            const reference = parts[1].split(':');
-                            const chapter = reference[0];
-                            
-                            navigate(`/reader/${book}/${chapter}`);
-                          }
-                        }}
-                      >
-                        <span>{passage}</span>
-                        <ChevronRight className="h-4 w-4" />
-                      </Button>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+              <DayDetail 
+                day={selectedDay} 
+                dayNumber={activePlan.days?.findIndex(d => d.id === selectedDay.id) + 1 || 0}
+                isCompleted={isDayCompleted(selectedDay.id)}
+                onComplete={handleMarkAsCompleted}
+              />
 
               {/* Tabs for different content types */}
               <Tabs defaultValue="context" className="w-full">
