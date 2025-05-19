@@ -112,34 +112,34 @@ export function ReaderPreview() {
         </div>
         
         {/* Lens Switcher */}
-        <div className="absolute bottom-4 right-4 flex bg-white dark:bg-gray-800 rounded-full p-1 shadow-md transition-all duration-300 hover:shadow-lg">
+        <div className="absolute bottom-3 right-3 flex bg-white dark:bg-gray-800 rounded-full p-0.5 shadow-md transition-all duration-300 hover:shadow-lg">
           <div 
-            className={`h-7 w-7 rounded-full text-xs flex items-center justify-center text-center font-medium transition-all duration-300 cursor-pointer ${activeLens === 'E' ? 'bg-[#e8efe5] dark:bg-[#2c4c3b] text-[#2c4c3b] dark:text-[#a5c2a5]' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'}`}
+            className={`h-6 w-6 rounded-full text-xs flex items-center justify-center text-center font-medium transition-all duration-300 cursor-pointer ${activeLens === 'E' ? 'bg-[#e8efe5] dark:bg-[#2c4c3b] text-[#2c4c3b] dark:text-[#a5c2a5]' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'}`}
             onClick={() => setActiveLens('E')}
           >E</div>
           <div 
-            className={`h-7 w-7 rounded-full text-xs flex items-center justify-center text-center font-medium ml-1 transition-all duration-300 cursor-pointer ${activeLens === 'C' ? 'bg-[#e8efe5] dark:bg-[#2c4c3b] text-[#2c4c3b] dark:text-[#a5c2a5]' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'}`}
+            className={`h-6 w-6 rounded-full text-xs flex items-center justify-center text-center font-medium ml-1 transition-all duration-300 cursor-pointer ${activeLens === 'C' ? 'bg-[#e8efe5] dark:bg-[#2c4c3b] text-[#2c4c3b] dark:text-[#a5c2a5]' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'}`}
             onClick={() => setActiveLens('C')}
           >C</div>
           <div 
-            className={`h-7 w-7 rounded-full text-xs flex items-center justify-center text-center font-medium ml-1 transition-all duration-300 cursor-pointer ${activeLens === 'J' ? 'bg-[#e8efe5] dark:bg-[#2c4c3b] text-[#2c4c3b] dark:text-[#a5c2a5]' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'}`}
+            className={`h-6 w-6 rounded-full text-xs flex items-center justify-center text-center font-medium ml-1 transition-all duration-300 cursor-pointer ${activeLens === 'J' ? 'bg-[#e8efe5] dark:bg-[#2c4c3b] text-[#2c4c3b] dark:text-[#a5c2a5]' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'}`}
             onClick={() => setActiveLens('J')}
           >J</div>
         </div>
         
         {/* Floating Action Buttons */}
-        <div className="absolute top-1/2 right-0 transform -translate-y-1/2 flex flex-col space-y-2">
-          <div className="h-9 w-9 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b]/60 text-[#2c4c3b] dark:text-[#a5c2a5] flex items-center justify-center cursor-pointer shadow-md hover:shadow-lg transition-all duration-300">
-            <Bookmark className="h-4 w-4" />
+        <div className="absolute top-1/2 right-1 transform -translate-y-1/2 flex flex-col space-y-1.5">
+          <div className="h-7 w-7 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b]/60 text-[#2c4c3b] dark:text-[#a5c2a5] flex items-center justify-center cursor-pointer shadow-md hover:shadow-lg transition-all duration-300">
+            <Bookmark className="h-3 w-3" />
           </div>
-          <div className="h-9 w-9 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b]/60 text-[#2c4c3b] dark:text-[#a5c2a5] flex items-center justify-center cursor-pointer shadow-md hover:shadow-lg transition-all duration-300">
-            <MessageCircle className="h-4 w-4" />
+          <div className="h-7 w-7 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b]/60 text-[#2c4c3b] dark:text-[#a5c2a5] flex items-center justify-center cursor-pointer shadow-md hover:shadow-lg transition-all duration-300">
+            <MessageCircle className="h-3 w-3" />
           </div>
         </div>
         
         {/* Hovering Tags Decoration - Subtle animation */}
-        <div className="absolute top-[30%] left-[50%] bg-[#f0f4ed] dark:bg-[#2c4c3b]/30 text-xs px-2 py-1 rounded-full text-[#2c4c3b] dark:text-[#a5c2a5] opacity-70 animate-float-reverse">CREATION</div>
-        <div className="absolute top-[60%] left-[20%] bg-[#f0f4ed] dark:bg-[#2c4c3b]/30 text-xs px-2 py-1 rounded-full text-[#2c4c3b] dark:text-[#a5c2a5] opacity-70 animate-float animation-delay-1500">LIGHT</div>
+        <div className="absolute top-[25%] left-[40%] bg-[#f0f4ed] dark:bg-[#2c4c3b]/30 text-[10px] px-1.5 py-0.5 rounded-full text-[#2c4c3b] dark:text-[#a5c2a5] opacity-70 animate-float-reverse">CREATION</div>
+        <div className="absolute top-[55%] left-[15%] bg-[#f0f4ed] dark:bg-[#2c4c3b]/30 text-[10px] px-1.5 py-0.5 rounded-full text-[#2c4c3b] dark:text-[#a5c2a5] opacity-70 animate-float animation-delay-1500">LIGHT</div>
       </div>
     </div>
   );

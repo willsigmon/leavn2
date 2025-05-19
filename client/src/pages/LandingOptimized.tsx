@@ -4,6 +4,7 @@ import { CTAButton } from '@/components/CTAButton';
 import { WaitlistModal } from '@/components/WaitlistModal';
 import { ScrollHeader } from '@/components/ScrollHeader';
 import { ReaderPreview } from '@/components/ReaderPreview';
+
 import { Play } from 'lucide-react';
 import Footer from '@/components/layout/Footer';
 const Benefits = React.lazy(() => import('@/components/Benefits3Up'));
@@ -79,13 +80,31 @@ export default function LandingOptimized() {
           <h2 className="text-2xl font-semibold text-[#2c4c3b] dark:text-white">Experience Leavn</h2>
         </div>
         <div className="mx-auto mt-8 max-w-4xl overflow-hidden rounded-3xl shadow-lg backdrop-blur-xl bg-white/30 dark:bg-black/20 border border-white/20 dark:border-white/5">
-          <video
-            className="w-full"
-            src="/media/landing-demo.mp4"
-            poster="/media/poster.jpg"
-            controls
-            preload="none"
-          />
+          <div className="relative w-full aspect-video">
+            <div className="absolute inset-0 bg-gradient-to-r from-[#2c4c3b]/80 to-[#1a2b26]/80 flex items-center justify-center">
+              <div className="flex flex-col items-center justify-center px-6 sm:px-10 md:px-16 text-center">
+                <h3 className="text-white text-2xl md:text-3xl font-semibold mb-4">
+                  Theological Lenses
+                </h3>
+                <p className="text-white/80 text-base md:text-lg mb-8">
+                  Switch between Catholic, Protestant, Jewish, Academic, and more perspectives with a single click
+                </p>
+                
+                <div className="flex justify-center space-x-3">
+                  {['Protestant', 'Catholic', 'Jewish', 'Gen-Z', 'Kids'].map((lens, i) => (
+                    <div
+                      key={lens}
+                      className={`px-3 py-1.5 rounded-full ${
+                        i === 1 ? 'bg-white text-[#2c4c3b]' : 'bg-white/20 text-white'
+                      } cursor-pointer text-sm font-medium`}
+                    >
+                      {lens}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
