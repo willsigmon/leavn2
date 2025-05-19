@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { BookOpenText, Settings, LogOut, User as UserIcon, Search, Moon, Sun } from 'lucide-react';
+import { BookOpenText, Settings, LogOut, User as UserIcon, Search, Moon, Sun, Lightbulb } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 
 export function NavBar() {
@@ -75,6 +75,13 @@ export function NavBar() {
                 className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer text-sm font-medium"
               >
                 Reading Plans
+              </Link>
+              <Link 
+                href="/concept-explorer"
+                className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer text-sm font-medium flex items-center"
+              >
+                <Lightbulb className="h-4 w-4 mr-1" />
+                Concept Explorer
               </Link>
             </nav>
           </div>

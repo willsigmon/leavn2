@@ -1,0 +1,135 @@
+import React, { useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useReadingPlans } from '../../hooks/useReadingPlans';
+import { fetchReadingPlanById } from '../../api/readingPlans';
+import DayCard from './DayCard';
+
+const PlanDetail: React.FC = () => {
+  const { planId } = useParams<{ planId: string }>();
+  const navigate = useNavigate();
+  const { state, dispatch } = useReadingPlans();
+  const { currentPlan, loading, error } = state;
+  
+  useEffect(() => {
+    const loadPlan = async () => {
+      if (!planId) return;
+      
+      dispatch({ type: 'FETCH_PLANS_REQUEST' });
+      try {
+        const plan = await fetchReadingPlanById(planId);
+        dispatch({ type: 'SET_CURRENT_PLAN', payload: plan });
+      } catch (err) {
+        dispatch({ type: 'FETCH_PLANS_FAILURE', payload: err.message });
+      }
+    };
+    
+    if (!currentPlan || currentPlan.id !== planId) {
+      loadPlan();
+    }
+  }, [planId, currentPlan, dispatch]);
+  
+  const handleStartPlan = () => {
+    if (!planId) return;
+    
+    dispatch({
+      type: 'START_PLAN',
+      payload: { planId }
+    });
+    
+    // Navigate to first day
+    navigate(`/reading-plans/${planId}/day/0`);
+  };
+  
+  if (loading) {
+    return <div className="loading">Loading reading plan...</div>;
+  }
+  
+  if (error) {
+    return <div className="error">Error: {error}</div>;
+  }
+  
+  if (!currentPlan) {
+    return <div className="not-found">Reading plan not found</div>;
+  }
+  
+  const hasStarted = Boolean(currentPlan.userProgress?.startDate);
+  const completedDays = currentPlan.userProgress?.completedDays || [];
+  const completionPercentage = Math.round(
+    (completedDays.length / currentPlan.duration) * 100
+  ) || 0;
+  
+  return (
+    <div className="plan-detail-container">
+      <div className="plan-header">
+        <h1>{currentPlan.title}</h1>
+        
+        <div className="plan-meta">
+          <span className="duration">{currentPlan.duration} days</span>
+          {currentPlan.difficulty && (
+            <span className={`difficulty ${currentPlan.difficulty}`}>
+              {currentPlan.difficulty}
+            </span>
+          )}
+          {currentPlan.author && (
+            <span className="author">By {currentPlan.author}</span>
+          )}
+        </div>
+        
+        <p className="description">{currentPlan.description}</p>
+        
+        {hasStarted ? (
+          <div className="progress-section">
+            <div className="progress-bar">
+              <div 
+                className="progress-fill" 
+                style={{ width: `${completionPercentage}%` }} 
+              />
+            </div>
+            <span className="progress-text">
+              {completionPercentage === 100 
+                ? 'Completed' 
+                : `${completionPercentage}% complete`}
+            </span>
+            
+            <button 
+              className="continue-button"
+              onClick={() => {
+                const nextIncompleteIndex = currentPlan.days.findIndex(
+                  (day, index) => !completedDays.includes(day.id)
+                );
+                const dayIndex = nextIncompleteIndex >= 0 
+                  ? nextIncompleteIndex 
+                  : 0;
+                navigate(`/reading-plans/${planId}/day/${dayIndex}`);
+              }}
+            >
+              {completionPercentage === 100 ? 'Restart' : 'Continue Reading'}
+            </button>
+          </div>
+        ) : (
+          <button 
+            className="start-button"
+            onClick={handleStartPlan}
+          >
+            Start Plan
+          </button>
+        )}
+      </div>
+      
+      <div className="days-container">
+        <h2>Reading Schedule</h2>
+        {currentPlan.days.map((day, index) => (
+          <DayCard 
+            key={day.id}
+            day={day}
+            dayNumber={index + 1}
+            isCompleted={completedDays.includes(day.id)}
+            onClick={() => navigate(`/reading-plans/${planId}/day/${index}`)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default PlanDetail;
