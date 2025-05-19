@@ -602,7 +602,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (process.env.ANTHROPIC_API_KEY) {
         // Use Anthropic Claude for better narrative generation
         const { generateNarrativeWithClaude } = await import('./anthropic');
-        narrative = await generateNarrativeWithClaude(verseTexts, { book, chapter: chapterNum }, lens);
+        narrative = await generateNarrativeWithClaude(book, String(chapterNum), lens);
       } else {
         // Fall back to OpenAI
         const { generateNarrativeMode } = await import('./ai');

@@ -2,7 +2,6 @@ import fs from 'fs';
 import path from 'path';
 import { db } from './db';
 import { tags, verses, verseTags } from '@shared/schema';
-import { eq, and, inArray, not, sql } from 'drizzle-orm';
 import crypto from 'crypto';
 import OpenAI from 'openai';
 
@@ -208,10 +207,7 @@ export async function saveTagsToDatabase(reference: string, tagsData: VerseTagsD
           .select()
           .from(verseTags)
           .where(
-            and(
-              eq(verseTags.verseReference, verse.id),
-              eq(verseTags.tagId, existingTag.id)
-            )
+            eq(verseTags.verseReference, verse.id)
           );
 
         // If relationship doesn't exist, create it
@@ -306,10 +302,7 @@ export async function findRelatedVerses(verseReference: string, limit: number = 
       })
       .from(verseTags)
       .where(
-        and(
-          inArray(verseTags.tagId, tagIds),
-          not(eq(verseTags.verseReference, verseReference))
-        )
+        inArray(verseTags.tagId, tagIds)
       )
       .groupBy(verseTags.verseReference)
       .orderBy(sql`count(*) desc`)

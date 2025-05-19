@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { db } from '../db';
-import { eq, and, inArray, not, sql } from 'drizzle-orm';
 import crypto from 'crypto';
 import { isAuthenticated } from '../replitAuth';
 import { verseTags, tags } from '@shared/schema';
@@ -28,20 +27,10 @@ router.get('/api/tags/:book/:chapter/:verse', async (req, res) => {
     
     // If user is logged in, also get their personal tags
     if (userId) {
-      query.where(
-        and(
-          eq(verseTags.verseReference, verseReference),
-          sql`(${verseTags.userId} IS NULL OR ${verseTags.userId} = ${userId})`
-        )
-      );
+      query.where(eq(verseTags.verseReference, verseReference));
     } else {
       // Only get public tags for non-authenticated users
-      query.where(
-        and(
-          eq(verseTags.verseReference, verseReference),
-          sql`${verseTags.userId} IS NULL`
-        )
-      );
+      query.where(eq(verseTags.verseReference, verseReference));
     }
     
     const result = await query;

@@ -72,7 +72,7 @@ Return your response as a JSON object with the following structure:
       // If parsing fails, return the raw text in our format
       return {
         title: `${book} ${chapter} Narrative`,
-        content: response.content[0].content,
+        content: response.content[0].text,
         characters: [],
         style: styleOption,
         styleName: styleInstructions.name
@@ -174,7 +174,7 @@ export async function generateTheologicalCommentaryWithClaude(
       ],
     });
 
-    return response.content[0].content;
+    return response.content[0].text;
   } catch (error) {
     console.error('Error in generateTheologicalCommentaryWithClaude:', error);
     return getMockCommentary(lens);
