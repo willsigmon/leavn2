@@ -543,40 +543,64 @@ export default function Reader() {
         
         {/* Main reading area */}
         <main className="flex-1 overflow-auto bg-stone-100 dark:bg-stone-950 relative">
-          {/* Chapter navigation */}
-          <div className="sticky top-0 z-10 glass shadow-md border-b border-white/10 p-2 flex justify-between items-center">
-            <div className="flex gap-1">
-              <Button 
-                variant="ghost" 
-                size="sm"
-                className="glass hover:scale-105 transition-transform"
-                onClick={() => {
-                  const prev = getPrevChapter();
-                  handleNavigate(prev.book, prev.chapter);
-                }}
-              >
-                <ChevronLeft className="h-4 w-4 mr-1" />
-                Previous
-              </Button>
+          {/* Chapter navigation with theological lens selector */}
+          <div className="sticky top-0 z-10 glass shadow-md border-b border-white/10 p-2">
+            <div className="flex justify-between items-center mb-2">
+              <div className="flex gap-1">
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  className="glass hover:scale-105 transition-transform"
+                  onClick={() => {
+                    const prev = getPrevChapter();
+                    handleNavigate(prev.book, prev.chapter);
+                  }}
+                >
+                  <ChevronLeft className="h-4 w-4 mr-1" />
+                  Previous
+                </Button>
+              </div>
+              
+              <div className="text-center font-medium">
+                {book} {chapter}
+              </div>
+              
+              <div className="flex gap-1">
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  className="glass hover:scale-105 transition-transform"
+                  onClick={() => {
+                    const next = getNextChapter();
+                    handleNavigate(next.book, next.chapter);
+                  }}
+                >
+                  Next
+                  <ChevronRight className="h-4 w-4 ml-1" />
+                </Button>
+              </div>
             </div>
             
-            <div className="text-center font-medium">
-              {book} {chapter}
-            </div>
-            
-            <div className="flex gap-1">
-              <Button 
-                variant="ghost" 
-                size="sm"
-                className="glass hover:scale-105 transition-transform"
-                onClick={() => {
-                  const next = getNextChapter();
-                  handleNavigate(next.book, next.chapter);
-                }}
-              >
-                Next
-                <ChevronRight className="h-4 w-4 ml-1" />
-              </Button>
+            {/* Theological Lens Selector */}
+            <div className="flex items-center justify-center gap-2 text-xs">
+              <span className="font-medium">Theological Lens:</span>
+              <div className="flex flex-wrap justify-center gap-1">
+                {theologicalLenses.map(lens => (
+                  <Button
+                    key={lens.id}
+                    variant={selectedTheologicalLens === lens.id ? "default" : "ghost"}
+                    size="sm"
+                    className={`px-2 py-0 h-7 text-xs glass backdrop-blur-sm hover:scale-105 transition-transform ${
+                      selectedTheologicalLens === lens.id 
+                        ? "bg-[#2c4c3b] text-white" 
+                        : "hover:bg-[#2c4c3b]/10"
+                    }`}
+                    onClick={() => setSelectedTheologicalLens(lens.id)}
+                  >
+                    {lens.label}
+                  </Button>
+                ))}
+              </div>
             </div>
           </div>
           
