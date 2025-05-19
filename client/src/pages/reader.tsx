@@ -179,10 +179,10 @@ export default function Reader() {
   return (
     <div className={`h-full w-full flex flex-col bg-stone-100 dark:bg-stone-950 ${getFontSizeClass()}`}>
       {/* Top navigation bar */}
-      <header className="border-b border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 shadow-sm">
-        <div className="container flex justify-between items-center h-14 px-4">
+      <header className="border-b border-white/10 glass shadow-sm">
+        <div className="flex justify-between items-center h-14 px-4">
           <div className="flex items-center">
-            <Button variant="ghost" size="icon" className="mr-2">
+            <Button variant="ghost" size="icon" className="mr-2 glass hover:scale-105 transition-transform">
               <Menu className="h-5 w-5" />
             </Button>
             <h1 className="text-lg font-semibold">
@@ -262,20 +262,21 @@ export default function Reader() {
       {/* Main content */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
         {/* Sidebar */}
-        <aside className={`border-r border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 w-full transition-all duration-300 
-          ${sidebarCollapsed ? 'lg:w-[60px]' : 'lg:w-[300px] xl:w-[340px] 2xl:w-[380px]'} 
+        <aside className={`border-r border-white/10 glass transition-all duration-300 
+          ${sidebarCollapsed ? 'lg:w-[60px]' : 'lg:w-[30%]'} 
           flex-shrink-0 overflow-y-auto relative`}>
           
           {/* Resize handle */}
           <div 
             className="absolute -right-3 top-1/2 transform -translate-y-1/2 z-10 cursor-pointer
-                      h-24 w-6 flex items-center justify-center bg-white dark:bg-stone-900
-                      border border-stone-200 dark:border-stone-700 rounded-md shadow-md"
+                      h-24 w-6 flex items-center justify-center glass
+                      border border-white/10 rounded-full shadow-lg
+                      hover:scale-105 transition-transform"
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
           >
             {sidebarCollapsed ? 
-              <ChevronsRight className="h-4 w-4 text-stone-500" /> : 
-              <ChevronsLeft className="h-4 w-4 text-stone-500" />
+              <ChevronsRight className="h-4 w-4" /> : 
+              <ChevronsLeft className="h-4 w-4" />
             }
           </div>
 
@@ -317,35 +318,53 @@ export default function Reader() {
             )}
             
             <TabsContent value="toc" className="p-4">
-              <h3 className="font-semibold mb-2">Old Testament</h3>
-              <div className="space-y-1.5">
-                {bibleStructure.bookOrder.slice(0, 39).map(bookName => (
-                  <Button
-                    key={bookName}
-                    variant={book === bookName ? "default" : "ghost"}
-                    size="sm"
-                    className="w-full justify-start"
-                    onClick={() => handleNavigate(bookName, 1)}
-                  >
-                    {bookName}
-                  </Button>
-                ))}
-              </div>
-              
-              <h3 className="font-semibold mt-6 mb-2">New Testament</h3>
-              <div className="space-y-1.5">
-                {bibleStructure.bookOrder.slice(39).map(bookName => (
-                  <Button
-                    key={bookName}
-                    variant={book === bookName ? "default" : "ghost"}
-                    size="sm"
-                    className="w-full justify-start"
-                    onClick={() => handleNavigate(bookName, 1)}
-                  >
-                    {bookName}
-                  </Button>
-                ))}
-              </div>
+              <Accordion type="multiple" defaultValue={["old-testament"]} className="w-full">
+                <AccordionItem value="old-testament" className="border-b border-white/10">
+                  <AccordionTrigger className="hover:no-underline">
+                    <span className="font-semibold">Old Testament</span>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="space-y-1.5 mt-2">
+                      {bibleStructure.bookOrder.slice(0, 39).map(bookName => (
+                        <Button
+                          key={bookName}
+                          variant={book === bookName ? "default" : "ghost"}
+                          size="sm"
+                          className={`w-full justify-start glass hover:scale-[1.01] transition-transform ${
+                            book === bookName ? "ring-1 ring-white/20" : ""
+                          }`}
+                          onClick={() => handleNavigate(bookName, 1)}
+                        >
+                          {bookName}
+                        </Button>
+                      ))}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+                
+                <AccordionItem value="new-testament" className="border-b border-white/10">
+                  <AccordionTrigger className="hover:no-underline">
+                    <span className="font-semibold">New Testament</span>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="space-y-1.5 mt-2">
+                      {bibleStructure.bookOrder.slice(39).map(bookName => (
+                        <Button
+                          key={bookName}
+                          variant={book === bookName ? "default" : "ghost"}
+                          size="sm"
+                          className={`w-full justify-start glass hover:scale-[1.01] transition-transform ${
+                            book === bookName ? "ring-1 ring-white/20" : ""
+                          }`}
+                          onClick={() => handleNavigate(bookName, 1)}
+                        >
+                          {bookName}
+                        </Button>
+                      ))}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </TabsContent>
             
             <TabsContent value="concepts" className="p-0 m-0 border-0 h-full">
@@ -444,11 +463,12 @@ export default function Reader() {
         {/* Main reading area */}
         <main className="flex-1 overflow-auto bg-stone-100 dark:bg-stone-950 relative">
           {/* Chapter navigation */}
-          <div className="sticky top-0 z-10 bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 p-2 flex justify-between items-center">
+          <div className="sticky top-0 z-10 glass shadow-md border-b border-white/10 p-2 flex justify-between items-center">
             <div className="flex gap-1">
               <Button 
                 variant="ghost" 
                 size="sm"
+                className="glass hover:scale-105 transition-transform"
                 onClick={() => {
                   const prev = getPrevChapter();
                   handleNavigate(prev.book, prev.chapter);
@@ -467,6 +487,7 @@ export default function Reader() {
               <Button 
                 variant="ghost" 
                 size="sm"
+                className="glass hover:scale-105 transition-transform"
                 onClick={() => {
                   const next = getNextChapter();
                   handleNavigate(next.book, next.chapter);
@@ -479,7 +500,7 @@ export default function Reader() {
           </div>
           
           {/* Bible content */}
-          <div className={`p-4 md:p-6 lg:p-8 w-full max-w-[90%] lg:max-w-[85%] mx-auto ${paperTexture ? 'paper-texture' : ''}`}>
+          <div className={`p-4 md:p-6 lg:p-8 w-full ${paperTexture ? 'paper-texture' : ''}`}>
             {book.toLowerCase() === 'genesis' ? (
               <GenesisReader chapter={chapter} />
             ) : (
