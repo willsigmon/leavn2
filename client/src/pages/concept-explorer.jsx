@@ -1,9 +1,7 @@
 import React from 'react';
 import { useLocation } from 'wouter';
-import ConceptGrid from '../components/explorer/ConceptGrid';
+import { TheologicalConceptExplorer } from '../components/explorer/TheologicalConceptExplorer';
 import { 
-  Book, 
-  ArrowLeftCircle, 
   Lightbulb,
   BookOpen 
 } from 'lucide-react';
@@ -50,8 +48,55 @@ const ConceptExplorerPage = () => {
             your understanding of Scripture's interconnected ideas.
           </p>
         </div>
+        
+        <div className="flex flex-col lg:flex-row gap-6">
+          <div className="lg:w-2/3">
+            <TheologicalConceptExplorer />
+          </div>
+          
+          <div className="lg:w-1/3 space-y-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-5 shadow-md border">
+              <h3 className="text-lg font-semibold mb-3 text-[#2c4c3b]">How to Use</h3>
+              <ul className="space-y-2 text-sm">
+                <li className="flex gap-2">
+                  <span className="text-[#2c4c3b] font-bold">•</span> 
+                  <span>Click on any concept node to view details</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-[#2c4c3b] font-bold">•</span> 
+                  <span>Explore verse references related to each concept</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-[#2c4c3b] font-bold">•</span> 
+                  <span>See connections between theological concepts</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-[#2c4c3b] font-bold">•</span> 
+                  <span>Bookmark concepts for later study</span>
+                </li>
+              </ul>
+            </div>
 
-        <ConceptGrid onNavigateToVerse={handleNavigateToVerse} />
+            <div className="bg-[#2c4c3b]/10 rounded-lg p-5 border">
+              <h3 className="text-lg font-semibold mb-3 flex items-center">
+                <Lightbulb className="h-5 w-5 mr-2 text-[#2c4c3b]" />
+                Study Recommendations
+              </h3>
+              <p className="text-sm mb-3">Based on popular study paths:</p>
+              <div className="space-y-2">
+                <button className="w-full text-left p-2 bg-white dark:bg-gray-800 rounded border hover:bg-gray-50 dark:hover:bg-gray-700 text-sm transition-colors">
+                  Salvation Themes Journey
+                </button>
+                <button className="w-full text-left p-2 bg-white dark:bg-gray-800 rounded border hover:bg-gray-50 dark:hover:bg-gray-700 text-sm transition-colors">
+                  Biblical Covenant Explorer
+                </button>
+                <button className="w-full text-left p-2 bg-white dark:bg-gray-800 rounded border hover:bg-gray-50 dark:hover:bg-gray-700 text-sm transition-colors">
+                  Character Studies in Scripture
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </main>
 
       <footer className="mt-8 py-4 border-t text-center text-sm text-muted-foreground">
