@@ -112,9 +112,10 @@ export function VerseWithConnections({
                     className={`inline-flex items-center px-2 py-0.5 rounded-full 
                       bg-[#2c4c3b]/10 text-[#2c4c3b] dark:bg-[#2c4c3b]/20 dark:text-[#5b8b76]
                       ${tagsClickable ? 'cursor-pointer hover:bg-[#2c4c3b]/20 hover:scale-105 transition-all' : ''}
+                      font-medium
                     `}
                   >
-                    #{tag}
+                    {tag}
                   </span>
                 ))}
               </div>
