@@ -1,129 +1,162 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useParams } from 'wouter';
+import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 
-const NarrativeMode = ({ passage, onNavigateToVerse }) => {
-  const [narrativeStyle, setNarrativeStyle] = useState('chosen');
-  
-  // Parse the book and chapter from the passage prop
-  const passageParts = passage ? passage.split(' ') : ['Genesis', '1'];
-  const book = passageParts[0];
-  const chapter = passageParts[1]?.split(':')[0] || '1';
-  
-  const { data: narrative, isLoading, error } = useQuery({
-    queryKey: [`/api/ai/narrative/${book}/${chapter}/${narrativeStyle}`],
-    enabled: !!book && !!chapter,
-  });
+const NARRATIVE_STYLES = [
+  { id: 'chosen', name: 'The Chosen Style', description: 'Inspired by the TV series' },
+  { id: 'firstperson', name: 'First Person', description: 'Experience through the eyes of a character' },
+  { id: 'modern', name: 'Modern', description: 'Contemporary retelling' },
+  { id: 'cinematic', name: 'Cinematic', description: 'Vivid, visual storytelling' },
+  { id: 'novelization', name: 'Literary', description: 'Rich, novel-like prose' }
+];
 
-  // Handle style change
-  const handleStyleChange = (value) => {
-    setNarrativeStyle(value);
+export default function NarrativeMode({ passage, onNavigateToVerse }) {
+  const [narrativeContent, setNarrativeContent] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [activeStyle, setActiveStyle] = useState('chosen');
+  const [error, setError] = useState(null);
+
+  // Parse book and chapter from passage reference (e.g., "Genesis 1:1-10" → "genesis", "1")
+  const parsePassage = (passageStr) => {
+    if (!passageStr) return { book: null, chapter: null };
+    
+    const parts = passageStr.split(' ');
+    if (parts.length < 2) return { book: null, chapter: null };
+    
+    const book = parts[0];
+    const chapterVerse = parts[1].split(':');
+    const chapter = chapterVerse[0];
+    
+    return { book, chapter };
   };
 
-  if (isLoading) {
+  useEffect(() => {
+    if (!passage) return;
+    
+    const { book, chapter } = parsePassage(passage);
+    if (!book || !chapter) return;
+    
+    async function fetchNarrativeContent() {
+      setLoading(true);
+      setError(null);
+      
+      try {
+        const response = await fetch(`/api/ai/narrative/${book}/${chapter}/${activeStyle}`);
+        
+        if (!response.ok) {
+          throw new Error(`Failed to fetch narrative content: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        setNarrativeContent(data);
+      } catch (err) {
+        console.error('Error fetching narrative content:', err);
+        setError(err.message || 'Failed to load narrative content');
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    fetchNarrativeContent();
+  }, [passage, activeStyle]);
+  
+  // Handle style change
+  const handleStyleChange = (style) => {
+    setActiveStyle(style);
+  };
+  
+  if (!passage) {
     return (
-      <div className="p-4 space-y-4">
-        <Skeleton className="h-8 w-3/4" />
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-5/6" />
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-4/5" />
+      <div className="p-4 text-center">
+        <p className="text-muted-foreground">Select a passage to view narrative mode</p>
       </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <Card className="mb-6">
-        <CardHeader className="pb-3">
-          <CardTitle>Error Loading Narrative</CardTitle>
-          <CardDescription>
-            We encountered an issue creating the narrative version for this passage.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>Please try again or select a different style.</p>
-        </CardContent>
-      </Card>
     );
   }
 
   return (
-    <div className="prose dark:prose-invert max-w-full">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="mb-0 text-2xl font-semibold text-[#2c4c3b] dark:text-emerald-300">
-          {narrative?.title || `${book} ${chapter} Narrative`}
-        </h2>
-        
-        <Select value={narrativeStyle} onValueChange={handleStyleChange}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="The Chosen Style" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="chosen">The Chosen Style</SelectItem>
-            <SelectItem value="firstperson">First Person</SelectItem>
-            <SelectItem value="modern">Modern Retelling</SelectItem>
-            <SelectItem value="cinematic">Cinematic</SelectItem>
-            <SelectItem value="novelization">Literary Novel</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      {narrative?.characters && narrative.characters.length > 0 && (
-        <div className="flex gap-1 flex-wrap mb-4">
-          {narrative.characters.map((character, index) => (
-            <Badge key={index} className="bg-[#2c4c3b]/10 text-[#2c4c3b] hover:bg-[#2c4c3b]/20 dark:bg-emerald-900/30 dark:text-emerald-200">
-              {character}
-            </Badge>
+    <div className="narrative-mode flex flex-col h-full overflow-hidden">
+      {/* Style selector */}
+      <div className="flex items-center justify-between px-4 py-2 border-b">
+        <h3 className="text-base font-semibold">Narrative Style</h3>
+        <div className="flex space-x-2 overflow-x-auto">
+          {NARRATIVE_STYLES.map((style) => (
+            <Button
+              key={style.id}
+              size="sm"
+              variant={activeStyle === style.id ? "default" : "outline"}
+              onClick={() => handleStyleChange(style.id)}
+              className="whitespace-nowrap"
+            >
+              {style.name}
+            </Button>
           ))}
         </div>
-      )}
-
-      <div className="whitespace-pre-line leading-7 text-lg">
-        {narrative?.content ? (
-          narrative.content
-            .split('\n\n')
-            .map((paragraph, index) => (
-              <p key={index} className="mb-4">{paragraph}</p>
-            ))
+      </div>
+      
+      {/* Content area */}
+      <div className="flex-1 overflow-y-auto p-4">
+        {loading ? (
+          <NarrativeLoadingSkeleton />
+        ) : error ? (
+          <div className="text-center py-8">
+            <p className="text-destructive mb-2">Error: {error}</p>
+            <Button variant="outline" onClick={() => handleStyleChange(activeStyle)}>
+              Try Again
+            </Button>
+          </div>
+        ) : narrativeContent ? (
+          <div className="prose prose-emerald dark:prose-invert max-w-none">
+            <h1 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
+              {narrativeContent.title}
+            </h1>
+            
+            {narrativeContent.characters && narrativeContent.characters.length > 0 && (
+              <div className="mb-4 flex flex-wrap gap-2">
+                {narrativeContent.characters.map((character, index) => (
+                  <Badge key={index} variant="outline" className="bg-primary/10">
+                    {character}
+                  </Badge>
+                ))}
+              </div>
+            )}
+            
+            <div className="narrative-content text-lg leading-relaxed font-serif">
+              {narrativeContent.content.split('\n\n').map((paragraph, index) => (
+                <p key={index} className="mb-4">{paragraph}</p>
+              ))}
+            </div>
+            
+            {narrativeContent.notes && (
+              <div className="mt-8 p-4 bg-muted rounded-lg">
+                <p className="italic text-sm text-muted-foreground">{narrativeContent.notes}</p>
+              </div>
+            )}
+          </div>
         ) : (
-          <p>
-            Loading narrative content for {book} {chapter}...
-          </p>
+          <div className="text-center py-8">
+            <p className="text-muted-foreground">No narrative content available</p>
+          </div>
         )}
       </div>
-
-      {narrative?.notes && (
-        <Card className="mt-8 bg-[#2c4c3b]/5 dark:bg-emerald-950/30 border-[#2c4c3b]/20">
-          <CardContent className="pt-4">
-            <p className="text-sm italic text-[#2c4c3b]/80 dark:text-emerald-200/80">
-              {narrative.notes}
-            </p>
-          </CardContent>
-          <CardFooter className="text-xs text-[#2c4c3b]/60 dark:text-emerald-200/60 pt-0">
-            Style: {narrative?.styleName || "The Chosen Style"}
-          </CardFooter>
-        </Card>
-      )}
     </div>
   );
-};
+}
 
-export default NarrativeMode;
+function NarrativeLoadingSkeleton() {
+  return (
+    <div className="prose max-w-none">
+      <Skeleton className="h-10 w-3/4 mb-6" />
+      <div className="flex gap-2 mb-6">
+        <Skeleton className="h-6 w-20" />
+        <Skeleton className="h-6 w-20" />
+        <Skeleton className="h-6 w-20" />
+      </div>
+      <Skeleton className="h-24 w-full mb-4" />
+      <Skeleton className="h-24 w-full mb-4" />
+      <Skeleton className="h-24 w-full mb-4" />
+      <Skeleton className="h-24 w-full mb-4" />
+    </div>
+  );
+}
