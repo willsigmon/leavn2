@@ -1,80 +1,44 @@
 /**
- * Type definitions for reading plans with rich contextual elements
+ * Types for reading plan features
  */
 
-/**
- * Represents a single day in a reading plan
- */
 export interface ReadingPlanDay {
-  day: number;
+  id: string;
   title: string;
-  passages: string[]; // Scripture references (e.g., "Genesis 1:1-31")
-  contextualNotes?: string;
+  passages: string[];
+  summary?: string;
   historicalContext?: string;
   theologicalConcepts?: string[];
-  applicationPoints?: string[];
   reflectionQuestions?: string[];
-  crossReferences?: string[];
+  keyVerses?: string[];
 }
 
-/**
- * Represents a complete reading plan
- */
 export interface ReadingPlan {
   id: string;
   title: string;
   description: string;
-  image?: string;
-  duration: number; // Days in plan
-  category: string; // e.g., "Old Testament", "New Testament", "Topical"
+  duration: number; // Number of days
+  category: string;
   tags: string[];
-  author?: string;
-  difficulty?: 'beginner' | 'intermediate' | 'advanced';
+  coverImage?: string;
   days: ReadingPlanDay[];
 }
 
-/**
- * User progress for a specific reading plan
- */
 export interface ReadingPlanProgress {
   planId: string;
-  startDate?: string;
-  completedDays: Record<number, string>; // Day number -> completion date
-  lastReadDate?: string;
-  streak?: number;
+  userId: string;
+  completedDays: string[]; // Array of day IDs that have been completed
+  currentDay: string; // ID of the current day
+  startDate: Date;
+  lastReadDate?: Date;
 }
 
-/**
- * Represents all user progress across reading plans
- */
-export interface UserProgress {
-  [planId: string]: {
-    startDate?: string;
-    completedDays: Record<number, string>;
-    lastReadDate?: string;
-  };
-}
-
-/**
- * Contextual content shown in the sidebar
- */
-export interface ContextualContent {
-  type: 'historical' | 'theological' | 'application' | 'reflection' | 'references';
-  title: string;
-  content: string | string[];
-}
-
-/**
- * Verse content with annotations for rich display
- */
-export interface AnnotatedVerse {
-  reference: string;
-  book: string;
-  chapter: number;
-  verse: number;
-  text: string;
-  notes?: string[];
-  highlights?: string; // Color code
-  bookmarked?: boolean;
-  tags?: string[];
+export interface ReadingPlanStats {
+  totalPlans: number;
+  completedPlans: number;
+  currentPlans: number;
+  daysRead: number;
+  passagesRead: number;
+  streakDays: number;
+  favoriteCategory?: string;
 }

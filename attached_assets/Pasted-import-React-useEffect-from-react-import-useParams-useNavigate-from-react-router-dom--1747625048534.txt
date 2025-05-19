@@ -1,0 +1,143 @@
+import React, { useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useReadingPlans } from '../../hooks/useReadingPlans';
+import { fetchReadingPlanById, markDayComplete } from '../../api/readingPlans';
+import BibleReader from '../BibleReader'; // Assuming this component exists
+import ContextualSidebar from './ContextualSidebar';
+
+const DayReader: React.FC = () => {
+  const { planId, dayIndex: dayIndexParam } = useParams<{ 
+    planId: string;
+    dayIndex: string;
+  }>();
+  const navigate = useNavigate();
+  const { state, dispatch } = useReadingPlans();
+  const { currentPlan, loading, error } = state;
+  
+  const dayIndex = parseInt(dayIndexParam || '0', 10);
+  
+  useEffect(() => {
+    const loadPlan = async () => {
+      if (!planId) return;
+      
+      dispatch({ type: 'FETCH_PLANS_REQUEST' });
+      try {
+        const plan = await fetchReadingPlanById(planId);
+        dispatch({ type: 'SET_CURRENT_PLAN', payload: plan });
+        dispatch({ type: 'SET_CURRENT_DAY', payload: dayIndex });
+      } catch (err) {
+        dispatch({ type: 'FETCH_PLANS_FAILURE', payload: err.message });
+      }
+    };
+    
+    if (!currentPlan || currentPlan.id !== planId) {
+      loadPlan();
+    } else {
+      dispatch({ type: 'SET_CURRENT_DAY', payload: dayIndex });
+    }
+  }, [planId, dayIndex, currentPlan, dispatch]);
+  
+  if (loading) {
+    return <div className="loading">Loading reading plan...</div>;
+  }
+  
+  if (error) {
+    return <div className="error">Error: {error}</div>;
+  }
+  
+  if (!currentPlan) {
+    return <div className="not-found">Reading plan not found</div>;
+  }
+  
+  const day = currentPlan.days[dayIndex];
+  if (!day) {
+    return <div className="not-found">Day not found</div>;
+  }
+  
+  const completedDays = currentPlan.userProgress?.completedDays || [];
+  const isCompleted = completedDays.includes(day.id);
+  
+  const handleComplete = async () => {
+    if (!planId || !day) return;
+    
+    try {
+      await markDayComplete(planId, day.id);
+      dispatch({
+        type: 'MARK_DAY_COMPLETE',
+        payload: { planId, dayId: day.id }
+      });
+      
+      // Navigate to next day if available
+      if (dayIndex < currentPlan.days.length - 1) {
+        navigate(`/reading-plans/${planId}/day/${dayIndex + 1}`);
+      } else {
+        // Navigate back to plan detail if this was the last day
+        navigate(`/reading-plans/${planId}`);
+      }
+    } catch (err) {
+      console.error('Failed to mark day as complete:', err);
+    }
+  };
+  
+  const handlePrevious = () => {
+    if (dayIndex > 0) {
+      navigate(`/reading-plans/${planId}/day/${dayIndex - 1}`);
+    }
+  };
+  
+  const handleNext = () => {
+    if (dayIndex < currentPlan.days.length - 1) {
+      navigate(`/reading-plans/${planId}/day/${dayIndex + 1}`);
+    }
+  };
+  
+  return (
+    <div className="day-reader-container">
+      <div className="day-reader-header">
+        <h1>{currentPlan.title}</h1>
+        <h2>Day {dayIndex + 1}: {day.title}</h2>
+        
+        <div className="navigation">
+          <button 
+            className="nav-button previous"
+            onClick={handlePrevious}
+            disabled={dayIndex === 0}
+          >
+            Previous Day
+          </button>
+          
+          <span className="progress-indicator">
+            {dayIndex + 1} of {currentPlan.days.length}
+          </span>
+          
+          <button 
+            className="nav-button next"
+            onClick={handleNext}
+            disabled={dayIndex === currentPlan.days.length - 1}
+          >
+            Next Day
+          </button>
+        </div>
+      </div>
+      
+      <div className="day-reader-content">
+        <div className="bible-container">
+          <BibleReader references={day.passages} />
+          
+          {!isCompleted && (
+            <button 
+              className="complete-button"
+              onClick={handleComplete}
+            >
+              Mark as Complete
+            </button>
+          )}
+        </div>
+        
+        <ContextualSidebar day={day} />
+      </div>
+    </div>
+  );
+};
+
+export default DayReader;
