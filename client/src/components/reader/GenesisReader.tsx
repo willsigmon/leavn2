@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/tooltip';
 import { globalBibleReader } from '@/lib/bibleHelper';
 import { getBookById, getTotalChapters, getBookPosition } from '@/lib/bibleStructure';
+import { ContextualCompanion } from './ContextualCompanion';
 
 interface Verse {
   verse: number;
@@ -642,7 +643,7 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
   );
 
   return (
-    <div className={`p-4 max-w-3xl mx-auto ${isDarkMode ? 'text-gray-100' : 'text-gray-800'}`}>
+    <div className={`p-4 max-w-6xl mx-auto ${isDarkMode ? 'text-gray-100' : 'text-gray-800'}`}>
       {/* Chapter navigation */}
       <div className="flex justify-between items-center mb-4">
         <Button 
@@ -667,131 +668,142 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
           <ChevronRight className="ml-1 h-4 w-4" />
         </Button>
       </div>
-    
-      {/* Chapter header */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold tracking-tight">
-          Genesis {currentChapter}: {currentChapter === 1 ? 'Creation' : `Chapter ${currentChapter}`}
-        </h1>
-        
-        {chapterData?.summary && (
-          <p className="mt-2 text-lg text-muted-foreground">
-            {chapterData.summary}
-          </p>
-        )}
+      
+      {/* Two-column layout */}
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Main content column */}
+        <div className="lg:w-2/3">
+          {/* Chapter header */}
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold tracking-tight">
+              Genesis {currentChapter}: {currentChapter === 1 ? 'Creation' : `Chapter ${currentChapter}`}
+            </h1>
+            
+            {chapterData?.summary && (
+              <p className="mt-2 text-lg text-muted-foreground">
+                {chapterData.summary}
+              </p>
+            )}
 
-        {/* Translation selector and settings */}
-        <div className="mt-4 flex gap-2 relative">
-          <Button 
-            variant={selectedTranslation === 'web' ? 'default' : 'outline'} 
-            size="sm"
-            onClick={() => setSelectedTranslation('web')}
-            className={`${selectedTranslation === 'web' ? 'bg-[#2c4c3b] text-white hover:bg-[#1e3c2b]' : 'text-[#2c4c3b] border-[#2c4c3b]/30 hover:bg-[#2c4c3b]/10'}`}
-          >
-            <BookOpen className="mr-2 h-4 w-4" />
-            WEB
-          </Button>
-          <Button 
-            variant={selectedTranslation === 'kjv' ? 'default' : 'outline'} 
-            size="sm"
-            onClick={() => setSelectedTranslation('kjv')}
-            className={`${selectedTranslation === 'kjv' ? 'bg-[#2c4c3b] text-white hover:bg-[#1e3c2b]' : 'text-[#2c4c3b] border-[#2c4c3b]/30 hover:bg-[#2c4c3b]/10'}`}
-          >
-            <BookOpen className="mr-2 h-4 w-4" />
-            KJV
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowThematicTags(!showThematicTags)}
-            className="text-[#2c4c3b] border-[#2c4c3b]/30 hover:bg-[#2c4c3b]/10"
-          >
-            <Info className="mr-2 h-4 w-4" />
-            {showThematicTags ? 'Hide Tags' : 'Show Tags'}
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowSettings(!showSettings)}
-            className={showSettings ? 'bg-[#2c4c3b]/20 text-[#2c4c3b] border-[#2c4c3b]/30' : 'text-[#2c4c3b] border-[#2c4c3b]/30 hover:bg-[#2c4c3b]/10'}
-          >
-            <Settings className="mr-2 h-4 w-4" />
-            Settings
-          </Button>
-          <SettingsPanel />
-        </div>
-      </div>
-
-      {/* Themes section */}
-      {chapterData?.themes && chapterData.themes.length > 0 && (
-        <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/20 rounded border border-green-100 dark:border-green-900">
-          <h3 className="font-medium mb-1 text-[#2c4c3b] dark:text-green-300">Key Themes</h3>
-          <div className="flex flex-wrap gap-1">
-            {chapterData.themes.map((theme, idx) => (
-              <span 
-                key={idx}
-                className="text-sm px-2 py-0.5 rounded-full bg-[#2c4c3b]/10 text-[#2c4c3b] dark:bg-[#2c4c3b]/30 dark:text-green-200"
+            {/* Translation selector and settings */}
+            <div className="mt-4 flex gap-2 relative">
+              <Button 
+                variant={selectedTranslation === 'web' ? 'default' : 'outline'} 
+                size="sm"
+                onClick={() => setSelectedTranslation('web')}
+                className={`${selectedTranslation === 'web' ? 'bg-[#2c4c3b] text-white hover:bg-[#1e3c2b]' : 'text-[#2c4c3b] border-[#2c4c3b]/30 hover:bg-[#2c4c3b]/10'}`}
               >
-                {theme}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      <Separator className="my-4" />
-
-      {/* Verses */}
-      <div className="space-y-4" style={verseContainerStyle}>
-        {renderedVerses.map((verse) => (
-          <div key={verse.verse} className="group relative verse-container">
-            <div className="flex">
-              <span className="text-sm font-semibold text-[#2c4c3b] dark:text-green-300 mr-3 mt-1 w-6 text-right">
-                {verse.verse}
-              </span>
-              <div className="flex-1">
-                <TooltipProvider>
-                  <p className="verse-text text-gray-900 dark:text-gray-100 mb-2">
-                    {verse.text && typeof verse.text === 'object' && 
-                      (selectedTranslation === 'kjv' 
-                        ? verse.text.kjv
-                        : verse.text.web)
-                    }
-                    {typeof verse.text === 'string' && verse.text}
-                    
-                    {/* Render people with tooltips */}
-                    {verse.tags?.people?.map((person, idx) => (
-                      <Tooltip key={idx}>
-                        <TooltipTrigger className="underline decoration-dotted decoration-2 decoration-green-600">
-                          {person}
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p className="w-64 text-sm">Person: {person}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    ))}
-                  </p>
-                </TooltipProvider>
-                
-                {renderTags(verse)}
-              </div>
+                <BookOpen className="mr-2 h-4 w-4" />
+                WEB
+              </Button>
+              <Button 
+                variant={selectedTranslation === 'kjv' ? 'default' : 'outline'} 
+                size="sm"
+                onClick={() => setSelectedTranslation('kjv')}
+                className={`${selectedTranslation === 'kjv' ? 'bg-[#2c4c3b] text-white hover:bg-[#1e3c2b]' : 'text-[#2c4c3b] border-[#2c4c3b]/30 hover:bg-[#2c4c3b]/10'}`}
+              >
+                <BookOpen className="mr-2 h-4 w-4" />
+                KJV
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowThematicTags(!showThematicTags)}
+                className="text-[#2c4c3b] border-[#2c4c3b]/30 hover:bg-[#2c4c3b]/10"
+              >
+                <Info className="mr-2 h-4 w-4" />
+                {showThematicTags ? 'Hide Tags' : 'Show Tags'}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowSettings(!showSettings)}
+                className={showSettings ? 'bg-[#2c4c3b]/20 text-[#2c4c3b] border-[#2c4c3b]/30' : 'text-[#2c4c3b] border-[#2c4c3b]/30 hover:bg-[#2c4c3b]/10'}
+              >
+                <Settings className="mr-2 h-4 w-4" />
+                Settings
+              </Button>
+              <SettingsPanel />
             </div>
           </div>
-        ))}
-      </div>
 
-      {/* Narrative version */}
-      {chapterData?.narrative && (
-        <div className="mt-8 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-900/30 rounded-md">
-          <h3 className="text-xl font-semibold mb-3 text-amber-800 dark:text-amber-300 flex items-center">
-            <ChevronRight className="h-5 w-5 mr-1" />
-            Narrative Retelling
-          </h3>
-          <p className="text-amber-900 dark:text-amber-100 leading-relaxed">
-            {chapterData.narrative}
-          </p>
+          {/* Themes section */}
+          {chapterData?.themes && chapterData.themes.length > 0 && (
+            <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/20 rounded border border-green-100 dark:border-green-900">
+              <h3 className="font-medium mb-1 text-[#2c4c3b] dark:text-green-300">Key Themes</h3>
+              <div className="flex flex-wrap gap-1">
+                {chapterData.themes.map((theme, idx) => (
+                  <span 
+                    key={idx}
+                    className="text-sm px-2 py-0.5 rounded-full bg-[#2c4c3b]/10 text-[#2c4c3b] dark:bg-[#2c4c3b]/30 dark:text-green-200"
+                  >
+                    {theme}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <Separator className="my-4" />
+
+          {/* Verses */}
+          <div className="space-y-4" style={verseContainerStyle}>
+            {renderedVerses.map((verse) => (
+              <div key={verse.verse} className="group relative verse-container">
+                <div className="flex">
+                  <span className="text-sm font-semibold text-[#2c4c3b] dark:text-green-300 mr-3 mt-1 w-6 text-right">
+                    {verse.verse}
+                  </span>
+                  <div className="flex-1">
+                    <TooltipProvider>
+                      <p className="verse-text text-gray-900 dark:text-gray-100 mb-2">
+                        {verse.text && typeof verse.text === 'object' && 
+                          (selectedTranslation === 'kjv' 
+                            ? verse.text.kjv
+                            : verse.text.web)
+                        }
+                        {typeof verse.text === 'string' && verse.text}
+                        
+                        {/* Render people with tooltips */}
+                        {verse.tags?.people?.map((person, idx) => (
+                          <Tooltip key={idx}>
+                            <TooltipTrigger className="underline decoration-dotted decoration-2 decoration-green-600">
+                              {person}
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p className="w-64 text-sm">Person: {person}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        ))}
+                      </p>
+                    </TooltipProvider>
+                    
+                    {renderTags(verse)}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Narrative version */}
+          {chapterData?.narrative && (
+            <div className="mt-8 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-900/30 rounded-md">
+              <h3 className="text-xl font-semibold mb-3 text-amber-800 dark:text-amber-300 flex items-center">
+                <ChevronRight className="h-5 w-5 mr-1" />
+                Narrative Retelling
+              </h3>
+              <p className="text-amber-900 dark:text-amber-100 leading-relaxed">
+                {chapterData.narrative}
+              </p>
+            </div>
+          )}
         </div>
-      )}
+        
+        {/* Contextual companion sidebar */}
+        <div className="lg:w-1/3 mt-6 lg:mt-0">
+          <ContextualCompanion book="genesis" chapter={currentChapter} />
+        </div>
+      </div>
     </div>
   );
 }

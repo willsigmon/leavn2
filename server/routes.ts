@@ -18,6 +18,7 @@ import crossReferencesRouter from "./routes/cross-references";
 import ragExplorerRouter from "./routes/rag-explorer";
 import genesisReaderRouter from "./routes/genesis-reader";
 import { explorerRouter } from "./routes/explorer";
+import contextRoutes from "./routes/context";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up session middleware
@@ -42,6 +43,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Register theological concept explorer routes
   app.use("/api/explorer", explorerRouter);
+  
+  // Register contextual study companion routes
+  app.use("/api/reader/context", contextRoutes);
   
   // User preferences endpoints
   app.get("/api/preferences", isAuthenticated, async (req: Request, res: Response) => {
