@@ -1,53 +1,54 @@
-const express = require('express');
-const router = express.Router();
-const { generateNarrativeWithClaude } = require('../anthropic');
+import express from 'express';
+import { generateNarrativeWithClaude } from '../anthropic.js';
+import * as fs from 'fs/promises';
+import * as path from 'path';
 
-// Cache to store generated narratives
+const router = express.Router();
+
+// Cache for narrative content to reduce API calls
 const narrativeCache = new Map();
 
 /**
- * Generate a narrative version of a scripture passage in a specific style
- * @route GET /api/ai/narrative/:passage/:style
+ * Generate a narrative version of a Bible chapter in a specific style
+ * @route GET /:book/:chapter/:style
  */
-router.get('/:passage/:style', async (req, res) => {
+router.get('/:book/:chapter/:style?', async (req, res) => {
   try {
-    const { passage, style } = req.params;
+    const { book, chapter } = req.params;
+    const style = req.params.style || 'chosen';
     
-    // Use cache if available to avoid regenerating content
-    const cacheKey = `${passage}-${style}`;
+    // Create a cache key from the parameters
+    const cacheKey = `${book}-${chapter}-${style}`;
+    
+    // Check if we have this narrative cached already
     if (narrativeCache.has(cacheKey)) {
+      console.log(`Returning cached narrative for ${cacheKey}`);
       return res.json(narrativeCache.get(cacheKey));
     }
     
-    // Parse passage reference (e.g., "Genesis 1" or "John 3:16")
-    const parts = passage.split(' ');
-    const book = parts[0];
-    const chapterParts = parts[1]?.split(':') || [];
-    const chapter = chapterParts[0];
+    // Generate the narrative content
+    const narrative = await generateNarrativeWithClaude(book, chapter, style);
     
-    // Generate narrative content based on passage and style
-    const narrativeContent = await generateNarrativeWithClaude(book, chapter, style);
+    // Cache the result for future requests
+    narrativeCache.set(cacheKey, narrative);
     
-    // Add to cache
-    narrativeCache.set(cacheKey, narrativeContent);
-    
-    res.json(narrativeContent);
+    res.json(narrative);
   } catch (error) {
     console.error('Error generating narrative:', error);
     res.status(500).json({ 
       error: 'Failed to generate narrative content',
-      message: error.message 
+      message: error.message
     });
   }
 });
 
 /**
  * Clear narrative cache for testing/development
- * @route POST /api/ai/narrative/clear-cache
+ * @route POST /clear-cache
  */
 router.post('/clear-cache', (req, res) => {
   narrativeCache.clear();
-  res.json({ success: true, message: 'Narrative cache cleared' });
+  res.json({ message: 'Narrative cache cleared successfully' });
 });
 
 module.exports = router;

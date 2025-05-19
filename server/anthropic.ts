@@ -51,7 +51,9 @@ Return your response as a JSON object with the following structure:
 
     try {
       // Try to parse the response as JSON
-      const textContent = response.content[0].text;
+      const content = response.content[0];
+      // Check if we have text content
+      const textContent = 'text' in content ? content.text : JSON.stringify(content);
       // Look for JSON within triple backticks if present
       const jsonMatch = textContent.match(/```json\n([\s\S]*?)\n```/) || 
                        textContent.match(/```\n([\s\S]*?)\n```/);
@@ -121,7 +123,8 @@ export async function generateContextualAnswerWithClaude(
       ],
     });
 
-    return response.content[0].text;
+    const content = response.content[0];
+    return 'text' in content ? content.text : JSON.stringify(content);
   } catch (error) {
     console.error('Error in generateContextualAnswerWithClaude:', error);
     return `This would be an insightful answer about "${verseText}" addressing the question: "${question}"`;
