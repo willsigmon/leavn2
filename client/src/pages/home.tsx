@@ -40,6 +40,14 @@ export default function Home() {
         <div className="absolute bottom-14 right-1/4 w-14 h-14 bg-[#a5c2a5] dark:bg-[#345841] rounded-full opacity-20 animate-bounce-slow animation-delay-2400"></div>
         <div className="absolute top-24 right-1/3 w-6 h-6 bg-[#e8efe5] dark:bg-[#3b5045] rounded-full opacity-15 animate-pulse animation-delay-3200"></div>
         
+        {/* Even more circles */}
+        <div className="absolute top-28 left-1/2 w-7 h-7 bg-[#c5d5bc] dark:bg-[#2c4c3b] rounded-full opacity-20 animate-float-reverse animation-delay-2800"></div>
+        <div className="absolute bottom-24 right-14 w-9 h-9 bg-[#a5c2a5] dark:bg-[#345841] rounded-full opacity-15 animate-spin-slow animation-delay-3300"></div>
+        <div className="absolute top-1/3 left-1/5 w-5 h-5 bg-[#d8e5d2] dark:bg-[#3b5045] rounded-full opacity-25 animate-bounce-slow animation-delay-1700"></div>
+        <div className="absolute bottom-1/3 right-1/5 w-6 h-6 bg-[#e8efe5] dark:bg-[#2c4c3b] rounded-full opacity-20 animate-float animation-delay-900"></div>
+        <div className="absolute top-10 center w-10 h-10 bg-[#d8e5d2] dark:bg-[#345841] rounded-full opacity-15 animate-pulse-slow animation-delay-1800"></div>
+        <div className="absolute bottom-10 left-1/4 w-8 h-8 bg-[#c5d5bc] dark:bg-[#2c4c3b] rounded-full opacity-20 animate-bounce-subtle animation-delay-2100"></div>
+        
         <div className="container mx-auto max-w-5xl relative z-10">
           <div className="flex flex-col lg:flex-row gap-8 md:gap-12 items-center">
             <div className="w-full lg:w-1/2 space-y-4 md:space-y-6">
@@ -108,10 +116,10 @@ export default function Home() {
                   </div>
                 </div>
                 
-                {/* Reader Content with Scrolling Animation */}
+                {/* Reader Content - Static Version */}
                 <div className="p-5 h-full overflow-hidden relative">
                   {/* Biblical Text */}
-                  <div className="animate-subtle-scroll">
+                  <div className="relative">
                     <p className="font-serif text-lg text-stone-800 dark:text-stone-200 mb-3">
                       <span className="text-[#2c4c3b] dark:text-[#a5c2a5] font-semibold">1</span> In the beginning God created the heavens and the earth.
                     </p>
@@ -143,9 +151,14 @@ export default function Home() {
                     <p className="font-serif text-lg text-stone-800 dark:text-stone-200">
                       <span className="text-[#2c4c3b] dark:text-[#a5c2a5] font-semibold">5</span> God called the light "day," and the darkness he called "night." And there was evening, and there was morning—the first day.
                     </p>
+                    
+                    {/* Small floating circles inside Bible content */}
+                    <div className="absolute top-4 right-3 w-5 h-5 bg-[#e8efe5] dark:bg-[#2c4c3b] rounded-full opacity-15 animate-float-reverse animation-delay-1000"></div>
+                    <div className="absolute bottom-10 left-2 w-4 h-4 bg-[#c5d5bc] dark:bg-[#345841] rounded-full opacity-20 animate-pulse animation-delay-1500"></div>
+                    <div className="absolute top-1/3 left-2 w-3 h-3 bg-[#d8e5d2] dark:bg-[#3b5045] rounded-full opacity-15 animate-bounce-slow animation-delay-2000"></div>
                   </div>
                   
-                  {/* Subtle Lens Switcher Animation */}
+                  {/* Lens Switcher */}
                   <div className="absolute bottom-4 right-4 flex bg-white dark:bg-gray-800 rounded-full p-1 shadow-md animate-bounce-subtle">
                     <div className="h-7 w-7 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b] text-xs flex items-center justify-center text-[#2c4c3b] dark:text-[#a5c2a5] font-medium">E</div>
                     <div className="h-7 w-7 rounded-full bg-gray-100 dark:bg-gray-700 text-xs flex items-center justify-center text-gray-500 dark:text-gray-400 font-medium ml-1">C</div>
