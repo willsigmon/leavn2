@@ -14,6 +14,7 @@ import Settings from "@/pages/settings";
 import Explorer from "@/pages/explorer";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { AuthProvider } from "./hooks/useAuth";
+import { ReadingPlanProvider } from "./hooks/useReadingPlanContext";
 import { NavBar } from "./components/NavBar";
 import Footer from "./components/layout/Footer";
 import { lazy, Suspense } from "react";
@@ -73,10 +74,12 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <AuthProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Router />
-          </TooltipProvider>
+          <ReadingPlanProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Router />
+            </TooltipProvider>
+          </ReadingPlanProvider>
         </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>

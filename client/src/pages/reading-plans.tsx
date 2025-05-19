@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link, useLocation } from 'wouter';
-import { useQuery } from '@tanstack/react-query';
 import { ReadingPlan } from '@/types/readingPlan';
 import { 
   Card, 
@@ -27,6 +26,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
+import { useReadingPlan } from '@/hooks/useReadingPlanContext';
 
 export default function ReadingPlans() {
   const [_, navigate] = useLocation();
