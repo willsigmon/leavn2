@@ -34,8 +34,7 @@ export default function LandingOptimized() {
               AI-guided insights
             </span>
             <h1 className="mt-6 text-4xl/tight md:text-5xl/tight xl:text-6xl/tight font-semibold text-[#2c4c3b] dark:text-white">
-              Unlock <span className="bg-gradient-to-r from-[#2c4c3b] to-[#3a6349] dark:from-[#3a6349] dark:to-[#4d7a5e] bg-clip-text text-transparent">context-rich</span> Bible
-              study&nbsp;in&nbsp;seconds.
+              Unlock <span className="bg-gradient-to-r from-[#2c4c3b] to-[#3a6349] dark:from-[#3a6349] dark:to-[#4d7a5e] bg-clip-text text-transparent">context-rich</span> Bible study.
             </h1>
             <p className="mt-4 max-w-md mx-auto lg:mx-0 text-base md:text-lg text-slate-600 dark:text-slate-300">
               AI lenses reveal maps, traditions &amp; kid-friendly translations—instantly.
