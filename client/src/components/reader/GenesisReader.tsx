@@ -539,11 +539,17 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
     );
   }
 
-  if (error) {
+  if (error || (chapterData?.verses?.length === 0)) {
     return (
       <div className="p-4 text-center">
-        <h2 className="text-xl font-semibold text-red-600">Error Loading Bible Chapter</h2>
-        <p className="mt-2">Failed to load Genesis chapter {chapter}. Please try again.</p>
+        <h2 className="text-xl font-semibold text-amber-600">Chapter Under Development</h2>
+        <p className="mt-2">Genesis chapter {currentChapter} is coming soon! Currently only Genesis 1 is fully implemented.</p>
+        <Button 
+          className="mt-4 bg-[#2c4c3b] hover:bg-[#1e3c2b]"
+          onClick={() => setCurrentChapter(1)}
+        >
+          Return to Genesis 1
+        </Button>
       </div>
     );
   }
@@ -711,7 +717,12 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
               </span>
               <div className="flex-1">
                 <TooltipProvider>
-                  <p className="verse-text">
+                  <p className="verse-text" 
+                    style={{ 
+                      fontSize: `${fontSize}px`, 
+                      lineHeight: lineSpacing
+                    }}
+                  >
                     {selectedTranslation === 'kjv' 
                       ? (verse.textKjv || verse.text)
                       : (verse.textWeb || verse.text)
