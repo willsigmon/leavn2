@@ -1,0 +1,51 @@
+{
+  "id": "genesis-overview",
+  "title": "Genesis Overview",
+  "description": "A 7-day journey through key narratives in Genesis, exploring creation, fall, and covenant with contextual insights for deeper understanding.",
+  "coverImage": "/images/reading-plans/genesis.jpg",
+  "duration": 7,
+  "category": "Old Testament",
+  "tags": ["Beginnings", "Creation", "Patriarchs", "Covenant"],
+  "author": "Will Sigmon",
+  "difficulty": "beginner",
+  "days": [
+    {
+      "id": "genesis-day1",
+      "title": "Creation and Purpose",
+      "passages": ["Genesis 1:1-2:3"],
+      "contextualNotes": "This passage introduces God's creative work and establishes the rhythm of creation.",
+      "historicalContext": "Genesis was compiled during the post-exilic period, addressing fundamental questions about God's relationship with Israel and all creation. The creation account demonstrates God's sovereignty and goodness while establishing humanity's unique role in the created order.",
+      "theologicalConcepts": [
+        "Creation ex nihilo (out of nothing)",
+        "Divine sovereignty",
+        "Goodness of creation",
+        "Sabbath rest"
+      ],
+      "reflectionQuestions": [
+        "What does the creation account reveal about God's character?",
+        "How does understanding ourselves as created beings impact our identity?",
+        "What is the significance of the seventh day rest?"
+      ],
+      "crossReferences": ["Psalm 8", "John 1:1-5", "Colossians 1:15-17"]
+    },
+    {
+      "id": "genesis-day2",
+      "title": "Fall and Promise",
+      "passages": ["Genesis 3:1-24"],
+      "contextualNotes": "This passage details humanity's fall into sin and God's judgment mixed with mercy.",
+      "historicalContext": "Ancient Near Eastern cultures often had serpent figures representing chaos or deception. This narrative establishes the fundamental human problem that the rest of Scripture addresses.",
+      "theologicalConcepts": [
+        "Sin and its consequences",
+        "Accountability to God",
+        "Protoevangelium (first gospel promise)",
+        "Divine judgment and mercy"
+      ],
+      "reflectionQuestions": [
+        "How does the serpent's deception strategy work, and how do we see it functioning today?",
+        "What are the immediate and long-term consequences of the fall?",
+        "How does God demonstrate both justice and mercy in this passage?"
+      ],
+      "crossReferences": ["Romans 5:12-21", "Revelation 12:9", "Romans 16:20"]
+    }
+  ]
+}

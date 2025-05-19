@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/resizable';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import { 
   ArrowLeft,
@@ -29,11 +30,13 @@ import {
   Book,
   Calendar,
   CheckCircle2,
+  Film,
   Lightbulb,
   HelpCircle
 } from 'lucide-react';
 import ContextualInsights from './ContextualInsights';
 import ContextualSidebar from './ContextualSidebar';
+import NarrativeMode from './NarrativeMode';
 
 const PlanReader = () => {
   const [_, setLocation] = useLocation();
@@ -362,7 +365,7 @@ const PlanReader = () => {
                 onValueChange={setActiveContext}
                 className="w-full"
               >
-                <TabsList className="grid grid-cols-2 w-full mb-0">
+                <TabsList className="grid grid-cols-3 w-full mb-0">
                   <TabsTrigger value="passage" className="text-xs sm:text-sm">
                     <Book className="h-4 w-4 mr-1 sm:mr-2" />
                     <span className="hidden sm:inline">Verse Context</span>
@@ -372,6 +375,11 @@ const PlanReader = () => {
                     <Calendar className="h-4 w-4 mr-1 sm:mr-2" />
                     <span className="hidden sm:inline">Reading Plan</span>
                     <span className="sm:hidden">Plan</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="narrative" className="text-xs sm:text-sm">
+                    <Film className="h-4 w-4 mr-1 sm:mr-2" />
+                    <span className="hidden sm:inline">Narrative Mode</span>
+                    <span className="sm:hidden">Story</span>
                   </TabsTrigger>
                 </TabsList>
 

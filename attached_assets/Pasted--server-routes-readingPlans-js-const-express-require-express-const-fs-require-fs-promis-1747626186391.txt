@@ -1,0 +1,83 @@
+// server/routes/readingPlans.js
+const express = require('express');
+const fs = require('fs').promises;
+const path = require('path');
+const router = express.Router();
+
+// Get all reading plans
+router.get('/', async (req, res) => {
+  try {
+    const plansDir = path.join(__dirname, '../data/readingPlans');
+    const files = await fs.readdir(plansDir);
+    
+    const plans = await Promise.all(
+      files
+        .filter(file => file.endsWith('.json'))
+        .map(async file => {
+          const data = await fs.readFile(path.join(plansDir, file), 'utf8');
+          return JSON.parse(data);
+        })
+    );
+    
+    // Get user progress from database or file system
+    // This implementation depends on your data storage approach
+    // For simplicity, we'll just return the plans as is
+    
+    res.json(plans);
+  } catch (error) {
+    console.error('Error fetching reading plans:', error);
+    res.status(500).json({ error: 'Failed to fetch reading plans' });
+  }
+});
+
+// Get a specific reading plan
+router.get('/:planId', async (req, res) => {
+  try {
+    const { planId } = req.params;
+    const planPath = path.join(__dirname, `../data/readingPlans/${planId}.json`);
+    
+    const data = await fs.readFile(planPath, 'utf8');
+    const plan = JSON.parse(data);
+    
+    // Get user progress from database or file system
+    // This implementation depends on your data storage approach
+    
+    res.json(plan);
+  } catch (error) {
+    console.error(`Error fetching reading plan ${req.params.planId}:`, error);
+    res.status(404).json({ error: 'Reading plan not found' });
+  }
+});
+
+// Update reading plan progress
+router.put('/:planId/progress', async (req, res) => {
+  try {
+    const { planId } = req.params;
+    const progress = req.body;
+    
+    // Save progress to database or file system
+    // This implementation depends on your data storage approach
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error(`Error updating reading plan progress for ${req.params.planId}:`, error);
+    res.status(500).json({ error: 'Failed to update reading plan progress' });
+  }
+});
+
+// Mark a day as complete
+router.put('/:planId/days/:dayId/complete', async (req, res) => {
+  try {
+    const { planId, dayId } = req.params;
+    
+    // Update progress in database or file system
+    // This implementation depends on your data storage approach
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error(`Error marking day ${req.params.dayId} as complete:`, error);
+    res.status(500).json({ error: 'Failed to mark day as complete' });
+  }
+});
+
+module.exports = router;
