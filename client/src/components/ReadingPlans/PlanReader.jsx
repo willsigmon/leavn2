@@ -33,6 +33,7 @@ import {
   HelpCircle
 } from 'lucide-react';
 import ContextualInsights from './ContextualInsights';
+import ContextualSidebar from './ContextualSidebar';
 
 const PlanReader = () => {
   const [_, setLocation] = useLocation();
@@ -51,6 +52,7 @@ const PlanReader = () => {
   
   const [selectedPassageIndex, setSelectedPassageIndex] = useState(0);
   const [activeVerse, setActiveVerse] = useState(null);
+  const [activeContext, setActiveContext] = useState('passage');
   
   // Fetch the plan day data
   const { data: day, isLoading: isDayLoading } = useQuery({
@@ -353,11 +355,44 @@ const PlanReader = () => {
         {/* Insights pane */}
         <ResizablePanel defaultSize={35} minSize={25}>
           <div className="h-full flex flex-col">
-            <div className="p-4">
-              <ContextualInsights 
-                passage={passageTitle}
-                onNavigateToVerse={navigateToVerse}
-              />
+            {/* Context selector tabs */}
+            <div className="px-4 pt-4 pb-0">
+              <Tabs
+                value={activeContext}
+                onValueChange={setActiveContext}
+                className="w-full"
+              >
+                <TabsList className="grid grid-cols-2 w-full mb-0">
+                  <TabsTrigger value="passage" className="text-xs sm:text-sm">
+                    <Book className="h-4 w-4 mr-1 sm:mr-2" />
+                    <span className="hidden sm:inline">Verse Context</span>
+                    <span className="sm:hidden">Verse</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="day" className="text-xs sm:text-sm">
+                    <Calendar className="h-4 w-4 mr-1 sm:mr-2" />
+                    <span className="hidden sm:inline">Reading Plan</span>
+                    <span className="sm:hidden">Plan</span>
+                  </TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="passage" className="mt-0 p-0">
+                  <div className="h-full pt-4">
+                    <ContextualInsights 
+                      passage={passageTitle}
+                      onNavigateToVerse={navigateToVerse}
+                    />
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="day" className="mt-0 p-0">
+                  <div className="h-full pt-4">
+                    <ContextualSidebar
+                      day={day}
+                      onNavigateToVerse={navigateToVerse}
+                    />
+                  </div>
+                </TabsContent>
+              </Tabs>
             </div>
           </div>
         </ResizablePanel>
