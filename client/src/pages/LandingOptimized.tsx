@@ -3,6 +3,7 @@ import { Link } from 'wouter';
 import { CTAButton } from '@/components/CTAButton';
 import { WaitlistModal } from '@/components/WaitlistModal';
 import { ScrollHeader } from '@/components/ScrollHeader';
+import { ReaderPreview } from '@/components/ReaderPreview';
 import { Play } from 'lucide-react';
 import Footer from '@/components/layout/Footer';
 const Benefits = React.lazy(() => import('@/components/Benefits3Up'));
@@ -56,19 +57,10 @@ export default function LandingOptimized() {
             </div>
           </div>
 
-          {/* Hero video */}
+          {/* Animated Reader Preview */}
           <div className="relative mt-10 lg:mt-0">
-            <div className="backdrop-blur-xl bg-white/30 dark:bg-black/20 rounded-2xl overflow-hidden shadow-2xl border border-white/20 dark:border-white/5 transform hover:scale-[1.01] transition-transform">
-              <video
-                className="aspect-video w-full rounded-xl opacity-0 transition-opacity duration-300"
-                src="/media/landing-demo.mp4"
-                poster="/media/poster.jpg"
-                autoPlay
-                muted
-                loop
-                playsInline
-                onLoadedData={e => e.currentTarget.classList.remove('opacity-0')}
-              />
+            <div className="transform hover:scale-[1.01] transition-transform h-[350px] md:h-[400px] lg:h-[450px]">
+              <ReaderPreview />
             </div>
           </div>
         </div>
