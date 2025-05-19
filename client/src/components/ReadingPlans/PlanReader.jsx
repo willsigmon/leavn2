@@ -400,6 +400,15 @@ const PlanReader = () => {
                     />
                   </div>
                 </TabsContent>
+                
+                <TabsContent value="narrative" className="mt-0 p-0">
+                  <div className="h-full pt-4">
+                    <NarrativeMode
+                      passage={passageTitle}
+                      onNavigateToVerse={navigateToVerse}
+                    />
+                  </div>
+                </TabsContent>
               </Tabs>
             </div>
           </div>
