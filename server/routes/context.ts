@@ -1,5 +1,5 @@
 import express from 'express';
-import { isAuthenticated } from '../replitAuth';
+import { isAuthenticated } from '../simpleAuth';
 
 const router = express.Router();
 
