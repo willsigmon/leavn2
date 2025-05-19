@@ -68,7 +68,7 @@ function generateMockCrossReferences(reference: string): CrossReference[] {
     // Generate tags
     const allTags = ['creation', 'word', 'beginning', 'faith', 'power', 'love', 'redemption', 'glory', 'wisdom'];
     const numTags = Math.floor(Math.random() * 3) + 1; // 1-3 tags
-    const tags = [];
+    const tags: string[] = [];
     for (let i = 0; i < numTags; i++) {
       const tag = allTags[Math.floor(Math.random() * allTags.length)];
       if (!tags.includes(tag)) {
@@ -144,7 +144,7 @@ router.get('/chapter/:book/:chapter', async (req: Request, res: Response) => {
     
     // In a production app, this would query the database for all cross-references
     // where either fromRef or toRef is in this chapter
-    const crossRefs = [];
+    const crossRefs: CrossReference[] = [];
     
     // Create a few cross-references for the chapter
     const bookName = book.charAt(0).toUpperCase() + book.slice(1).toLowerCase();
@@ -334,7 +334,7 @@ function getCommonThemes(fromRef: string, toRef: string): string[] {
   
   // Return 2-4 random themes
   const numThemes = Math.floor(Math.random() * 3) + 2; // 2-4
-  const selectedThemes = [];
+  const selectedThemes: string[] = [];
   
   for (let i = 0; i < numThemes; i++) {
     const theme = allThemes[Math.floor(Math.random() * allThemes.length)];

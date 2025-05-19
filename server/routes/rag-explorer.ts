@@ -71,8 +71,8 @@ router.get('/tag/:book/:type/:value', async (req: Request, res: Response) => {
     }
     
     // Look through the Genesis chapters data directly for now
-    try {
-      const chapters = [];
+      try {
+      const chapters: any[] = [];
       
       // We'll check the first 12 chapters of Genesis in our current implementation
       for (let chapterNum = 1; chapterNum <= 12; chapterNum++) {
@@ -94,7 +94,7 @@ router.get('/tag/:book/:type/:value', async (req: Request, res: Response) => {
       }
       
       // Find verses that contain this tag
-      const matchingVerses = [];
+      const matchingVerses: any[] = [];
       
       for (const chapter of chapters) {
         for (const verse of chapter.verses) {
@@ -210,8 +210,8 @@ router.get('/related/:book/:chapter/:verse', async (req: Request, res: Response)
       const symbolsToMatch = verseTags.symbols || [];
       
       // Find verses that share these tags
-      const relatedVerses = [];
-      const chaptersToSearch = [];
+      const relatedVerses: any[] = [];
+      const chaptersToSearch: any[] = [];
       
       // Get nearby chapters (for context)
       for (let c = Math.max(1, chapterNum - 2); c <= Math.min(50, chapterNum + 2); c++) {
@@ -317,8 +317,8 @@ router.get('/concept-map/:book/:chapter?', async (req: Request, res: Response) =
       const ragIndex = JSON.parse(await readFile(indexPath, 'utf8'));
       
       // Build concept map nodes and edges
-      const nodes = [];
-      const edges = [];
+      const nodes: any[] = [];
+      const edges: any[] = [];
       
       // Add theme nodes
       ragIndex.themes.forEach((theme, idx) => {

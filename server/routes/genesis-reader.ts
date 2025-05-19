@@ -5,6 +5,17 @@ import path from 'path';
 
 const router = Router();
 
+interface GenesisVerse {
+  verse: number;
+  number: number;
+  text: string;
+  textKjv: string;
+  textWeb: string;
+  isBookmarked: boolean;
+  hasNote: boolean;
+  tags: Record<string, any>;
+}
+
 // Get Genesis chapter data from our enriched files
 router.get('/:chapter', async (req: Request, res: Response) => {
   try {
@@ -137,7 +148,7 @@ router.get('/:chapter', async (req: Request, res: Response) => {
       }
       
       // Create the complete array of verses
-      const verses = [];
+      const verses: GenesisVerse[] = [];
       
       // Create a map of full text verses if available
       const fullTextMap = new Map();
