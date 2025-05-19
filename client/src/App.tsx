@@ -34,7 +34,7 @@ function Router() {
           <Route path="/reader/:book" component={Reader} />
           <Route path="/reader/:book/:chapter" component={Reader} />
           <Route path="/reading-plans" component={ReadingPlans} />
-          <Route path="/reading-plan/:id" component={ReadingPlanDetail} />
+          <Route path="/reading-plans/:id" component={ReadingPlanDetail} />
           <Route path="/login" component={Login} />
           <Route path="/profile" component={Profile} />
           <Route path="/settings" component={Settings} />
