@@ -94,9 +94,6 @@ export default function Home() {
               </div>
             </div>
             <div className="w-full mt-8 lg:mt-0 lg:w-1/2 relative">
-              <div className="hidden md:block absolute inset-0 -left-6 -top-6 bg-[#f0f4ed] dark:bg-[#2c4c3b]/30 rounded-xl"></div>
-              <div className="hidden md:block absolute inset-0 -right-6 -bottom-6 bg-[#e8efe5] dark:bg-[#345841]/30 rounded-xl"></div>
-              
               {/* Bible Reader Preview Card */}
               <div className="relative rounded-xl overflow-hidden shadow-xl border-2 md:border-4 border-white dark:border-gray-800 bg-white dark:bg-gray-900 h-80 lg:h-96">
                 {/* Reader Header */}
