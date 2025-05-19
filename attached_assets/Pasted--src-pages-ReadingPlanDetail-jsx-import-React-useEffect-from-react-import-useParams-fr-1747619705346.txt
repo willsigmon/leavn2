@@ -1,0 +1,65 @@
+// src/pages/ReadingPlanDetail.jsx
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useReadingPlan } from '../hooks/useReadingPlanContext';
+import DayCard from '../components/ReadingPlans/DayCard';
+
+const ReadingPlanDetail = () => {
+  const { planId } = useParams();
+  const { state, dispatch } = useReadingPlan();
+  const { plans, activePlan, userProgress } = state;
+  
+  useEffect(() => {
+    const plan = plans.find(p => p.id === planId);
+    if (plan) {
+      dispatch({ type: 'SET_ACTIVE_PLAN', payload: plan });
+    }
+  }, [planId, plans, dispatch]);
+  
+  if (!activePlan) return <div>Loading plan...</div>;
+  
+  const progress = userProgress[planId] || { completedDays: [] };
+  const completionPercentage = 
+    (progress.completedDays.length / activePlan.days.length) * 100;
+  
+  return (
+    <div className="reading-plan-detail">
+      <header>
+        <h1>{activePlan.title}</h1>
+        <p>{activePlan.description}</p>
+        <div className="plan-meta">
+          <span>{activePlan.duration} days</span>
+          <span className={activePlan.difficulty}>{activePlan.difficulty}</span>
+          <span>By {activePlan.author}</span>
+        </div>
+      </header>
+      
+      <div className="progress-tracker">
+        <div className="progress-bar">
+          <div 
+            className="progress-fill"
+            style={{ width: `${completionPercentage}%` }} 
+          />
+        </div>
+        <span>{Math.round(completionPercentage)}% complete</span>
+      </div>
+      
+      <div className="days-container">
+        {activePlan.days.map((day, index) => (
+          <DayCard 
+            key={day.id}
+            day={day}
+            dayNumber={index + 1}
+            isCompleted={progress.completedDays.includes(day.id)}
+            onComplete={() => dispatch({
+              type: 'MARK_DAY_COMPLETE',
+              payload: { planId, dayId: day.id }
+            })}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default ReadingPlanDetail;

@@ -1,0 +1,93 @@
+// src/hooks/useReadingPlanContext.jsx
+import React, { createContext, useContext, useReducer, useEffect } from 'react';
+
+const ReadingPlanContext = createContext();
+
+const initialState = {
+  plans: [],
+  activePlan: null,
+  currentDay: null,
+  loading: false,
+  error: null,
+  userProgress: {},
+};
+
+function readingPlanReducer(state, action) {
+  switch (action.type) {
+    case 'LOAD_PLANS':
+      return { ...state, plans: action.payload, loading: false };
+    case 'SET_ACTIVE_PLAN':
+      return { ...state, activePlan: action.payload };
+    case 'SET_CURRENT_DAY':
+      return { ...state, currentDay: action.payload };
+    case 'MARK_DAY_COMPLETE':
+      const { planId, dayId } = action.payload;
+      return {
+        ...state,
+        userProgress: {
+          ...state.userProgress,
+          [planId]: {
+            ...state.userProgress[planId],
+            completedDays: [
+              ...(state.userProgress[planId]?.completedDays || []),
+              dayId
+            ]
+          }
+        }
+      };
+    // Add more cases as needed
+    default:
+      return state;
+  }
+}
+
+export function ReadingPlanProvider({ children }) {
+  const [state, dispatch] = useReducer(readingPlanReducer, initialState);
+  
+  // Load plans from API or local storage
+  useEffect(() => {
+    async function loadPlans() {
+      try {
+        // Replace with actual API call or data source
+        const response = await fetch('/api/reading-plans');
+        const data = await response.json();
+        dispatch({ type: 'LOAD_PLANS', payload: data });
+      } catch (error) {
+        console.error('Failed to load reading plans:', error);
+      }
+    }
+    
+    loadPlans();
+    
+    // Load user progress from localStorage
+    const savedProgress = localStorage.getItem('readingPlanProgress');
+    if (savedProgress) {
+      dispatch({ 
+        type: 'LOAD_USER_PROGRESS', 
+        payload: JSON.parse(savedProgress) 
+      });
+    }
+  }, []);
+  
+  // Save progress to localStorage when it changes
+  useEffect(() => {
+    localStorage.setItem(
+      'readingPlanProgress', 
+      JSON.stringify(state.userProgress)
+    );
+  }, [state.userProgress]);
+  
+  return (
+    <ReadingPlanContext.Provider value={{ state, dispatch }}>
+      {children}
+    </ReadingPlanContext.Provider>
+  );
+}
+
+export function useReadingPlan() {
+  const context = useContext(ReadingPlanContext);
+  if (!context) {
+    throw new Error('useReadingPlan must be used within a ReadingPlanProvider');
+  }
+  return context;
+}

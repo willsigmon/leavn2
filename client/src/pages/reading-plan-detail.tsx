@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useRoute, Link } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import { 
@@ -46,6 +46,8 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import { useReadingPlan } from '@/hooks/useReadingPlanContext';
+import DayCard from '@/components/ReadingPlans/DayCard';
 
 export default function ReadingPlanDetail() {
   const [match, params] = useRoute('/reading-plans/:id');
@@ -53,36 +55,68 @@ export default function ReadingPlanDetail() {
   const { isAuthenticated } = useAuth();
   const { toast } = useToast();
   const [selectedDayId, setSelectedDayId] = React.useState<string | null>(null);
+  const { state, dispatch } = useReadingPlan();
+  const { plans, activePlan, userProgress, loading: contextLoading } = state;
 
-  // Fetch reading plan details
-  const { data: plan, isLoading, error } = useQuery<ReadingPlan>({
+  // Use both the context and query to ensure we have the data
+  const { data: planFromApi, isLoading: isLoadingFromApi, error } = useQuery<ReadingPlan>({
     queryKey: ['/api/reading-plans', params?.id],
-    enabled: !!params?.id,
+    enabled: !!params?.id && !activePlan,
   });
 
-  // Fetch user progress if authenticated
-  const { data: progress, isLoading: isLoadingProgress } = useQuery<ReadingPlanProgress>({
-    queryKey: ['/api/reading-plans', params?.id, 'progress'],
-    enabled: !!params?.id && isAuthenticated,
-  });
-
-  React.useEffect(() => {
-    if (plan?.days && plan.days.length > 0 && !selectedDayId) {
-      // Select first day or current day if progress exists
-      const dayToSelect = progress ? plan.days.find(d => d.id === progress.completedDays[progress.completedDays.length - 1]) || plan.days[0] : plan.days[0];
-      setSelectedDayId(dayToSelect.id);
+  // Set the active plan from either context or API response
+  useEffect(() => {
+    if (!params?.id) return;
+    
+    // If plan is in context state, use it
+    const planFromContext = plans.find(p => p.id === params.id);
+    
+    if (planFromContext) {
+      dispatch({ type: 'SET_ACTIVE_PLAN', payload: planFromContext });
+    } else if (planFromApi) {
+      dispatch({ type: 'SET_ACTIVE_PLAN', payload: planFromApi });
     }
-  }, [plan, progress, selectedDayId]);
+  }, [params?.id, plans, planFromApi, dispatch]);
+
+  // Select the first day or current/last day if there's progress
+  useEffect(() => {
+    if (activePlan?.days && activePlan.days.length > 0 && !selectedDayId) {
+      // Get progress for this plan
+      const progress = userProgress[params?.id || ''];
+      
+      // Select first day or current day if progress exists
+      if (progress && progress.completedDays.length > 0) {
+        const lastCompletedDayId = progress.completedDays[progress.completedDays.length - 1];
+        const lastCompletedIndex = activePlan.days.findIndex(d => d.id === lastCompletedDayId);
+        
+        // If there's a next day after the last completed, select it
+        if (lastCompletedIndex < activePlan.days.length - 1) {
+          const nextDay = activePlan.days[lastCompletedIndex + 1];
+          setSelectedDayId(nextDay.id);
+        } else {
+          // Otherwise select the last completed day
+          setSelectedDayId(lastCompletedDayId);
+        }
+      } else {
+        // No progress yet, select first day
+        setSelectedDayId(activePlan.days[0].id);
+      }
+    }
+  }, [activePlan, params?.id, userProgress, selectedDayId]);
 
   const selectedDay = React.useMemo(() => {
-    if (!plan?.days || !selectedDayId) return null;
-    return plan.days.find(day => day.id === selectedDayId) || null;
-  }, [plan, selectedDayId]);
+    if (!activePlan?.days || !selectedDayId) return null;
+    return activePlan.days.find(day => day.id === selectedDayId) || null;
+  }, [activePlan, selectedDayId]);
 
-  const handleMarkAsCompleted = async () => {
-    if (!selectedDayId || !isAuthenticated) return;
+  const handleMarkAsCompleted = () => {
+    if (!selectedDayId || !params?.id || !isAuthenticated) return;
     
-    // Here we would normally call the API to mark the day as completed
+    dispatch({
+      type: 'MARK_DAY_COMPLETE',
+      payload: { planId: params.id, dayId: selectedDayId }
+    });
+    
     toast({
       title: "Day marked as completed",
       description: "Your progress has been updated. Great job!",
