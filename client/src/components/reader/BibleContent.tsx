@@ -32,6 +32,13 @@ export function BibleContent({
   const [notedVerses, setNotedVerses] = useState<number[]>([]);
   const [currentTagFilter, setCurrentTagFilter] = useState<string | null>(null);
   
+  // Log when tag filter changes
+  React.useEffect(() => {
+    if (currentTagFilter) {
+      console.log(`Now filtering by tag: ${currentTagFilter}`);
+    }
+  }, [currentTagFilter]);
+  
   // Fetch Bible content
   const { data: chapterData, isLoading, error } = useQuery({
     queryKey: [`/api/reader/${book}/${chapter}`],
@@ -117,8 +124,8 @@ export function BibleContent({
     setSelectedVerse(prevRef => prevRef === verseRef ? null : verseRef);
   };
   
-  // Handle tag click for "rabbit hole" exploration
-  const handleTagClick = (tag: string) => {
+  // Tag click handler - uses unique name to avoid duplication
+  const handleTagInteraction = (tag: string) => {
     setCurrentTagFilter(prevTag => prevTag === tag ? null : tag);
     
     // In a real application, this would:
@@ -257,7 +264,7 @@ export function BibleContent({
                   highlightColor={highlightColor || verse.highlightColor}
                   tags={tagsForVerse}
                   tagsClickable={tagsClickable}
-                  onTagClick={handleTagClick}
+                  onTagClick={handleTagInteraction}
                   onNavigateToVerse={onNavigateToVerse}
                   onHighlight={handleHighlight}
                   onBookmark={handleBookmark}

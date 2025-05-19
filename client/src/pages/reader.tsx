@@ -597,7 +597,9 @@ export default function Reader() {
                     }`}
                     onClick={() => setSelectedTheologicalLens(lens.id)}
                   >
-                    {lens.label}
+                    {lens.label.split('-').map(word => 
+                      word.charAt(0).toUpperCase() + word.slice(1)
+                    ).join(' ')}
                   </Button>
                 ))}
               </div>
