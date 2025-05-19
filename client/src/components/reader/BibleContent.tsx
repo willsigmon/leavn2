@@ -30,6 +30,7 @@ export function BibleContent({
   const [highlightedVerses, setHighlightedVerses] = useState<Record<number, string>>({});
   const [bookmarkedVerses, setBookmarkedVerses] = useState<number[]>([]);
   const [notedVerses, setNotedVerses] = useState<number[]>([]);
+  const [currentTagFilter, setCurrentTagFilter] = useState<string | null>(null);
   
   // Fetch Bible content
   const { data: chapterData, isLoading, error } = useQuery({
@@ -41,6 +42,24 @@ export function BibleContent({
       }
       return response.json();
     }
+  });
+  
+  // Fetch tags for verses in this chapter
+  const { data: verseTagsData = {} } = useQuery<Record<string, string[]>>({
+    queryKey: [`/api/reader/tags/${book}/${chapter}`],
+    queryFn: async () => {
+      try {
+        const response = await fetch(`/api/reader/tags/${book}/${chapter}`);
+        if (!response.ok) {
+          return {};
+        }
+        return response.json();
+      } catch (error) {
+        console.error('Error fetching verse tags:', error);
+        return {};
+      }
+    },
+    enabled: !!chapterData && enableTagging
   });
   
   // Fetch cross-references for the entire chapter
@@ -98,6 +117,19 @@ export function BibleContent({
     setSelectedVerse(prevRef => prevRef === verseRef ? null : verseRef);
   };
   
+  // Handle tag click for "rabbit hole" exploration
+  const handleTagClick = (tag: string) => {
+    setCurrentTagFilter(prevTag => prevTag === tag ? null : tag);
+    
+    // In a real application, this would:
+    // 1. Show a panel of related verses with this tag
+    // 2. Allow user to navigate to these verses
+    // 3. Show more information about the tag's meaning
+    
+    // For demo purposes, we'll log this action
+    console.log(`Tag clicked: ${tag}`, `Finding related verses with tag "${tag}"...`);
+  };
+  
   if (isLoading) {
     return (
       <div className="space-y-3 p-4 md:p-6">
@@ -133,6 +165,47 @@ export function BibleContent({
     }
   };
   
+  // Generate temporary tags for demo purposes until backend is ready
+  const generateTemporaryTags = (verseNumber: number, verseRef: string): string[] => {
+    // Map of context-relevant tags for Genesis 1
+    const verseTags: Record<number, string[]> = {
+      1: ['creation', 'beginning', 'God', 'heaven', 'earth'],
+      2: ['void', 'darkness', 'water', 'deep', 'spirit'],
+      3: ['light', 'creation', 'spoke', 'word'],
+      4: ['separation', 'light', 'darkness', 'day', 'night'],
+      5: ['evening', 'morning', 'first-day'],
+      6: ['sky', 'water', 'separation'],
+      7: ['vault', 'sky', 'water'],
+      8: ['heaven', 'second-day'],
+      9: ['land', 'water', 'seas', 'dry-ground'],
+      10: ['good', 'land', 'seas'],
+      11: ['vegetation', 'plants', 'trees', 'seed', 'fruit'],
+      12: ['growth', 'plants', 'produce', 'trees'],
+      13: ['evening', 'morning', 'third-day'],
+      14: ['lights', 'sky', 'day', 'night', 'signs', 'seasons'],
+      15: ['light', 'earth', 'shine'],
+      16: ['sun', 'moon', 'stars', 'day', 'night'],
+      17: ['set', 'sky', 'light', 'earth'],
+      18: ['govern', 'day', 'night', 'separate', 'light', 'darkness'],
+      19: ['evening', 'morning', 'fourth-day'],
+      20: ['water', 'creatures', 'birds', 'sky'],
+      21: ['sea-creatures', 'birds', 'blessing', 'multiply'],
+      22: ['blessing', 'sea', 'birds', 'fruitful'],
+      23: ['evening', 'morning', 'fifth-day'],
+      24: ['land', 'creatures', 'livestock', 'animals', 'wildlife'],
+      25: ['animals', 'livestock', 'creatures', 'good'],
+      26: ['mankind', 'image', 'likeness', 'dominion', 'rule'],
+      27: ['image', 'man', 'woman', 'creation'],
+      28: ['blessing', 'fruitful', 'multiply', 'subdue', 'rule'],
+      29: ['food', 'plants', 'seed', 'fruit', 'provision'],
+      30: ['animals', 'food', 'plants', 'green'],
+      31: ['good', 'creation', 'complete', 'sixth-day']
+    };
+    
+    // Return tags for this verse number or fallback tags
+    return verseTags[verseNumber] || ['Scripture', 'Genesis', 'Bible'];
+  };
+  
   // Filter cross-references based on selected verse
   const visibleCrossReferences = selectedVerse
     ? allCrossReferences.filter(ref => 
@@ -150,12 +223,21 @@ export function BibleContent({
         </h2>
         
         <div className="space-y-1 font-serif text-stone-800 dark:text-stone-200">
-          {chapterData.verses.map((verse) => {
+          {chapterData.verses.map((verse: any) => {
             const verseRef = `${bookName} ${chapter}:${verse.verse}`;
             const isHighlighted = !!highlightedVerses[verse.verse];
             const highlightColor = highlightedVerses[verse.verse];
             const isBookmarked = bookmarkedVerses.includes(verse.verse) || !!verse.isBookmarked;
             const hasNote = notedVerses.includes(verse.verse) || !!verse.hasNote;
+            
+            // Get tags for this verse from our verseTagsData object or generate temporary ones
+            const tagsForVerse = enableTagging ? 
+              (verseTagsData[verseRef] || generateTemporaryTags(verse.verse, verseRef)) : [];
+            
+            // Filter verses by tag if a tag filter is active
+            if (currentTagFilter && !tagsForVerse.includes(currentTagFilter)) {
+              return null; // Skip verses that don't have the current tag
+            }
             
             return (
               <motion.div 
@@ -173,10 +255,13 @@ export function BibleContent({
                   isBookmarked={isBookmarked}
                   hasNote={hasNote}
                   highlightColor={highlightColor || verse.highlightColor}
+                  tags={tagsForVerse}
+                  tagsClickable={tagsClickable}
                   onNavigateToVerse={onNavigateToVerse}
                   onHighlight={handleHighlight}
                   onBookmark={handleBookmark}
                   onAddNote={handleAddNote}
+                  onTagClick={handleTagClick}
                 />
               </motion.div>
             );
