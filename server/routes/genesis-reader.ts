@@ -115,57 +115,84 @@ router.get('/:chapter', async (req: Request, res: Response) => {
       
       console.log(`Got ${verseMap.size} verses from the data file. Expected count: ${expectedVerseCount}`);
       
+      // Check if we have a complete text file for this chapter
+      const fullTextPath = path.join(
+        process.cwd(),
+        'data',
+        'genesis',
+        'bible_text',
+        `genesis_${chapterNum}_complete.json`
+      );
+      
+      // If we have a full text file, use it to get the actual verse texts
+      let fullTextData = null;
+      if (fs.existsSync(fullTextPath)) {
+        try {
+          const fileData = fs.readFileSync(fullTextPath, 'utf8');
+          fullTextData = JSON.parse(fileData);
+          console.log(`Loaded complete Bible text for Genesis ${chapterNum} with ${fullTextData.verses.length} verses`);
+        } catch (err) {
+          console.error(`Error loading complete Bible text for Genesis ${chapterNum}:`, err);
+        }
+      }
+      
       // Create the complete array of verses
       const verses = [];
+      
+      // Create a map of full text verses if available
+      const fullTextMap = new Map();
+      if (fullTextData && Array.isArray(fullTextData.verses)) {
+        fullTextData.verses.forEach(verse => {
+          if (verse.verse && verse.text) {
+            fullTextMap.set(verse.verse, verse);
+          }
+        });
+        console.log(`Loaded ${fullTextMap.size} verses from complete text file`);
+      }
+      
       for (let i = 1; i <= expectedVerseCount; i++) {
         const existingVerse = verseMap.get(i);
+        const fullTextVerse = fullTextMap.get(i);
         
-        if (existingVerse) {
-          // Get the verse data from our existing data
-          // Detect the text format and extract appropriately
-          let kjvText = '';
-          let webText = '';
-          
-          // Check if there's a text field at all
-          if (existingVerse.text) {
-            try {
-              // Handle format where text is an object with translations
-              if (typeof existingVerse.text === 'object') {
-                kjvText = existingVerse.text.kjv || '';
-                webText = existingVerse.text.web || '';
-              } else if (typeof existingVerse.text === 'string') {
-                // If just a string, use it for both translations
-                kjvText = existingVerse.text;
-                webText = existingVerse.text;
-              }
-            } catch (err) {
-              console.error(`Error extracting text for verse ${i}:`, err);
+        // Get the texts - prioritize the full text data if available
+        let kjvText = '';
+        let webText = '';
+        
+        if (fullTextVerse && fullTextVerse.text) {
+          // Use the complete text from our full text file
+          kjvText = fullTextVerse.text.kjv || '';
+          webText = fullTextVerse.text.web || '';
+          console.log(`Using full text for verse ${i}`);
+        } else if (existingVerse && existingVerse.text) {
+          // Fall back to the existing data if full text not available
+          try {
+            // Handle format where text is an object with translations
+            if (typeof existingVerse.text === 'object') {
+              kjvText = existingVerse.text.kjv || '';
+              webText = existingVerse.text.web || '';
+            } else if (typeof existingVerse.text === 'string') {
+              // If just a string, use it for both translations
+              kjvText = existingVerse.text;
+              webText = existingVerse.text;
             }
+          } catch (err) {
+            console.error(`Error extracting text for verse ${i}:`, err);
           }
-          
-          verses.push({
-            verse: i,
-            number: i,
-            text: webText || `Genesis ${chapterNum}:${i}`,
-            textKjv: kjvText || `Genesis ${chapterNum}:${i} (KJV)`,  
-            textWeb: webText || `Genesis ${chapterNum}:${i} (WEB)`,
-            isBookmarked: existingVerse.isBookmarked || false,
-            hasNote: existingVerse.hasNote || false,
-            tags: existingVerse.tags || {}
-          });
-        } else {
-          // Create a placeholder for missing verses
-          verses.push({
-            verse: i,
-            number: i,
-            text: `Genesis ${chapterNum}:${i}`,
-            textKjv: `Genesis ${chapterNum}:${i} (KJV)`,  
-            textWeb: `Genesis ${chapterNum}:${i} (WEB)`,
-            isBookmarked: false,
-            hasNote: false,
-            tags: {}
-          });
         }
+        
+        // Use the metadata from existing verse or create default metadata
+        const metadata = existingVerse || {};
+        
+        verses.push({
+          verse: i,
+          number: i,
+          text: webText || `Genesis ${chapterNum}:${i}`,
+          textKjv: kjvText || `Genesis ${chapterNum}:${i} (KJV)`,  
+          textWeb: webText || `Genesis ${chapterNum}:${i} (WEB)`,
+          isBookmarked: metadata.isBookmarked || false,
+          hasNote: metadata.hasNote || false,
+          tags: metadata.tags || {}
+        });
       }
       
       // Debug logging for the first verse
