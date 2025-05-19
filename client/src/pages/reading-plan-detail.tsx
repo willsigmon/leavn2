@@ -371,7 +371,7 @@ export default function ReadingPlanDetail() {
 
               {/* Tabs for different content types */}
               <Tabs defaultValue="context" className="w-full">
-                <TabsList className="bg-muted grid grid-cols-4 mb-4">
+                <TabsList className="bg-muted grid grid-cols-5 mb-4">
                   <TabsTrigger 
                     value="context" 
                     className="data-[state=active]:bg-[#d8e5d2] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#3a6349] dark:data-[state=active]:text-white"
@@ -395,6 +395,12 @@ export default function ReadingPlanDetail() {
                     className="data-[state=active]:bg-[#d8e5d2] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#3a6349] dark:data-[state=active]:text-white"
                   >
                     References
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="days" 
+                    className="data-[state=active]:bg-[#d8e5d2] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#3a6349] dark:data-[state=active]:text-white"
+                  >
+                    All Days
                   </TabsTrigger>
                 </TabsList>
                 

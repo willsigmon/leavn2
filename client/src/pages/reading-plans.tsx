@@ -31,13 +31,13 @@ import { useReadingPlan } from '@/hooks/useReadingPlanContext';
 export default function ReadingPlans() {
   const [_, navigate] = useLocation();
   const { isAuthenticated } = useAuth();
+  const { state } = useReadingPlan();
+  const { plans, loading, userProgress } = state;
   const [searchQuery, setSearchQuery] = React.useState('');
   const [selectedCategory, setSelectedCategory] = React.useState('all');
 
-  const { data: readingPlans, isLoading } = useQuery<ReadingPlan[]>({
-    queryKey: ['/api/reading-plans'],
-    retry: false,
-  });
+  const isLoading = loading;
+  const readingPlans = plans;
 
   const filteredPlans = React.useMemo(() => {
     if (!readingPlans) return [];
@@ -181,12 +181,30 @@ export default function ReadingPlans() {
                       )}
                     </div>
                   </CardContent>
-                  <CardFooter className="pt-0">
+                  <CardFooter className="pt-0 flex flex-col gap-3">
+                    {userProgress && userProgress[plan.id] && (
+                      <div className="w-full">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-xs text-muted-foreground">
+                            Progress: {userProgress[plan.id].completedDays.length} / {plan.days.length} days
+                          </span>
+                          <span className="text-xs font-medium text-[#2c4c3b]">
+                            {Math.round((userProgress[plan.id].completedDays.length / plan.days.length) * 100)}%
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
+                          <div 
+                            className="bg-[#2c4c3b] h-1.5 rounded-full" 
+                            style={{ width: `${Math.round((userProgress[plan.id].completedDays.length / plan.days.length) * 100)}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    )}
                     <Button 
                       className="w-full bg-[#2c4c3b] hover:bg-[#3a6349] text-white"
                       onClick={() => navigate(`/reading-plans/${plan.id}`)}
                     >
-                      View Plan
+                      {userProgress && userProgress[plan.id] ? 'Continue Plan' : 'View Plan'}
                       <ChevronRight className="ml-2 h-4 w-4" />
                     </Button>
                   </CardFooter>
