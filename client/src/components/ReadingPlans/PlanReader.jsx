@@ -151,7 +151,7 @@ const PlanReader = () => {
         <p className="text-gray-600 dark:text-gray-400 mb-6">
           The reading day you're looking for doesn't exist or has been removed.
         </p>
-        <Button onClick={() => navigate(`/plans/${planId}`)}>
+        <Button onClick={() => setLocation(`/reading-plans/${planId}`)}>
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Reading Plan
         </Button>
@@ -222,7 +222,7 @@ const PlanReader = () => {
             <Button 
               variant="ghost" 
               className="p-0 mr-2"
-              onClick={() => navigate(`/plans/${planId}`)}
+              onClick={() => setLocation(`/reading-plans/${planId}`)}
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
