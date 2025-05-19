@@ -119,7 +119,7 @@ const ContextualInsights = ({ passage, onNavigateToVerse }) => {
   }
   
   return (
-    <Card className="h-full">
+    <Card className="h-full glass shadow-lg">
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-semibold text-[#2c4c3b] dark:text-green-400">
           Contextual Insights
@@ -136,20 +136,48 @@ const ContextualInsights = ({ passage, onNavigateToVerse }) => {
           onValueChange={setActiveContext}
           className="mt-2"
         >
-          <TabsList className="grid grid-cols-4 w-full mb-4">
-            <TabsTrigger value="cultural" className="text-xs sm:text-sm">
+          <TabsList className="glass mx-auto rounded-xl grid grid-cols-4 w-fit mb-6 backdrop-blur-xl">
+            <TabsTrigger 
+              value="cultural" 
+              className={`text-xs sm:text-sm transition-transform ${
+                activeContext === 'cultural' 
+                  ? "ring-1 ring-white/20 scale-105" 
+                  : "hover:scale-105"
+              }`}
+            >
               <Globe className="h-4 w-4 mr-1 sm:mr-2" />
               <span className="hidden sm:inline">Cultural</span>
             </TabsTrigger>
-            <TabsTrigger value="historical" className="text-xs sm:text-sm">
+            <TabsTrigger 
+              value="historical" 
+              className={`text-xs sm:text-sm transition-transform ${
+                activeContext === 'historical' 
+                  ? "ring-1 ring-white/20 scale-105" 
+                  : "hover:scale-105"
+              }`}
+            >
               <History className="h-4 w-4 mr-1 sm:mr-2" />
               <span className="hidden sm:inline">Historical</span>
             </TabsTrigger>
-            <TabsTrigger value="geographical" className="text-xs sm:text-sm">
+            <TabsTrigger 
+              value="geographical" 
+              className={`text-xs sm:text-sm transition-transform ${
+                activeContext === 'geographical' 
+                  ? "ring-1 ring-white/20 scale-105" 
+                  : "hover:scale-105"
+              }`}
+            >
               <Map className="h-4 w-4 mr-1 sm:mr-2" />
               <span className="hidden sm:inline">Places</span>
             </TabsTrigger>
-            <TabsTrigger value="theological" className="text-xs sm:text-sm">
+            <TabsTrigger 
+              value="theological" 
+              className={`text-xs sm:text-sm transition-transform ${
+                activeContext === 'theological' 
+                  ? "ring-1 ring-white/20 scale-105" 
+                  : "hover:scale-105"
+              }`}
+            >
               <Lightbulb className="h-4 w-4 mr-1 sm:mr-2" />
               <span className="hidden sm:inline">Theology</span>
             </TabsTrigger>
