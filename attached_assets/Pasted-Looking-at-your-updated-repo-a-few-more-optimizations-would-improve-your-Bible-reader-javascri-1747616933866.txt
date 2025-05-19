@@ -1,0 +1,396 @@
+Looking at your updated repo, a few more optimizations would improve your Bible reader:
+
+```javascript
+// Add verse history tracking for back/forward navigation
+// Add at the bottom of script.js
+
+// 1. Verse history tracking
+const verseHistory = {
+  stack: [],
+  position: -1,
+  maxSize: 50,
+  
+  push(book, chapter, verse) {
+    // Don't add if same as current position
+    const current = this.current();
+    if (current && 
+        current.book === book && 
+        current.chapter === chapter && 
+        current.verse === verse) {
+      return;
+    }
+    
+    // If we're not at the end, truncate forward history
+    if (this.position < this.stack.length - 1) {
+      this.stack = this.stack.slice(0, this.position + 1);
+    }
+    
+    // Add new entry and move position
+    this.stack.push({book, chapter, verse});
+    if (this.stack.length > this.maxSize) {
+      this.stack.shift();
+    } else {
+      this.position++;
+    }
+    
+    // Save to localStorage
+    try {
+      localStorage.setItem('verseHistory', JSON.stringify(this.stack));
+      localStorage.setItem('verseHistoryPosition', this.position);
+    } catch (e) {
+      console.error('Failed to save history', e);
+    }
+  },
+  
+  back() {
+    if (this.position > 0) {
+      this.position--;
+      return this.current();
+    }
+    return null;
+  },
+  
+  forward() {
+    if (this.position < this.stack.length - 1) {
+      this.position++;
+      return this.current();
+    }
+    return null;
+  },
+  
+  current() {
+    return this.stack[this.position] || null;
+  },
+  
+  load() {
+    try {
+      const savedStack = localStorage.getItem('verseHistory');
+      const savedPosition = localStorage.getItem('verseHistoryPosition');
+      
+      if (savedStack) {
+        this.stack = JSON.parse(savedStack);
+        this.position = savedPosition ? parseInt(savedPosition) : this.stack.length - 1;
+      }
+    } catch (e) {
+      console.error('Failed to load history', e);
+    }
+  }
+};
+
+// Modify navigateToVerse to track history
+const originalNavigate = navigateToVerse;
+navigateToVerse = function(book, chapter, verse, skipHistory = false) {
+  originalNavigate(book, chapter, verse);
+  if (!skipHistory) {
+    verseHistory.push(book, chapter, verse);
+  }
+};
+
+// Add back/forward functions
+function goBack() {
+  const prev = verseHistory.back();
+  if (prev) {
+    navigateToVerse(prev.book, prev.chapter, prev.verse, true);
+  }
+}
+
+function goForward() {
+  const next = verseHistory.forward();
+  if (next) {
+    navigateToVerse(next.book, prev.chapter, prev.verse, true);
+  }
+}
+
+// Initialize history
+verseHistory.load();
+```
+
+```javascript
+// Add keyboard shortcuts and mobile swipe gestures for navigation
+// Add to the enhancedInit function
+
+function setupAdvancedNavigation() {
+  // Keyboard shortcuts
+  document.addEventListener('keydown', (e) => {
+    // Already have left/right arrows, add more shortcuts
+    if (e.altKey && e.key === 'ArrowLeft') {
+      goBack();
+    } else if (e.altKey && e.key === 'ArrowRight') {
+      goForward();
+    } else if (e.key === 'Home') {
+      navigateToVerse(reader.book, reader.chapter, 1);
+    } else if (e.key === 'End') {
+      const chapterData = books[reader.book].chapters[reader.chapter-1];
+      if (chapterData) {
+        navigateToVerse(reader.book, reader.chapter, chapterData.length);
+      }
+    }
+  });
+  
+  // Touch swipe for mobile
+  let touchStartX = 0;
+  let touchEndX = 0;
+  
+  document.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  });
+  
+  document.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+  });
+  
+  function handleSwipe() {
+    const minSwipeDistance = 50;
+    if (touchStartX - touchEndX > minSwipeDistance) {
+      // Swipe left = next
+      nextVerse();
+    } else if (touchEndX - touchStartX > minSwipeDistance) {
+      // Swipe right = previous
+      prevVerse();
+    }
+  }
+}
+
+// Add to initialization
+enhancedInit = function() {
+  addLoadingStyles();
+  setupKeyboardNavigation();
+  setupAdvancedNavigation();
+  validateBooksData();
+  initializeBibleReader();
+};
+```
+
+```css
+/* Add responsive design improvements to style.css */
+
+/* Mobile-first responsive layout */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+  
+  #navigation-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  #navigation-form input,
+  #navigation-form select,
+  #navigation-form button {
+    margin-bottom: 8px;
+    width: 100%;
+  }
+  
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    padding: 10px;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .controls button {
+    flex: 1;
+    margin: 0 5px;
+  }
+  
+  /* Add padding to bottom to account for fixed controls */
+  body {
+    padding-bottom: 60px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #121212;
+    color: #e0e0e0;
+  }
+  
+  input, select, button {
+    background-color: #333;
+    color: #e0e0e0;
+    border-color: #444;
+  }
+  
+  .verse {
+    border-color: #333;
+  }
+  
+  .verse-number {
+    color: #9e9e9e;
+  }
+  
+  .controls {
+    background-color: #121212;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
+  }
+}
+```
+
+```javascript
+// Add verse bookmarking
+// Add to script.js
+
+const bookmarks = {
+  items: [],
+  
+  add(book, chapter, verse) {
+    const bookmark = {
+      id: Date.now(),
+      book,
+      chapter,
+      verse,
+      date: new Date().toISOString(),
+      note: ''
+    };
+    
+    this.items.push(bookmark);
+    this.save();
+    return bookmark;
+  },
+  
+  remove(id) {
+    this.items = this.items.filter(b => b.id !== id);
+    this.save();
+  },
+  
+  updateNote(id, note) {
+    const bookmark = this.items.find(b => b.id === id);
+    if (bookmark) {
+      bookmark.note = note;
+      this.save();
+    }
+  },
+  
+  save() {
+    try {
+      localStorage.setItem('bookmarks', JSON.stringify(this.items));
+    } catch (e) {
+      console.error('Failed to save bookmarks', e);
+    }
+  },
+  
+  load() {
+    try {
+      const saved = localStorage.getItem('bookmarks');
+      if (saved) {
+        this.items = JSON.parse(saved);
+      }
+    } catch (e) {
+      console.error('Failed to load bookmarks', e);
+    }
+  }
+};
+
+// Add bookmark UI functions
+function toggleBookmark() {
+  const {book, chapter, verse} = reader;
+  
+  // Check if already bookmarked
+  const existing = bookmarks.items.find(b => 
+    b.book === book && 
+    b.chapter === chapter && 
+    b.verse === verse
+  );
+  
+  if (existing) {
+    bookmarks.remove(existing.id);
+    updateBookmarkUI(false);
+  } else {
+    bookmarks.add(book, chapter, verse);
+    updateBookmarkUI(true);
+  }
+}
+
+function updateBookmarkUI(isBookmarked) {
+  const bookmarkBtn = document.getElementById('bookmark-btn');
+  if (bookmarkBtn) {
+    bookmarkBtn.textContent = isBookmarked ? '★ Bookmarked' : '☆ Bookmark';
+    bookmarkBtn.classList.toggle('active', isBookmarked);
+  }
+}
+
+// Add to displayVerse function to update bookmark status
+function checkBookmarkStatus() {
+  const {book, chapter, verse} = reader;
+  const isBookmarked = bookmarks.items.some(b => 
+    b.book === book && 
+    b.chapter === chapter && 
+    b.verse === verse
+  );
+  updateBookmarkUI(isBookmarked);
+}
+
+// Initialize bookmarks
+bookmarks.load();
+```
+
+```html
+<!-- Add bookmark button to index.html (after verse-container div) -->
+<div class="bookmark-container">
+  <button id="bookmark-btn" onclick="toggleBookmark()">☆ Bookmark</button>
+</div>
+```
+
+One final optimization - add offline support with a service worker:
+
+```javascript
+// service-worker.js - Create this file in root directory
+
+const CACHE_NAME = 'bible-reader-v1';
+const URLS_TO_CACHE = [
+  '/',
+  '/index.html',
+  '/style.css',
+  '/script.js',
+  '/books.js',
+  '/about.html',
+  '/contact.html',
+  '/privacy.html',
+  '/terms.html'
+];
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(URLS_TO_CACHE))
+  );
+});
+
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => response || fetch(event.request))
+  );
+});
+```
+
+```javascript
+// Add to script.js to register service worker
+
+// Register service worker for offline support
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log('Service worker registered'))
+      .catch(err => console.error('Service worker error:', err));
+  });
+}
+```
+
+These additions give you:
+1. Verse history with back/forward navigation
+2. Mobile swipe gestures and keyboard shortcuts
+3. Responsive design with mobile-first approach
+4. Dark mode support
+5. Verse bookmarking system
+6. Offline support via service worker
+
+All should work within your existing Replit structure. Each block can be added independently.
