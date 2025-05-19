@@ -23,6 +23,13 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { 
   Book, 
   History, 
@@ -31,16 +38,38 @@ import {
   Calendar, 
   Lightbulb, 
   MessageCircle,
-  Globe
+  Globe,
+  BookOpen,
+  Cross,
+  Glasses,
+  Sparkles,
+  School
 } from 'lucide-react';
+
+const THEOLOGICAL_LENSES = [
+  { id: 'protestant', label: 'Protestant', icon: <Cross className="h-4 w-4 mr-2" /> },
+  { id: 'catholic', label: 'Catholic', icon: <Cross className="h-4 w-4 mr-2" /> },
+  { id: 'orthodox', label: 'Orthodox', icon: <Cross className="h-4 w-4 mr-2" /> },
+  { id: 'jewish', label: 'Jewish', icon: <Book className="h-4 w-4 mr-2" /> },
+  { id: 'academic', label: 'Academic', icon: <School className="h-4 w-4 mr-2" /> },
+  { id: 'genz', label: 'Gen-Z', icon: <Sparkles className="h-4 w-4 mr-2" /> },
+  { id: 'kids', label: 'Kids', icon: <Glasses className="h-4 w-4 mr-2" /> },
+];
 
 const ContextualInsights = ({ passage, onNavigateToVerse }) => {
   const [activeContext, setActiveContext] = useState('cultural');
+  const [activeLens, setActiveLens] = useState('protestant');
   
   // Fetch contextual insights for this passage
   const { data: insights, isLoading } = useQuery({
     queryKey: [`/api/contextual-insights/${passage}`],
     enabled: !!passage,
+  });
+  
+  // Fetch theological lens content when on theological tab
+  const { data: lensContent, isLoading: isLensLoading } = useQuery({
+    queryKey: [`/api/theological-lens/${passage}/${activeLens}`],
+    enabled: !!passage && activeContext === 'theological',
   });
 
   // Handle navigation to a specific verse when mentioned in context
@@ -256,7 +285,80 @@ const ContextualInsights = ({ passage, onNavigateToVerse }) => {
           
           {/* Theological Context */}
           <TabsContent value="theological" className="space-y-4">
-            {insights.theological ? (
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1.5 text-[#2c4c3b] dark:text-green-300">
+                Theological Lens
+              </label>
+              <Select value={activeLens} onValueChange={setActiveLens}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select a perspective" />
+                </SelectTrigger>
+                <SelectContent>
+                  {THEOLOGICAL_LENSES.map((lens) => (
+                    <SelectItem key={lens.id} value={lens.id} className="flex items-center">
+                      <div className="flex items-center">
+                        {lens.icon}
+                        <span>{lens.label}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            
+            {isLensLoading ? (
+              <div className="space-y-4">
+                <Skeleton className="h-20 w-full" />
+                <Skeleton className="h-20 w-full" />
+              </div>
+            ) : lensContent ? (
+              <div className="space-y-4">
+                <div className="prose dark:prose-invert max-w-none text-sm">
+                  <p className="text-sm font-medium mb-2">
+                    {THEOLOGICAL_LENSES.find(l => l.id === activeLens)?.label} Perspective
+                  </p>
+                  <p>{lensContent.interpretation}</p>
+                </div>
+                
+                {lensContent.keyPoints && lensContent.keyPoints.length > 0 && (
+                  <div className="mt-4">
+                    <h4 className="text-sm font-medium mb-2">Key Points</h4>
+                    <div className="space-y-3">
+                      {lensContent.keyPoints.map((point, idx) => (
+                        <div key={idx} className="border border-stone-200 dark:border-stone-700 rounded-md overflow-hidden">
+                          <div className="bg-stone-50 dark:bg-stone-800 px-3 py-2 flex items-center justify-between">
+                            <div className="font-medium text-sm flex items-center">
+                              <Lightbulb className="h-4 w-4 text-[#2c4c3b] dark:text-green-300 mr-2" />
+                              {point.title}
+                            </div>
+                          </div>
+                          <div className="p-3">
+                            <p className="text-xs text-gray-700 dark:text-gray-300">
+                              {point.description}
+                            </p>
+                            
+                            {point.references && point.references.length > 0 && (
+                              <div className="mt-2 flex flex-wrap gap-1.5">
+                                {point.references.map((verse, i) => (
+                                  <Badge 
+                                    key={i}
+                                    variant="outline"
+                                    className="text-xs cursor-pointer bg-[#2c4c3b]/5 hover:bg-[#2c4c3b]/10 dark:bg-[#2c4c3b]/20 dark:hover:bg-[#2c4c3b]/30 text-[#2c4c3b] dark:text-green-300"
+                                    onClick={() => handleVerseClick(verse)}
+                                  >
+                                    {verse}
+                                  </Badge>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : insights?.theological ? (
               <>
                 <div className="prose dark:prose-invert max-w-none text-sm">
                   <p>{insights.theological.description}</p>

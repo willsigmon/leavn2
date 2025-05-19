@@ -1,0 +1,121 @@
+import React, { useState } from 'react';
+import { ReadingPlanDay } from '../../types/readingPlan';
+
+interface ContextualSidebarProps {
+  day: ReadingPlanDay;
+}
+
+const ContextualSidebar: React.FC<ContextualSidebarProps> = ({ day }) => {
+  const [activeTab, setActiveTab] = useState<string>('context');
+  
+  // Determine which tabs should be available based on content
+  const tabs = [
+    { id: 'context', label: 'Historical Context', content: day.historicalContext },
+    { id: 'theological', label: 'Theological Concepts', content: day.theologicalConcepts },
+    { id: 'application', label: 'Application', content: day.applicationPoints },
+    { id: 'reflection', label: 'Reflection', content: day.reflectionQuestions },
+    { id: 'references', label: 'Cross References', content: day.crossReferences }
+  ].filter(tab => tab.content);
+  
+  // If no tabs have content, show a message
+  if (tabs.length === 0) {
+    return (
+      <div className="contextual-sidebar empty">
+        <p>No additional context available for this passage.</p>
+      </div>
+    );
+  }
+  
+  // Set initial active tab if not set
+  if (!activeTab || !tabs.find(tab => tab.id === activeTab)) {
+    setActiveTab(tabs[0].id);
+  }
+  
+  const activeTabData = tabs.find(tab => tab.id === activeTab);
+  
+  return (
+    <div className="contextual-sidebar">
+      <div className="sidebar-tabs">
+        {tabs.map(tab => (
+          <button
+            key={tab.id}
+            className={`tab-button ${activeTab === tab.id ? 'active' : ''}`}
+            onClick={() => setActiveTab(tab.id)}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+      
+      <div className="tab-content">
+        {activeTabData && (
+          <div className={`content-section ${activeTab}`}>
+            {activeTab === 'context' && (
+              <div className="historical-context">
+                <p>{day.historicalContext}</p>
+              </div>
+            )}
+            
+            {activeTab === 'theological' && (
+              <div className="theological-concepts">
+                <ul>
+                  {day.theologicalConcepts?.map((concept, index) => (
+                    <li key={index}>{concept}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            
+            {activeTab === 'application' && (
+              <div className="application-points">
+                <ul>
+                  {day.applicationPoints?.map((point, index) => (
+                    <li key={index}>{point}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            
+            {activeTab === 'reflection' && (
+              <div className="reflection-questions">
+                <ul>
+                  {day.reflectionQuestions?.map((question, index) => (
+                    <li key={index}>
+                      <p>{question}</p>
+                      <textarea 
+                        placeholder="Your thoughts..."
+                        className="reflection-input"
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            
+            {activeTab === 'references' && (
+              <div className="cross-references">
+                <ul>
+                  {day.crossReferences?.map((reference, index) => (
+                    <li key={index}>
+                      <button 
+                        className="reference-link"
+                        onClick={() => {
+                          // Link to the Bible reader with this reference
+                          // Implementation will depend on your app's routing
+                        }}
+                      >
+                        {reference}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default ContextualSidebar;

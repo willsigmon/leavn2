@@ -307,7 +307,7 @@ const PlanReader = () => {
               <div className="flex flex-wrap gap-2">
                 <Button 
                   variant="outline" 
-                  onClick={() => navigate(`/plans/${planId}`)}
+                  onClick={() => setLocation(`/reading-plans/${planId}`)}
                   size="sm"
                   className="flex items-center"
                 >
@@ -316,7 +316,7 @@ const PlanReader = () => {
                 </Button>
                 
                 <Button 
-                  onClick={() => navigate(`/reader/${passageTitle.split(' ')[0].toLowerCase()}/1`)}
+                  onClick={() => setLocation(`/reader/${passageTitle.split(' ')[0].toLowerCase()}/1`)}
                   variant="outline"
                   size="sm"
                   className="text-[#2c4c3b] border-[#2c4c3b]/30 hover:bg-[#2c4c3b]/10"
