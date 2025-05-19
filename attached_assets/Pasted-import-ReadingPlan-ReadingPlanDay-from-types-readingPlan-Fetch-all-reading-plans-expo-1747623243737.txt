@@ -1,0 +1,71 @@
+import { ReadingPlan, ReadingPlanDay } from '../types/readingPlan';
+
+// Fetch all reading plans
+export async function fetchReadingPlans(): Promise<ReadingPlan[]> {
+  try {
+    const response = await fetch('/api/reading-plans');
+    if (!response.ok) {
+      throw new Error(`Failed to fetch reading plans: ${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching reading plans:', error);
+    throw error;
+  }
+}
+
+// Fetch a specific reading plan by ID
+export async function fetchReadingPlanById(planId: string): Promise<ReadingPlan> {
+  try {
+    const response = await fetch(`/api/reading-plans/${planId}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch reading plan: ${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(`Error fetching reading plan ${planId}:`, error);
+    throw error;
+  }
+}
+
+// Update reading plan progress
+export async function updateReadingPlanProgress(
+  planId: string, 
+  progress: ReadingPlan['userProgress']
+): Promise<void> {
+  try {
+    const response = await fetch(`/api/reading-plans/${planId}/progress`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(progress),
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to update reading plan progress: ${response.statusText}`);
+    }
+  } catch (error) {
+    console.error(`Error updating reading plan progress for ${planId}:`, error);
+    throw error;
+  }
+}
+
+// Mark a day as complete
+export async function markDayComplete(
+  planId: string,
+  dayId: string
+): Promise<void> {
+  try {
+    const response = await fetch(`/api/reading-plans/${planId}/days/${dayId}/complete`, {
+      method: 'PUT',
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to mark day as complete: ${response.statusText}`);
+    }
+  } catch (error) {
+    console.error(`Error marking day ${dayId} as complete:`, error);
+    throw error;
+  }
+}

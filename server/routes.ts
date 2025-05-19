@@ -19,6 +19,7 @@ import ragExplorerRouter from "./routes/rag-explorer";
 import genesisReaderRouter from "./routes/genesis-reader";
 import { explorerRouter } from "./routes/explorer";
 import contextRoutes from "./routes/context";
+import verseTagsRouter from "./routes/verse-tags";
 import { registerReadingPlanRoutes } from "./routes/reading-plans";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -47,6 +48,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Register contextual study companion routes
   app.use("/api/reader/context", contextRoutes);
+  
+  // Register verse tagging routes
+  app.use(verseTagsRouter);
   
   // Register reading plans routes
   registerReadingPlanRoutes(app);

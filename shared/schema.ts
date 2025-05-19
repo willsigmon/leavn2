@@ -78,16 +78,23 @@ export const commentaries = pgTable("commentaries", {
 export const tags = pgTable("tags", {
   id: text("id").primaryKey(),
   name: text("name").notNull().unique(),
-  category: text("category").notNull(),
-  title: text("title").notNull(),
-  description: text("description").notNull(),
+  category: text("category").notNull().default("custom"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  usageCount: integer("usage_count").default(0),
 });
 
 // Junction table for verses and tags
 export const verseTags = pgTable("verse_tags", {
   id: text("id").primaryKey(),
-  verseId: text("verse_id").notNull().references(() => verses.id, { onDelete: "cascade" }),
+  verseReference: text("verse_reference").notNull(), // Format: "Book Chapter:Verse"
   tagId: text("tag_id").notNull().references(() => tags.id, { onDelete: "cascade" }),
+  userId: text("user_id").references(() => users.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => {
+  return [
+    // Composite unique constraint to prevent duplicates
+    index("verse_tag_unique").on(table.verseReference, table.tagId, table.userId)
+  ];
 });
 
 // Author information for books
@@ -186,8 +193,8 @@ export const insertVerseSchema = createInsertSchema(verses).omit({ id: true });
 export const insertBibleChunkSchema = createInsertSchema(bibleChunks).omit({ id: true, createdAt: true });
 export const insertNoteSchema = createInsertSchema(notes).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertCommentarySchema = createInsertSchema(commentaries).omit({ id: true, createdAt: true });
-export const insertTagSchema = createInsertSchema(tags).omit({ id: true });
-export const insertVerseTagSchema = createInsertSchema(verseTags).omit({ id: true });
+export const insertTagSchema = createInsertSchema(tags).omit({ id: true, createdAt: true, usageCount: true });
+export const insertVerseTagSchema = createInsertSchema(verseTags).omit({ id: true, createdAt: true });
 export const insertAuthorSchema = createInsertSchema(authors).omit({ id: true });
 export const insertReadingPlanSchema = createInsertSchema(readingPlans).omit({ id: true, createdAt: true });
 export const insertPlanEntrySchema = createInsertSchema(planEntries).omit({ id: true });
