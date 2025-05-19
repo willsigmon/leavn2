@@ -4,7 +4,7 @@ import { storage } from "./storage";
 import { generateCommentary, generateTranslation, searchVerses } from "./ai";
 import { z } from "zod";
 import { insertNoteSchema } from "@shared/schema";
-import { setupSession, isAuthenticated, handleLogin, handleLogout, getUserData } from "./simpleAuth";
+import { isAuthenticated, handleLogin, handleLogout, getUserData } from "./simpleAuth";
 import { 
   initBibleRAG, 
   findSimilarChunks, 
@@ -23,8 +23,6 @@ import verseTagsRouter from "./routes/verse-tags";
 import { registerReadingPlanRoutes } from "./routes/reading-plans";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Set up session middleware
-  setupSession(app);
 
   // Add authentication routes
   app.get("/api/login", handleLogin);
