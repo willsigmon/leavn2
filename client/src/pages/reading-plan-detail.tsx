@@ -481,6 +481,49 @@ export default function ReadingPlanDetail() {
                 </TabsContent>
                 
                 {/* References Tab */}
+                <TabsContent value="days" className="space-y-6">
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <div className="flex items-start">
+                        <Calendar className="mt-1 mr-2 h-5 w-5 text-blue-500" />
+                        <div>
+                          <CardTitle className="text-lg">All Plan Days</CardTitle>
+                          <p className="text-sm text-muted-foreground">Complete overview of this reading plan</p>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 gap-4">
+                        {activePlan.days?.map((day, index) => (
+                          <DayCard 
+                            key={day.id}
+                            day={day} 
+                            dayNumber={index + 1}
+                            isCompleted={
+                              params?.id && userProgress[params.id] 
+                                ? userProgress[params.id].completedDays.includes(day.id) 
+                                : false
+                            }
+                            onComplete={() => {
+                              if (!params?.id || !isAuthenticated) return;
+                              
+                              dispatch({
+                                type: 'MARK_DAY_COMPLETE',
+                                payload: { planId: params.id, dayId: day.id }
+                              });
+                              
+                              toast({
+                                title: "Day marked as completed",
+                                description: "Your progress has been updated. Great job!",
+                              });
+                            }}
+                          />
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+
                 <TabsContent value="references" className="space-y-6">
                   <Card>
                     <CardHeader className="pb-2">
