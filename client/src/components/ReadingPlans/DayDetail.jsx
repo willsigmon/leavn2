@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { BookOpen, CheckCircle2, Lightbulb, ChevronRight } from 'lucide-react';
 import { useLocation } from 'wouter';
+import ContextualInsights from './ContextualInsights';
 
 const DayDetail = ({ day, dayNumber, onComplete, isCompleted }) => {
   const [_, navigate] = useLocation();
@@ -68,67 +69,13 @@ const DayDetail = ({ day, dayNumber, onComplete, isCompleted }) => {
         </CardContent>
       </Card>
       
-      {/* Historical Context */}
-      <Card>
-        <CardHeader className="pb-2">
-          <div className="flex items-start">
-            <Lightbulb className="mt-1 mr-2 h-5 w-5 text-amber-500" />
-            <div>
-              <CardTitle className="text-lg">Historical Context</CardTitle>
-              <p className="text-sm text-muted-foreground">Background information to understand today's passages</p>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent className="text-muted-foreground">
-          <p>{day.contextualNotes}</p>
-        </CardContent>
-      </Card>
-      
-      {/* Reflection Questions */}
-      {day.reflectionQuestions && day.reflectionQuestions.length > 0 && (
-        <Card>
-          <CardHeader className="pb-2">
-            <div className="flex items-start">
-              <div className="h-5 w-5 mt-1 mr-2 flex items-center justify-center text-blue-500 font-bold">?</div>
-              <div>
-                <CardTitle className="text-lg">Reflection Questions</CardTitle>
-                <p className="text-sm text-muted-foreground">Questions to deepen your understanding</p>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <ul className="list-disc pl-5 space-y-2">
-              {day.reflectionQuestions.map((question, index) => (
-                <li key={index} className="text-muted-foreground">{question}</li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-      )}
-      
-      {/* Theological Concepts */}
-      {day.theologicalConcepts && day.theologicalConcepts.length > 0 && (
-        <Card>
-          <CardHeader className="pb-2">
-            <div className="flex items-start">
-              <div className="h-5 w-5 mt-1 mr-2 flex items-center justify-center text-purple-500">✨</div>
-              <div>
-                <CardTitle className="text-lg">Key Concepts</CardTitle>
-                <p className="text-sm text-muted-foreground">Important themes in this passage</p>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-1.5">
-              {day.theologicalConcepts.map((concept, index) => (
-                <Badge key={index} variant="secondary" className="bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">
-                  {concept}
-                </Badge>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      {/* Contextual Insights Component */}
+      <ContextualInsights 
+        historicalContext={day.contextualNotes}
+        theologicalConcepts={day.theologicalConcepts || []}
+        reflectionQuestions={day.reflectionQuestions || []}
+        crossReferences={day.crossReferences || []}
+      />
     </div>
   );
 };
