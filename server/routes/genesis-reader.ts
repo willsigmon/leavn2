@@ -148,6 +148,10 @@ router.get('/:chapter', async (req: Request, res: Response) => {
           }
         });
         console.log(`Loaded ${fullTextMap.size} verses from complete text file`);
+      } else {
+        console.log('No full text data available or format is incorrect:', fullTextData);
+        console.log('Bible text path:', fullTextPath);
+        console.log('Directory exists:', fs.existsSync(path.dirname(fullTextPath)));
       }
       
       for (let i = 1; i <= expectedVerseCount; i++) {
