@@ -2,6 +2,7 @@ import React, { useState, Suspense } from 'react';
 import { Link } from 'wouter';
 import { CTAButton } from '@/components/CTAButton';
 import { WaitlistModal } from '@/components/WaitlistModal';
+import { ScrollHeader } from '@/components/ScrollHeader';
 import { Play } from 'lucide-react';
 import Footer from '@/components/layout/Footer';
 const Benefits = React.lazy(() => import('@/components/Benefits3Up'));
@@ -12,6 +13,9 @@ export default function LandingOptimized() {
 
   return (
     <main className="mx-auto max-w-7xl px-4 relative min-h-screen">
+      {/* Scroll Header */}
+      <ScrollHeader onOpenWaitlist={() => setOpen(true)} />
+      
       {/* Background elements */}
       <div className="absolute inset-0 overflow-hidden -z-10">
         <div className="bg-circle w-64 h-64 top-10 right-1/3 bg-[#2c4c3b]"></div>
