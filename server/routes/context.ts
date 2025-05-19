@@ -4,7 +4,7 @@ import { isAuthenticated } from '../simpleAuth';
 const router = express.Router();
 
 // Bible study context database (placeholder for demonstration)
-const contextDatabase = {
+const contextDatabase: Record<string, Record<number, any>> = {
   genesis: {
     1: {
       historical: {

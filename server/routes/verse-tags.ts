@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { db } from '../db';
-import { eq, and, sql } from 'drizzle-orm';
+import { eq, and, inArray, not, sql } from 'drizzle-orm/pg-core';
+import crypto from 'crypto';
 import { isAuthenticated } from '../replitAuth';
 import { verseTags, tags } from '@shared/schema';
 
@@ -66,7 +67,7 @@ router.post('/api/tags/:book/:chapter/:verse', isAuthenticated, async (req, res)
     }
     
     const verseReference = `${book} ${chapter}:${verse}`;
-    const userId = req.user.claims.sub;
+    const userId = (req.user as any).claims.sub;
     
     // Check if the tag already exists in the tags table
     let existingTag = await db
@@ -82,8 +83,10 @@ router.post('/api/tags/:book/:chapter/:verse', isAuthenticated, async (req, res)
       const newTag = await db
         .insert(tags)
         .values({
+          id: crypto.randomUUID(),
           name: tag.toLowerCase(),
           category: req.body.category || 'custom',
+          createdAt: new Date(),
         })
         .returning();
       
@@ -108,6 +111,7 @@ router.post('/api/tags/:book/:chapter/:verse', isAuthenticated, async (req, res)
     if (existingVerseTag.length === 0) {
       // Create the verse-tag association
       await db.insert(verseTags).values({
+        id: crypto.randomUUID(),
         verseReference,
         tagId,
         userId: isPersonal ? userId : null,
@@ -131,7 +135,7 @@ router.delete('/api/tags/:book/:chapter/:verse/:tagName', isAuthenticated, async
   try {
     const { book, chapter, verse, tagName } = req.params;
     const verseReference = `${book} ${chapter}:${verse}`;
-    const userId = req.user.claims.sub;
+    const userId = (req.user as any).claims.sub;
     
     // Find the tag ID
     const existingTag = await db

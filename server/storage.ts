@@ -453,8 +453,8 @@ export class MemStorage implements IStorage {
     
     // Sample tags
     const tags: Tag[] = [
-      { id: "t1", name: "Trust", category: "theological", title: "Trust in Scripture", description: "The Hebrew word for trust (בָּטַח, batach) implies complete reliance and confidence. This theme appears 80+ times in Psalms and Proverbs." },
-      { id: "t2", name: "Heart", category: "theological", title: "Heart in Hebrew Thought", description: "In Hebrew, \"heart\" (לֵב, lev) represents the core of a person - including mind, emotions, and will - not just feelings as in Western culture." }
+      { id: "t1", name: "Trust", category: "theological", createdAt: new Date(), usageCount: 0 },
+      { id: "t2", name: "Heart", category: "theological", createdAt: new Date(), usageCount: 0 }
     ];
     
     tags.forEach(tag => {

@@ -77,24 +77,19 @@ export const commentaries = pgTable("commentaries", {
 // Tags for verses
 export const tags = pgTable("tags", {
   id: text("id").primaryKey(),
-  name: text("name").notNull().unique(),
-  category: text("category").notNull().default("custom"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+  name: text("name").notNull(),
+  category: text("category").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
   usageCount: integer("usage_count").default(0),
 });
 
 // Junction table for verses and tags
 export const verseTags = pgTable("verse_tags", {
   id: text("id").primaryKey(),
-  verseReference: text("verse_reference").notNull(), // Format: "Book Chapter:Verse"
-  tagId: text("tag_id").notNull().references(() => tags.id, { onDelete: "cascade" }),
-  userId: text("user_id").references(() => users.id, { onDelete: "cascade" }),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-}, (table) => {
-  return [
-    // Composite unique constraint to prevent duplicates
-    index("verse_tag_unique").on(table.verseReference, table.tagId, table.userId)
-  ];
+  verseReference: text("verse_reference").notNull(),
+  tagId: text("tag_id").references(() => tags.id).notNull(),
+  userId: text("user_id").references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
 // Author information for books

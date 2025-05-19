@@ -595,7 +595,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Extract text from verses
-      const verseTexts = verses.map(verse => verse.text);
+      const verseTexts = verses.filter(Boolean).map(v => v.textKjv);
       
       // Choose AI provider based on available API keys
       let narrative = "";

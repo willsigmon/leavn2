@@ -22,7 +22,7 @@ interface CrossReference {
 // Function to generate mock cross-references data for development
 function generateMockCrossReferences(reference: string): CrossReference[] {
   const connectionTypes = ['thematic', 'quotation', 'fulfillment', 'parallel', 'contrast'];
-  const referenceText = {
+  const referenceText: Record<string, string> = {
     'Genesis 1:1': 'In the beginning God created the heaven and the earth.',
     'John 1:1': 'In the beginning was the Word, and the Word was with God, and the Word was God.',
     'Hebrews 11:3': 'Through faith we understand that the worlds were framed by the word of God.',
