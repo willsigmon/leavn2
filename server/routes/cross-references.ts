@@ -177,8 +177,10 @@ router.get('/:book/:chapter/:verse', async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Invalid chapter or verse number' });
     }
     
+    // Normalize book name to match the format used in the chapter route
+    const bookName = book.charAt(0).toUpperCase() + book.slice(1).toLowerCase();
     // Construct verse reference
-    const fromRef = `${book} ${chapter}:${verse}`;
+    const fromRef = `${bookName} ${chapter}:${verse}`;
     
     // Get related references from the DB (or use default for testing)
     const relatedRefs = crossReferenceDB[fromRef] || crossReferenceDB['default'];
