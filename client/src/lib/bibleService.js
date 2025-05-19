@@ -2,7 +2,11 @@
  * Bible text and features service
  * Handles retrieval, caching, and transformation of Bible text and related features
  */
-import { fetchBibleChapter, fetchChapterContext, fetchCrossReferences } from './api';
+import {
+  fetchBibleChapter,
+  fetchChapterContext,
+  fetchCrossReferences,
+} from "./api";
 
 // Local cache to avoid unnecessary API calls
 const chapterCache = new Map();
@@ -17,17 +21,17 @@ const crossReferenceCache = new Map();
  */
 export async function getBibleChapter(book, chapter) {
   const cacheKey = `${book.toLowerCase()}_${chapter}`;
-  
+
   if (chapterCache.has(cacheKey)) {
     return chapterCache.get(cacheKey);
   }
-  
+
   try {
     const chapterData = await fetchBibleChapter(book, chapter);
     chapterCache.set(cacheKey, chapterData);
     return chapterData;
   } catch (error) {
-    console.error('Error fetching Bible chapter:', error);
+    console.error("Error fetching Bible chapter:", error);
     throw error;
   }
 }
@@ -40,17 +44,17 @@ export async function getBibleChapter(book, chapter) {
  */
 export async function getChapterContext(book, chapter) {
   const cacheKey = `${book.toLowerCase()}_${chapter}`;
-  
+
   if (contextCache.has(cacheKey)) {
     return contextCache.get(cacheKey);
   }
-  
+
   try {
     const contextData = await fetchChapterContext(book, chapter);
     contextCache.set(cacheKey, contextData);
     return contextData;
   } catch (error) {
-    console.error('Error fetching chapter context:', error);
+    console.error("Error fetching chapter context:", error);
     throw error;
   }
 }
@@ -63,17 +67,17 @@ export async function getChapterContext(book, chapter) {
  */
 export async function getChapterCrossReferences(book, chapter) {
   const cacheKey = `${book.toLowerCase()}_${chapter}`;
-  
+
   if (crossReferenceCache.has(cacheKey)) {
     return crossReferenceCache.get(cacheKey);
   }
-  
+
   try {
     const crossRefs = await fetchCrossReferences(book, chapter);
     crossReferenceCache.set(cacheKey, crossRefs);
     return crossRefs;
   } catch (error) {
-    console.error('Error fetching cross references:', error);
+    console.error("Error fetching cross references:", error);
     throw error;
   }
 }
@@ -86,7 +90,9 @@ export async function getChapterCrossReferences(book, chapter) {
  */
 export function getVerseFromChapter(chapterData, verseNumber) {
   if (!chapterData || !chapterData.verses) return null;
-  return chapterData.verses.find(verse => verse.verse === verseNumber) || null;
+  return (
+    chapterData.verses.find((verse) => verse.verse === verseNumber) || null
+  );
 }
 
 /**
@@ -94,15 +100,15 @@ export function getVerseFromChapter(chapterData, verseNumber) {
  * @param {string} book - The book name
  * @param {number} chapter - The chapter number
  * @param {number} startVerse - Starting verse number
- * @param {number} endVerse - Ending verse number 
+ * @param {number} endVerse - Ending verse number
  * @returns {Promise<Array>} - Array of verses in the range
  */
 export async function getVerseRange(book, chapter, startVerse, endVerse) {
   const chapterData = await getBibleChapter(book, chapter);
   if (!chapterData || !chapterData.verses) return [];
-  
+
   return chapterData.verses.filter(
-    verse => verse.verse >= startVerse && verse.verse <= endVerse
+    (verse) => verse.verse >= startVerse && verse.verse <= endVerse,
   );
 }
 
@@ -127,16 +133,16 @@ export function formatBibleReference(book, chapter, verse) {
  */
 export function parseBibleReference(reference) {
   try {
-    const [book, chapterVerse] = reference.split(' ');
-    const [chapter, verse] = chapterVerse.split(':');
-    
-    return {
-      book,
-      chapter: parseInt(chapter, 10),
-      verse: verse ? parseInt(verse, 10) : null
-    };
+    const match = reference.trim().match(/^(.*\D)\s+(\d+)(?::(\d+))?$/);
+    if (!match) return null;
+
+    const book = match[1];
+    const chapter = parseInt(match[2], 10);
+    const verse = match[3] ? parseInt(match[3], 10) : null;
+
+    return { book, chapter, verse };
   } catch (error) {
-    console.error('Error parsing Bible reference:', error);
+    console.error("Error parsing Bible reference:", error);
     return null;
   }
 }
