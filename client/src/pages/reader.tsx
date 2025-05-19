@@ -22,6 +22,7 @@ import { bibleStructure } from '@/lib/bibleStructure';
 // Using the existing GenesisReader while we fix the BibleReader component
 import { GenesisReader } from '@/components/reader/GenesisReader';
 import { BibleContent } from '@/components/reader/BibleContent';
+import { ConceptExplorerTab } from '@/components/reader/ConceptExplorerTab';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
@@ -257,10 +258,11 @@ export default function Reader() {
       {/* Main content */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
         {/* Sidebar */}
-        <aside className="border-r border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 w-full lg:w-64 flex-shrink-0 overflow-y-auto">
+        <aside className="border-r border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 w-full lg:w-[300px] xl:w-[340px] 2xl:w-[380px] flex-shrink-0 overflow-y-auto">
           <Tabs defaultValue="toc" value={sidebarTab} onValueChange={setSidebarTab}>
-            <TabsList className="w-full">
-              <TabsTrigger value="toc" className="flex-1">Table of Contents</TabsTrigger>
+            <TabsList className="w-full grid grid-cols-3">
+              <TabsTrigger value="toc" className="flex-1">Contents</TabsTrigger>
+              <TabsTrigger value="concepts" className="flex-1">Concepts</TabsTrigger>
               <TabsTrigger value="settings" className="flex-1">Settings</TabsTrigger>
             </TabsList>
             
