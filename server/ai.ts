@@ -16,7 +16,7 @@ export async function generateCommentary(verseText: string, lens: string): Promi
   }
 
   try {
-    // The newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+    // Using OpenAI's "gpt-4.1-mini" model; do not change this unless explicitly requested by the user
     const response = await openai.chat.completions.create({
       model: "gpt-4.1-mini", // As specified in requirements
       messages: [
