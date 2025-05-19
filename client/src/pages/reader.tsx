@@ -268,61 +268,83 @@ export default function Reader() {
       {/* Main content */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
         {/* Sidebar */}
+        {/* Floating expand button that appears when sidebar is collapsed */}
+        {sidebarCollapsed && (
+          <div 
+            className="fixed left-4 top-1/2 transform -translate-y-1/2 z-40 cursor-pointer
+                    h-10 w-10 flex items-center justify-center glass
+                    border border-white/10 rounded-full shadow-xl
+                    hover:scale-110 transition-all duration-300
+                    bg-gradient-to-tr from-[#2c4c3b]/80 to-[#2c4c3b]/30"
+            onClick={() => setSidebarCollapsed(false)}
+          >
+            <ChevronsRight className="h-5 w-5 text-white" />
+          </div>
+        )}
+        
         <aside className={`border-r border-white/10 glass backdrop-blur-lg transition-all duration-500 ease-in-out
-          ${sidebarCollapsed ? 'lg:w-[0px] opacity-0 invisible' : 'lg:w-[min(30%,400px)]'} 
+          ${sidebarCollapsed ? 'w-0 opacity-0 invisible max-w-0 overflow-hidden' : 'lg:w-[min(30%,400px)]'} 
           flex-shrink-0 overflow-y-auto relative group`}>
           
-          {/* Floating resize handle - visible even when sidebar is collapsed */}
+          {/* Collapse sidebar button - only visible when sidebar is expanded */}
           <div 
-            className={`absolute ${sidebarCollapsed ? 'left-4' : '-right-3'} top-1/2 transform -translate-y-1/2 z-20 cursor-pointer
+            className="absolute -right-3 top-1/2 transform -translate-y-1/2 z-20 cursor-pointer
                       h-10 w-10 flex items-center justify-center glass
                       border border-white/10 rounded-full shadow-xl
                       hover:scale-110 transition-all duration-300
-                      bg-gradient-to-tr from-[#2c4c3b]/80 to-[#2c4c3b]/30`}
-            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+                      bg-gradient-to-tr from-[#2c4c3b]/80 to-[#2c4c3b]/30"
+            onClick={() => setSidebarCollapsed(true)}
           >
-            {sidebarCollapsed ? 
-              <ChevronsRight className="h-5 w-5 text-white" /> : 
-              <ChevronsLeft className="h-5 w-5 text-white" />
-            }
+            <ChevronsLeft className="h-5 w-5 text-white" />
           </div>
 
           <Tabs defaultValue="toc" value={sidebarTab} onValueChange={setSidebarTab} className="flex flex-col h-full overflow-hidden">
-            <TabsList className={`glass m-4 rounded-xl justify-center ${sidebarCollapsed ? 'hidden' : 'flex flex-wrap gap-1'}`}>
-              <TabsTrigger 
-                value="toc" 
-                className={`text-xs sm:text-sm transition-transform whitespace-nowrap ${
-                  sidebarTab === 'toc' 
-                    ? "ring-1 ring-white/20 scale-105" 
-                    : "hover:scale-105"
-                }`}
+            <div className="flex justify-between items-center">
+              <TabsList className={`glass m-4 rounded-xl justify-center ${sidebarCollapsed ? 'hidden' : 'flex flex-wrap gap-1'}`}>
+                <TabsTrigger 
+                  value="toc" 
+                  className={`text-xs sm:text-sm transition-transform whitespace-nowrap ${
+                    sidebarTab === 'toc' 
+                      ? "ring-1 ring-white/20 scale-105" 
+                      : "hover:scale-105"
+                  }`}
+                >
+                  <BookOpen className="h-4 w-4 mr-1 sm:mr-2" />
+                  <span>Contents</span>
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="concepts" 
+                  className={`text-xs sm:text-sm transition-transform whitespace-nowrap ${
+                    sidebarTab === 'concepts' 
+                      ? "ring-1 ring-white/20 scale-105" 
+                      : "hover:scale-105"
+                  }`}
+                >
+                  <Lightbulb className="h-4 w-4 mr-1 sm:mr-2" />
+                  <span>Concepts</span>
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="settings"
+                  className={`text-xs sm:text-sm transition-transform whitespace-nowrap ${
+                    sidebarTab === 'settings' 
+                      ? "ring-1 ring-white/20 scale-105" 
+                      : "hover:scale-105"
+                  }`}
+                >
+                  <Settings className="h-4 w-4 mr-1 sm:mr-2" />
+                  <span>Settings</span>
+                </TabsTrigger>
+              </TabsList>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="mr-4 glass rounded-full p-1 hover:scale-105 transition-transform"
+                onClick={() => setSidebarCollapsed(true)}
+                title="Collapse sidebar"
               >
-                <BookOpen className="h-4 w-4 mr-1 sm:mr-2" />
-                <span>Contents</span>
-              </TabsTrigger>
-              <TabsTrigger 
-                value="concepts" 
-                className={`text-xs sm:text-sm transition-transform whitespace-nowrap ${
-                  sidebarTab === 'concepts' 
-                    ? "ring-1 ring-white/20 scale-105" 
-                    : "hover:scale-105"
-                }`}
-              >
-                <Lightbulb className="h-4 w-4 mr-1 sm:mr-2" />
-                <span>Concepts</span>
-              </TabsTrigger>
-              <TabsTrigger 
-                value="settings"
-                className={`text-xs sm:text-sm transition-transform whitespace-nowrap ${
-                  sidebarTab === 'settings' 
-                    ? "ring-1 ring-white/20 scale-105" 
-                    : "hover:scale-105"
-                }`}
-              >
-                <Settings className="h-4 w-4 mr-1 sm:mr-2" />
-                <span>Settings</span>
-              </TabsTrigger>
-            </TabsList>
+                <ChevronsLeft className="h-4 w-4" />
+              </Button>
+            </div>
             
             {/* Collapsed sidebar mini-navigation */}
             {sidebarCollapsed && (
