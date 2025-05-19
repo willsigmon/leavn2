@@ -66,23 +66,89 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
 
   // Handle tags display for a verse
   const renderTags = (verse: Verse) => {
-    if (!showThematicTags || !verse.tags) return null;
+    if (!showThematicTags) return null;
     
-    const allTags = [
-      ...(verse.tags.themes || []),
-      ...(verse.tags.people || []),
-      ...(verse.tags.places || []),
-      ...(verse.tags.symbols || [])
-    ];
+    // For demo purposes, add sample tags to Genesis 1:1-3
+    if (verse.verse === 1) {
+      verse.tags = {
+        themes: ['Creation', 'Beginning', 'God\'s Power'],
+        people: ['God'],
+        places: ['Heaven', 'Earth'],
+        timeframe: ['Beginning of time'],
+        symbols: ['Light', 'Darkness'],
+        emotions: ['Wonder', 'Awe']
+      };
+    } else if (verse.verse === 2) {
+      verse.tags = {
+        themes: ['Chaos', 'Spirit of God', 'Void'],
+        people: ['God'],
+        places: ['Deep waters', 'Earth'],
+        timeframe: ['First day'],
+        symbols: ['Water', 'Darkness'],
+        emotions: ['Mystery']
+      };
+    } else if (verse.verse === 3) {
+      verse.tags = {
+        themes: ['Light', 'God\'s Word', 'Creation by speaking'],
+        people: ['God'],
+        places: [],
+        timeframe: ['First day'],
+        symbols: ['Light'],
+        emotions: ['Divine authority']
+      };
+    }
     
+    if (!verse.tags) return null;
+    
+    // Group tags by category with different colors
     return (
-      <div className="mt-1 flex flex-wrap gap-1">
-        {allTags.map((tag, idx) => (
+      <div className="mt-2 flex flex-wrap gap-1">
+        {verse.tags.themes?.map((theme, i) => (
           <span 
-            key={idx}
-            className="text-xs px-1.5 py-0.5 rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
+            key={`theme-${i}`} 
+            className="text-xs px-1.5 py-0.5 rounded-full bg-[#2c4c3b]/10 text-[#2c4c3b] dark:bg-[#2c4c3b]/30 dark:text-green-200"
           >
-            {tag}
+            {theme}
+          </span>
+        ))}
+        {verse.tags.people?.map((person, i) => (
+          <span 
+            key={`person-${i}`} 
+            className="text-xs px-1.5 py-0.5 rounded-full bg-blue-50 text-blue-800 dark:bg-blue-900/20 dark:text-blue-200"
+          >
+            {person}
+          </span>
+        ))}
+        {verse.tags.places?.map((place, i) => (
+          <span 
+            key={`place-${i}`} 
+            className="text-xs px-1.5 py-0.5 rounded-full bg-amber-50 text-amber-800 dark:bg-amber-900/20 dark:text-amber-200"
+          >
+            {place}
+          </span>
+        ))}
+        {verse.tags.timeframe?.map((time, i) => (
+          <span 
+            key={`time-${i}`} 
+            className="text-xs px-1.5 py-0.5 rounded-full bg-purple-50 text-purple-800 dark:bg-purple-900/20 dark:text-purple-200"
+          >
+            {time}
+          </span>
+        ))}
+        {verse.tags.symbols?.map((symbol, i) => (
+          <span 
+            key={`symbol-${i}`} 
+            className="text-xs px-1.5 py-0.5 rounded-full bg-rose-50 text-rose-800 dark:bg-rose-900/20 dark:text-rose-200"
+          >
+            {symbol}
+          </span>
+        ))}
+        {verse.tags.emotions?.map((emotion, i) => (
+          <span 
+            key={`emotion-${i}`} 
+            className="text-xs px-1.5 py-0.5 rounded-full bg-indigo-50 text-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-200"
+          >
+            {emotion}
           </span>
         ))}
       </div>
@@ -213,8 +279,91 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
         10: {
           kjv: "And God called the dry land Earth; and the gathering together of the waters called he Seas: and God saw that it was good.",
           web: "God called the dry land \"earth\", and the gathering together of the waters he called \"seas\". God saw that it was good."
+        },
+        11: {
+          kjv: "And God said, Let the earth bring forth grass, the herb yielding seed, and the fruit tree yielding fruit after his kind, whose seed is in itself, upon the earth: and it was so.",
+          web: "God said, \"Let the earth yield grass, herbs yielding seeds, and fruit trees bearing fruit after their kind, with their seeds in it, on the earth\"; and it was so."
+        },
+        12: {
+          kjv: "And the earth brought forth grass, and herb yielding seed after his kind, and the tree yielding fruit, whose seed was in itself, after his kind: and God saw that it was good.",
+          web: "The earth yielded grass, herbs yielding seed after their kind, and trees bearing fruit, with their seeds in it, after their kind; and God saw that it was good."
+        },
+        13: {
+          kjv: "And the evening and the morning were the third day.",
+          web: "There was evening and there was morning, a third day."
+        },
+        14: {
+          kjv: "And God said, Let there be lights in the firmament of the heaven to divide the day from the night; and let them be for signs, and for seasons, and for days, and years:",
+          web: "God said, \"Let there be lights in the expanse of the sky to divide the day from the night; and let them be for signs to mark seasons, days, and years;"
+        },
+        15: {
+          kjv: "And let them be for lights in the firmament of the heaven to give light upon the earth: and it was so.",
+          web: "and let them be for lights in the expanse of the sky to give light on the earth\"; and it was so."
+        },
+        16: {
+          kjv: "And God made two great lights; the greater light to rule the day, and the lesser light to rule the night: he made the stars also.",
+          web: "God made the two great lights: the greater light to rule the day, and the lesser light to rule the night. He also made the stars."
+        },
+        17: {
+          kjv: "And God set them in the firmament of the heaven to give light upon the earth,",
+          web: "God set them in the expanse of the sky to give light to the earth,"
+        },
+        18: {
+          kjv: "And to rule over the day and over the night, and to divide the light from the darkness: and God saw that it was good.",
+          web: "and to rule over the day and over the night, and to divide the light from the darkness. God saw that it was good."
+        },
+        19: {
+          kjv: "And the evening and the morning were the fourth day.",
+          web: "There was evening and there was morning, a fourth day."
+        },
+        20: {
+          kjv: "And God said, Let the waters bring forth abundantly the moving creature that hath life, and fowl that may fly above the earth in the open firmament of heaven.",
+          web: "God said, \"Let the waters abound with living creatures, and let birds fly above the earth in the open expanse of the sky.\""
+        },
+        21: {
+          kjv: "And God created great whales, and every living creature that moveth, which the waters brought forth abundantly, after their kind, and every winged fowl after his kind: and God saw that it was good.",
+          web: "God created the large sea creatures and every living creature that moves, with which the waters swarmed, after their kind, and every winged bird after its kind. God saw that it was good."
+        },
+        22: {
+          kjv: "And God blessed them, saying, Be fruitful, and multiply, and fill the waters in the seas, and let fowl multiply in the earth.",
+          web: "God blessed them, saying, \"Be fruitful, and multiply, and fill the waters in the seas, and let birds multiply on the earth.\""
+        },
+        23: {
+          kjv: "And the evening and the morning were the fifth day.",
+          web: "There was evening and there was morning, a fifth day."
+        },
+        24: {
+          kjv: "And God said, Let the earth bring forth the living creature after his kind, cattle, and creeping thing, and beast of the earth after his kind: and it was so.",
+          web: "God said, \"Let the earth produce living creatures after their kind, livestock, creeping things, and animals of the earth after their kind\"; and it was so."
+        },
+        25: {
+          kjv: "And God made the beast of the earth after his kind, and cattle after their kind, and every thing that creepeth upon the earth after his kind: and God saw that it was good.",
+          web: "God made the animals of the earth after their kind, and the livestock after their kind, and everything that creeps on the ground after its kind. God saw that it was good."
+        },
+        26: {
+          kjv: "And God said, Let us make man in our image, after our likeness: and let them have dominion over the fish of the sea, and over the fowl of the air, and over the cattle, and over all the earth, and over every creeping thing that creepeth upon the earth.",
+          web: "God said, \"Let's make man in our image, after our likeness. Let them have dominion over the fish of the sea, and over the birds of the sky, and over the livestock, and over all the earth, and over every creeping thing that creeps on the earth.\""
+        },
+        27: {
+          kjv: "So God created man in his own image, in the image of God created he him; male and female created he them.",
+          web: "God created man in his own image. In God's image he created him; male and female he created them."
+        },
+        28: {
+          kjv: "And God blessed them, and God said unto them, Be fruitful, and multiply, and replenish the earth, and subdue it: and have dominion over the fish of the sea, and over the fowl of the air, and over every living thing that moveth upon the earth.",
+          web: "God blessed them. God said to them, \"Be fruitful, multiply, fill the earth, and subdue it. Have dominion over the fish of the sea, over the birds of the sky, and over every living thing that moves on the earth.\""
+        },
+        29: {
+          kjv: "And God said, Behold, I have given you every herb bearing seed, which is upon the face of all the earth, and every tree, in the which is the fruit of a tree yielding seed; to you it shall be for meat.",
+          web: "God said, \"Behold, I have given you every herb yielding seed, which is on the surface of all the earth, and every tree, which bears fruit yielding seed. It will be your food."
+        },
+        30: {
+          kjv: "And to every beast of the earth, and to every fowl of the air, and to every thing that creepeth upon the earth, wherein there is life, I have given every green herb for meat: and it was so.",
+          web: "To every animal of the earth, and to every bird of the sky, and to everything that creeps on the earth, in which there is life, I have given every green herb for food;\"; and it was so."
+        },
+        31: {
+          kjv: "And God saw every thing that he had made, and, behold, it was very good. And the evening and the morning were the sixth day.",
+          web: "God saw everything that he had made, and, behold, it was very good. There was evening and there was morning, a sixth day."
         }
-        // Add more verses as needed for the chapter
       };
       
       return bibleText[verseNumber] || {
