@@ -45,7 +45,7 @@ export default function Home() {
         <div className="absolute bottom-24 right-14 w-9 h-9 bg-[#a5c2a5] dark:bg-[#345841] rounded-full opacity-15 animate-spin-slow animation-delay-3300"></div>
         <div className="absolute top-1/3 left-1/5 w-5 h-5 bg-[#d8e5d2] dark:bg-[#3b5045] rounded-full opacity-25 animate-bounce-slow animation-delay-1700"></div>
         <div className="absolute bottom-1/3 right-1/5 w-6 h-6 bg-[#e8efe5] dark:bg-[#2c4c3b] rounded-full opacity-20 animate-float animation-delay-900"></div>
-        <div className="absolute top-10 center w-10 h-10 bg-[#d8e5d2] dark:bg-[#345841] rounded-full opacity-15 animate-pulse-slow animation-delay-1800"></div>
+        <div className="absolute top-10 left-1/2 transform -translate-x-1/2 w-10 h-10 bg-[#d8e5d2] dark:bg-[#345841] rounded-full opacity-15 animate-pulse-slow animation-delay-1800"></div>
         <div className="absolute bottom-10 left-1/4 w-8 h-8 bg-[#c5d5bc] dark:bg-[#2c4c3b] rounded-full opacity-20 animate-bounce-subtle animation-delay-2100"></div>
         
         <div className="container mx-auto max-w-5xl relative z-10">
