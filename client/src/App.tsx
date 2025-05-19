@@ -15,6 +15,7 @@ import Settings from "@/pages/settings";
 import Explorer from "@/pages/explorer";
 import ConceptExplorer from "./pages/concept-explorer";
 import Landing from "./pages/landing";
+import LandingOptimized from "./pages/LandingOptimized";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { AuthProvider } from "./hooks/useAuth";
 import { ReadingPlanProvider } from "./hooks/useReadingPlanContext";
@@ -40,8 +41,11 @@ function Router() {
   return (
     <div className="flex flex-col min-h-screen">
       <Switch>
-        {/* Landing page - no navbar */}
-        <Route path="/" component={Landing} />
+        {/* Optimized Landing page - no navbar */}
+        <Route path="/" component={LandingOptimized} />
+        
+        {/* Original Landing page for comparison */}
+        <Route path="/landing-original" component={Landing} />
         
         {/* Main app entry point */}
         <Route path="/app">
