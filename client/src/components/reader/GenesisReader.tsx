@@ -594,26 +594,30 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
   // Reader settings panel
   const SettingsPanel = () => (
     <div 
-      className={`bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 
-                 absolute right-0 top-full mt-2 z-50 w-64 transition-all duration-200 
+      className={`bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg border border-stone-300 dark:border-gray-700 
+                 absolute right-0 top-full mt-2 z-50 w-72 transition-all duration-200 
                  ${showSettings ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`}
     >
       <h3 className="text-lg font-semibold mb-3 text-[#2c4c3b] dark:text-green-400">Reader Settings</h3>
       
       <div className="space-y-4">
         <div>
-          <label className="text-sm font-medium block mb-1">Font Size</label>
+          <label className="text-sm font-medium text-stone-800 dark:text-stone-200 block mb-1">Font Size</label>
           <div className="flex items-center">
             <button 
               onClick={() => setFontSize(Math.max(12, fontSize - 1))}
-              className="w-8 h-8 flex items-center justify-center rounded border border-gray-200 dark:border-gray-700"
+              className="w-8 h-8 flex items-center justify-center rounded bg-stone-100 hover:bg-stone-200 
+              dark:bg-gray-700 dark:hover:bg-gray-600 border border-stone-300 dark:border-gray-700 
+              text-stone-700 dark:text-stone-200"
             >
               -
             </button>
-            <div className="mx-2 text-sm">{fontSize}px</div>
+            <div className="mx-2 text-sm text-stone-800 dark:text-stone-200 font-medium">{fontSize}px</div>
             <button 
               onClick={() => setFontSize(Math.min(24, fontSize + 1))}
-              className="w-8 h-8 flex items-center justify-center rounded border border-gray-200 dark:border-gray-700"
+              className="w-8 h-8 flex items-center justify-center rounded bg-stone-100 hover:bg-stone-200 
+              dark:bg-gray-700 dark:hover:bg-gray-600 border border-stone-300 dark:border-gray-700 
+              text-stone-700 dark:text-stone-200"
             >
               +
             </button>
@@ -621,22 +625,36 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
         </div>
         
         <div>
-          <label className="text-sm font-medium block mb-1">Line Spacing</label>
+          <label className="text-sm font-medium text-stone-800 dark:text-stone-200 block mb-1">Line Spacing</label>
           <div className="flex items-center">
             <button 
               onClick={() => setLineSpacing(Math.max(1, lineSpacing - 0.1))}
-              className="w-8 h-8 flex items-center justify-center rounded border border-gray-200 dark:border-gray-700"
+              className="w-8 h-8 flex items-center justify-center rounded bg-stone-100 hover:bg-stone-200 
+              dark:bg-gray-700 dark:hover:bg-gray-600 border border-stone-300 dark:border-gray-700 
+              text-stone-700 dark:text-stone-200"
             >
               -
             </button>
-            <div className="mx-2 text-sm">{lineSpacing.toFixed(1)}</div>
+            <div className="mx-2 text-sm text-stone-800 dark:text-stone-200 font-medium">{lineSpacing.toFixed(1)}</div>
             <button 
               onClick={() => setLineSpacing(Math.min(3, lineSpacing + 0.1))}
-              className="w-8 h-8 flex items-center justify-center rounded border border-gray-200 dark:border-gray-700"
+              className="w-8 h-8 flex items-center justify-center rounded bg-stone-100 hover:bg-stone-200 
+              dark:bg-gray-700 dark:hover:bg-gray-600 border border-stone-300 dark:border-gray-700 
+              text-stone-700 dark:text-stone-200"
             >
               +
             </button>
           </div>
+        </div>
+        
+        <div className="pt-1 border-t border-stone-200 dark:border-gray-700">
+          <button 
+            onClick={() => setShowSettings(false)}
+            className="mt-2 w-full py-1.5 px-3 text-sm font-medium rounded-md
+            bg-[#2c4c3b] hover:bg-[#1e3c2b] text-white"
+          >
+            Apply Settings
+          </button>
         </div>
       </div>
     </div>

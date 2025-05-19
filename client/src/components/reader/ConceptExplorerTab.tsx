@@ -161,12 +161,49 @@ const ConceptDetailDialog: React.FC<{
   onNavigateToVerse?: (reference: string) => void;
   isBookmarked: boolean;
   onToggleBookmark: (concept: Node) => void;
-}> = ({ concept, onClose, onNavigateToVerse, isBookmarked, onToggleBookmark }) => {
+  onExploreRelatedConcept: (conceptId: string) => void;
+}> = ({ concept, onClose, onNavigateToVerse, isBookmarked, onToggleBookmark, onExploreRelatedConcept }) => {
   if (!concept) return null;
+  
+  // Find related concepts through links
+  const relatedConcepts = sampleData.links
+    .filter(link => link.source === concept.id || link.target === concept.id)
+    .map(link => {
+      const relatedNodeId = link.source === concept.id ? link.target : link.source;
+      const relatedNode = sampleData.nodes.find(n => n.id === relatedNodeId);
+      const relationship = {
+        node: relatedNode,
+        type: link.type,
+        description: link.description,
+        direction: link.source === concept.id ? 'outgoing' : 'incoming'
+      };
+      return relationship;
+    })
+    .filter(item => item.node) as {
+      node: Node; 
+      type: string; 
+      description: string;
+      direction: 'incoming' | 'outgoing'
+    }[];
+
+  // Find common themes between related verses
+  const verseThemes = concept.verses ? 
+    Array.from(new Set(concept.verses.flatMap(verse => 
+      // Mock themes for demo purposes - in real app, these would come from the database
+      verse.includes('Genesis') ? ['Creation', 'Origins', 'Divine Authority'] :
+      verse.includes('John') ? ['Logos', 'Divinity of Christ', 'Purpose'] :
+      verse.includes('Romans') ? ['Sin', 'Justification', 'Grace'] :
+      verse.includes('Hebrews') ? ['Faith', 'Covenant', 'Sacrifice'] :
+      verse.includes('Ephesians') ? ['Redemption', 'Unity', 'Identity'] :
+      verse.includes('Colossians') ? ['Christ Supreme', 'New Life', 'Freedom'] :
+      verse.includes('Peter') ? ['Suffering', 'Holiness', 'Hope'] :
+      verse.includes('Corinthians') ? ['Church', 'Resurrection', 'Unity'] :
+      ['Scripture', 'Theology']
+    ))) : [];
 
   return (
     <Dialog open={!!concept} onOpenChange={() => onClose()}>
-      <DialogContent className="max-w-2xl max-h-[80vh]">
+      <DialogContent className="max-w-3xl max-h-[85vh]">
         <DialogHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center">
@@ -198,26 +235,75 @@ const ConceptDetailDialog: React.FC<{
           <TabsList className="w-full">
             <TabsTrigger value="verses" className="flex-1">Scripture References</TabsTrigger>
             <TabsTrigger value="connections" className="flex-1">Connections</TabsTrigger>
+            <TabsTrigger value="explore" className="flex-1">Explore</TabsTrigger>
             <TabsTrigger value="study" className="flex-1">Study Notes</TabsTrigger>
           </TabsList>
           
           <TabsContent value="verses" className="mt-4 space-y-4">
+            {/* Verse themes section */}
+            <div className="mb-4">
+              <h3 className="text-sm font-semibold mb-2">Common Themes in These Verses:</h3>
+              <div className="flex flex-wrap gap-1.5">
+                {verseThemes.map(theme => (
+                  <Badge key={theme} variant="secondary" className="cursor-pointer hover:bg-secondary/80">
+                    {theme}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+            
             <ScrollArea className="h-[200px] rounded-md border p-4">
               {concept.verses && concept.verses.length > 0 ? (
                 <ul className="space-y-2">
                   {concept.verses.map((verse) => (
-                    <li key={verse} className="flex items-center justify-between p-2 hover:bg-muted rounded-md">
-                      <span className="font-medium">{verse}</span>
-                      {onNavigateToVerse && (
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          onClick={() => onNavigateToVerse(verse)}
-                          className="h-8 text-xs"
-                        >
-                          Read <ExternalLink className="ml-1 h-3 w-3" />
-                        </Button>
-                      )}
+                    <li key={verse} className="p-2 hover:bg-muted rounded-md transition-colors">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-medium">{verse}</span>
+                        <div className="flex gap-1">
+                          {/* Context button to see surrounding verses */}
+                          <Button variant="outline" size="sm" className="h-7 text-xs">
+                            Context +/-3
+                          </Button>
+                          
+                          {/* Navigate to verse button */}
+                          {onNavigateToVerse && (
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              onClick={() => onNavigateToVerse(verse)}
+                              className="h-7 text-xs"
+                            >
+                              Read <ExternalLink className="ml-1 h-3 w-3" />
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                      
+                      {/* Mock verse text */}
+                      <p className="text-sm text-muted-foreground italic">
+                        {verse.includes("Genesis 1:1") ? 
+                          "In the beginning God created the heavens and the earth." :
+                         verse.includes("John 3:16") ?
+                          "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life." :
+                          "Click 'Read' to view full verse text."}
+                      </p>
+                      
+                      {/* Related concepts for this specific verse */}
+                      <div className="mt-2 flex flex-wrap gap-1">
+                        {/* Mock related tags specific to this verse */}
+                        {verse.includes("Genesis") && (
+                          <>
+                            <Badge variant="outline" size="sm" className="text-[10px] cursor-pointer hover:bg-muted">beginnings</Badge>
+                            <Badge variant="outline" size="sm" className="text-[10px] cursor-pointer hover:bg-muted">divinity</Badge>
+                          </>
+                        )}
+                        {verse.includes("John") && (
+                          <>
+                            <Badge variant="outline" size="sm" className="text-[10px] cursor-pointer hover:bg-muted">logos</Badge>
+                            <Badge variant="outline" size="sm" className="text-[10px] cursor-pointer hover:bg-muted">pre-existence</Badge>
+                          </>
+                        )}
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -228,54 +314,200 @@ const ConceptDetailDialog: React.FC<{
           </TabsContent>
           
           <TabsContent value="connections" className="mt-4">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-base">Related Concepts</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-2">
-                  {sampleData.links
-                    .filter(link => link.source === concept.id || link.target === concept.id)
-                    .map((link, index) => {
-                      const relatedNodeId = link.source === concept.id ? link.target : link.source;
-                      const relatedNode = sampleData.nodes.find(n => n.id === relatedNodeId);
-                      
-                      return relatedNode ? (
-                        <Badge 
-                          key={index}
-                          style={{ backgroundColor: relatedNode.color || CATEGORY_COLORS[relatedNode.group as keyof typeof CATEGORY_COLORS] || CATEGORY_COLORS.default, opacity: 0.9 }}
-                          className="cursor-pointer hover:opacity-100 transition-opacity"
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Card className="overflow-hidden">
+                <CardHeader className="pb-2 bg-secondary/20">
+                  <CardTitle className="text-base flex items-center">
+                    <span>Related Concepts</span>
+                    <Badge className="ml-2 text-xs" variant="outline">{relatedConcepts.length}</Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <ScrollArea className="h-[220px]">
+                    <div className="space-y-3">
+                      {relatedConcepts.map((relation, idx) => (
+                        <div 
+                          key={idx} 
+                          className="p-3 border rounded-md hover:bg-muted/50 transition-colors cursor-pointer"
+                          onClick={() => onExploreRelatedConcept(relation.node.id)}
                         >
-                          {relatedNode.name}
-                        </Badge>
-                      ) : null;
-                    })}
-                </div>
-                <div className="mt-4 pt-2 border-t">
-                  <h4 className="font-medium mb-2 text-sm">Connection Types:</h4>
-                  <ul className="space-y-1 text-sm text-muted-foreground">
-                    {sampleData.links
-                      .filter(link => link.source === concept.id || link.target === concept.id)
-                      .map((link, index) => {
-                        const relatedNodeId = link.source === concept.id ? link.target : link.source;
-                        const relatedNode = sampleData.nodes.find(n => n.id === relatedNodeId);
-                        const isSourceToTarget = link.source === concept.id;
+                          <div className="flex items-center justify-between mb-1">
+                            <Badge 
+                              style={{ 
+                                backgroundColor: relation.node.color || 
+                                CATEGORY_COLORS[relation.node.group as keyof typeof CATEGORY_COLORS] || 
+                                CATEGORY_COLORS.default 
+                              }}
+                            >
+                              {relation.node.group}
+                            </Badge>
+                            <Badge variant="outline" className="text-xs">
+                              {relation.type}
+                            </Badge>
+                          </div>
+                          
+                          <h4 className="font-medium">{relation.node.name}</h4>
+                          <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
+                            {relation.description}
+                          </p>
+                          
+                          <div className="flex items-center mt-2 text-xs text-muted-foreground">
+                            <span>Direction: </span>
+                            <Badge variant="secondary" className="ml-1 text-[10px]">
+                              {relation.direction === 'outgoing' ? 'Leads to' : 'Follows from'}
+                            </Badge>
+                          </div>
+                        </div>
+                      ))}
+                      
+                      {relatedConcepts.length === 0 && (
+                        <p className="text-center text-muted-foreground italic">
+                          No direct connections found for this concept.
+                        </p>
+                      )}
+                    </div>
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader className="pb-2 bg-secondary/20">
+                  <CardTitle className="text-base">Connection Map</CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <div className="h-[220px] flex items-center justify-center border rounded-md bg-muted/30 relative">
+                    {/* Simple visual representation of connections */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="relative w-full max-w-[200px]">
+                        {/* Center node (current concept) */}
+                        <div 
+                          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full flex items-center justify-center text-center text-sm font-medium"
+                          style={{ 
+                            backgroundColor: concept.color || 
+                            CATEGORY_COLORS[concept.group as keyof typeof CATEGORY_COLORS] || 
+                            CATEGORY_COLORS.default,
+                            opacity: 0.9
+                          }}
+                        >
+                          {concept.name}
+                        </div>
                         
-                        return relatedNode ? (
-                          <li key={index} className="flex items-center">
-                            <span className="font-medium">{concept.name}</span>
-                            <span className="mx-2 italic text-xs">
-                              {isSourceToTarget ? 'to' : 'from'}
-                            </span>
-                            <span className="font-medium">{relatedNode.name}</span>
-                            <span className="mx-2">-</span>
-                            <span className="rounded px-1.5 py-0.5 bg-muted text-xs">
-                              {link.type}
-                            </span>
-                          </li>
-                        ) : null;
-                      })}
-                  </ul>
+                        {/* Related nodes, positioned in a circle around the center */}
+                        {relatedConcepts.map((relation, idx) => {
+                          // Calculate position in a circle
+                          const angle = (idx * (360 / relatedConcepts.length)) * (Math.PI / 180);
+                          const radius = 80; // Distance from center
+                          const left = Math.cos(angle) * radius + 100; // 100 = center point
+                          const top = Math.sin(angle) * radius + 100;
+                          
+                          return (
+                            <div 
+                              key={idx}
+                              className="absolute w-14 h-14 rounded-full flex items-center justify-center text-center text-xs font-medium cursor-pointer hover:z-10 hover:scale-110 transition-transform"
+                              style={{ 
+                                left: `${left}px`, 
+                                top: `${top}px`,
+                                backgroundColor: relation.node.color || 
+                                CATEGORY_COLORS[relation.node.group as keyof typeof CATEGORY_COLORS] || 
+                                CATEGORY_COLORS.default,
+                                opacity: 0.8
+                              }}
+                              onClick={() => onExploreRelatedConcept(relation.node.id)}
+                            >
+                              {relation.node.name}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                    
+                    {relatedConcepts.length === 0 && (
+                      <p className="text-center text-muted-foreground italic">
+                        No connections to visualize.
+                      </p>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="explore" className="mt-4">
+            <Card>
+              <CardHeader className="pb-2 bg-secondary/20">
+                <CardTitle className="text-base">Concept Journey</CardTitle>
+                <CardDescription>
+                  Explore how this concept connects to others across Scripture
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pt-4">
+                <div className="mb-4">
+                  <h4 className="text-sm font-semibold mb-2">Suggested Journeys:</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {/* Suggested paths through related concepts */}
+                    {['Salvation History', 'Prophetic Timeline', 'Covenantal Progression', 'Doctrinal Framework'].map((journey, idx) => (
+                      <Button 
+                        key={idx}
+                        variant="outline"
+                        className="justify-start h-auto py-2 px-3"
+                      >
+                        <div className="text-left">
+                          <div className="font-medium">{journey}</div>
+                          <div className="text-xs text-muted-foreground">
+                            Follow the progression of {concept.name.toLowerCase()} through Scripture
+                          </div>
+                        </div>
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="mb-4">
+                  <h4 className="text-sm font-semibold mb-2">Discover by Theological Category:</h4>
+                  <div className="flex flex-wrap gap-1.5">
+                    {Object.entries(CATEGORY_COLORS).map(([category, color]) => (
+                      category !== 'default' && (
+                        <Badge 
+                          key={category}
+                          style={{ backgroundColor: color }}
+                          className="cursor-pointer"
+                        >
+                          {category}
+                        </Badge>
+                      )
+                    ))}
+                  </div>
+                </div>
+                
+                <div>
+                  <h4 className="text-sm font-semibold mb-2">Biblical Timeline Placement:</h4>
+                  <div className="relative h-12 bg-muted rounded-md overflow-hidden">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full h-1 bg-primary/30"></div>
+                      
+                      {/* Time marker for current concept */}
+                      <div 
+                        className="absolute w-3 h-3 rounded-full bg-primary"
+                        style={{ 
+                          left: concept.id === 'creation' ? '5%' : 
+                                concept.id === 'sin' ? '8%' :
+                                concept.id === 'covenant' ? '15%' :
+                                concept.id === 'redemption' ? '70%' :
+                                concept.id === 'faith' ? '50%' : '40%'
+                        }}
+                      ></div>
+                    </div>
+                    
+                    <div className="absolute bottom-0 left-0 right-0 flex justify-between text-xs px-2">
+                      <span>Creation</span>
+                      <span>Patriarchs</span>
+                      <span>Exodus</span>
+                      <span>Kingdom</span>
+                      <span>Exile</span>
+                      <span>Christ</span>
+                      <span>Church</span>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -283,10 +515,10 @@ const ConceptDetailDialog: React.FC<{
           
           <TabsContent value="study" className="mt-4">
             <Card>
-              <CardHeader className="pb-2">
+              <CardHeader className="pb-2 bg-secondary/20">
                 <CardTitle className="text-base">Theological Significance</CardTitle>
               </CardHeader>
-              <CardContent className="text-sm">
+              <CardContent className="text-sm pt-4">
                 <p>
                   The concept of <strong>{concept.name}</strong> is central to biblical theology.
                   It appears in various contexts throughout Scripture, spanning both Old and New Testaments.
@@ -302,6 +534,30 @@ const ConceptDetailDialog: React.FC<{
                   Today, understanding {concept.name.toLowerCase()} helps believers integrate 
                   faith with daily life, informing both personal devotion and communal worship.
                 </p>
+                
+                <div className="mt-4 pt-3 border-t">
+                  <h4 className="font-semibold mb-2">Theological Perspectives:</h4>
+                  <Tabs defaultValue="protestant" className="w-full">
+                    <TabsList className="w-full grid grid-cols-4">
+                      <TabsTrigger value="protestant">Protestant</TabsTrigger>
+                      <TabsTrigger value="catholic">Catholic</TabsTrigger>
+                      <TabsTrigger value="orthodox">Orthodox</TabsTrigger>
+                      <TabsTrigger value="academic">Academic</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="protestant" className="pt-2">
+                      <p>From the Protestant perspective, <strong>{concept.name.toLowerCase()}</strong> is understood through the lens of Scripture alone, emphasizing God's sovereignty and grace.</p>
+                    </TabsContent>
+                    <TabsContent value="catholic" className="pt-2">
+                      <p>Catholic theology views <strong>{concept.name.toLowerCase()}</strong> within the context of Church tradition and teaching, connecting it to the sacramental life of faith.</p>
+                    </TabsContent>
+                    <TabsContent value="orthodox" className="pt-2">
+                      <p>Orthodox theology emphasizes the mystical dimensions of <strong>{concept.name.toLowerCase()}</strong>, connecting it to the Church's liturgical life and deification.</p>
+                    </TabsContent>
+                    <TabsContent value="academic" className="pt-2">
+                      <p>Academic scholarship examines <strong>{concept.name.toLowerCase()}</strong> through historical-critical methods, considering cultural context and literary forms.</p>
+                    </TabsContent>
+                  </Tabs>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>

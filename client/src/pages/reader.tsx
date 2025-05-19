@@ -14,7 +14,10 @@ import {
   Moon,
   ChevronLeft,
   ChevronRight,
-  Settings
+  Settings,
+  ChevronsLeft,
+  ChevronsRight,
+  Lightbulb
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { loadBibleData } from '@/lib/bibleData';
@@ -41,6 +44,7 @@ export default function Reader() {
   const [lineSpacing, setLineSpacing] = useState(1.5);
   const [paperTexture, setPaperTexture] = useState(true);
   const [showComfortLight, setShowComfortLight] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   
   // Initialize Bible data and route parameters
   useEffect(() => {
@@ -258,13 +262,59 @@ export default function Reader() {
       {/* Main content */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
         {/* Sidebar */}
-        <aside className="border-r border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 w-full lg:w-[300px] xl:w-[340px] 2xl:w-[380px] flex-shrink-0 overflow-y-auto">
+        <aside className={`border-r border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 w-full transition-all duration-300 
+          ${sidebarCollapsed ? 'lg:w-[60px]' : 'lg:w-[300px] xl:w-[340px] 2xl:w-[380px]'} 
+          flex-shrink-0 overflow-y-auto relative`}>
+          
+          {/* Resize handle */}
+          <div 
+            className="absolute -right-3 top-1/2 transform -translate-y-1/2 z-10 cursor-pointer
+                      h-24 w-6 flex items-center justify-center bg-white dark:bg-stone-900
+                      border border-stone-200 dark:border-stone-700 rounded-md shadow-md"
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+          >
+            {sidebarCollapsed ? 
+              <ChevronsRight className="h-4 w-4 text-stone-500" /> : 
+              <ChevronsLeft className="h-4 w-4 text-stone-500" />
+            }
+          </div>
+
           <Tabs defaultValue="toc" value={sidebarTab} onValueChange={setSidebarTab}>
-            <TabsList className="w-full grid grid-cols-3">
+            <TabsList className={`w-full ${sidebarCollapsed ? 'hidden' : 'grid grid-cols-3'}`}>
               <TabsTrigger value="toc" className="flex-1">Contents</TabsTrigger>
               <TabsTrigger value="concepts" className="flex-1">Concepts</TabsTrigger>
               <TabsTrigger value="settings" className="flex-1">Settings</TabsTrigger>
             </TabsList>
+            
+            {/* Collapsed sidebar mini-navigation */}
+            {sidebarCollapsed && (
+              <div className="flex flex-col items-center py-4 space-y-4">
+                <Button 
+                  variant={sidebarTab === 'toc' ? 'default' : 'ghost'} 
+                  size="icon"
+                  onClick={() => setSidebarTab('toc')}
+                  className={sidebarTab === 'toc' ? 'bg-[#2c4c3b] hover:bg-[#2c4c3b]/90' : ''}
+                >
+                  <BookOpen className="h-5 w-5" />
+                </Button>
+                <Button 
+                  variant={sidebarTab === 'concepts' ? 'default' : 'ghost'} 
+                  size="icon"
+                  onClick={() => setSidebarTab('concepts')}
+                  className={sidebarTab === 'concepts' ? 'bg-[#2c4c3b] hover:bg-[#2c4c3b]/90' : ''}
+                >
+                  <Lightbulb className="h-5 w-5" />
+                </Button>
+                <Button 
+                  variant={sidebarTab === 'settings' ? 'default' : 'ghost'} 
+                  size="icon"
+                  onClick={() => setSidebarTab('settings')}
+                  className={sidebarTab === 'settings' ? 'bg-[#2c4c3b] hover:bg-[#2c4c3b]/90' : ''}
+                >
+                  <Settings className="h-5 w-5" />
+                </Button>
+              </div>
+            )}
             
             <TabsContent value="toc" className="p-4">
               <h3 className="font-semibold mb-2">Old Testament</h3>
