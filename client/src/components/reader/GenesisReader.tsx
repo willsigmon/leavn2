@@ -50,16 +50,42 @@ interface GenesisChapterData {
 export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
   const [selectedTranslation, setSelectedTranslation] = useState<'web' | 'kjv'>('web');
   const [showThematicTags, setShowThematicTags] = useState(true);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  // Use system preference for dark mode
+  const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const [isDarkMode, setIsDarkMode] = useState(prefersDarkMode);
   const [currentChapter, setCurrentChapter] = useState(chapter);
   const [showSettings, setShowSettings] = useState(false);
   const [fontSize, setFontSize] = useState(16);
   const [lineSpacing, setLineSpacing] = useState(1.5);
   
-  // Initialize Bible reader
+  // Initialize Bible reader and keyboard navigation
   useEffect(() => {
     // Sync our chapter with the reader
     globalBibleReader.navigate('genesis', currentChapter, 1);
+    
+    // Set up keyboard navigation
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Arrow keys for chapter navigation
+      if (e.key === 'ArrowRight') {
+        goToNextChapter();
+      } else if (e.key === 'ArrowLeft') {
+        goToPreviousChapter();
+      }
+      
+      // Numbers for quick verse jumps (future enhancement)
+      const num = parseInt(e.key);
+      if (!isNaN(num) && e.ctrlKey) {
+        // TODO: Jump to specific verse
+        console.log(`Jump to verse ${num}`);
+      }
+    };
+    
+    document.addEventListener('keydown', handleKeyDown);
+    
+    return () => {
+      // Clean up
+      document.removeEventListener('keydown', handleKeyDown);
+    };
   }, [currentChapter]);
   
   // Check system preference for dark mode
@@ -629,22 +655,7 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
           Previous Chapter
         </Button>
         
-        <div className="flex items-center gap-3">
-          <span className="text-sm font-medium">Chapter {currentChapter} of {getTotalChapters('genesis')}</span>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setIsDarkMode(!isDarkMode)}
-            className="rounded-full"
-            title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
-          >
-            {isDarkMode ? (
-              <Sun className="h-5 w-5 text-yellow-300" />
-            ) : (
-              <Moon className="h-5 w-5 text-slate-700" />
-            )}
-          </Button>
-        </div>
+        <span className="text-sm font-medium">Chapter {currentChapter} of {getTotalChapters('genesis')}</span>
         
         <Button 
           variant="outline" 
