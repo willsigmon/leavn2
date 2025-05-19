@@ -2,7 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import { db } from './db';
 import { tags, verses, verseTags } from '@shared/schema';
-import { eq } from 'drizzle-orm';
+import { eq, and, inArray, not, sql } from 'drizzle-orm/pg-core';
+import crypto from 'crypto';
 import OpenAI from 'openai';
 
 // Initialize OpenAI client
@@ -19,7 +20,7 @@ interface BibleCache {
 }
 
 // Structure for verse tags
-interface VerseTags {
+interface VerseTagsData {
   themes: string[];
   figures: string[];
   places: string[];
@@ -47,7 +48,7 @@ if (!fs.existsSync(CACHE_DIR)) {
 
 // Initialize empty cache
 let bibleCache: BibleCache = {};
-let tagsCache: Record<string, VerseTags> = {};
+let tagsCache: Record<string, VerseTagsData> = {};
 
 // Load Bible cache if exists
 export function loadBibleCache(): BibleCache {
@@ -69,7 +70,7 @@ export function saveBibleCache() {
 }
 
 // Load tags cache if exists
-export function loadTagsCache(): Record<string, VerseTags> {
+export function loadTagsCache(): Record<string, VerseTagsData> {
   if (fs.existsSync(TAGS_CACHE_PATH)) {
     const data = fs.readFileSync(TAGS_CACHE_PATH, 'utf-8');
     tagsCache = JSON.parse(data);
@@ -101,7 +102,7 @@ export function getVerseFromBibleCache(reference: string): BibleVerse | null {
 }
 
 // Generate tags for a verse using AI
-export async function generateTagsForVerse(reference: string, verseText: string): Promise<VerseTags> {
+export async function generateTagsForVerse(reference: string, verseText: string): Promise<VerseTagsData> {
   // Check if we have tags cached already
   if (tagsCache[reference]) {
     return tagsCache[reference];
@@ -136,7 +137,7 @@ Be concise, specific, and focus only on elements clearly present or strongly imp
       temperature: 0.3,
     });
 
-    const tags = JSON.parse(response.choices[0].message.content) as VerseTags;
+    const tags = JSON.parse(response.choices[0].message.content) as VerseTagsData;
     
     // Cache the result
     tagsCache[reference] = tags;
@@ -161,7 +162,7 @@ Be concise, specific, and focus only on elements clearly present or strongly imp
 }
 
 // Save tags to database
-export async function saveTagsToDatabase(reference: string, verseTags: VerseTags) {
+export async function saveTagsToDatabase(reference: string, tagsData: VerseTagsData) {
   try {
     // Get the verse ID from the reference
     const [verse] = await db.select().from(verses).where(
@@ -175,12 +176,12 @@ export async function saveTagsToDatabase(reference: string, verseTags: VerseTags
 
     // Process each tag category
     const categories = [
-      { name: 'themes', tags: verseTags.themes },
-      { name: 'figures', tags: verseTags.figures },
-      { name: 'places', tags: verseTags.places },
-      { name: 'timeframe', tags: verseTags.timeframe },
-      { name: 'symbols', tags: verseTags.symbols },
-      { name: 'emotions', tags: verseTags.emotions }
+      { name: 'themes', tags: tagsData.themes },
+      { name: 'figures', tags: tagsData.figures },
+      { name: 'places', tags: tagsData.places },
+      { name: 'timeframe', tags: tagsData.timeframe },
+      { name: 'symbols', tags: tagsData.symbols },
+      { name: 'emotions', tags: tagsData.emotions }
     ];
 
     for (const category of categories) {
@@ -193,8 +194,10 @@ export async function saveTagsToDatabase(reference: string, verseTags: VerseTags
         // If tag doesn't exist, create it
         if (!existingTag) {
           const [newTag] = await db.insert(tags).values({
+            id: crypto.randomUUID(),
             name: tagName,
             category: category.name,
+            createdAt: new Date(),
           }).returning();
           
           existingTag = newTag;
@@ -214,8 +217,10 @@ export async function saveTagsToDatabase(reference: string, verseTags: VerseTags
         // If relationship doesn't exist, create it
         if (!existingVerseTag) {
           await db.insert(verseTags).values({
+            id: crypto.randomUUID(),
             verseReference: verse.id,
             tagId: existingTag.id,
+            createdAt: new Date(),
           });
         }
       }
@@ -301,14 +306,13 @@ export async function findRelatedVerses(verseReference: string, limit: number = 
       })
       .from(verseTags)
       .where(
-        // Match any of the tags
-        verseTags.tagId.in(tagIds),
-        // But not the original verse
-        eq(verseTags.verseReference, verseReference).not(),
+        and(
+          inArray(verseTags.tagId, tagIds),
+          not(eq(verseTags.verseReference, verseReference))
+        )
       )
       .groupBy(verseTags.verseReference)
-      // Sort by number of matching tags (descending)
-      .orderBy({ tag_count: 'desc' })
+      .orderBy(sql`count(*) desc`)
       .limit(limit);
     
     return relatedVerses.map(v => v.verseReference);

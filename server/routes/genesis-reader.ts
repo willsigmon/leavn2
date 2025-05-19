@@ -61,7 +61,7 @@ router.get('/:chapter', async (req: Request, res: Response) => {
       console.log(`Loaded ${chapterData.verses.length} verses from data file for Genesis ${chapterNum}`);
       
       // Complete verse counts for all Genesis chapters
-      const verseCounts = {
+      const verseCounts: Record<number, number> = {
         1: 31,  // Genesis 1 has 31 verses
         2: 25,  // Genesis 2 has 25 verses
         3: 24,  // Genesis 3 has 24 verses 
@@ -119,7 +119,7 @@ router.get('/:chapter', async (req: Request, res: Response) => {
       
       // Create a map of existing verses from the data
       const verseMap = new Map();
-      chapterData.verses.forEach(verse => {
+      chapterData.verses.forEach((verse: any) => {
         const verseNumber = verse.verse_number || verse.number || verse.verse;
         verseMap.set(verseNumber, verse);
       });
@@ -153,7 +153,7 @@ router.get('/:chapter', async (req: Request, res: Response) => {
       // Create a map of full text verses if available
       const fullTextMap = new Map();
       if (fullTextData && Array.isArray(fullTextData.verses)) {
-        fullTextData.verses.forEach(verse => {
+        fullTextData.verses.forEach((verse: any) => {
           if (verse.verse && verse.text) {
             fullTextMap.set(verse.verse, verse);
           }
@@ -204,6 +204,7 @@ router.get('/:chapter', async (req: Request, res: Response) => {
           text: webText || `Genesis ${chapterNum}:${i}`,
           textKjv: kjvText || `Genesis ${chapterNum}:${i} (KJV)`,
           textWeb: webText || `Genesis ${chapterNum}:${i} (WEB)`,
+          isBookmarked: false,
           hasNote: metadata.hasNote || false,
           tags: metadata.tags || {}
         });

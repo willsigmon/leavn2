@@ -118,7 +118,9 @@ router.get('/:book/:chapter/:verse/versions', async (req: Request, res: Response
       return res.status(404).json({ message: `Verse ${book} ${chapter}:${verse} not found` });
     }
     
-    const verseText = verseData.text;
+    const verseText = typeof verseData.text === 'object'
+      ? verseData.text.kjv
+      : (verseData.textKjv || verseData.text);
     
     // Generate alternative versions
     const [genzTranslation, narrativeVersion] = await Promise.all([
@@ -157,7 +159,9 @@ router.get('/:book/:chapter/:verse/commentary/:lens', isAuthenticated, async (re
       return res.status(404).json({ message: `Verse ${book} ${chapter}:${verse} not found` });
     }
     
-    const verseText = verseData.text;
+    const verseText = typeof verseData.text === 'object'
+      ? verseData.text.kjv
+      : (verseData.textKjv || verseData.text);
     
     // Check if commentary exists in database
     const verseId = `${book} ${chapter}:${verse}`;
@@ -206,7 +210,7 @@ router.get('/:book/:chapter/narrative', isAuthenticated, async (req: Request, re
     
     // Get all verses for the chapter
     const dbVerses = await storage.getVerses(book, chapterNum);
-    const verseTexts = dbVerses.map(v => v.text);
+    const verseTexts = dbVerses.filter(Boolean).map(v => v.textKjv);
     
     // Generate narrative version
     let narrativeText;
