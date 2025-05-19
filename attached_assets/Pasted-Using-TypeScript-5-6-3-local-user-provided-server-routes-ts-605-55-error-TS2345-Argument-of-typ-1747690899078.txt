@@ -1,0 +1,13 @@
+Using TypeScript 5.6.3 (local user-provided)
+server/routes.ts(605,55): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'string'.
+server/storage.ts(277,34): error TS2339: Property 'verseId' does not exist on type 'PgTableWithColumns<{ name: "verse_tags"; schema: undefined; columns: { id: PgColumn<{ name: "id"; tableName: "verse_tags"; dataType: "string"; columnType: "PgText"; data: string; driverParam: string; notNull: true; hasDefault: false; ... 6 more ...; generated: undefined; }, {}, {}>; verseReference: PgColumn<...>; ta...'.
+server/storage.ts(422,33): error TS2345: Argument of type '{ id: string; book: string; chapter: number; verseNumber: number; text: string; embedding: null; } | { id: string; book: string; chapter: number; verseNumber: number; textKjv: string; textWeb: string; embedding: null; }' is not assignable to parameter of type 'Verse'.
+  Type '{ id: string; book: string; chapter: number; verseNumber: number; text: string; embedding: null; }' is not assignable to type 'Verse'.
+    Type '{ id: string; book: string; chapter: number; verseNumber: number; text: string; embedding: null; }' is missing the following properties from type '{ book: string; id: string; chapter: number; verseNumber: number; textKjv: string; textWeb: string; embedding: string | null; }': textKjv, textWeb
+server/storage.ts(656,11): error TS2322: Type '{ id: string; createdAt: Date; updatedAt: Date; highlightColor: string | null; book: string; chapter: number; userId: string; verse: number; content?: string | null | undefined; highlight?: boolean | ... 1 more ... | undefined; }' is not assignable to type '{ book: string; id: string; createdAt: Date; updatedAt: Date; chapter: number; userId: string; verse: number; content: string | null; highlight: boolean | null; highlightColor: string | null; }'.
+  Types of property 'content' are incompatible.
+    Type 'string | null | undefined' is not assignable to type 'string | null'.
+      Type 'undefined' is not assignable to type 'string | null'.
+server/anthropic.ts(75,38): error TS2339: Property 'content' does not exist on type 'ContentBlock'.
+  Property 'content' does not exist on type 'TextBlock'.
+server/anthropic.ts(177,32): error TS2339: Property 'content' does not exist on type 'ContentBlock'.
