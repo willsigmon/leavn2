@@ -8,11 +8,20 @@ export interface BibleBook {
   shortName?: string; // Optional short name for display
 }
 
+// Export a special structure that some existing code imports as BibleSection
+export interface BibleSection {
+  id: string;
+  name: string;
+  books: BibleBook[];
+}
+
 // Main bibleStructure object that's used by existing code
 export const bibleStructure = {
-  books: [] as BibleBook[], // Will be populated from bibleBooks
+  books: {} as Record<string, BibleBook>, // Map of bookId to book object
   oldTestament: [] as BibleBook[],
   newTestament: [] as BibleBook[],
+  bookOrder: [] as string[], // Array of book IDs in order
+  sections: [] as BibleSection[], // Sections for the table of contents
 };
 
 export const bibleBooks: BibleBook[] = [
@@ -158,3 +167,36 @@ export const oldTestamentBooks = getBooksByTestament('old');
 
 // New Testament books
 export const newTestamentBooks = getBooksByTestament('new');
+
+// Export a special structure that some existing code imports as BibleSection
+export interface BibleSection {
+  id: string;
+  name: string;
+  books: BibleBook[];
+}
+
+// Initialize the bibleStructure object
+// Create a book map for fast lookup
+bibleBooks.forEach(book => {
+  bibleStructure.books[book.id] = book;
+});
+
+// Set up bookOrder as an array of book IDs
+bibleStructure.bookOrder = bibleBooks.map(book => book.id);
+
+bibleStructure.oldTestament = oldTestamentBooks;
+bibleStructure.newTestament = newTestamentBooks;
+
+// Create sections for navigation
+bibleStructure.sections = [
+  {
+    id: 'old-testament',
+    name: 'Old Testament',
+    books: oldTestamentBooks
+  },
+  {
+    id: 'new-testament',
+    name: 'New Testament',
+    books: newTestamentBooks
+  }
+];
