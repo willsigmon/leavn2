@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ChevronRight, BookOpen, Info, ChevronLeft, ChevronUp, Settings } from 'lucide-react';
+import { ChevronRight, BookOpen, Info, ChevronLeft, ChevronUp, Settings, Sun, Moon } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
@@ -629,7 +629,22 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
           Previous Chapter
         </Button>
         
-        <span className="text-sm font-medium">Chapter {currentChapter} of {getTotalChapters('genesis')}</span>
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-medium">Chapter {currentChapter} of {getTotalChapters('genesis')}</span>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsDarkMode(!isDarkMode)}
+            className="rounded-full"
+            title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {isDarkMode ? (
+              <Sun className="h-5 w-5 text-yellow-300" />
+            ) : (
+              <Moon className="h-5 w-5 text-slate-700" />
+            )}
+          </Button>
+        </div>
         
         <Button 
           variant="outline" 
