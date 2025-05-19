@@ -1,0 +1,135 @@
+Below is a surgical “delta plan” that layers a high‑converting, Vision‑OS‑style landing page on top of the code that’s already in leavn2 (Vite + React + Tailwind). I’ve split it into three sections so you can move fast:
+
+Why each element matters — backed by current CRO data.
+
+Exactly what to change / add in your repo.
+
+Copy‑paste prompt for Replit Ghostwriter that assumes the existing file tree.
+
+1 Evidence‑backed checklist
+Landing‑page element	Why it stays on the list
+Single, distraction‑free hero (no top‑nav)	Removing global navigation doubled conversions in a 2025 VWO test 
+Website
+Human‑face or in‑app hero visual	A/B test for First Midwest Bank: photos lifted conversions by 47 % 
+Unbounce
+Short (< 15 words) headline + sub‑headline	Dense copy kills skimmers; shorter copy wins in multiple Unbounce studies (see above face test).
+One primary CTA above the fold	Pages with a single CTA outperform multi‑CTA pages (13.5 % vs 11.9 % conv.) 
+Keywords Everywhere
+Looping <30 s product demo video	Adding video lifts conversions 34 % on average 
+Unbounce
+3‑logo trust strip + micro‑testimonial	Quick social proof removes “is this legit?” friction.
+0‑2 s load budget	Each extra second drops CVR ~4.4 % (Portent) 
+Keywords Everywhere
+FAQ accordion (5–7 Qs)	Handles late‑stage objections without breaking flow.
+A/B hooks + PostHog analytics	You can’t improve what you can’t measure.
+
+2 Repo‑level changes (incremental)
+Files mentioned use paths relative to project root. If a file already exists, extend it; otherwise create it.
+
+Where	What to do
+client/src/pages/Landing.tsx	Create a new React component with:
+• Tailwind glass background (backdrop-blur bg-white/40 dark:bg-neutral-800/40)
+• Hero grid (headline / sub‑h / CTA left, autoplay‑muted video right)
+• SocialProofStrip component
+• Benefits3Up component
+• DemoSection (react‑player + framer‑motion)
+• FAQAccordion (Radix UI)
+• CTARepeat + footer
+client/src/routes.tsx (or wherever routes live)	Add <Route path="/" element={<Landing />} /> and move the current reader entry to "/app" so deep links stay intact.
+tailwind.config.ts	Extend theme: ```ts
+colors: {	
+brand: {	
+
+csharp
+Copy
+Edit
+50:'#F5F4F2',
+100:'#E8E5DF',
+300:'#D3C4A3',   // sand
+500:'#B9A37F',   // clay
+700:'#4E4736',   // deep earth
+accent:'#6FC3DF' // Leavn blue
+}
+}
+
+|
+Copy
+Edit
+|`client/src/components/CTAButton.tsx`|Extract primary button so you can A/B test copy via props (`data-ab="variantA"` etc.).|
+|`shared/analytics.ts`|Add PostHog snippet with `import posthog from 'posthog-js'` and guard for `process.env.POSTHOG_KEY`. Call `posthog.init(...)` in `App.tsx`.|
+|`server/routes/waitlist.ts`|(If not present) POST `/api/waitlist` → store email in Drizzle SQLite table `waitlist(email,text)`; return 200 JSON `{success:true}`.|
+|`client/src/api/index.ts`|Add `export const joinWaitlist = (email) => fetch('/api/waitlist',{method:'POST',body:JSON.stringify({email})})`.|
+|`public/media/landing-demo.mp4`|Create or drop a placeholder ≤ 700 KB.|
+|Performance tweaks|• `vite.config.ts` – enable `rollupOptions.output.manualChunks` to split vendor <br>• Add `<link rel="preload" as="video" href="/media/landing-demo.mp4">` in `index.html`.|
+|Testing hook|Add `npm run lighthouse` script with `lighthouse http://localhost:5173 --only-categories=performance,accessibility,best-practices,seo`.|
+
+---
+
+## 3 One‑shot Ghostwriter prompt
+
+> Paste this verbatim in Replit AI chat; it assumes the repo is already cloned/open.
+
+```md
+### SYSTEM
+Project context: existing Vite + React + Tailwind repo at /home/runner/leavn2.
+Goal: bolt on a high‑converting landing page (see SPEC) without breaking current /app reader.
+
+### SPEC
+1. **New route & component**
+   - Add Landing.tsx and wire it to path "/" via react‑router‑dom v6.
+   - Move current default reader path to "/app".
+
+2. **Design tokens**
+   - Import brand palette (see tailwind.config extension below).
+   - apply Vision‑OS glass: `backdrop-blur-md bg-white/40 dark:bg-neutral-800/40`.
+
+3. **Sections** (in order)
+   1. Header (logo only, no nav)
+   2. Hero grid
+      - h1: “Unlock context‑rich Bible study in seconds.”
+      - sub: “AI lenses reveal maps, traditions & kid‑friendly translations—instantly.”
+      - CTA button (primary accent) → opens ModalWaitlistForm.
+      - right: `<video src="/media/landing-demo.mp4" poster="/media/poster.jpg" ...>`
+   3. SocialProofStrip (three grayscale church logos)
+   4. Benefits3Up (icon+two‑line copy)
+   5. DemoSection (react‑player, framer‑motion captions)
+   6. FAQAccordion (5 items)
+   7. TrustRow (GDPR, SSL, “No ads” badges)
+   8. CTARepeat
+   9. Footer (©, privacy)
+
+4. **ModalWaitlistForm**
+   - email input + submit → `joinWaitlist()` helper (POST /api/waitlist).
+   - On success: replace form with success state.
+
+5. **Analytics & A/B**
+   - Create shared/analytics.ts using PostHog; call `init` in App.tsx.
+   - Wrap CTAButton with `data-ab="hero-cta"` for variant tests.
+
+6. **tailwind.config.ts add**
+   ```ts
+   theme: { extend: { colors: { brand:{...} } } }
+Performance
+
+Lazy‑load non‑critical components using React.lazy.
+
+Use vite-plugin-compress and vendor chunk splitting.
+
+Deliverables
+
+Updated files + new ones listed above.
+
+Keep git diffs atomic.
+
+OUTPUT
+Return the changed file tree AND full file contents. No prose.
+
+arduino
+Copy
+Edit
+
+Drop that in Ghostwriter; it will scaffold the landing page and wire everything up automatically. After it finishes, run:
+
+```bash
+npm i && npm run dev
+—then hit / for the marketing splash and /app for your existing reader. From there, Lighthouse should report ≥ 90, and you’ll have analytics + waitlist live.

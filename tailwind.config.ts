@@ -14,6 +14,15 @@ export default {
         "3xl": "2rem",
       },
       colors: {
+        brand: {
+          50: '#F5F4F2',
+          100: '#E8E5DF',
+          300: '#D3C4A3',   // sand
+          500: '#B9A37F',   // clay
+          700: '#4E4736',   // deep earth
+          900: '#2c2a21',   // darker earth
+          accent: '#6FC3DF' // Leavn blue
+        },
         surface: "rgba(255,255,255,.06)", // VisionOS glass tint
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
