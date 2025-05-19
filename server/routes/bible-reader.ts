@@ -81,7 +81,6 @@ router.get('/:book/:chapter', async (req: Request, res: Response) => {
         kjv: cachedVerse?.kjv || dbVerse.text,
         web: cachedVerse?.web || dbVerse.text,
         // Add user-specific data
-        isBookmarked: !!userNote?.isBookmarked,
         hasNote: !!userNote?.content,
         highlightColor: userNote?.highlightColor
       };

@@ -191,9 +191,8 @@ router.get('/:chapter', async (req: Request, res: Response) => {
           verse: i,
           number: i,
           text: webText || `Genesis ${chapterNum}:${i}`,
-          textKjv: kjvText || `Genesis ${chapterNum}:${i} (KJV)`,  
+          textKjv: kjvText || `Genesis ${chapterNum}:${i} (KJV)`,
           textWeb: webText || `Genesis ${chapterNum}:${i} (WEB)`,
-          isBookmarked: metadata.isBookmarked || false,
           hasNote: metadata.hasNote || false,
           tags: metadata.tags || {}
         });
