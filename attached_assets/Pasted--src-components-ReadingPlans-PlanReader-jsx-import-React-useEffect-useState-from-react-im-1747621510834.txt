@@ -1,0 +1,91 @@
+// src/components/ReadingPlans/PlanReader.jsx
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useReadingPlan } from '../../hooks/useReadingPlanContext';
+import BibleReader from '../BibleReader'; // Your existing Bible reader component
+import ContextualInsights from './ContextualInsights';
+
+const PlanReader = () => {
+  const { planId, dayId } = useParams();
+  const navigate = useNavigate();
+  const { state, dispatch } = useReadingPlan();
+  const { plans, activePlan } = state;
+  const [currentDay, setCurrentDay] = useState(null);
+  
+  useEffect(() => {
+    const plan = plans.find(p => p.id === planId);
+    if (plan) {
+      dispatch({ type: 'SET_ACTIVE_PLAN', payload: plan });
+      const day = plan.days.find(d => d.id === dayId) || plan.days[0];
+      setCurrentDay(day);
+    }
+  }, [planId, dayId, plans, dispatch]);
+  
+  if (!activePlan || !currentDay) return <div>Loading...</div>;
+  
+  const currentDayIndex = activePlan.days.findIndex(d => d.id === currentDay.id);
+  const hasPrevious = currentDayIndex > 0;
+  const hasNext = currentDayIndex < activePlan.days.length - 1;
+  
+  const goToPrevious = () => {
+    if (hasPrevious) {
+      const prevDay = activePlan.days[currentDayIndex - 1];
+      navigate(`/reading-plans/${planId}/${prevDay.id}`);
+    }
+  };
+  
+  const goToNext = () => {
+    if (hasNext) {
+      const nextDay = activePlan.days[currentDayIndex + 1];
+      navigate(`/reading-plans/${planId}/${nextDay.id}`);
+    }
+  };
+  
+  return (
+    <div className="plan-reader-container">
+      <div className="plan-navigation">
+        <h2>{activePlan.title} - Day {currentDayIndex + 1}: {currentDay.title}</h2>
+        <div className="nav-controls">
+          <button 
+            onClick={goToPrevious} 
+            disabled={!hasPrevious}
+          >
+            Previous Day
+          </button>
+          <button 
+            onClick={goToNext} 
+            disabled={!hasNext}
+          >
+            Next Day
+          </button>
+        </div>
+      </div>
+      
+      <div className="reading-content">
+        <BibleReader references={currentDay.passages} />
+      </div>
+      
+      <ContextualInsights
+        historicalContext={currentDay.historicalContext}
+        theologicalConcepts={currentDay.theologicalConcepts}
+        reflectionQuestions={currentDay.reflectionQuestions}
+        crossReferences={currentDay.crossReferences}
+      />
+      
+      <button 
+        className="mark-complete-button"
+        onClick={() => {
+          dispatch({
+            type: 'MARK_DAY_COMPLETE',
+            payload: { planId, dayId: currentDay.id }
+          });
+          if (hasNext) goToNext();
+        }}
+      >
+        Complete & Continue
+      </button>
+    </div>
+  );
+};
+
+export default PlanReader;

@@ -8,6 +8,7 @@ import Home from "@/pages/home";
 import Reader from "@/pages/reader";
 import ReadingPlans from "@/pages/reading-plans";
 import ReadingPlanDetail from "@/pages/reading-plan-detail";
+import PlanReader from "@/pages/plan-reader";
 import Login from "@/pages/login";
 import Profile from "@/pages/profile";
 import Settings from "@/pages/settings";
@@ -35,7 +36,8 @@ function Router() {
           <Route path="/reader/:book" component={Reader} />
           <Route path="/reader/:book/:chapter" component={Reader} />
           <Route path="/reading-plans" component={ReadingPlans} />
-          <Route path="/reading-plans/:id" component={ReadingPlanDetail} />
+          <Route path="/reading-plans/:planId" component={ReadingPlanDetail} />
+          <Route path="/reading-plans/:planId/:dayNumber" component={PlanReader} />
           <Route path="/login" component={Login} />
           <Route path="/profile" component={Profile} />
           <Route path="/settings" component={Settings} />
