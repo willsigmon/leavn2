@@ -557,6 +557,12 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
   // Use the formatted verses for rendering
   const renderedVerses = chapterData ? getFormattedVerses() : [];
   
+  // Apply reader settings to verse container style
+  const verseContainerStyle = {
+    fontSize: `${fontSize}px`,
+    lineHeight: lineSpacing.toString()
+  };
+  
   // Reader settings panel
   const SettingsPanel = () => (
     <div 
@@ -708,7 +714,7 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
       <Separator className="my-4" />
 
       {/* Verses */}
-      <div className="space-y-4 text-lg">
+      <div className="space-y-4" style={verseContainerStyle}>
         {renderedVerses.map((verse) => (
           <div key={verse.verse} className="group relative verse-container">
             <div className="flex">
@@ -717,12 +723,7 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
               </span>
               <div className="flex-1">
                 <TooltipProvider>
-                  <p className="verse-text" 
-                    style={{ 
-                      fontSize: `${fontSize}px`, 
-                      lineHeight: lineSpacing
-                    }}
-                  >
+                  <p className="verse-text">
                     {selectedTranslation === 'kjv' 
                       ? (verse.textKjv || verse.text)
                       : (verse.textWeb || verse.text)
