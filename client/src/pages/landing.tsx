@@ -43,10 +43,10 @@ const ModalWaitlistForm = ({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: 
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="sm:max-w-md backdrop-blur-md bg-white/70 dark:bg-neutral-800/70 border border-brand-100 dark:border-brand-700">
+      <DialogContent className="sm:max-w-md backdrop-blur-xl bg-white/50 dark:bg-neutral-800/40 border border-white/20 dark:border-neutral-700/30 shadow-xl rounded-xl">
         <DialogHeader>
-          <DialogTitle className="text-2xl">Join the Waitlist</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-2xl bg-gradient-to-r from-[#2c4c3b] to-[#3a6349] dark:from-[#3a6349] dark:to-[#4d7a5e] bg-clip-text text-transparent font-bold">Join the Waitlist</DialogTitle>
+          <DialogDescription className="text-slate-600 dark:text-slate-300">
             Get early access to Leavn and be the first to experience context-rich Bible study.
           </DialogDescription>
         </DialogHeader>
@@ -141,13 +141,20 @@ const Benefits3Up = () => {
   ];
 
   return (
-    <div className="py-16 bg-brand-50 dark:bg-transparent">
+    <div className="py-16 bg-gradient-to-b from-[#f0f4ed]/80 to-white dark:from-[#1a2920]/80 dark:to-transparent">
       <div className="container mx-auto">
+        <div className="text-center mb-12">
+          <div className="inline-block px-4 py-1 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b]/60 text-[#2c4c3b] dark:text-[#a5c2a5] text-sm font-semibold mb-4">
+            Key Features
+          </div>
+          <h2 className="text-3xl font-bold mb-4">Bible Study for <span className="bg-gradient-to-r from-[#2c4c3b] to-[#3a6349] dark:from-[#3a6349] dark:to-[#4d7a5e] bg-clip-text text-transparent">deeper understanding</span></h2>
+        </div>
+        
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {benefits.map((benefit, i) => (
-            <div key={i} className="text-center">
-              <div className="text-4xl mb-4">{benefit.icon}</div>
-              <h3 className="text-lg font-semibold mb-2">{benefit.title}</h3>
+            <div key={i} className="backdrop-blur-md bg-white/40 dark:bg-black/20 rounded-xl p-6 shadow-lg border border-white/20 dark:border-white/5 text-center hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
+              <div className="text-4xl mb-4 bg-[#e8efe5] dark:bg-[#2c4c3b]/60 w-16 h-16 rounded-full flex items-center justify-center mx-auto">{benefit.icon}</div>
+              <h3 className="text-lg font-semibold mb-2 text-[#2c4c3b] dark:text-[#a5c2a5]">{benefit.title}</h3>
               <p className="text-slate-600 dark:text-slate-300">{benefit.description}</p>
             </div>
           ))}
@@ -197,13 +204,22 @@ const DemoSection = () => {
 
 const FAQAccordion = () => {
   return (
-    <div className="py-16 bg-brand-50 dark:bg-transparent">
-      <div className="container mx-auto max-w-3xl">
-        <h2 className="text-3xl font-bold text-center mb-10">Frequently Asked Questions</h2>
+    <div className="py-16 bg-gradient-to-b from-white to-[#f0f4ed]/80 dark:from-transparent dark:to-[#1a2920]/50 relative overflow-hidden">
+      {/* Subtle animated background elements */}
+      <div className="absolute bottom-10 right-10 w-20 h-20 bg-[#c5d5bc] dark:bg-[#2c4c3b] rounded-full opacity-20 animate-float"></div>
+      <div className="absolute top-20 left-20 w-24 h-24 bg-[#d8e5d2] dark:bg-[#345841] rounded-full opacity-20 animate-float-reverse animation-delay-1000"></div>
+      
+      <div className="container mx-auto max-w-3xl relative z-10">
+        <div className="text-center mb-12">
+          <div className="inline-block px-4 py-1 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b]/60 text-[#2c4c3b] dark:text-[#a5c2a5] text-sm font-semibold mb-4">
+            Common Questions
+          </div>
+          <h2 className="text-3xl font-bold">Frequently Asked <span className="bg-gradient-to-r from-[#2c4c3b] to-[#3a6349] dark:from-[#3a6349] dark:to-[#4d7a5e] bg-clip-text text-transparent">Questions</span></h2>
+        </div>
         
-        <Accordion type="single" collapsible className="bg-white/60 dark:bg-neutral-800/60 backdrop-blur-md rounded-xl p-4">
-          <AccordionItem value="item-1" className="border-b border-slate-200 dark:border-slate-700">
-            <AccordionTrigger className="text-left text-lg font-medium py-4">
+        <Accordion type="single" collapsible className="backdrop-blur-xl bg-white/50 dark:bg-black/20 rounded-xl p-6 shadow-lg border border-white/20 dark:border-white/5">
+          <AccordionItem value="item-1" className="border-b border-slate-200/50 dark:border-slate-700/50">
+            <AccordionTrigger className="text-left text-lg font-medium py-4 text-[#2c4c3b] dark:text-[#a5c2a5]">
               What makes Leavn different from other Bible apps?
             </AccordionTrigger>
             <AccordionContent className="pb-4 text-slate-600 dark:text-slate-300">
@@ -211,8 +227,8 @@ const FAQAccordion = () => {
             </AccordionContent>
           </AccordionItem>
           
-          <AccordionItem value="item-2" className="border-b border-slate-200 dark:border-slate-700">
-            <AccordionTrigger className="text-left text-lg font-medium py-4">
+          <AccordionItem value="item-2" className="border-b border-slate-200/50 dark:border-slate-700/50">
+            <AccordionTrigger className="text-left text-lg font-medium py-4 text-[#2c4c3b] dark:text-[#a5c2a5]">
               Is Leavn suitable for children and families?
             </AccordionTrigger>
             <AccordionContent className="pb-4 text-slate-600 dark:text-slate-300">
@@ -220,8 +236,8 @@ const FAQAccordion = () => {
             </AccordionContent>
           </AccordionItem>
           
-          <AccordionItem value="item-3" className="border-b border-slate-200 dark:border-slate-700">
-            <AccordionTrigger className="text-left text-lg font-medium py-4">
+          <AccordionItem value="item-3" className="border-b border-slate-200/50 dark:border-slate-700/50">
+            <AccordionTrigger className="text-left text-lg font-medium py-4 text-[#2c4c3b] dark:text-[#a5c2a5]">
               How accurate are the theological perspectives?
             </AccordionTrigger>
             <AccordionContent className="pb-4 text-slate-600 dark:text-slate-300">
@@ -229,8 +245,8 @@ const FAQAccordion = () => {
             </AccordionContent>
           </AccordionItem>
           
-          <AccordionItem value="item-4" className="border-b border-slate-200 dark:border-slate-700">
-            <AccordionTrigger className="text-left text-lg font-medium py-4">
+          <AccordionItem value="item-4" className="border-b border-slate-200/50 dark:border-slate-700/50">
+            <AccordionTrigger className="text-left text-lg font-medium py-4 text-[#2c4c3b] dark:text-[#a5c2a5]">
               Does Leavn require an internet connection?
             </AccordionTrigger>
             <AccordionContent className="pb-4 text-slate-600 dark:text-slate-300">
@@ -239,7 +255,7 @@ const FAQAccordion = () => {
           </AccordionItem>
           
           <AccordionItem value="item-5" className="border-b-0">
-            <AccordionTrigger className="text-left text-lg font-medium py-4">
+            <AccordionTrigger className="text-left text-lg font-medium py-4 text-[#2c4c3b] dark:text-[#a5c2a5]">
               When will Leavn be available?
             </AccordionTrigger>
             <AccordionContent className="pb-4 text-slate-600 dark:text-slate-300">
@@ -254,28 +270,28 @@ const FAQAccordion = () => {
 
 const TrustRow = () => {
   return (
-    <div className="py-8 bg-white/60 dark:bg-neutral-900/60 backdrop-blur-sm">
+    <div className="py-8 backdrop-blur-lg bg-white/30 dark:bg-neutral-900/30 border-y border-white/20 dark:border-neutral-800/30">
       <div className="container mx-auto">
         <div className="flex flex-wrap justify-center items-center gap-8">
-          <div className="flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600" viewBox="0 0 20 20" fill="currentColor">
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/40 dark:bg-black/20 shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#2c4c3b] dark:text-[#a5c2a5]" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
-            <span className="text-sm">SSL Secure</span>
+            <span className="text-sm font-medium">SSL Secure</span>
           </div>
           
-          <div className="flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/40 dark:bg-black/20 shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#2c4c3b] dark:text-[#a5c2a5]" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
             </svg>
-            <span className="text-sm">GDPR Compliant</span>
+            <span className="text-sm font-medium">GDPR Compliant</span>
           </div>
           
-          <div className="flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-600" viewBox="0 0 20 20" fill="currentColor">
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/40 dark:bg-black/20 shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#2c4c3b] dark:text-[#a5c2a5]" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
             </svg>
-            <span className="text-sm">No Ads</span>
+            <span className="text-sm font-medium">No Ads</span>
           </div>
         </div>
       </div>
@@ -296,12 +312,20 @@ const Landing = () => {
       </header>
       
       {/* Hero section */}
-      <section className="flex-1 pt-8 pb-16">
-        <div className="container mx-auto">
+      <section className="flex-1 pt-8 pb-16 relative overflow-hidden">
+        {/* Subtle animated background elements */}
+        <div className="absolute top-12 left-12 w-24 h-24 bg-[#c5d5bc] dark:bg-[#2c4c3b] rounded-full opacity-20 animate-float"></div>
+        <div className="absolute bottom-20 right-20 w-32 h-32 bg-[#d8e5d2] dark:bg-[#345841] rounded-full opacity-30 animate-float animation-delay-2000"></div>
+        <div className="absolute top-1/4 right-10 w-16 h-16 bg-[#e8efe5] dark:bg-[#3b5045] rounded-full opacity-20 animate-float animation-delay-1000"></div>
+        
+        <div className="container mx-auto relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="text-center lg:text-left">
+              <div className="inline-block px-4 py-1 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b]/60 text-[#2c4c3b] dark:text-[#a5c2a5] text-sm font-semibold mb-4">
+                Spiritually Intelligent Bible Study
+              </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-                Unlock context-rich Bible study in seconds.
+                Unlock <span className="bg-gradient-to-r from-[#2c4c3b] to-[#3a6349] dark:from-[#3a6349] dark:to-[#4d7a5e] bg-clip-text text-transparent">context-rich</span> Bible study in seconds.
               </h1>
               <p className="text-xl mb-8 text-slate-600 dark:text-slate-300">
                 AI lenses reveal maps, traditions & kid-friendly translations—instantly.
@@ -309,28 +333,44 @@ const Landing = () => {
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Button 
                   size="lg" 
-                  className="bg-brand-accent hover:bg-brand-accent/90 text-white text-lg px-8 py-6 rounded-xl"
+                  className="bg-[#2c4c3b] hover:bg-[#223c2e] text-white text-lg px-8 py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
                   onClick={() => setIsWaitlistModalOpen(true)}
                   data-ab="hero-cta"
                 >
                   Join Waitlist
                 </Button>
-                <Link href="/app">
+                <Link href="/reader">
                   <Button 
                     variant="outline" 
                     size="lg" 
-                    className="text-lg px-8 py-6 rounded-xl"
+                    className="text-lg px-8 py-6 rounded-xl backdrop-blur-sm bg-white/10 dark:bg-white/5 border border-white/20 dark:border-white/10 shadow-md hover:shadow-lg transition-all duration-300"
                     data-ab="demo-cta"
                   >
                     Try Demo
                   </Button>
                 </Link>
               </div>
+              
+              {/* Feature badges */}
+              <div className="flex flex-wrap gap-3 md:gap-4 pt-6 justify-center sm:justify-start">
+                <div className="flex items-center text-sm text-slate-600 dark:text-slate-300">
+                  <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b]/60 flex items-center justify-center mr-2">
+                    <span className="text-[#2c4c3b] dark:text-[#a5c2a5] text-xs">✓</span>
+                  </div>
+                  <span className="whitespace-nowrap">Multiple translations</span>
+                </div>
+                <div className="flex items-center text-sm text-slate-600 dark:text-slate-300">
+                  <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-[#e8efe5] dark:bg-[#2c4c3b]/60 flex items-center justify-center mr-2">
+                    <span className="text-[#2c4c3b] dark:text-[#a5c2a5] text-xs">✓</span>
+                  </div>
+                  <span className="whitespace-nowrap">AI-powered insights</span>
+                </div>
+              </div>
             </div>
             
-            <div className="backdrop-blur-md bg-white/20 dark:bg-black/20 rounded-2xl overflow-hidden shadow-xl">
+            <div className="backdrop-blur-xl bg-white/30 dark:bg-black/20 rounded-2xl overflow-hidden shadow-2xl border border-white/20 dark:border-white/5">
               <video 
-                className="w-full h-full object-cover" 
+                className="w-full h-full object-cover rounded-xl" 
                 poster="/media/poster.jpg"
                 autoPlay
                 muted
