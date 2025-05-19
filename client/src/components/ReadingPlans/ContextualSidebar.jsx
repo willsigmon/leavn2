@@ -79,12 +79,12 @@ const ContextualSidebar = ({ day, onNavigateToVerse }) => {
   };
   
   return (
-    <div className="bg-white dark:bg-stone-950 rounded-lg border h-full overflow-hidden flex flex-col">
-      <div className="p-4 border-b">
-        <h3 className="font-semibold text-lg text-[#2c4c3b] dark:text-green-400">
+    <div className="glass rounded-2xl shadow-lg h-full overflow-hidden flex flex-col">
+      <div className="p-4">
+        <h3 className="font-semibold text-lg text-[#2c4c3b] dark:text-green-400 mb-1">
           Contextual Insights
         </h3>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
+        <p className="text-sm text-muted-foreground">
           Explore historical and theological context for this passage
         </p>
       </div>
@@ -95,14 +95,18 @@ const ContextualSidebar = ({ day, onNavigateToVerse }) => {
         onValueChange={setActiveTab}
         className="flex-1 flex flex-col"
       >
-        <TabsList className="grid w-full p-1 mb-0 border-b rounded-none" 
+        <TabsList className="glass mx-4 rounded-xl grid w-auto justify-center p-1 mb-2" 
           style={{ gridTemplateColumns: `repeat(${Math.min(tabs.length, 5)}, 1fr)` }}
         >
           {tabs.map(tab => (
             <TabsTrigger 
               key={tab.id} 
               value={tab.id}
-              className="flex items-center text-xs sm:text-sm"
+              className={`flex items-center text-xs sm:text-sm transition-transform ${
+                activeTab === tab.id 
+                  ? "ring-1 ring-white/20 scale-105" 
+                  : "hover:scale-105"
+              }`}
             >
               {tab.icon}
               <span className="hidden sm:inline">{tab.label}</span>
@@ -137,7 +141,7 @@ const ContextualSidebar = ({ day, onNavigateToVerse }) => {
                   {day.theologicalConcepts?.map((concept, index) => (
                     <div 
                       key={index}
-                      className="flex items-start p-2.5 bg-[#2c4c3b]/5 dark:bg-[#2c4c3b]/10 rounded-md hover:bg-[#2c4c3b]/10 dark:hover:bg-[#2c4c3b]/20 transition-colors"
+                      className="flex items-start p-3 glass rounded-xl hover:scale-[1.01] transition-all duration-200 cursor-default"
                     >
                       <Lightbulb className="h-4 w-4 text-[#2c4c3b] dark:text-green-300 mt-0.5 mr-2.5 flex-shrink-0" />
                       <span className="text-sm">{concept}</span>
