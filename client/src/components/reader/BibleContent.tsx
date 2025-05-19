@@ -257,11 +257,11 @@ export function BibleContent({
                   highlightColor={highlightColor || verse.highlightColor}
                   tags={tagsForVerse}
                   tagsClickable={tagsClickable}
+                  onTagClick={handleTagClick}
                   onNavigateToVerse={onNavigateToVerse}
                   onHighlight={handleHighlight}
                   onBookmark={handleBookmark}
                   onAddNote={handleAddNote}
-                  onTagClick={handleTagClick}
                 />
               </motion.div>
             );
