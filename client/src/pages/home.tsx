@@ -22,18 +22,23 @@ export default function Home() {
     <div className="flex flex-col">
       {/* Hero section */}
       <section className="py-20 px-4 md:px-0 bg-gradient-to-b from-[#f0f4ed] to-[#e8efe8] dark:from-[#1a3328] dark:to-[#1f3c37] relative overflow-hidden">
-        {/* Decorative elements with animations */}
-        <div className="absolute top-12 left-12 w-24 h-24 bg-[#c5d5bc] dark:bg-[#2c4c3b] rounded-lg opacity-20 rotate-12 animate-float"></div>
+        {/* Decorative circles with fluid animations */}
+        <div className="absolute top-12 left-12 w-24 h-24 bg-[#c5d5bc] dark:bg-[#2c4c3b] rounded-full opacity-20 animate-float"></div>
         <div className="absolute bottom-20 right-20 w-32 h-32 bg-[#d8e5d2] dark:bg-[#345841] rounded-full opacity-30 animate-float animation-delay-2000"></div>
-        <div className="absolute top-1/4 right-10 w-16 h-16 bg-[#e8efe5] dark:bg-[#3b5045] rounded-lg opacity-20 -rotate-12 animate-float animation-delay-1000"></div>
+        <div className="absolute top-1/4 right-10 w-16 h-16 bg-[#e8efe5] dark:bg-[#3b5045] rounded-full opacity-20 animate-float animation-delay-1000"></div>
         <div className="absolute bottom-32 left-20 w-20 h-20 bg-[#e8efe5] dark:bg-[#2c4c3b] rounded-full opacity-30 animate-pulse animation-delay-3000"></div>
         
-        {/* Additional circles with different sizes, shapes and animations */}
-        <div className="absolute top-40 left-1/4 w-14 h-14 bg-[#e8efe5] dark:bg-[#2c4c3b] rounded-full opacity-15 animate-float animation-delay-2500"></div>
-        <div className="absolute bottom-16 left-1/3 w-10 h-10 bg-[#a5c2a5] dark:bg-[#345841] rounded-full opacity-20 animate-pulse animation-delay-500"></div>
-        <div className="absolute top-1/3 right-1/4 w-16 h-16 bg-[#d8e5d2] dark:bg-[#3b5045] rounded-full opacity-25 animate-float animation-delay-3500"></div>
+        {/* Additional animated circles with different sizes and dance-like movement */}
+        <div className="absolute top-40 left-1/4 w-14 h-14 bg-[#e8efe5] dark:bg-[#2c4c3b] rounded-full opacity-15 animate-bounce-slow animation-delay-2500"></div>
+        <div className="absolute bottom-16 left-1/3 w-10 h-10 bg-[#a5c2a5] dark:bg-[#345841] rounded-full opacity-20 animate-bounce-subtle animation-delay-500"></div>
+        <div className="absolute top-1/3 right-1/4 w-16 h-16 bg-[#d8e5d2] dark:bg-[#3b5045] rounded-full opacity-25 animate-float-reverse animation-delay-3500"></div>
         <div className="absolute bottom-40 right-1/3 w-12 h-12 bg-[#e8efe5] dark:bg-[#2c4c3b] rounded-full opacity-20 animate-pulse animation-delay-1500"></div>
-        <div className="absolute top-16 right-1/2 w-8 h-8 bg-[#d8e5d2] dark:bg-[#345841] rounded-full opacity-15 animate-float animation-delay-4000"></div>
+        <div className="absolute top-16 right-1/2 w-8 h-8 bg-[#d8e5d2] dark:bg-[#345841] rounded-full opacity-15 animate-spin-slow animation-delay-4000"></div>
+        
+        {/* Adding more dancing circles */}
+        <div className="absolute top-1/2 left-10 w-18 h-18 bg-[#c5d5bc] dark:bg-[#2c4c3b] rounded-full opacity-25 animate-float-reverse animation-delay-1200"></div>
+        <div className="absolute bottom-14 right-1/4 w-14 h-14 bg-[#a5c2a5] dark:bg-[#345841] rounded-full opacity-20 animate-bounce-slow animation-delay-2400"></div>
+        <div className="absolute top-24 right-1/3 w-6 h-6 bg-[#e8efe5] dark:bg-[#3b5045] rounded-full opacity-15 animate-pulse animation-delay-3200"></div>
         
         <div className="container mx-auto max-w-5xl relative z-10">
           <div className="flex flex-col lg:flex-row gap-8 md:gap-12 items-center">
