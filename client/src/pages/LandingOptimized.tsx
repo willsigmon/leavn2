@@ -3,6 +3,7 @@ import { Link } from 'wouter';
 import { CTAButton } from '@/components/CTAButton';
 import { WaitlistModal } from '@/components/WaitlistModal';
 import { Play } from 'lucide-react';
+import Footer from '@/components/layout/Footer';
 const Benefits = React.lazy(() => import('@/components/Benefits3Up'));
 const FAQ = React.lazy(() => import('@/components/FAQAccordion'));
 
@@ -116,6 +117,9 @@ export default function LandingOptimized() {
       </section>
 
       <WaitlistModal open={open} onClose={() => setOpen(false)} />
+      
+      {/* Footer */}
+      <Footer />
     </main>
   );
 }
