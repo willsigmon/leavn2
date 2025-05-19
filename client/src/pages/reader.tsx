@@ -544,13 +544,13 @@ export default function Reader() {
         {/* Main reading area */}
         <main className="flex-1 overflow-auto bg-stone-100 dark:bg-stone-950 relative">
           {/* Chapter navigation with theological lens selector */}
-          <div className="sticky top-0 z-10 glass shadow-md border-b border-white/10 p-2">
+          <div className="sticky top-0 z-10 glass shadow-md border-b border-black/10 dark:border-white/10 p-2 backdrop-blur-md bg-white/60 dark:bg-black/60">
             <div className="flex justify-between items-center mb-2">
               <div className="flex gap-1">
                 <Button 
                   variant="ghost" 
                   size="sm"
-                  className="glass hover:scale-105 transition-transform"
+                  className="glass hover:scale-105 transition-transform text-black dark:text-white"
                   onClick={() => {
                     const prev = getPrevChapter();
                     handleNavigate(prev.book, prev.chapter);
@@ -561,7 +561,7 @@ export default function Reader() {
                 </Button>
               </div>
               
-              <div className="text-center font-medium">
+              <div className="text-center font-medium text-black dark:text-white">
                 {book} {chapter}
               </div>
               
@@ -569,7 +569,7 @@ export default function Reader() {
                 <Button 
                   variant="ghost" 
                   size="sm"
-                  className="glass hover:scale-105 transition-transform"
+                  className="glass hover:scale-105 transition-transform text-black dark:text-white"
                   onClick={() => {
                     const next = getNextChapter();
                     handleNavigate(next.book, next.chapter);
@@ -582,7 +582,7 @@ export default function Reader() {
             </div>
             
             {/* Theological Lens Selector */}
-            <div className="flex items-center justify-center gap-2 text-xs">
+            <div className="flex items-center justify-center gap-2 text-xs text-black dark:text-white">
               <span className="font-medium">Theological Lens:</span>
               <div className="flex flex-wrap justify-center gap-1">
                 {theologicalLenses.map(lens => (
@@ -593,7 +593,7 @@ export default function Reader() {
                     className={`px-2 py-0 h-7 text-xs glass backdrop-blur-sm hover:scale-105 transition-transform ${
                       selectedTheologicalLens === lens.id 
                         ? "bg-[#2c4c3b] text-white" 
-                        : "hover:bg-[#2c4c3b]/10"
+                        : "text-black dark:text-white hover:bg-[#2c4c3b]/10"
                     }`}
                     onClick={() => setSelectedTheologicalLens(lens.id)}
                   >
