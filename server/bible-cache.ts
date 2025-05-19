@@ -195,8 +195,6 @@ export async function saveTagsToDatabase(reference: string, verseTags: VerseTags
           const [newTag] = await db.insert(tags).values({
             name: tagName,
             category: category.name,
-            title: tagName,
-            description: `${tagName} (${category.name})`,
           }).returning();
           
           existingTag = newTag;
@@ -208,7 +206,7 @@ export async function saveTagsToDatabase(reference: string, verseTags: VerseTags
           .from(verseTags)
           .where(
             and(
-              eq(verseTags.verseId, verse.id),
+              eq(verseTags.verseReference, verse.id),
               eq(verseTags.tagId, existingTag.id)
             )
           );
@@ -216,7 +214,7 @@ export async function saveTagsToDatabase(reference: string, verseTags: VerseTags
         // If relationship doesn't exist, create it
         if (!existingVerseTag) {
           await db.insert(verseTags).values({
-            verseId: verse.id,
+            verseReference: verse.id,
             tagId: existingTag.id,
           });
         }
@@ -230,7 +228,7 @@ export async function saveTagsToDatabase(reference: string, verseTags: VerseTags
 }
 
 // Get random featured tags for a verse
-export async function getFeaturedTagsForVerse(verseId: string, count: number = 3): Promise<string[]> {
+export async function getFeaturedTagsForVerse(verseReference: string, count: number = 3): Promise<string[]> {
   try {
     // Get all tags for this verse
     const verseTags = await db
@@ -239,7 +237,7 @@ export async function getFeaturedTagsForVerse(verseId: string, count: number = 3
       })
       .from(verseTags)
       .innerJoin(tags, eq(verseTags.tagId, tags.id))
-      .where(eq(verseTags.verseId, verseId));
+      .where(eq(verseTags.verseReference, verseReference));
     
     // If we have more tags than requested count, randomly select some
     if (verseTags.length > count) {
@@ -264,13 +262,13 @@ export async function findVersesByTag(tagName: string, limit: number = 10): Prom
     
     const relatedVerses = await db
       .select({
-        verseId: verseTags.verseId,
+        verseReference: verseTags.verseReference,
       })
       .from(verseTags)
       .where(eq(verseTags.tagId, tag.id))
       .limit(limit);
-    
-    return relatedVerses.map(v => v.verseId);
+
+    return relatedVerses.map(v => v.verseReference);
   } catch (error) {
     console.error('Error finding verses by tag:', error);
     return [];
@@ -278,7 +276,7 @@ export async function findVersesByTag(tagName: string, limit: number = 10): Prom
 }
 
 // Search for related verses based on common tags
-export async function findRelatedVerses(verseId: string, limit: number = 5): Promise<string[]> {
+export async function findRelatedVerses(verseReference: string, limit: number = 5): Promise<string[]> {
   try {
     // Get all tags for this verse
     const vTags = await db
@@ -286,7 +284,7 @@ export async function findRelatedVerses(verseId: string, limit: number = 5): Pro
         tagId: verseTags.tagId,
       })
       .from(verseTags)
-      .where(eq(verseTags.verseId, verseId));
+      .where(eq(verseTags.verseReference, verseReference));
     
     if (vTags.length === 0) return [];
     
@@ -295,7 +293,7 @@ export async function findRelatedVerses(verseId: string, limit: number = 5): Pro
     // Find verses that share these tags but aren't the source verse
     const relatedVerses = await db
       .select({
-        verseId: verseTags.verseId,
+        verseReference: verseTags.verseReference,
         // Count how many matching tags each verse has
         count: () => {
           return { name: "tag_count" };
@@ -306,14 +304,14 @@ export async function findRelatedVerses(verseId: string, limit: number = 5): Pro
         // Match any of the tags
         verseTags.tagId.in(tagIds),
         // But not the original verse
-        eq(verseTags.verseId, verseId).not(),
+        eq(verseTags.verseReference, verseReference).not(),
       )
-      .groupBy(verseTags.verseId)
+      .groupBy(verseTags.verseReference)
       // Sort by number of matching tags (descending)
       .orderBy({ tag_count: 'desc' })
       .limit(limit);
     
-    return relatedVerses.map(v => v.verseId);
+    return relatedVerses.map(v => v.verseReference);
   } catch (error) {
     console.error('Error finding related verses:', error);
     return [];
