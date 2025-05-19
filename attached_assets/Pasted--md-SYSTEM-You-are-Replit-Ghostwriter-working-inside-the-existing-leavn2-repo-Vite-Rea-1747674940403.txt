@@ -1,0 +1,225 @@
+````md
+### SYSTEM
+You are Replit Ghostwriter working inside the existing **leavn2** repo (Vite + React + Tailwind).  
+Goal → tighten the landing page for faster LCP, better visual balance, and stronger CTA focus—all without touching the `/app` reader.
+
+---
+
+### SPEC - incremental “delta” changes
+
+#### 1 `client/src/pages/Landing.tsx`
+```tsx
+/* 1️⃣  Replace the existing <Landing> component with the code below  */
+import React, { useState, Suspense } from 'react';
+import { CTAButton } from '@/components/CTAButton';
+import { WaitlistModal } from '@/components/WaitlistModal';
+import { Play } from 'lucide-react';
+const Benefits = React.lazy(() => import('@/components/Benefits3Up'));
+const FAQ = React.lazy(() => import('@/components/FAQAccordion'));
+
+export default function Landing() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <main className="section mx-auto max-w-7xl px-4">
+      {/* Hero */}
+      <section className="grid lg:grid-cols-2 gap-10 items-center py-16">
+        <div>
+          <span className="inline-block rounded-full bg-brand-100 px-3 py-1 text-xs font-medium text-brand-700">
+            AI-guided insights
+          </span>
+          <h1 className="mt-6 text-4xl/tight font-semibold text-brand-700 sm:text-5xl">
+            Unlock <span className="text-accent">context-rich</span> Bible
+            study&nbsp;in&nbsp;seconds.
+          </h1>
+          <p className="mt-4 max-w-md text-base text-brand-600">
+            AI lenses reveal maps, traditions &amp; kid-friendly translations—instantly.
+          </p>
+          <div className="mt-8 flex items-center gap-4">
+            <CTAButton onClick={() => setOpen(true)}>Join waitlist</CTAButton>
+            <CTAButton variant="ghost" size="sm" icon={Play}>
+              Watch 30-sec demo
+            </CTAButton>
+          </div>
+
+          {/* Social proof */}
+          <div className="mt-8 flex items-center gap-6 grayscale hover:grayscale-0 transition">
+            {['/logos/church1.svg', '/logos/church2.svg', '/logos/church3.svg'].map(src => (
+              <img key={src} src={src} alt="Church logo" className="h-6 w-auto" />
+            ))}
+          </div>
+        </div>
+
+        {/* Hero video */}
+        <div className="relative">
+          <video
+            className="aspect-video w-full rounded-3xl shadow-lg opacity-0 transition-opacity duration-300"
+            src="/media/landing-demo.mp4"
+            poster="/media/poster.jpg"
+            autoPlay
+            muted
+            loop
+            playsInline
+            onLoadedData={e => e.currentTarget.classList.remove('opacity-0')}
+          />
+        </div>
+      </section>
+
+      {/* Benefits */}
+      <Suspense fallback={null}>
+        <Benefits />
+      </Suspense>
+
+      {/* Demo */}
+      <section className="section">
+        <h2 className="text-center text-2xl font-semibold text-brand-700">See Leavn in Action</h2>
+        <div className="mx-auto mt-8 max-w-4xl overflow-hidden rounded-3xl shadow-lg">
+          <video
+            className="w-full"
+            src="/media/landing-demo.mp4"
+            poster="/media/poster.jpg"
+            controls
+            preload="none"
+          />
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <Suspense fallback={null}>
+        <FAQ />
+      </Suspense>
+
+      {/* CTA repeat */}
+      <section className="section text-center">
+        <h3 className="text-xl font-medium text-white">Ready to transform your Bible study?</h3>
+        <p className="mt-2 text-brand-100">
+          Join thousands of believers experiencing scripture in a whole new way.
+        </p>
+        <CTAButton className="mt-6" onClick={() => setOpen(true)}>
+          Join waitlist
+        </CTAButton>
+      </section>
+
+      <WaitlistModal open={open} onClose={() => setOpen(false)} />
+    </main>
+  );
+}
+````
+
+#### 2 `client/src/components/CTAButton.tsx`
+
+```tsx
+/* 2️⃣  Extend variants */
+export function CTAButton({
+  children,
+  variant = 'primary',
+  size = 'base',
+  icon: Icon,
+  ...props
+}: {
+  children: React.ReactNode;
+  variant?: 'primary' | 'ghost';
+  size?: 'base' | 'sm';
+  icon?: LucideIcon;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>) {
+  const classes = clsx(
+    'inline-flex items-center justify-center rounded-full font-medium transition focus-visible:ring-2',
+    {
+      primary: 'bg-accent text-white hover:bg-accent/90 px-6 py-3',
+      ghost:
+        'bg-transparent text-brand-700 hover:bg-brand-100/40 border border-brand-200 px-4 py-2',
+    }[variant],
+    {
+      base: 'text-sm', // default
+      sm: 'text-xs',
+    }[size]
+  );
+  return (
+    <button {...props} className={classes}>
+      {Icon && <Icon className="mr-2 h-4 w-4" />} {children}
+    </button>
+  );
+}
+```
+
+#### 3 `tailwind.config.ts`
+
+```ts
+/* 3️⃣  Add brand palette + slow pulse */
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        brand: {
+          50:  '#F5F4F2',
+          100: '#E8E5DF',
+          300: '#D3C4A3',
+          500: '#B9A37F',
+          600: '#8A7755',
+          700: '#4E4736',
+          accent: '#6FC3DF',
+        },
+      },
+      animation: {
+        slow: 'pulse 8s ease-in-out infinite',
+      },
+    },
+  },
+};
+```
+
+#### 4 `client/src/components/Section.tsx` (optional helper)
+
+```tsx
+export function Section({ children, className = '' }: React.PropsWithChildren<{ className?: string }>) {
+  return <section className={`section py-14 lg:py-20 ${className}`}>{children}</section>;
+}
+```
+
+#### 5 Global CSS (`index.css`)
+
+```css
+/* 5️⃣  Subtle circles – lighter opacity */
+.bg-circle {
+  @apply absolute rounded-full bg-accent opacity-5 animate-slow;
+}
+```
+
+#### 6 `vite.config.ts`
+
+```ts
+/* 6️⃣  Vendor chunk splitting + compression */
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import compress from 'vite-plugin-compress';
+
+export default defineConfig({
+  plugins: [react(), compress()],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: id => (id.includes('node_modules') ? 'vendor' : undefined),
+      },
+    },
+  },
+});
+```
+
+#### 7 Performance & A/B
+
+* Add `link rel="preload" as="video" href="/media/landing-demo.mp4">` to `index.html`.
+* Wrap CTA buttons with `data-ab="hero-cta"` (already in component).
+
+---
+
+### DELIVERABLES
+
+* The **updated files above** plus any new media assets (`public/media/landing-demo.mp4`, ≤ 700 KB).
+* All code must compile with `npm run dev` and Lighthouse mobile score ≥ 95.
+
+### OUTPUT
+
+Return ONLY the full contents of every file that changed or was added.
+
+```
+```

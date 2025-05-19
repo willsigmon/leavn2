@@ -135,6 +135,7 @@ export default {
         "pulse-slow": "pulse-slow 5s ease-in-out infinite",
         "subtle-scroll": "subtle-scroll 20s linear infinite",
         "fade-in": "fade-in 0.8s ease-out forwards",
+        "slow": "pulse 8s ease-in-out infinite",
       },
     },
   },
