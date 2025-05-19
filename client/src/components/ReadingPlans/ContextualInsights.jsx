@@ -81,7 +81,7 @@ const ContextualInsights = ({ passage, onNavigateToVerse }) => {
   
   if (isLoading) {
     return (
-      <Card className="h-full">
+      <Card className="h-full glass shadow-lg">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg font-semibold text-[#2c4c3b] dark:text-green-400">
             Contextual Insights
@@ -99,7 +99,7 @@ const ContextualInsights = ({ passage, onNavigateToVerse }) => {
   
   if (!insights) {
     return (
-      <Card className="h-full">
+      <Card className="h-full glass shadow-lg">
         <CardHeader>
           <CardTitle className="text-lg font-semibold text-[#2c4c3b] dark:text-green-400">
             Contextual Insights

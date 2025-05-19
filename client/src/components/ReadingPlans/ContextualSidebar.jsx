@@ -156,11 +156,11 @@ const ContextualSidebar = ({ day, onNavigateToVerse }) => {
                 <h4 className="text-sm font-medium mb-3">Application Points</h4>
                 <div className="space-y-3">
                   {day.applicationPoints?.map((point, index) => (
-                    <div key={index} className="flex gap-2">
-                      <div className="h-6 w-6 rounded-full bg-[#2c4c3b]/10 dark:bg-[#2c4c3b]/30 flex items-center justify-center text-sm text-[#2c4c3b] dark:text-green-300 font-medium flex-shrink-0">
+                    <div key={index} className="flex gap-3 p-3 glass rounded-xl hover:scale-[1.01] transition-all duration-200">
+                      <div className="h-6 w-6 rounded-full bg-surface/80 backdrop-blur-sm flex items-center justify-center text-xs font-medium flex-shrink-0 border border-white/10">
                         {index + 1}
                       </div>
-                      <p className="text-sm text-gray-800 dark:text-gray-200">
+                      <p className="text-sm">
                         {point}
                       </p>
                     </div>
@@ -174,19 +174,19 @@ const ContextualSidebar = ({ day, onNavigateToVerse }) => {
                 <h4 className="text-sm font-medium mb-3">Reflection Questions</h4>
                 <div className="space-y-6">
                   {day.reflectionQuestions?.map((question, index) => (
-                    <div key={index} className="space-y-2">
-                      <div className="flex gap-2">
-                        <div className="h-6 w-6 rounded-full bg-[#2c4c3b]/10 dark:bg-[#2c4c3b]/30 flex items-center justify-center text-sm text-[#2c4c3b] dark:text-green-300 font-medium flex-shrink-0">
+                    <div key={index} className="glass rounded-xl p-4 space-y-4 hover:shadow-xl transition-all duration-300">
+                      <div className="flex items-start gap-3">
+                        <div className="h-6 w-6 rounded-full bg-surface/80 backdrop-blur-sm flex items-center justify-center text-xs font-medium flex-shrink-0 border border-white/10">
                           {index + 1}
                         </div>
-                        <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">
+                        <p className="text-sm font-medium">
                           {question}
                         </p>
                       </div>
-                      <div className="pl-8">
+                      <div>
                         <textarea 
                           placeholder="Your thoughts..."
-                          className="w-full p-2.5 text-sm border rounded-md bg-white dark:bg-stone-800 focus:ring-2 focus:ring-[#2c4c3b] dark:focus:ring-green-500 focus:outline-none resize-none min-h-[80px]"
+                          className="w-full p-3 text-sm glass rounded-xl border-none focus:ring-1 focus:ring-white/30 focus:outline-none resize-none min-h-[80px] placeholder-white/50"
                         />
                       </div>
                     </div>
@@ -198,13 +198,13 @@ const ContextualSidebar = ({ day, onNavigateToVerse }) => {
             {tab.id === 'references' && (
               <div>
                 <h4 className="text-sm font-medium mb-3">Cross References</h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {day.crossReferences?.map((reference, index) => (
                     <Button 
                       key={index}
                       variant="outline"
                       size="sm"
-                      className="justify-start font-normal text-left"
+                      className="glass justify-start font-normal text-left hover:scale-[1.02] transition-transform duration-200"
                       onClick={() => handleReferenceClick(reference)}
                     >
                       <BookOpen className="h-3.5 w-3.5 mr-2 text-[#2c4c3b] dark:text-green-300" />
