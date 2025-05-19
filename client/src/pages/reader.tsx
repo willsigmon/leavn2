@@ -559,17 +559,22 @@ export default function Reader() {
           
           {/* Bible content */}
           <div className={`p-4 md:p-6 lg:p-8 w-full ${paperTexture ? 'paper-texture' : ''}`}>
-            {book.toLowerCase() === 'genesis' ? (
-              <GenesisReader chapter={chapter} />
-            ) : (
-              <BibleContent
-                book={book}
-                bookName={book}
-                chapter={chapter}
-                viewMode={viewMode}
-                onNavigateToVerse={handleNavigateToVerse}
-              />
-            )}
+            <div className="glass rounded-3xl p-6 md:p-8 shadow-xl backdrop-blur-xl hover:backdrop-blur-2xl transition-all duration-300 animate-fade-in group">
+              <div className="relative">
+                <div className="absolute -inset-1 bg-gradient-to-r from-[#2c4c3b]/20 to-transparent rounded-3xl blur opacity-25 group-hover:opacity-40 transition-opacity duration-300"></div>
+                {book.toLowerCase() === 'genesis' ? (
+                  <GenesisReader chapter={chapter} />
+                ) : (
+                  <BibleContent
+                    book={book}
+                    bookName={book}
+                    chapter={chapter}
+                    viewMode={viewMode}
+                    onNavigateToVerse={handleNavigateToVerse}
+                  />
+                )}
+              </div>
+            </div>
           </div>
         </main>
       </div>
