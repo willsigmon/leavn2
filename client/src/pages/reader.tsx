@@ -286,11 +286,41 @@ export default function Reader() {
             }
           </div>
 
-          <Tabs defaultValue="toc" value={sidebarTab} onValueChange={setSidebarTab}>
-            <TabsList className={`w-full ${sidebarCollapsed ? 'hidden' : 'grid grid-cols-3'}`}>
-              <TabsTrigger value="toc" className="flex-1">Contents</TabsTrigger>
-              <TabsTrigger value="concepts" className="flex-1">Concepts</TabsTrigger>
-              <TabsTrigger value="settings" className="flex-1">Settings</TabsTrigger>
+          <Tabs defaultValue="toc" value={sidebarTab} onValueChange={setSidebarTab} className="flex flex-col h-full overflow-hidden">
+            <TabsList className={`glass m-4 rounded-xl justify-center ${sidebarCollapsed ? 'hidden' : 'flex flex-wrap gap-1'}`}>
+              <TabsTrigger 
+                value="toc" 
+                className={`text-xs sm:text-sm transition-transform whitespace-nowrap ${
+                  sidebarTab === 'toc' 
+                    ? "ring-1 ring-white/20 scale-105" 
+                    : "hover:scale-105"
+                }`}
+              >
+                <BookOpen className="h-4 w-4 mr-1 sm:mr-2" />
+                <span>Contents</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="concepts" 
+                className={`text-xs sm:text-sm transition-transform whitespace-nowrap ${
+                  sidebarTab === 'concepts' 
+                    ? "ring-1 ring-white/20 scale-105" 
+                    : "hover:scale-105"
+                }`}
+              >
+                <Lightbulb className="h-4 w-4 mr-1 sm:mr-2" />
+                <span>Concepts</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="settings"
+                className={`text-xs sm:text-sm transition-transform whitespace-nowrap ${
+                  sidebarTab === 'settings' 
+                    ? "ring-1 ring-white/20 scale-105" 
+                    : "hover:scale-105"
+                }`}
+              >
+                <Settings className="h-4 w-4 mr-1 sm:mr-2" />
+                <span>Settings</span>
+              </TabsTrigger>
             </TabsList>
             
             {/* Collapsed sidebar mini-navigation */}
@@ -323,54 +353,56 @@ export default function Reader() {
               </div>
             )}
             
-            <TabsContent value="toc" className="p-4">
-              <Accordion type="multiple" defaultValue={["old-testament"]} className="w-full">
-                <AccordionItem value="old-testament" className="border-b border-white/10">
-                  <AccordionTrigger className="hover:no-underline">
-                    <span className="font-semibold">Old Testament</span>
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-1.5 mt-2">
-                      {bibleStructure.bookOrder.slice(0, 39).map(bookName => (
-                        <Button
-                          key={bookName}
-                          variant={book === bookName ? "default" : "ghost"}
-                          size="sm"
-                          className={`w-full justify-start glass hover:scale-[1.01] transition-transform ${
-                            book === bookName ? "ring-1 ring-white/20" : ""
-                          }`}
-                          onClick={() => handleNavigate(bookName, 1)}
-                        >
-                          {bookName}
-                        </Button>
-                      ))}
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-                
-                <AccordionItem value="new-testament" className="border-b border-white/10">
-                  <AccordionTrigger className="hover:no-underline">
-                    <span className="font-semibold">New Testament</span>
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-1.5 mt-2">
-                      {bibleStructure.bookOrder.slice(39).map(bookName => (
-                        <Button
-                          key={bookName}
-                          variant={book === bookName ? "default" : "ghost"}
-                          size="sm"
-                          className={`w-full justify-start glass hover:scale-[1.01] transition-transform ${
-                            book === bookName ? "ring-1 ring-white/20" : ""
-                          }`}
-                          onClick={() => handleNavigate(bookName, 1)}
-                        >
-                          {bookName}
-                        </Button>
-                      ))}
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
+            <TabsContent value="toc" className="flex-1 overflow-y-auto px-4 pb-4">
+              <div className="glass rounded-xl p-4 mb-2 hover:shadow-xl transition-shadow">
+                <Accordion type="multiple" defaultValue={["old-testament"]} className="w-full">
+                  <AccordionItem value="old-testament" className="border-b border-white/10">
+                    <AccordionTrigger className="hover:no-underline transition-all duration-200 hover:opacity-80">
+                      <span className="font-semibold">Old Testament</span>
+                    </AccordionTrigger>
+                    <AccordionContent className="transition-all animate-accordion-down">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 xs:grid-cols-1 gap-1.5 mt-2">
+                        {bibleStructure.bookOrder.slice(0, 39).map(bookName => (
+                          <Button
+                            key={bookName}
+                            variant={book === bookName ? "default" : "ghost"}
+                            size="sm"
+                            className={`w-full justify-start glass hover:scale-[1.01] transition-transform text-xs ${
+                              book === bookName ? "ring-1 ring-white/20" : ""
+                            }`}
+                            onClick={() => handleNavigate(bookName, 1)}
+                          >
+                            {bookName}
+                          </Button>
+                        ))}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                  
+                  <AccordionItem value="new-testament" className="border-b border-white/10">
+                    <AccordionTrigger className="hover:no-underline transition-all duration-200 hover:opacity-80">
+                      <span className="font-semibold">New Testament</span>
+                    </AccordionTrigger>
+                    <AccordionContent className="transition-all animate-accordion-down">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 xs:grid-cols-1 gap-1.5 mt-2">
+                        {bibleStructure.bookOrder.slice(39).map(bookName => (
+                          <Button
+                            key={bookName}
+                            variant={book === bookName ? "default" : "ghost"}
+                            size="sm"
+                            className={`w-full justify-start glass hover:scale-[1.01] transition-transform text-xs ${
+                              book === bookName ? "ring-1 ring-white/20" : ""
+                            }`}
+                            onClick={() => handleNavigate(bookName, 1)}
+                          >
+                            {bookName}
+                          </Button>
+                        ))}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </div>
             </TabsContent>
             
             <TabsContent value="concepts" className="p-0 m-0 border-0 h-full">
@@ -405,62 +437,82 @@ export default function Reader() {
               />
             </TabsContent>
             
-            <TabsContent value="settings" className="p-4">
-              <div className="space-y-4">
-                <div>
-                  <h3 className="font-semibold mb-2">View Mode</h3>
-                  <div className="space-y-1">
-                    <Button
-                      variant={viewMode === 'standard' ? "default" : "outline"}
-                      size="sm"
-                      className="w-full justify-start"
-                      onClick={() => handleViewModeChange('standard')}
-                    >
-                      Standard
-                    </Button>
-                    <Button
-                      variant={viewMode === 'genz' ? "default" : "outline"}
-                      size="sm"
-                      className="w-full justify-start"
-                      onClick={() => handleViewModeChange('genz')}
-                    >
-                      Gen-Z Version
-                    </Button>
-                    <Button
-                      variant={viewMode === 'kids' ? "default" : "outline"}
-                      size="sm"
-                      className="w-full justify-start"
-                      onClick={() => handleViewModeChange('kids')}
-                    >
-                      Kids Version
-                    </Button>
-                    <Button
-                      variant={viewMode === 'novelize' ? "default" : "outline"}
-                      size="sm"
-                      className="w-full justify-start"
-                      onClick={() => handleViewModeChange('novelize')}
-                    >
-                      Narrative Mode
-                    </Button>
-                  </div>
-                </div>
-                
-                <div>
-                  <h3 className="font-semibold mb-2">Theological Lens</h3>
-                  <div className="space-y-1">
-                    {theologicalLenses.map(lens => (
-                      <Button
-                        key={lens.id}
-                        variant={selectedTheologicalLens === lens.id ? "default" : "outline"}
-                        size="sm"
-                        className="w-full justify-start"
-                        onClick={() => setSelectedTheologicalLens(lens.id)}
-                      >
-                        {lens.label}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
+            <TabsContent value="settings" className="flex-1 overflow-y-auto px-4 pb-4">
+              <div className="glass rounded-xl p-4 hover:shadow-xl transition-shadow">
+                <Accordion type="multiple" defaultValue={["viewMode", "theologicalLens"]} className="w-full">
+                  <AccordionItem value="viewMode" className="border-b border-white/10">
+                    <AccordionTrigger className="hover:no-underline">
+                      <span className="font-semibold">View Mode</span>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 xs:grid-cols-1 gap-1.5 mt-2">
+                        <Button
+                          variant={viewMode === 'standard' ? "default" : "ghost"}
+                          size="sm"
+                          className={`justify-start glass hover:scale-[1.01] transition-transform ${
+                            viewMode === 'standard' ? "ring-1 ring-white/20" : ""
+                          }`}
+                          onClick={() => handleViewModeChange('standard')}
+                        >
+                          Standard
+                        </Button>
+                        <Button
+                          variant={viewMode === 'genz' ? "default" : "ghost"}
+                          size="sm"
+                          className={`justify-start glass hover:scale-[1.01] transition-transform ${
+                            viewMode === 'genz' ? "ring-1 ring-white/20" : ""
+                          }`}
+                          onClick={() => handleViewModeChange('genz')}
+                        >
+                          Gen-Z Version
+                        </Button>
+                        <Button
+                          variant={viewMode === 'kids' ? "default" : "ghost"}
+                          size="sm"
+                          className={`justify-start glass hover:scale-[1.01] transition-transform ${
+                            viewMode === 'kids' ? "ring-1 ring-white/20" : ""
+                          }`}
+                          onClick={() => handleViewModeChange('kids')}
+                        >
+                          Kids Version
+                        </Button>
+                        <Button
+                          variant={viewMode === 'novelize' ? "default" : "ghost"}
+                          size="sm"
+                          className={`justify-start glass hover:scale-[1.01] transition-transform ${
+                            viewMode === 'novelize' ? "ring-1 ring-white/20" : ""
+                          }`}
+                          onClick={() => handleViewModeChange('novelize')}
+                        >
+                          Narrative Mode
+                        </Button>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                  
+                  <AccordionItem value="theologicalLens" className="border-b border-white/10">
+                    <AccordionTrigger className="hover:no-underline">
+                      <span className="font-semibold">Theological Lens</span>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 xs:grid-cols-1 gap-1.5 mt-2">
+                        {theologicalLenses.map(lens => (
+                          <Button
+                            key={lens.id}
+                            variant={selectedTheologicalLens === lens.id ? "default" : "ghost"}
+                            size="sm"
+                            className={`justify-start glass hover:scale-[1.01] transition-transform ${
+                              selectedTheologicalLens === lens.id ? "ring-1 ring-white/20" : ""
+                            }`}
+                            onClick={() => setSelectedTheologicalLens(lens.id)}
+                          >
+                            {lens.label}
+                          </Button>
+                        ))}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
               </div>
             </TabsContent>
           </Tabs>
