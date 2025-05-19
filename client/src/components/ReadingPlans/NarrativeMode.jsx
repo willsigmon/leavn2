@@ -78,21 +78,22 @@ export default function NarrativeMode({ passage, onNavigateToVerse }) {
   return (
     <div className="narrative-mode flex flex-col h-full overflow-hidden">
       {/* Style selector */}
-      <div className="flex items-center justify-between px-4 py-2 border-b">
-        <h3 className="text-base font-semibold">Narrative Style</h3>
-        <div className="flex space-x-2 overflow-x-auto">
-          {NARRATIVE_STYLES.map((style) => (
-            <Button
-              key={style.id}
-              size="sm"
-              variant={activeStyle === style.id ? "default" : "outline"}
-              onClick={() => handleStyleChange(style.id)}
-              className="whitespace-nowrap"
-            >
-              {style.name}
-            </Button>
-          ))}
-        </div>
+      <div className="glass sticky top-4 mx-auto w-fit flex items-center gap-2 rounded-full px-3 py-1 z-10 mb-4">
+        {NARRATIVE_STYLES.map((style) => (
+          <Button
+            key={style.id}
+            size="sm"
+            variant={activeStyle === style.id ? "default" : "ghost"}
+            onClick={() => handleStyleChange(style.id)}
+            className={`whitespace-nowrap transition-transform ${
+              activeStyle === style.id 
+                ? "ring-1 ring-white/30 backdrop-blur-xs scale-105" 
+                : "hover:scale-105"
+            }`}
+          >
+            {style.name}
+          </Button>
+        ))}
       </div>
       
       {/* Content area */}
@@ -115,21 +116,25 @@ export default function NarrativeMode({ passage, onNavigateToVerse }) {
             {narrativeContent.characters && narrativeContent.characters.length > 0 && (
               <div className="mb-4 flex flex-wrap gap-2">
                 {narrativeContent.characters.map((character, index) => (
-                  <Badge key={index} variant="outline" className="bg-primary/10">
+                  <Badge 
+                    key={index} 
+                    variant="outline" 
+                    className="glass px-2 py-0.5 text-xs font-medium rounded-lg group hover:scale-105 transition-transform"
+                  >
                     {character}
                   </Badge>
                 ))}
               </div>
             )}
             
-            <div className="narrative-content text-lg leading-relaxed font-serif">
+            <div className="glass rounded-2xl p-6 narrative-content text-lg leading-relaxed font-serif group hover:shadow-xl transition-shadow">
               {narrativeContent.content.split('\n\n').map((paragraph, index) => (
                 <p key={index} className="mb-4">{paragraph}</p>
               ))}
             </div>
             
             {narrativeContent.notes && (
-              <div className="mt-8 p-4 bg-muted rounded-lg">
+              <div className="mt-8 glass rounded-xl p-4 group hover:translate-z-[12px] motion-safe:duration-200">
                 <p className="italic text-sm text-muted-foreground">{narrativeContent.notes}</p>
               </div>
             )}

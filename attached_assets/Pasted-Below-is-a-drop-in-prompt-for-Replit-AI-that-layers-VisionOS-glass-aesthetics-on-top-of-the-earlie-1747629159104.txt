@@ -1,0 +1,68 @@
+Below is a drop‑in prompt for Replit AI that layers VisionOS “glass” aesthetics on top of the earlier layout refactor. (I kept everything else intact and just folded in the translucent, depth‑driven polish Apple calls materials.) Copy → paste → run.
+
+👋 **Replit AI — refine the Bible Reader with VisionOS‑inspired glass design (Tailwind v3, React, TS):**
+
+## 0.  VisionOS styling helpers
+```ts
+// tailwind.config.ts – extend theme
+module.exports = {
+  plugins: [require('@tailwindcss/typography'), require('tailwindcss-filters')],
+  theme: {
+    extend: {
+      colors: { surface: 'rgba(255,255,255,.06)' }, // “glass” tint
+      backdropBlur: { xs: '4px', md: '16px', xl: '28px' },
+    },
+  },
+};
+
+Add a class="glass" utility:
+
+@layer utilities {
+  .glass {
+    @apply backdrop-blur-md bg-surface/60 shadow-lg shadow-black/10 border border-white/10;
+  }
+}
+
+(Idea cribbed from Apple’s Material.ultraThin and Material.thin patterns  ￼ ￼)
+
+1.  Global Grid
+
+Same 3‑column grid as before, but wrap each column’s scroll container in <div className="glass rounded-2xl p-4"> to float on a hazy backdrop.
+Depth tip: animate translate‑z on hover (group-hover:translate-z-[12px] motion-safe:duration-200).
+
+2.  BookNav
+	•	Keep sticky/scroll logic, now give the list className="glass overflow-y-scroll rounded-xl h-full".
+	•	Active item gets a subtle glow:
+ring-1 ring-white/30 backdrop-blur-xs.
+
+3.  ReaderToolbar
+	•	Make the toolbar itself a floating pill:
+className="glass sticky top-4 mx-auto w-fit flex items-center gap-2 rounded-full px-3 py-1 backdrop-blur-md supports-[backdrop-filter]:bg-surface/50"
+	•	Icons scale 1.05 on hover to mimic VisionOS’ depth emphasis  ￼.
+
+4.  VerseReader
+	•	Verse gutter unchanged, but each <article> gets group glass hover:shadow-xl transition-shadow.
+	•	When tags are visible, chips use translucency too:
+className="glass px-2 py-0.5 text-xs font-medium rounded-lg".
+
+5.  Companion Panel
+	•	Stickiness as before, plus:
+
+<aside className="glass max-h-[calc(100vh-var(--header-h))] overflow-y-auto rounded-3xl p-5">
+   <CompanionTabs … />
+</aside>
+
+
+	•	Mobile sheet: use react-spring to slide‑up with a dimmed, blurred backdrop (backdrop-blur-xl bg-black/40).
+
+6.  Micro‑parallax
+
+Add useParallax3D hook: on pointer‑move inside any .glass element, adjust CSS transform: rotateX / rotateY up to 6deg for VisionOS‑like spatial feel. Disable when prefers-reduced-motion.
+
+7.  Tests & cleanup
+
+No change to logic tests; just snapshot once to ensure .glass class renders. Remove any legacy opaque backgrounds.
+
+🎯 End result: the reader now “floats” in layered glass panes, catching subtle blur and depth exactly like VisionOS apps, while preserving all earlier accessibility and layout improvements.
+
+This keeps your functional grid + sticky upgrades, but applies Apple’s materials, blur, and depth cues so the whole interface feels lifted off the canvas — just like reading Scripture inside a Vision Pro.

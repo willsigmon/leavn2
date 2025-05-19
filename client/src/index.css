@@ -5,6 +5,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .glass {
+    @apply backdrop-blur-md bg-surface/60 shadow-lg shadow-black/10 border border-white/10;
+  }
+}
+
 :root {
   /* Base colors */
   --background: 70 30% 97%;

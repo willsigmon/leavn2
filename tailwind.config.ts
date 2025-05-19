@@ -9,8 +9,12 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        xl: "1rem",
+        "2xl": "1.5rem",
+        "3xl": "2rem",
       },
       colors: {
+        surface: "rgba(255,255,255,.06)", // VisionOS glass tint
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
@@ -61,6 +65,11 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+      },
+      backdropBlur: {
+        xs: '4px',
+        md: '16px',
+        xl: '28px',
       },
       keyframes: {
         "accordion-down": {
@@ -120,5 +129,9 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+  plugins: [
+    require("tailwindcss-animate"), 
+    require("@tailwindcss/typography"),
+    require("tailwindcss-filters")
+  ],
 } satisfies Config;
