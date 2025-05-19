@@ -102,6 +102,52 @@
           "explanation": "Paul identifies Christ as the one through whom all things were created."
         }
       ]
+    },
+    {
+      "verse_number": 2,
+      "text": {
+        "kjv": "And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters.",
+        "web": "The earth was formless and empty. Darkness was on the surface of the deep and God's Spirit was hovering over the surface of the waters."
+      },
+      "tags": {
+        "themes": ["Creation", "Chaos", "Divine presence"],
+        "people": ["God", "Spirit of God"],
+        "places": ["Earth", "Waters"],
+        "symbols": ["Darkness", "Waters", "Void"],
+        "emotions": [],
+        "timeframe": ["Beginning of creation"],
+        "cross_refs": []
+      }
+    },
+    {
+      "verse_number": 3,
+      "text": {
+        "kjv": "And God said, Let there be light: and there was light.",
+        "web": "God said, \"Let there be light,\" and there was light."
+      },
+      "tags": {
+        "themes": ["Creation", "Light", "Divine word"],
+        "people": ["God"],
+        "places": [],
+        "symbols": ["Light"],
+        "emotions": [],
+        "timeframe": ["First day"],
+        "cross_refs": []
+      }
+    },
+    {
+      "verse_number": 4,
+      "text": {
+        "kjv": "And God saw the light, that it was good: and God divided the light from the darkness.",
+        "web": "God saw the light, and saw that it was good. God divided the light from the darkness."
+      }
+    },
+    {
+      "verse_number": 5,
+      "text": {
+        "kjv": "And God called the light Day, and the darkness he called Night. And the evening and the morning were the first day.",
+        "web": "God called the light \"day\", and the darkness he called \"night\". There was evening and there was morning, the first day."
+      }
     }
   ]
 }
