@@ -89,7 +89,7 @@ const contextDatabase = {
 };
 
 // Get contextual information for a book, chapter, and optional verse
-router.get('/:book/:chapter/:verse?', isAuthenticated, (req, res) => {
+router.get('/:book/:chapter/:verse?', (req, res) => {
   const { book, chapter, verse } = req.params;
   const bookLower = book.toLowerCase();
   const chapterNum = parseInt(chapter);

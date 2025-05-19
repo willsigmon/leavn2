@@ -1,5 +1,5 @@
 import { useAuth } from '../lib/auth';
-import { useLocation } from 'wouter';
+import { useLocation, Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
@@ -64,18 +64,18 @@ export function NavBar() {
             
             {/* Desktop navigation */}
             <nav className="hidden md:flex items-center space-x-6">
-              <div 
-                onClick={() => navigate('/reader')}
+              <Link 
+                href="/reader"
                 className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer text-sm font-medium"
               >
                 Bible Reader
-              </div>
-              <div 
-                onClick={() => navigate('/reading-plans')}
+              </Link>
+              <Link 
+                href="/reading-plans"
                 className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer text-sm font-medium"
               >
                 Reading Plans
-              </div>
+              </Link>
             </nav>
           </div>
           
