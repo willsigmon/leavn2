@@ -371,7 +371,7 @@ export default function ReadingPlanDetail() {
 
               {/* Tabs for different content types */}
               <Tabs defaultValue="context" className="w-full">
-                <TabsList className="bg-muted grid grid-cols-5 mb-4">
+                <TabsList className="bg-muted grid grid-cols-6 mb-4">
                   <TabsTrigger 
                     value="context" 
                     className="data-[state=active]:bg-[#d8e5d2] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#3a6349] dark:data-[state=active]:text-white"
@@ -401,6 +401,12 @@ export default function ReadingPlanDetail() {
                     className="data-[state=active]:bg-[#d8e5d2] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#3a6349] dark:data-[state=active]:text-white"
                   >
                     All Days
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="stats" 
+                    className="data-[state=active]:bg-[#d8e5d2] data-[state=active]:text-[#2c4c3b] dark:data-[state=active]:bg-[#3a6349] dark:data-[state=active]:text-white"
+                  >
+                    Stats
                   </TabsTrigger>
                 </TabsList>
                 
@@ -520,6 +526,142 @@ export default function ReadingPlanDetail() {
                           />
                         ))}
                       </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+                
+                <TabsContent value="stats" className="space-y-6">
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <div className="flex items-start">
+                        <Target className="mt-1 mr-2 h-5 w-5 text-purple-500" />
+                        <div>
+                          <CardTitle className="text-lg">Your Progress</CardTitle>
+                          <p className="text-sm text-muted-foreground">Statistics about your reading journey</p>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      {(!params?.id || !userProgress[params.id]) && (
+                        <div className="flex flex-col items-center justify-center py-8 text-center">
+                          <AlertTriangle className="h-12 w-12 text-amber-500 mb-4" />
+                          <h3 className="text-lg font-medium mb-2">You haven't started this plan yet</h3>
+                          <p className="text-muted-foreground mb-4">Track your progress by marking days as complete.</p>
+                          <Button 
+                            onClick={() => {
+                              if (!params?.id || !isAuthenticated) return;
+                              
+                              dispatch({
+                                type: 'START_PLAN',
+                                payload: { planId: params.id }
+                              });
+                              
+                              toast({
+                                title: "Plan started",
+                                description: "You're all set to begin this reading plan!",
+                              });
+                            }}
+                            className="bg-[#2c4c3b] hover:bg-[#3a6349] text-white"
+                          >
+                            Start This Plan
+                          </Button>
+                        </div>
+                      )}
+                      
+                      {params?.id && userProgress[params.id] && (
+                        <>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <Card>
+                              <CardContent className="pt-6">
+                                <div className="text-center">
+                                  <span className="text-3xl font-bold">
+                                    {Math.round((userProgress[params.id].completedDays.length / activePlan.days.length) * 100)}%
+                                  </span>
+                                  <p className="text-sm text-muted-foreground">Completed</p>
+                                </div>
+                              </CardContent>
+                            </Card>
+                            <Card>
+                              <CardContent className="pt-6">
+                                <div className="text-center">
+                                  <span className="text-3xl font-bold">{userProgress[params.id].completedDays.length}</span>
+                                  <p className="text-sm text-muted-foreground">Days Completed</p>
+                                </div>
+                              </CardContent>
+                            </Card>
+                            <Card>
+                              <CardContent className="pt-6">
+                                <div className="text-center">
+                                  <span className="text-3xl font-bold">
+                                    {activePlan.days.length - userProgress[params.id].completedDays.length}
+                                  </span>
+                                  <p className="text-sm text-muted-foreground">Days Remaining</p>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          </div>
+                          
+                          {/* Timeline */}
+                          <Card>
+                            <CardHeader>
+                              <CardTitle className="text-md">Reading Timeline</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="flex items-center space-x-2 overflow-x-auto pb-2">
+                                {activePlan.days.map((day, index) => {
+                                  const isCompleted = userProgress[params.id].completedDays.includes(day.id);
+                                  return (
+                                    <div 
+                                      key={day.id}
+                                      className={`
+                                        flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full cursor-pointer
+                                        ${isCompleted 
+                                          ? 'bg-green-500 text-white' 
+                                          : 'bg-muted text-muted-foreground'}
+                                      `}
+                                      title={`Day ${index + 1}: ${day.title}`}
+                                      onClick={() => setSelectedDayId(day.id)}
+                                    >
+                                      {index + 1}
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </CardContent>
+                          </Card>
+                          
+                          {/* Reading Streaks */}
+                          <Card className="mt-4">
+                            <CardHeader>
+                              <CardTitle className="text-md">Reading Streaks</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div className="flex flex-col items-center">
+                                  <div className="text-2xl font-bold text-green-500">
+                                    {userProgress[params.id].completedDays.length}
+                                  </div>
+                                  <div className="text-sm text-muted-foreground">Current Streak</div>
+                                </div>
+                                <div className="flex flex-col items-center">
+                                  <div className="text-2xl font-bold text-blue-500">
+                                    {new Date(userProgress[params.id].startDate || '').toLocaleDateString()}
+                                  </div>
+                                  <div className="text-sm text-muted-foreground">Date Started</div>
+                                </div>
+                                <div className="flex flex-col items-center">
+                                  <div className="text-2xl font-bold text-purple-500">
+                                    {userProgress[params.id].lastUpdated ? 
+                                      new Date(userProgress[params.id].lastUpdated).toLocaleDateString() : 
+                                      'Not yet'}
+                                  </div>
+                                  <div className="text-sm text-muted-foreground">Last Reading</div>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </>
+                      )}
                     </CardContent>
                   </Card>
                 </TabsContent>
