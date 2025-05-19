@@ -1,0 +1,90 @@
+// src/components/ReadingPlans/ContextualInsights.jsx
+import React, { useState } from 'react';
+
+const ContextualInsights = ({ 
+  historicalContext, 
+  theologicalConcepts, 
+  reflectionQuestions,
+  crossReferences
+}) => {
+  const [activeTab, setActiveTab] = useState('historical');
+  
+  return (
+    <div className="contextual-insights">
+      <div className="tabs">
+        <button 
+          className={activeTab === 'historical' ? 'active' : ''} 
+          onClick={() => setActiveTab('historical')}
+        >
+          Historical Context
+        </button>
+        <button 
+          className={activeTab === 'theological' ? 'active' : ''} 
+          onClick={() => setActiveTab('theological')}
+        >
+          Theological Concepts
+        </button>
+        <button 
+          className={activeTab === 'reflection' ? 'active' : ''} 
+          onClick={() => setActiveTab('reflection')}
+        >
+          Reflection
+        </button>
+        <button 
+          className={activeTab === 'cross' ? 'active' : ''} 
+          onClick={() => setActiveTab('cross')}
+        >
+          Cross References
+        </button>
+      </div>
+      
+      <div className="tab-content">
+        {activeTab === 'historical' && (
+          <div className="historical-content">
+            <p>{historicalContext}</p>
+          </div>
+        )}
+        
+        {activeTab === 'theological' && (
+          <div className="theological-content">
+            <ul>
+              {theologicalConcepts.map((concept, index) => (
+                <li key={index}>{concept}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        
+        {activeTab === 'reflection' && (
+          <div className="reflection-content">
+            <ul className="questions">
+              {reflectionQuestions.map((question, index) => (
+                <li key={index}>
+                  <p>{question}</p>
+                  <textarea 
+                    placeholder="Your thoughts..." 
+                    className="reflection-input"
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        
+        {activeTab === 'cross' && (
+          <div className="cross-references">
+            <ul>
+              {crossReferences.map((reference, index) => (
+                <li key={index}>
+                  <a href={`/bible/${reference}`}>{reference}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default ContextualInsights;
