@@ -8,7 +8,7 @@ import { useLocation } from 'wouter';
 import ContextualInsights from './ContextualInsights';
 
 const DayDetail = ({ day, dayNumber, onComplete, isCompleted }) => {
-  const [_, navigate] = useLocation();
+  const [_, setLocation] = useLocation();
   
   const handleReadPassage = (passage) => {
     if (passage.toLowerCase() === 'this reading plan is under development') return;
@@ -19,7 +19,7 @@ const DayDetail = ({ day, dayNumber, onComplete, isCompleted }) => {
     const reference = parts[1].split(':');
     const chapter = reference[0];
     
-    navigate(`/reader/${book}/${chapter}`);
+    setLocation(`/reader/${book}/${chapter}`);
   };
   
   return (
