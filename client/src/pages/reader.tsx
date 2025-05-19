@@ -298,6 +298,38 @@ export default function Reader() {
               </div>
             </TabsContent>
             
+            <TabsContent value="concepts" className="p-0 m-0 border-0 h-full">
+              <ConceptExplorerTab 
+                book={book}
+                chapter={chapter}
+                onNavigateToVerse={(reference) => {
+                  // Parse the reference (e.g., "John 3:16" => book: "John", chapter: 3, verse: 16)
+                  const parts = reference.split(' ');
+                  const chapterVerse = parts.pop() || '';
+                  const [chapterStr, verseStr] = chapterVerse.split(':');
+                  const newBook = parts.join(' ');
+                  const newChapter = parseInt(chapterStr);
+                  
+                  if (newBook && !isNaN(newChapter)) {
+                    // Navigate to the new book/chapter
+                    handleNavigate(newBook, newChapter);
+                    
+                    // Scroll to the verse (after a short delay to allow rendering)
+                    setTimeout(() => {
+                      const verseElement = document.querySelector(`[data-verse-num="${verseStr}"]`);
+                      if (verseElement) {
+                        verseElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        verseElement.classList.add('highlight-verse');
+                        setTimeout(() => {
+                          verseElement.classList.remove('highlight-verse');
+                        }, 2000);
+                      }
+                    }, 500);
+                  }
+                }}
+              />
+            </TabsContent>
+            
             <TabsContent value="settings" className="p-4">
               <div className="space-y-4">
                 <div>
@@ -397,7 +429,7 @@ export default function Reader() {
           </div>
           
           {/* Bible content */}
-          <div className={`p-4 md:p-6 lg:p-8 max-w-4xl mx-auto ${paperTexture ? 'paper-texture' : ''}`}>
+          <div className={`p-4 md:p-6 lg:p-8 w-full max-w-[90%] lg:max-w-[85%] mx-auto ${paperTexture ? 'paper-texture' : ''}`}>
             {book.toLowerCase() === 'genesis' ? (
               <GenesisReader chapter={chapter} />
             ) : (
