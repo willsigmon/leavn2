@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { db } from '../db';
-import { eq, inArray, not, sql, and } from 'drizzle-orm';
 import crypto from 'crypto';
 import { isAuthenticated } from '../replitAuth';
 import { verseTags, tags } from '@shared/schema';
