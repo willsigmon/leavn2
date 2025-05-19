@@ -266,23 +266,24 @@ export default function Reader() {
       </header>
       
       {/* Main content */}
-      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
         {/* Sidebar */}
-        <aside className={`border-r border-white/10 glass transition-all duration-300 
-          ${sidebarCollapsed ? 'lg:w-[60px]' : 'lg:w-[30%]'} 
-          flex-shrink-0 overflow-y-auto relative`}>
+        <aside className={`border-r border-white/10 glass backdrop-blur-lg transition-all duration-500 ease-in-out
+          ${sidebarCollapsed ? 'lg:w-[0px] opacity-0 invisible' : 'lg:w-[min(30%,400px)]'} 
+          flex-shrink-0 overflow-y-auto relative group`}>
           
-          {/* Resize handle */}
+          {/* Floating resize handle - visible even when sidebar is collapsed */}
           <div 
-            className="absolute -right-3 top-1/2 transform -translate-y-1/2 z-10 cursor-pointer
-                      h-24 w-6 flex items-center justify-center glass
-                      border border-white/10 rounded-full shadow-lg
-                      hover:scale-105 transition-transform"
+            className={`absolute ${sidebarCollapsed ? 'left-4' : '-right-3'} top-1/2 transform -translate-y-1/2 z-20 cursor-pointer
+                      h-10 w-10 flex items-center justify-center glass
+                      border border-white/10 rounded-full shadow-xl
+                      hover:scale-110 transition-all duration-300
+                      bg-gradient-to-tr from-[#2c4c3b]/80 to-[#2c4c3b]/30`}
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
           >
             {sidebarCollapsed ? 
-              <ChevronsRight className="h-4 w-4" /> : 
-              <ChevronsLeft className="h-4 w-4" />
+              <ChevronsRight className="h-5 w-5 text-white" /> : 
+              <ChevronsLeft className="h-5 w-5 text-white" />
             }
           </div>
 
