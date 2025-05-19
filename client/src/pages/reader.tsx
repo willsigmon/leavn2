@@ -249,13 +249,7 @@ export default function Reader() {
               </PopoverContent>
             </Popover>
             
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setDarkMode(!darkMode)}
-            >
-              {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            </Button>
+
           </div>
         </div>
       </header>
