@@ -57,8 +57,8 @@ export default function LandingOptimized() {
           </div>
 
           {/* Animated Reader Preview */}
-          <div className="relative mt-10 lg:mt-0">
-            <div className="transform hover:scale-[1.01] transition-transform h-[350px] md:h-[400px] lg:h-[450px]">
+          <div className="relative mt-10 lg:mt-0 max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-full mx-auto">
+            <div className="transform hover:scale-[1.01] transition-transform h-[320px] md:h-[380px] lg:h-[420px]">
               <ReaderPreview />
             </div>
           </div>

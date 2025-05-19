@@ -39,36 +39,36 @@ export function ReaderPreview() {
   }, [activeVerse]);
 
   return (
-    <div className="relative w-full rounded-xl overflow-hidden shadow-xl border-2 md:border-4 border-white dark:border-gray-800 bg-white dark:bg-gray-900 transition-all duration-500">
+    <div className="relative w-full h-full rounded-xl overflow-hidden shadow-xl border-2 border-white dark:border-gray-800 bg-white dark:bg-gray-900 transition-all duration-500">
       {/* Reader Header */}
-      <div className="bg-[#e8efe5] dark:bg-[#284233]/90 p-3 border-b border-[#d8e5d2] dark:border-[#2c4c3b]/50 flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <MenuIcon className="h-5 w-5 text-[#2c4c3b] dark:text-[#a5c2a5]" />
+      <div className="bg-[#e8efe5] dark:bg-[#284233]/90 p-2 sm:p-3 border-b border-[#d8e5d2] dark:border-[#2c4c3b]/50 flex items-center justify-between">
+        <div className="flex items-center space-x-2 sm:space-x-3">
+          <MenuIcon className="h-4 w-4 sm:h-5 sm:w-5 text-[#2c4c3b] dark:text-[#a5c2a5]" />
           <div className="flex items-center">
-            <BookOpen className="h-5 w-5 text-[#2c4c3b] dark:text-[#a5c2a5] mr-2" />
-            <span className="font-medium text-[#2c4c3b] dark:text-[#a5c2a5]">Genesis 1</span>
+            <BookOpen className="h-4 w-4 sm:h-5 sm:w-5 text-[#2c4c3b] dark:text-[#a5c2a5] mr-1 sm:mr-2" />
+            <span className="font-medium text-sm sm:text-base text-[#2c4c3b] dark:text-[#a5c2a5]">Genesis 1</span>
           </div>
         </div>
-        <div className="flex items-center space-x-2">
-          <div className="flex items-center space-x-1">
-            <ChevronLeft className="h-5 w-5 text-[#2c4c3b] dark:text-[#a5c2a5] cursor-pointer hover:bg-[#d8e5d2] dark:hover:bg-[#345841]/30 rounded-full p-1" />
-            <ChevronRight className="h-5 w-5 text-[#2c4c3b] dark:text-[#a5c2a5] cursor-pointer hover:bg-[#d8e5d2] dark:hover:bg-[#345841]/30 rounded-full p-1" />
+        <div className="flex items-center space-x-1 sm:space-x-2">
+          <div className="flex items-center">
+            <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 text-[#2c4c3b] dark:text-[#a5c2a5] cursor-pointer hover:bg-[#d8e5d2] dark:hover:bg-[#345841]/30 rounded-full p-1" />
+            <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 text-[#2c4c3b] dark:text-[#a5c2a5] cursor-pointer hover:bg-[#d8e5d2] dark:hover:bg-[#345841]/30 rounded-full p-1" />
           </div>
-          <div className="h-7 w-7 rounded-full bg-[#d8e5d2] dark:bg-[#345841] flex items-center justify-center cursor-pointer">
-            <Settings className="h-4 w-4 text-[#2c4c3b] dark:text-[#a5c2a5]" />
+          <div className="h-6 w-6 sm:h-7 sm:w-7 rounded-full bg-[#d8e5d2] dark:bg-[#345841] flex items-center justify-center cursor-pointer">
+            <Settings className="h-3 w-3 sm:h-4 sm:w-4 text-[#2c4c3b] dark:text-[#a5c2a5]" />
           </div>
         </div>
       </div>
       
       {/* Reader Content */}
-      <div className="p-5 overflow-hidden relative h-full">
+      <div className="p-3 sm:p-4 overflow-hidden relative h-full">
         <div className="relative">
-          <p className={`font-serif text-lg text-stone-800 dark:text-stone-200 mb-3 transition-all duration-300 ${activeVerse === 1 ? 'bg-[#f0f4ed]/50 dark:bg-[#2c4c3b]/20 -mx-2 px-2 py-1 rounded' : ''}`}>
+          <p className={`font-serif text-base sm:text-lg text-stone-800 dark:text-stone-200 mb-2 transition-all duration-300 ${activeVerse === 1 ? 'bg-[#f0f4ed]/50 dark:bg-[#2c4c3b]/20 -mx-2 px-2 py-1 rounded' : ''}`}>
             <span className="text-[#2c4c3b] dark:text-[#a5c2a5] font-semibold mr-2">1</span>
             In the beginning God created the heavens and the earth.
           </p>
           
-          <p className={`font-serif text-lg text-stone-800 dark:text-stone-200 mb-3 transition-all duration-300 ${activeVerse === 2 ? 'bg-[#f0f4ed]/50 dark:bg-[#2c4c3b]/20 -mx-2 px-2 py-1 rounded' : ''}`}>
+          <p className={`font-serif text-base sm:text-lg text-stone-800 dark:text-stone-200 mb-2 transition-all duration-300 ${activeVerse === 2 ? 'bg-[#f0f4ed]/50 dark:bg-[#2c4c3b]/20 -mx-2 px-2 py-1 rounded' : ''}`}>
             <span className="text-[#2c4c3b] dark:text-[#a5c2a5] font-semibold mr-2">2</span>
             Now the earth was formless and empty, darkness was over the surface of the deep, and the Spirit of God was hovering over the waters.
           </p>
