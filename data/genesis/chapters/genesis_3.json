@@ -1,0 +1,108 @@
+{
+  "chapter_number": 3,
+  "title": "The Fall",
+  "summary": "The serpent tempts Eve to eat from the forbidden tree, bringing sin and separation from God into the world.",
+  "themes": [
+    "Temptation",
+    "Sin",
+    "Consequences",
+    "Promise",
+    "Judgment"
+  ],
+  "people": [
+    "God",
+    "Adam",
+    "Eve",
+    "Serpent"
+  ],
+  "places": [
+    "Garden of Eden"
+  ],
+  "timeframe": "After creation",
+  "symbols": [
+    "Serpent",
+    "Forbidden fruit",
+    "Nakedness",
+    "Fig leaves",
+    "Animal skins"
+  ],
+  "narrative": "The harmonious relationship between humanity and God is fractured when the cunning serpent questions God's command not to eat from the Tree of Knowledge. With subtle deception, he convinces Eve that the forbidden fruit will make her like God, knowing good and evil. After eating and sharing with Adam, their eyes are opened to their nakedness, and they hide from God in shame. When confronted, Adam blames Eve, and Eve blames the serpent. God pronounces judgment on all three: the serpent is cursed to crawl on its belly, enmity is placed between the serpent and woman, Eve will experience pain in childbirth, and Adam must toil against thorns and thistles. Yet amidst judgment, God provides clothing from animal skins—a hint of grace—before banishing them from Eden.",
+  "connections": [
+    {
+      "id": "Romans 5:12-21",
+      "type": "thematic",
+      "theme": "Sin and redemption",
+      "explanation": "Paul contrasts Adam's sin bringing death with Christ's righteousness bringing life."
+    },
+    {
+      "id": "Revelation 12:9",
+      "type": "symbolic",
+      "theme": "The serpent identified",
+      "explanation": "The serpent is identified as Satan, the deceiver of the whole world."
+    }
+  ],
+  "verses": [
+    {
+      "verse_number": 1,
+      "text": {
+        "kjv": "Now the serpent was more subtil than any beast of the field which the LORD God had made. And he said unto the woman, Yea, hath God said, Ye shall not eat of every tree of the garden?",
+        "web": "Now the serpent was more subtle than any animal of the field which Yahweh God had made. He said to the woman, \"Has God really said, 'You shall not eat of any tree of the garden'?\""
+      },
+      "tags": {
+        "themes": ["Temptation", "Deception"],
+        "people": ["Serpent", "Eve"],
+        "places": ["Garden of Eden"],
+        "symbols": ["Serpent"],
+        "emotions": ["Curiosity"],
+        "timeframe": ["After creation"],
+        "cross_refs": ["Revelation 12:9", "2 Corinthians 11:3"]
+      }
+    },
+    {
+      "verse_number": 2,
+      "text": {
+        "kjv": "And the woman said unto the serpent, We may eat of the fruit of the trees of the garden:",
+        "web": "The woman said to the serpent, \"We may eat fruit from the trees of the garden,"
+      },
+      "tags": {
+        "themes": ["Knowledge", "God's provision"],
+        "people": ["Eve", "Serpent"],
+        "places": ["Garden of Eden"],
+        "symbols": ["Trees", "Fruit"],
+        "emotions": ["Uncertainty"],
+        "timeframe": ["After creation"],
+        "cross_refs": []
+      }
+    },
+    {
+      "verse_number": 3,
+      "text": {
+        "kjv": "But of the fruit of the tree which is in the midst of the garden, God hath said, Ye shall not eat of it, neither shall ye touch it, lest ye die.",
+        "web": "but not the fruit of the tree which is in the middle of the garden. God has said, 'You shall not eat of it. You shall not touch it, lest you die.'\""
+      },
+      "tags": {
+        "themes": ["Prohibition", "Obedience", "Death"],
+        "people": ["Eve", "God (referenced)"],
+        "places": ["Garden of Eden"],
+        "symbols": ["Forbidden fruit", "Tree of Knowledge"],
+        "emotions": ["Caution", "Fear"],
+        "timeframe": ["After creation"],
+        "cross_refs": ["Genesis 2:16-17"]
+      }
+    },
+    {
+      "verse_number": 4,
+      "text": {
+        "kjv": "And the serpent said unto the woman, Ye shall not surely die:",
+        "web": "The serpent said to the woman, \"You won't really die,"
+      }
+    },
+    {
+      "verse_number": 5,
+      "text": {
+        "kjv": "For God doth know that in the day ye eat thereof, then your eyes shall be opened, and ye shall be as gods, knowing good and evil.",
+        "web": "for God knows that in the day you eat it, your eyes will be opened, and you will be like God, knowing good and evil.\""
+      }
+    }
+  ]
+}
