@@ -1,22 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import session from 'express-session';
 import { v4 as uuidv4 } from 'uuid';
 
 // Simple authentication middleware without database dependency
 // This is a temporary solution for testing purposes
-
-// Configure simple session
-export const setupSession = (app: any) => {
-  app.use(session({
-    secret: process.env.SESSION_SECRET || 'leavn-bible-study-secret',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { 
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 24 * 60 * 60 * 1000 // 1 day
-    }
-  }));
-};
 
 // Middleware to check if user is authenticated
 export const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
