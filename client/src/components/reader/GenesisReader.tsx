@@ -739,11 +739,13 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
               </span>
               <div className="flex-1">
                 <TooltipProvider>
-                  <p className="verse-text">
-                    {selectedTranslation === 'kjv' 
-                      ? (verse.textKjv || verse.text)
-                      : (verse.textWeb || verse.text)
+                  <p className="verse-text text-gray-900 dark:text-gray-100 mb-2">
+                    {verse.text && typeof verse.text === 'object' && 
+                      (selectedTranslation === 'kjv' 
+                        ? verse.text.kjv
+                        : verse.text.web)
                     }
+                    {typeof verse.text === 'string' && verse.text}
                     
                     {/* Render people with tooltips */}
                     {verse.tags?.people?.map((person, idx) => (
