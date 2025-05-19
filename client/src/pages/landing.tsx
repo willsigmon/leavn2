@@ -401,20 +401,36 @@ const Landing = () => {
       <TrustRow />
       
       {/* CTA repeat */}
-      <section className="py-16 bg-gradient-to-b from-brand-700 to-brand-900 text-white">
-        <div className="container mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to transform your Bible study?</h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
+      <section className="py-16 bg-gradient-to-b from-[#2c4c3b] to-[#1a3328] text-white relative overflow-hidden">
+        {/* Subtle animated background elements */}
+        <div className="absolute top-10 left-10 w-24 h-24 bg-white rounded-full opacity-10 animate-float"></div>
+        <div className="absolute bottom-10 right-10 w-32 h-32 bg-white rounded-full opacity-10 animate-float animation-delay-2000"></div>
+        <div className="absolute top-1/3 right-1/3 w-16 h-16 bg-white rounded-full opacity-5 animate-float animation-delay-1000"></div>
+        
+        <div className="container mx-auto text-center relative z-10">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 drop-shadow-sm">Ready to transform your Bible study?</h2>
+          <p className="text-xl mb-8 max-w-2xl mx-auto text-white/90">
             Join thousands of believers experiencing scripture in a whole new way.
           </p>
-          <Button 
-            size="lg" 
-            className="bg-white hover:bg-white/90 text-brand-700 text-lg px-8 py-6 rounded-xl"
-            onClick={() => setIsWaitlistModalOpen(true)}
-            data-ab="footer-cta"
-          >
-            Join Waitlist
-          </Button>
+          <div className="flex justify-center gap-4 flex-wrap">
+            <Button 
+              size="lg" 
+              className="backdrop-blur-xl bg-white/90 text-[#2c4c3b] hover:bg-white text-lg px-8 py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+              onClick={() => setIsWaitlistModalOpen(true)}
+              data-ab="footer-cta"
+            >
+              Join Waitlist
+            </Button>
+            <Link href="/reader">
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="backdrop-blur-xl bg-white/10 border-white/40 text-white hover:bg-white/20 text-lg px-8 py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                Try Reader Demo
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
       
