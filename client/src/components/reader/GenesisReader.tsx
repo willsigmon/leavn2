@@ -686,7 +686,7 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
             variant={selectedTranslation === 'web' ? 'default' : 'outline'} 
             size="sm"
             onClick={() => setSelectedTranslation('web')}
-            className={`${selectedTranslation === 'web' ? 'bg-[#2c4c3b] hover:bg-[#1e3c2b]' : ''}`}
+            className={`${selectedTranslation === 'web' ? 'bg-[#2c4c3b] text-white hover:bg-[#1e3c2b]' : 'text-[#2c4c3b] border-[#2c4c3b]/30 hover:bg-[#2c4c3b]/10'}`}
           >
             <BookOpen className="mr-2 h-4 w-4" />
             WEB
@@ -695,7 +695,7 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
             variant={selectedTranslation === 'kjv' ? 'default' : 'outline'} 
             size="sm"
             onClick={() => setSelectedTranslation('kjv')}
-            className={`${selectedTranslation === 'kjv' ? 'bg-[#2c4c3b] hover:bg-[#1e3c2b]' : ''}`}
+            className={`${selectedTranslation === 'kjv' ? 'bg-[#2c4c3b] text-white hover:bg-[#1e3c2b]' : 'text-[#2c4c3b] border-[#2c4c3b]/30 hover:bg-[#2c4c3b]/10'}`}
           >
             <BookOpen className="mr-2 h-4 w-4" />
             KJV
@@ -704,6 +704,7 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
             variant="outline"
             size="sm"
             onClick={() => setShowThematicTags(!showThematicTags)}
+            className="text-[#2c4c3b] border-[#2c4c3b]/30 hover:bg-[#2c4c3b]/10"
           >
             <Info className="mr-2 h-4 w-4" />
             {showThematicTags ? 'Hide Tags' : 'Show Tags'}
@@ -712,7 +713,7 @@ export function GenesisReader({ chapter = 1 }: { chapter?: number }) {
             variant="outline"
             size="sm"
             onClick={() => setShowSettings(!showSettings)}
-            className={showSettings ? 'bg-gray-200 dark:bg-gray-700' : ''}
+            className={showSettings ? 'bg-[#2c4c3b]/20 text-[#2c4c3b] border-[#2c4c3b]/30' : 'text-[#2c4c3b] border-[#2c4c3b]/30 hover:bg-[#2c4c3b]/10'}
           >
             <Settings className="mr-2 h-4 w-4" />
             Settings
