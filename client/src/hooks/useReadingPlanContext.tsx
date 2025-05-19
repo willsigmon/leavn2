@@ -81,13 +81,14 @@ function readingPlanReducer(state: ReadingPlanState, action: ReadingPlanAction):
         ...state,
         userProgress: {
           ...state.userProgress,
-          [planId]: {
+          [startPlanId]: {
             completedDays: [],
             startDate: today,
             lastUpdated: new Date().toISOString()
           }
         }
       };
+    }
     case 'LOAD_USER_PROGRESS':
       return {
         ...state,

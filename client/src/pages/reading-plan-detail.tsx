@@ -133,9 +133,12 @@ export default function ReadingPlanDetail() {
   };
 
   const isDayCompleted = (dayId: string) => {
-    if (!progress) return false;
-    return progress.completedDays.includes(dayId);
+    if (!params?.id || !userProgress[params.id]) return false;
+    return userProgress[params.id].completedDays.includes(dayId);
   };
+  
+  // Combined loading state from both context and API
+  const isLoading = contextLoading || isLoadingFromApi;
 
   if (!match) {
     return (
@@ -180,7 +183,7 @@ export default function ReadingPlanDetail() {
     );
   }
 
-  if (error || !plan) {
+  if (error || !activePlan) {
     return (
       <div className="container max-w-6xl py-12 px-4 text-center">
         <div className="flex flex-col items-center justify-center py-12">
@@ -218,18 +221,18 @@ export default function ReadingPlanDetail() {
           <div className="space-y-8">
             {/* Plan Header */}
             <div>
-              <Badge variant="outline" className={`mb-2 ${getDifficultyColor(plan.difficulty)}`}>
-                {plan.difficulty.charAt(0).toUpperCase() + plan.difficulty.slice(1)}
+              <Badge variant="outline" className={`mb-2 ${getDifficultyColor(activePlan.difficulty)}`}>
+                {activePlan.difficulty.charAt(0).toUpperCase() + activePlan.difficulty.slice(1)}
               </Badge>
-              <h1 className="text-2xl md:text-3xl font-bold mb-2 text-[#2c4c3b] dark:text-[#a5c2a5]">{plan.title}</h1>
+              <h1 className="text-2xl md:text-3xl font-bold mb-2 text-[#2c4c3b] dark:text-[#a5c2a5]">{activePlan.title}</h1>
               <div className="flex items-center gap-2 text-muted-foreground mb-4">
                 <Calendar className="h-4 w-4" />
-                <span>{plan.duration} days</span>
+                <span>{activePlan.days.length} days</span>
               </div>
-              <p className="text-foreground mb-4">{plan.description}</p>
+              <p className="text-foreground mb-4">{activePlan.description}</p>
 
               <div className="flex flex-wrap gap-2">
-                {plan.tags.map(tag => (
+                {activePlan.tags.map((tag: string) => (
                   <Badge key={tag} variant="secondary" className="bg-[#f0f4ed] hover:bg-[#e8efe5] text-[#2c4c3b] dark:bg-[#2c4c3b]/30 dark:text-[#a5c2a5] dark:hover:bg-[#2c4c3b]/40">
                     {tag}
                   </Badge>
@@ -241,7 +244,7 @@ export default function ReadingPlanDetail() {
             <div>
               <h2 className="font-semibold text-lg mb-3">Plan Days</h2>
               <div className="space-y-2">
-                {plan.days?.map((day, index) => (
+                {activePlan.days?.map((day, index) => (
                   <Button
                     key={day.id}
                     variant={selectedDayId === day.id ? "default" : "outline"}
@@ -270,21 +273,21 @@ export default function ReadingPlanDetail() {
               <div className="border rounded-lg p-4 bg-muted/40">
                 <h2 className="font-semibold text-lg mb-2">Your Progress</h2>
                 
-                {progress ? (
+                {params?.id && userProgress[params.id] ? (
                   <div className="space-y-3">
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Clock className="h-4 w-4" />
-                      <span>Started on {new Date(progress.startDate).toLocaleDateString()}</span>
+                      <span>Started on {new Date(userProgress[params.id].startDate || '').toLocaleDateString()}</span>
                     </div>
                     <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
                       <div 
                         className="bg-[#3a6349] h-2.5 rounded-full" 
-                        style={{ width: `${(progress.completedDays.length / plan.duration) * 100}%` }}
+                        style={{ width: `${(userProgress[params.id].completedDays.length / activePlan.days.length) * 100}%` }}
                       ></div>
                     </div>
                     <div className="text-sm text-muted-foreground flex justify-between">
-                      <span>{progress.completedDays.length} of {plan.duration} days completed</span>
-                      <span>{Math.round((progress.completedDays.length / plan.duration) * 100)}%</span>
+                      <span>{userProgress[params.id].completedDays.length} of {activePlan.days.length} days completed</span>
+                      <span>{Math.round((userProgress[params.id].completedDays.length / activePlan.days.length) * 100)}%</span>
                     </div>
                   </div>
                 ) : (
