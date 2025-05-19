@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { db } from './db';
 import { tags, verses, verseTags } from '@shared/schema';
-import { eq, and, inArray, not, sql } from 'drizzle-orm/pg-core';
+import { eq, and, inArray, not, sql } from 'drizzle-orm';
 import crypto from 'crypto';
 import OpenAI from 'openai';
 

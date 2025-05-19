@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { db } from '../db';
-import { eq, and, inArray, not, sql } from 'drizzle-orm/pg-core';
+import { eq, and, inArray, not, sql } from 'drizzle-orm';
 import crypto from 'crypto';
 import { isAuthenticated } from '../replitAuth';
 import { verseTags, tags } from '@shared/schema';

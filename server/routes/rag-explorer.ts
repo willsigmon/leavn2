@@ -322,7 +322,7 @@ router.get('/concept-map/:book/:chapter?', async (req: Request, res: Response) =
       const edges: any[] = [];
       
       // Add theme nodes
-      ragIndex.themes.forEach((theme, idx) => {
+      ragIndex.themes.forEach((theme: any, idx: number) => {
         nodes.push({
           id: `theme-${idx}`,
           label: theme,
@@ -332,7 +332,7 @@ router.get('/concept-map/:book/:chapter?', async (req: Request, res: Response) =
       });
       
       // Add people nodes
-      ragIndex.people.forEach((person, idx) => {
+      ragIndex.people.forEach((person: any, idx: number) => {
         nodes.push({
           id: `person-${idx}`,
           label: person,
@@ -342,7 +342,7 @@ router.get('/concept-map/:book/:chapter?', async (req: Request, res: Response) =
       });
       
       // Add place nodes
-      ragIndex.places.forEach((place, idx) => {
+      ragIndex.places.forEach((place: any, idx: number) => {
         nodes.push({
           id: `place-${idx}`,
           label: place,
@@ -376,7 +376,7 @@ router.get('/concept-map/:book/:chapter?', async (req: Request, res: Response) =
           });
           
           // Link chapter to its tags
-          chapterData.themes.forEach((theme, idx) => {
+          chapterData.themes.forEach((theme: any, idx: number) => {
             const themeNode = nodes.find(n => n.label === theme && n.type === 'theme');
             if (themeNode) {
               edges.push({
@@ -388,7 +388,7 @@ router.get('/concept-map/:book/:chapter?', async (req: Request, res: Response) =
             }
           });
           
-          chapterData.people.forEach((person, idx) => {
+          chapterData.people.forEach((person: any, idx: number) => {
             const personNode = nodes.find(n => n.label === person && n.type === 'person');
             if (personNode) {
               edges.push({
@@ -400,7 +400,7 @@ router.get('/concept-map/:book/:chapter?', async (req: Request, res: Response) =
             }
           });
           
-          chapterData.places.forEach((place, idx) => {
+          chapterData.places.forEach((place: any, idx: number) => {
             const placeNode = nodes.find(n => n.label === place && n.type === 'place');
             if (placeNode) {
               edges.push({
