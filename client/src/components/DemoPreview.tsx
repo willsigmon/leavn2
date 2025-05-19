@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, MenuIcon, Bookmark, MessageCircle, Settings, ChevronRight, ChevronLeft } from 'lucide-react';
 
-export function ReaderPreview() {
+export function DemoPreview() {
   const [isHighlighted, setIsHighlighted] = useState(false);
   const [activeVerse, setActiveVerse] = useState(3);
   const [activeLens, setActiveLens] = useState('E');
@@ -144,3 +144,4 @@ export function ReaderPreview() {
     </div>
   );
 }
+

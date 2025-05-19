@@ -3,7 +3,7 @@ import { Link } from 'wouter';
 import { CTAButton } from '@/components/CTAButton';
 import { WaitlistModal } from '@/components/WaitlistModal';
 import { ScrollHeader } from '@/components/ScrollHeader';
-import { ReaderPreview } from '@/components/ReaderPreview';
+import { DemoPreview } from '@/components/DemoPreview';
 
 import { Play } from 'lucide-react';
 import Footer from '@/components/layout/Footer';
@@ -60,7 +60,7 @@ export default function LandingOptimized() {
           {/* Animated Reader Preview */}
           <div className="relative mt-10 lg:mt-0 max-w-[95%] sm:max-w-[90%] md:max-w-[85%] lg:max-w-full mx-auto">
             <div className="transform hover:scale-[1.01] transition-transform h-[320px] md:h-[380px] lg:h-[420px]">
-              <ReaderPreview />
+              <DemoPreview />
             </div>
           </div>
         </div>

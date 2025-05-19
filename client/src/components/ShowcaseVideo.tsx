@@ -25,7 +25,7 @@ const features = [
   }
 ];
 
-export function ReaderShowcaseVideo() {
+export function ShowcaseVideo() {
   const [activeFeature, setActiveFeature] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -170,3 +170,4 @@ export function ReaderShowcaseVideo() {
     </div>
   );
 }
+
