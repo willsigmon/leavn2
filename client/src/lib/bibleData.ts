@@ -18,7 +18,6 @@ export interface BibleChapter {
     genz?: string;
     kids?: string;
     novelize?: string;
-    isBookmarked?: boolean;
     hasNote?: boolean;
     highlightColor?: string;
   }[];
