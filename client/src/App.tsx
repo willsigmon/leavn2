@@ -5,15 +5,13 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
-import Reader from "@/pages/reader";
+import Reader from "@/pages/reader/index";
 import ReadingPlans from "@/pages/reading-plans";
 import ReadingPlanDetail from "@/pages/reading-plan-detail";
-import PlanReader from "@/pages/plan-reader";
 import Login from "@/pages/login";
 import Profile from "@/pages/profile";
 import Settings from "@/pages/settings";
 import Explorer from "@/pages/explorer";
-import ConceptExplorer from "./pages/concept-explorer";
 import Landing from "./pages/landing";
 import LandingOptimized from "./pages/LandingOptimized";
 import { ThemeProvider } from "./components/ThemeProvider";
@@ -88,7 +86,7 @@ function Router() {
         
         <Route path="/reading-plans/:planId/:dayId">
           <AppLayout>
-            <PlanReader />
+            <ReadingPlanDetail />
           </AppLayout>
         </Route>
         
@@ -120,7 +118,7 @@ function Router() {
         
         <Route path="/concept-explorer">
           <AppLayout>
-            <ConceptExplorer />
+            <Explorer />
           </AppLayout>
         </Route>
         
